@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.diy.mapper.DiyUserMapper">
+		
+	<resultMap type="DiyUser" id="DiyUserResultMap">
+		<result column="ID" property="id"/>
+		<result column="LOGIN_NAME" property="loginName"/>
+		<result column="PASSWORD" property="password"/>
+		<result column="USER_NAME" property="userName"/>
+		<result column="PHONE_NO" property="phoneNo"/>
+		<result column="ISDEFAULT" property="isdefault"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="DiyUserColumns">
+		m.ID,
+		m.LOGIN_NAME,
+		m.PASSWORD,
+		m.USER_NAME,
+		m.PHONE_NO,
+		m.ISDEFAULT,
+		m.DATA_STAT,
+		m.REMARKS,
+		m.CREATE_USER,
+		m.UPDATE_USER,
+		m.CREATE_TIME,
+		m.UPDATE_TIME,
+		m.LOCK_VERSION
+	</sql>
+	
+	<select id="getDiyUserById" parameterType="String" resultMap="DiyUserResultMap">
+		 SELECT 
+	  		<include refid="DiyUserColumns" />,d.mchnt_code,d.shop_code
+		 FROM TB_DIY_WEB_USER m LEFT JOIN TB_DIY_WEB_USER_DATA_AUTH ud 
+     		ON m.ID = ud.USER_ID LEFT JOIN TB_DIY_WEB_DATA_AUTH d
+     		ON ud.AUTH_ID = d.ID
+		 WHERE m.ID=#{id} and m.DATA_STAT = '0'
+	</select>
+	
+	<insert id="insertDiyUser" parameterType="DiyUser" useGeneratedKeys="true" keyProperty="id">
+		<selectKey resultType="String" order="AFTER" keyProperty="id">  
+			<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getDiyUserId" />
+		</selectKey>
+		INSERT INTO TB_DIY_WEB_USER (
+			LOGIN_NAME,
+			PASSWORD,
+			USER_NAME,
+			PHONE_NO,
+			ISDEFAULT,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			UPDATE_USER,
+			CREATE_TIME,
+			UPDATE_TIME,
+			LOCK_VERSION
+		 )  VALUES ( 
+		 		#{loginName,jdbcType=VARCHAR},
+		 		#{password,jdbcType=VARCHAR},
+		 		#{userName,jdbcType=VARCHAR},
+		 		#{phoneNo,jdbcType=VARCHAR},
+		 		#{isdefault,jdbcType=VARCHAR},
+		 		#{dataStat,jdbcType=VARCHAR},
+		 		#{remarks,jdbcType=VARCHAR},
+		 		#{createUser,jdbcType=VARCHAR},
+				#{updateUser,jdbcType=VARCHAR},
+				sysdate,
+				sysdate,
+				'0'
+			) 
+			
+	</insert>
+	
+	<update id="updateDiyUser" parameterType="DiyUser">
+		UPDATE TB_DIY_WEB_USER
+		<set>
+			USER_NAME=#{userName,jdbcType=VARCHAR},
+			PHONE_NO=#{phoneNo,jdbcType=VARCHAR},
+			ISDEFAULT=#{isdefault,jdbcType=VARCHAR},
+			DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+			UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+			UPDATE_TIME=sysdate,
+			LOCK_VERSION=LOCK_VERSION +1
+		</set>
+			WHERE ID=#{id}
+	</update>
+
+	<delete id="deleteDiyUserById" parameterType="String" >
+		 update TB_DIY_WEB_USER SET DATA_STAT='1' WHERE  ID=#{id}
+	</delete>
+	
+	<select id="getDiyUserByUserName" parameterType="DiyUser" resultType="DiyUser">
+		 SELECT 
+	  		<include refid="DiyUserColumns" />
+		 FROM TB_DIY_WEB_USER m LEFT JOIN TB_DIY_WEB_USER_DATA_AUTH ud 
+     		ON m.ID = ud.USER_ID LEFT JOIN TB_DIY_WEB_DATA_AUTH d
+     		ON ud.AUTH_ID = d.ID
+		 WHERE m.USER_NAME= #{userName} and d.mchnt_code = #{mchntCode} and m.DATA_STAT='0'
+	</select>
+	
+	<select id="getDiyUserByPhoneNo" parameterType="DiyUser" resultType="DiyUser">
+		 SELECT 
+	  		<include refid="DiyUserColumns" />
+		 FROM TB_DIY_WEB_USER m 
+		 WHERE m.PHONE_NO=#{phoneNo} and m.DATA_STAT='0'
+	</select>
+	
+	<select id="getDiyUserList" parameterType="DiyUser" resultMap="DiyUserResultMap">
+		SELECT 
+	  		<include refid="DiyUserColumns" />, 
+	  			mif.mchnt_name as mchntName,sif.shop_name as shopName,ur.role_id as roleId,r.role_name as roleName
+	  			FROM TB_DIY_WEB_USER m
+         			LEFT JOIN TB_DIY_WEB_USER_DATA_AUTH ua on ua.USER_ID=m.ID
+         			LEFT JOIN TB_DIY_WEB_DATA_AUTH a on a.ID=ua.AUTH_ID
+         			LEFT JOIN TB_MERCHANT_INF mif on mif.MCHNT_CODE=a.MCHNT_CODE
+         			LEFT JOIN TB_SHOP_INF sif on sif.SHOP_CODE=a.SHOP_CODE
+         			LEFT JOIN TB_DIY_WEB_USER_ROLE UR ON M.ID = UR.USER_ID
+         			LEFT JOIN TB_DIY_WEB_ROLE R ON UR.ROLE_ID = R.ID
+         			WHERE  m.DATA_STAT='0'
+         			<if test="userName !=null and userName !='' ">
+					 		AND m.USER_NAME LIKE '%' || #{userName} || '%'
+					</if>
+					<if test="phoneNo !=null and phoneNo !='' ">
+					 		AND m.PHONE_NO LIKE '%' || #{phoneNo} || '%'
+					</if>
+					<if test="mchntName !=null and mchntName !='' ">
+					 		AND mif.MCHNT_NAME LIKE '%' || #{mchntName} || '%'
+					</if>
+					ORDER BY m.UPDATE_TIME DESC
+	</select>
+	
+	<!-- 增加角用户角色 -->
+	<insert id="saveDiyUserRole" parameterType="DiyUserRole">
+		insert into TB_DIY_WEB_USER_ROLE(
+			USER_ID,
+			ROLE_ID,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			UPDATE_USER,
+			CREATE_TIME,
+			UPDATE_TIME,
+			LOCK_VERSION
+			) values (
+				#{userId},
+				#{roleId},
+				#{dataStat,jdbcType=VARCHAR},
+		 		#{remarks,jdbcType=VARCHAR},
+		 		#{createUser,jdbcType=VARCHAR},
+				#{updateUser,jdbcType=VARCHAR},
+				sysdate,
+				sysdate,
+				'0'
+			)
+	</insert>
+	
+	<update id="updateDiyUserRole" parameterType="DiyUserRole">
+		UPDATE TB_DIY_WEB_USER_ROLE
+		<set>
+			<if test="roleId != null and roleId !='' ">
+			ROLE_ID=#{roleId},
+			</if>
+			<if test="dataStat != null and dataStat !='' ">
+			DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+			</if>
+			<if test="remarks != null and remarks !='' ">
+			REMARKS=#{remarks,jdbcType=VARCHAR},
+			</if>
+			<if test="updateUser != null and updateUser !='' ">
+			UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+			</if>
+			UPDATE_TIME=sysdate,
+			LOCK_VERSION = LOCK_VERSION +1
+		</set>
+			WHERE USER_ID=#{userId}
+	</update>
+	
+	<delete id="deleteDiyUserRoleByUserId" parameterType="String">
+		update TB_DIY_WEB_USER_ROLE SET DATA_STAT='1' where user_id=#{userId}
+	</delete>
+	
+	<!-- 增加用户数据权限关联表 -->
+	<insert id="saveDiyUserDataAuth" parameterType="DiyUserDataAuth">
+		insert into TB_DIY_WEB_USER_DATA_AUTH(
+			AUTH_ID,
+			USER_ID,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			UPDATE_USER,
+			CREATE_TIME,
+			UPDATE_TIME,
+			LOCK_VERSION
+			) values (
+				#{authId},
+				#{userId},
+				#{dataStat,jdbcType=VARCHAR},
+		 		#{remarks,jdbcType=VARCHAR},
+		 		#{createUser,jdbcType=VARCHAR},
+				#{updateUser,jdbcType=VARCHAR},
+				sysdate,
+				sysdate,
+				'0'
+			)
+	</insert>
+	
+	<delete id="deleteDiyUserDataAuthByUserId" parameterType="String" >
+		 update TB_DIY_WEB_USER_DATA_AUTH SET DATA_STAT='1' WHERE user_id=#{userId}
+	</delete>
+	
+	<!-- 增加用户数据权限关联表 -->
+	<insert id="saveDiyDataAuth" parameterType="DiyDataAuth"  useGeneratedKeys="true" keyProperty="id">
+		<selectKey resultType="string" order="AFTER" keyProperty="id">  
+			<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getDiyDataAuthId" />
+		</selectKey>
+		insert into TB_DIY_WEB_DATA_AUTH(
+			MCHNT_CODE,
+			SHOP_CODE,
+			CASECADE,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			UPDATE_USER,
+			CREATE_TIME,
+			UPDATE_TIME,
+			LOCK_VERSION
+			) values (
+				#{mchntCode,jdbcType=VARCHAR},
+				#{shopCode,jdbcType=VARCHAR},
+				#{casecade,jdbcType=VARCHAR},
+				#{dataStat,jdbcType=VARCHAR},
+		 		#{remarks,jdbcType=VARCHAR},
+		 		#{createUser,jdbcType=VARCHAR},
+				#{updateUser,jdbcType=VARCHAR},
+				sysdate,
+				sysdate,
+				'0'
+			)
+	</insert>
+	<update id="updateDiyDataAuth" parameterType="DiyDataAuth">
+		UPDATE TB_DIY_WEB_DATA_AUTH
+		<set>
+			MCHNT_CODE=#{mchntCode,jdbcType=VARCHAR},
+			SHOP_CODE=#{shopCode,jdbcType=VARCHAR},
+			UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+			UPDATE_TIME=sysdate,
+			LOCK_VERSION = LOCK_VERSION +1
+		</set>
+			WHERE ID=#{id}
+	</update>
+	
+	<select id="getDiyDataAuthById" parameterType="String" resultType = "DiyDataAuth">
+		select d.* 
+		from TB_DIY_WEB_DATA_AUTH d left join tb_diy_web_user_data_auth ud
+		on d.id = ud.auth_id left join tb_diy_web_user u
+		on ud.user_id = u.id
+		 where u.id=#{id} and u.DATA_STAT = '0'
+	</select>
+	
+	<delete id="deleteDiyDataAuthByAuthId" parameterType="String" >
+		 update TB_DIY_WEB_DATA_AUTH SET DATA_STAT='1' WHERE  id=#{id}
+	</delete>
+	
+	<select id="getRoleByMchntCodeAndShopCode" parameterType="DiyUser" resultType="DiyUser">
+		select count(*) as countNumber,u.id from 
+			TB_DIY_WEB_USER u,TB_DIY_WEB_USER_DATA_AUTH ud,TB_DIY_WEB_DATA_AUTH da,TB_DIY_WEB_USER_ROLE ur,TB_DIY_WEB_ROLE r
+		    where 1=1 and u.id = ud.user_id and ud.auth_id = da.id and
+		    u.id = ur.user_id and ur.role_id = r.id
+			and da.mchnt_code = #{mchntCode} and da.shop_code = #{shopCode} and r.id = #{roleId} and u.DATA_STAT = '0'
+			group by u.id
+	</select>
+</mapper>

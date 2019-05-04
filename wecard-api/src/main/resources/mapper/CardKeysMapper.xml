@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wecard.api.module.welfaremart.mapper.CardKeysMapper">
+
+	<sql id="CardKeysColumns">
+		CARD_KEY,
+		PRODUCT_CODE,
+		ACCOUNT_ID,
+		ACTIVE_START_DATE,
+		ACTIVE_END_DATE,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+
+	<sql id="CardKeysFields">
+		#{cardKey, jdbcType=VARCHAR},
+		#{productCode, jdbcType=VARCHAR},
+		#{accountId, jdbcType=VARCHAR},
+		#{activeStartDate, jdbcType=VARCHAR},
+		#{activeEndDate, jdbcType=VARCHAR},
+		'0',
+		#{remarks, jdbcType=VARCHAR},
+		#{createUser, jdbcType=VARCHAR},
+		#{updateUser, jdbcType=VARCHAR},
+		SYSDATE,
+		SYSDATE,
+		'0'
+	</sql>
+	
+	<sql id="tableName">
+			TB_CARD_KEYS
+	</sql>
+	
+	<select id="getCardKeysByCardKey" parameterType="CardKeys" resultType="CardKeys">
+		SELECT
+			<include refid="CardKeysColumns" />
+		FROM 
+			<include refid="tableName" />
+		WHERE 1=1
+		<if test="dataStat !=null and dataStat !='' ">
+			AND DATA_STAT = #{dataStat}
+		</if>
+			AND CARD_KEY = #{cardKey}
+	</select>
+
+	<select id="getCardKeysList" parameterType="CardKeys" resultType="CardKeys">
+		SELECT
+			<include refid="CardKeysColumns" />
+		FROM 
+			<include refid="tableName" />
+		WHERE DATA_STAT = '0'
+			AND PRODUCT_CODE = #{productCode}
+			AND ACCOUNT_ID = #{accountId}
+			AND ROWNUM &lt;= #{validNum}
+	</select>
+	
+	<select id="getCardKeysCount" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT
+			count(*)
+		FROM 
+			<include refid="tableName" />
+		WHERE DATA_STAT = '0'
+			AND ACCOUNT_ID = #{accountId}
+	</select>
+	
+	<select id="getCardKeysByAccountId" parameterType="java.lang.String" resultType="CardKeys">
+		SELECT
+			PRODUCT_CODE, count(PRODUCT_CODE) as validNum
+		FROM 
+			<include refid="tableName" />
+		WHERE DATA_STAT = '0'
+			AND ACCOUNT_ID = #{accountId}
+			GROUP BY PRODUCT_CODE
+	</select>
+	
+	<select id="getCardKeysByDataStat" resultType="CardKeys">
+		SELECT
+			<include refid="CardKeysColumns" />
+		FROM 
+			<include refid="tableName" />
+		WHERE DATA_STAT = '1'
+			AND CARD_KEY in (
+				SELECT 
+					CARD_KEY 
+				FROM TB_CARD_KEYS_TRANS_LOG 
+				WHERE DATA_STAT = '0' 
+				AND ORDER_ID in (
+					SELECT 
+						ORDER_ID 
+					FROM TB_CARD_KEYS_ORDER_INF 
+					WHERE DATA_STAT = '0' 
+						AND TYPE = '30'
+			        	AND STAT in ('30','31')
+				)
+			)
+	</select>
+	
+	<select id="getLoseNumByAccountId" parameterType="CardKeys" resultType="java.lang.Integer">
+		SELECT
+			count(PRODUCT_CODE)
+		FROM 
+			<include refid="tableName" />
+		WHERE DATA_STAT = '0'
+			AND ACCOUNT_ID = #{accountId}
+			AND PRODUCT_CODE = #{productCode}
+	</select>
+
+	<insert id="insertCardKeys" parameterType="CardKeys">
+		INSERT INTO 
+			<include refid="tableName" />
+		(
+			<include refid="CardKeysColumns" />
+		) VALUES (
+			<include refid="CardKeysFields" />
+		)
+	</insert>
+	
+	<!-- <update id="updateBatchCardKeys" parameterType="java.util.List">
+        update 
+        	<include refid="tableName" />
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="dataStat = case" suffix="end,">
+                 <foreach collection="list" item="item" index="index">
+                         when CARD_KEY=#{item.cardKey} then #{item.dataStat}
+                 </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.cardKey,jdbcType=VARCHAR}
+        </foreach>
+    </update> -->
+
+	<update id="updateCardKeys" parameterType="CardKeys">
+		UPDATE 
+			<include refid="tableName" />
+		SET
+		<if test="dataStat !=null and dataStat !='' ">
+			DATA_STAT = #{dataStat},
+		</if>
+			UPDATE_TIME = sysdate,
+			LOCK_VERSION = LOCK_VERSION+1
+		WHERE CARD_KEY = #{cardKey}
+	</update>
+
+</mapper>

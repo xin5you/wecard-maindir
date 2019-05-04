@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.margin.mapper.MerchantCashManageMapper">
+		
+	<resultMap type="MerchantCashManage" id="MerchantCashManageResultMap">
+
+		<result column="CHASH_ID" property="chashId"/>
+		<result column="MCHNT_ID" property="mchntId"/>
+		<result column="INS_ID" property="insId"/>
+		<result column="MORTGAGE_FLG" property="mortgageFlg"/>
+		<result column="GET_QUOTA" property="getQuota"/>
+		<result column="RECHARGE_FACE_AMT" property="rechargeFaceAmt"/>
+		<result column="RECHARGE_AMT" property="rechargeAmt"/>
+		<result column="CASH_THRESHOLD_AMT" property="cashThresholdAmt"/>
+		<result column="GROSS_PROFIT_RATE" property="grossProfitRate"/>
+		<result column="RECHARGE_AMT" property="rechargeAmt"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+		
+		<result column="MCHNT_CODE" property="mchntCode"/>
+		<result column="MCHNT_NAME" property="mchntName"/>
+	</resultMap>
+	
+	<sql id="MerchantCashManageColumns">
+		m.CHASH_ID,
+		m.MCHNT_ID,
+		m.INS_ID,
+		m.MORTGAGE_FLG,
+		m.MORTGAGE_AMT,
+		m.GET_QUOTA,
+		m.RECHARGE_AMT,
+		m.RECHARGE_FACE_AMT,
+		m.CASH_THRESHOLD_AMT,
+		m.GROSS_PROFIT_RATE,
+		m.DATA_STAT,
+		m.REMARKS,
+		m.CREATE_USER,
+		m.UPDATE_USER,
+		m.CREATE_TIME,
+		m.UPDATE_TIME,
+		m.LOCK_VERSION
+	</sql>
+	
+	<select id="getMchntCashManagetById" parameterType="java.lang.String" resultMap="MerchantCashManageResultMap">
+		SELECT 
+	  		<include refid="MerchantCashManageColumns" />
+		 FROM TB_MERCHANT_CASH_MANAGE m WHERE  m.CHASH_ID=#{chashId}
+	</select>
+	
+	<select id="getMerchantCashManageByMchntId" parameterType="java.lang.String" resultMap="MerchantCashManageResultMap">
+		SELECT 
+	  		<include refid="MerchantCashManageColumns" />
+		 FROM TB_MERCHANT_CASH_MANAGE m WHERE  m.MCHNT_ID=#{mchntId}
+	</select>
+	
+	<select id="getMerchantCashManageList" parameterType="MerchantCashManage" resultMap="MerchantCashManageResultMap">
+				SELECT 
+			  		<include refid="MerchantCashManageColumns" />,
+			    mi.MCHNT_CODE,
+			    mi.MCHNT_NAME
+				 FROM TB_MERCHANT_CASH_MANAGE m,
+                   TB_MERCHANT_INF mi 
+                   WHERE 
+                     m.DATA_STAT='0'
+                     AND mi.DATA_STAT='0'
+                     AND m.MCHNT_ID=mi.MCHNT_ID
+                     
+                  <if test="mortgageFlg !=null and mortgageFlg !='' ">
+				 		AND m.MORTGAGE_FLG=#{mortgageFlg}
+				 </if>
+				 <if test="mchntName !=null and mchntName !='' ">
+				 		AND mi.MCHNT_NAME LIKE '%' || #{mchntName} || '%'
+				 </if>
+				 <if test="mchntCode !=null and mchntCode !='' ">
+						AND mi.MCHNT_CODE=#{mchntCode}
+				 </if>
+				  ORDER BY m.UPDATE_TIME DESC
+	</select>
+	
+	<insert id="insertMchntCashManaget" parameterType="MerchantCashManage">
+		 <selectKey resultType="string" order="BEFORE" keyProperty="chashId">  
+			<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getCommonId" />
+		</selectKey>
+			INSERT INTO TB_MERCHANT_CASH_MANAGE (
+			CHASH_ID,
+			MCHNT_ID,
+			INS_ID,
+			MORTGAGE_FLG,
+			MORTGAGE_AMT,
+			GET_QUOTA,
+			RECHARGE_AMT,
+			RECHARGE_FACE_AMT,
+			CASH_THRESHOLD_AMT,
+			GROSS_PROFIT_RATE,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			CREATE_TIME,
+			UPDATE_USER,
+			UPDATE_TIME,
+			LOCK_VERSION
+			 )  VALUES (
+				 	#{chashId,jdbcType=VARCHAR},
+					#{mchntId,jdbcType=VARCHAR},
+					#{insId,jdbcType=VARCHAR},
+					#{mortgageFlg,jdbcType=VARCHAR},
+					#{mortgageAmt,jdbcType=VARCHAR},
+					#{getQuota,jdbcType=VARCHAR},
+					#{rechargeAmt,jdbcType=VARCHAR},
+					#{rechargeFaceAmt,jdbcType=VARCHAR},
+					#{cashThresholdAmt,jdbcType=VARCHAR},
+					#{grossProfitRate,jdbcType=VARCHAR},
+					#{dataStat,jdbcType=VARCHAR},
+			 		#{remarks,jdbcType=VARCHAR},
+			 		#{createUser,jdbcType=VARCHAR},
+			 		sysdate,
+			 		#{createUser,jdbcType=VARCHAR},
+			 		sysdate,
+			 		'0'
+			 		) 
+		</insert>
+		
+		<update id="updateMchntCashManage" parameterType="MerchantCashManage">
+			UPDATE TB_MERCHANT_CASH_MANAGE SET
+					MORTGAGE_FLG=#{mortgageFlg,jdbcType=VARCHAR},
+					MORTGAGE_AMT=#{mortgageAmt,jdbcType=VARCHAR},
+					CASH_THRESHOLD_AMT=#{cashThresholdAmt,jdbcType=VARCHAR},
+					GROSS_PROFIT_RATE=#{grossProfitRate,jdbcType=VARCHAR},
+					RECHARGE_AMT=#{rechargeAmt,jdbcType=VARCHAR},
+					GET_QUOTA=#{getQuota,jdbcType=VARCHAR},
+					RECHARGE_FACE_AMT=#{rechargeFaceAmt,jdbcType=VARCHAR},
+					DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+			 		REMARKS=#{remarks,jdbcType=VARCHAR},
+			 		UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+			 		UPDATE_TIME=sysdate,
+			 		LOCK_VERSION=LOCK_VERSION+1
+			 WHERE CHASH_ID=#{chashId}
+	  </update>
+	
+	<update id="deleteMerchantCashManage" parameterType="string">
+		UPDATE TB_MERCHANT_CASH_MANAGE SET DATA_STAT='1' WHERE　 CHASH_ID=#{chashId}
+	</update>
+</mapper>

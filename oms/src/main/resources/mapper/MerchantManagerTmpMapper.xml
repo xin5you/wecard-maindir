@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.merchant.mapper.MerchantManagerTmpMapper">
+		
+	<resultMap type="MerchantManagerTmp" id="MerchantManagerTmpResultMap">
+		<result column="MANGER_ID" property="mangerId"/>
+		<result column="MANGER_NAME" property="mangerName"/>
+		<result column="MCHNT_ID" property="mchntId"/>
+		<result column="MCHNT_NAME" property="mchntName"/>
+		<result column="SHOP_ID" property="shopId"/>
+		<result column="SHOP_NAME" property="shopName"/>
+		<result column="ROLE_TYPE" property="roleType"/>
+		<result column="ROLE_NAME" property="roleName"/>
+		<result column="CASH_PASSWD" property="cashPasswd"/>
+		<result column="NAME" property="name"/>
+		<result column="PHONE_NUMBER" property="phoneNumber"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="MerchantManagerTmpColumns">
+		m.MANGER_ID,
+		m.MANGER_NAME,
+		m.MCHNT_ID,
+		m.SHOP_ID,
+		m.ROLE_TYPE,
+		m.NAME,
+		m.PHONE_NUMBER,
+		m.DATA_STAT,
+		m.REMARKS,
+		m.CREATE_USER, 
+		m.UPDATE_USER, 
+		m.CREATE_TIME, 
+		m.UPDATE_TIME, 
+		m.LOCK_VERSION
+	</sql>
+	
+	<select id="getMerchantManagerTmpById" parameterType="java.lang.String" resultMap="MerchantManagerTmpResultMap">
+			SELECT 
+  				<include refid="MerchantManagerTmpColumns" />
+	 			FROM TB_MERCHANT_MANAGER_TMP m WHERE m.MANGER_ID=#{managerId}
+	</select>
+	
+	<insert id="insertMerchantManagerTmp" parameterType="MerchantManagerTmp">
+		INSERT INTO TB_MERCHANT_MANAGER_TMP (
+			MANGER_NAME,
+			MCHNT_ID,
+			SHOP_ID,
+			ROLE_TYPE,
+			CASH_PASSWD,
+			NAME,
+			PHONE_NUMBER,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER, 
+			CREATE_TIME,
+			UPDATE_USER,
+			UPDATE_TIME,
+			LOCK_VERSION
+			)	VALUES	( 
+		 		#{mangerName,jdbcType=VARCHAR},
+		 		#{mchntId,jdbcType=VARCHAR},
+		 		#{shopId,jdbcType=VARCHAR},
+		 		#{roleType,jdbcType=VARCHAR},
+		 		#{cashPasswd,jdbcType=VARCHAR},
+		 		#{name,jdbcType=VARCHAR},
+		 		#{phoneNumber,jdbcType=VARCHAR},
+		 		#{dataStat,jdbcType=VARCHAR},
+		 		#{remarks,jdbcType=VARCHAR},
+		 		#{createUser,jdbcType=VARCHAR},
+		 		sysdate,
+		 		#{createUser,jdbcType=VARCHAR},
+		 		sysdate,
+		 		'0') 
+	</insert>
+	
+	<update id="updateMerchantManagerTmp" parameterType="MerchantManagerTmp">
+			UPDATE TB_MERCHANT_MANAGER_TMP SET
+				MCHNT_ID=#{mchntId,jdbcType=VARCHAR},
+				SHOP_ID=#{shopId,jdbcType=VARCHAR},
+				ROLE_TYPE=#{roleType,jdbcType=VARCHAR},
+				NAME=#{name,jdbcType=VARCHAR},
+				PHONE_NUMBER=#{phoneNumber,jdbcType=VARCHAR},
+				DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+				REMARKS=#{remarks,jdbcType=VARCHAR},
+				UPDATE_TIME=sysdate
+			 WHERE MANGER_ID = #{mangerId} 
+	</update>
+	
+	
+	<select id="getMerchantManagerTmpList" parameterType="MerchantManagerTmp" resultMap="MerchantManagerTmpResultMap">
+		SELECT 
+  
+		    m.MANGER_ID,
+		    m.MANGER_NAME,
+		    m.MCHNT_ID,
+		    m.SHOP_ID,
+		    m.ROLE_TYPE,
+				m.NAME,
+				m.PHONE_NUMBER,
+				m.DATA_STAT,
+				m.REMARKS,
+		    mi.mchnt_name,
+		    si.shop_name
+		    from tb_merchant_manager_tmp m
+		         left join tb_merchant_inf mi on mi.mchnt_id=m.mchnt_id
+		         left join tb_shop_inf si on si.shop_id=m.shop_id
+		         WHERE 1=1
+			 <if test="mchntName !=null and mchntName !='' ">
+			 		AND mi.MCHNT_NAME=#{mchntName}
+			 </if>
+			  <if test="shopName !=null and shopName !='' ">
+					AND si.SHOP_NAME=#{shopName}
+			 </if>
+			 <if test="phoneNumber !=null and phoneNumber !='' ">
+			 		AND m.PHONE_NUMBER=#{phoneNumber}
+			 </if>
+			 <if test="name !=null and name !='' ">
+			 		AND m.name LIKE '%' || #{name} || '%'
+			 </if>
+				ORDER BY m.UPDATE_TIME DESC
+	</select>
+	
+	<select id="getMchntManagerTmpByPhoneNumber" parameterType="java.lang.String" resultMap="MerchantManagerTmpResultMap">
+		SELECT 
+	  		<include refid="MerchantManagerTmpColumns" />
+		 		FROM TB_MERCHANT_MANAGER_TMP m
+				WHERE m.PHONE_NUMBER=#{phoneNumber}
+	</select>
+	
+	<delete id="deleteMerchantManagerTmp" parameterType="java.lang.String">
+			DELETE FROM TB_MERCHANT_MANAGER_TMP t WHERE t.MANGER_ID=#{managerId}
+	</delete>
+</mapper>

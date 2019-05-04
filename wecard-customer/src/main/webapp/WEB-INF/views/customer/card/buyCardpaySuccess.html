@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!--通用媒体查询-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+<title>&#x652F;&#x4ED8;&#x6210;&#x529F;</title>
+<#include "../../common/wecardHeader.html">
+<script type="text/javascript" src="${s.base}/static/js/module/card/buyCardpaySuccess.js?v=${s.version}"></script>
+</head>
+<body>
+<!-- 支付成功 -->
+<div class="hkb_pay_animation">
+    <!--成功动画-->
+    <div class="pay_animation_right">
+        <div class="swal2-icon swal2-success animate">
+            <span class="line tip animate-success-tip"></span>
+            <span class="line long animate-success-long"></span>
+            <div class="placeholder"></div>
+            <div class="fix"></div>
+        </div>
+    </div>
+    <!--动画-->
+    <div class="load-3">
+        <div class="k-line2 k-line12-1"></div>
+        <div class="k-line2 k-line12-2"></div>
+        <div class="k-line2 k-line12-3"></div>
+        <div class="k-line2 k-line12-4"></div>
+        <div class="k-line2 k-line12-5"></div>
+        <div class="k-line2 k-line12-6"></div>
+        <div class="k-line2 k-line12-7"></div>
+        <div class="k-line2 k-line12-8"></div>
+    </div>
+    <div class="hkb_pay_text">购卡成功</div>
+	<!--关闭-->
+    <div class="hkb_button_pay">
+        <a class="main_btn" href="#"><span>关闭</span>
+        </a>
+    </div>
+    <div class="hkb_button_half">
+    <div class="hkb_button_scan">
+        <a class="scanBtn" href="#"><span>扫一扫买单</span>
+        </a>
+    </div>
+    <div class="hkb_button_code">
+        <a class="qrCodeBtn" href="#"><span>二维码买单</span>
+        </a>
+    </div>
+    </div>
+</div>
+
+<script>addEventListener('load',function(){})
+</script>
+
+<script>
+// 阻止浏览器后退按钮  
+$(document).ready(function(e) {	
+	var counter = 0;
+	if (window.history && window.history.pushState) {
+		$(window).on('popstate', function () {
+			window.history.pushState('forward', null, '#');
+			window.history.forward(1);
+		});
+	}
+	window.history.pushState('forward', null, '#'); //在IE中必须得有这两行
+	window.history.forward(1);
+});
+</script>
+</body>
+</html>

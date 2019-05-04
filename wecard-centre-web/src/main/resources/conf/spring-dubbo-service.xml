@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">     
+	
+	<!-- 服务消费者应用名称 -->
+	<dubbo:application name="dubbo_wxc" />
+	<!-- 服务消费者缺省值配置 -->
+	<dubbo:consumer check="false" timeout="2000" />
+	<!-- 使用zookeeper注册中心暴露服务地址 -->
+	<dubbo:registry  address="${wecard.dubbo.registry.address}"/>
+	
+	<!-- 分销商 -->
+	<dubbo:reference id="telChannelInfFacade" interface="com.cn.thinkx.wecard.facade.telrecharge.service.TelChannelInfFacade" cluster="failfast">
+		<dubbo:method name="saveTelChannelInf" timeout="5000" retries="0"/>
+		<dubbo:method name="updateTelChannelInf" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelChannelInfById" timeout="5000" retries="3"/>
+		<dubbo:method name="deleteTelChannelInfById" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelChannelInfList" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelChannelInfPage" timeout="5000" retries="3"/>
+	</dubbo:reference>
+
+	<!-- 费率 -->
+	<dubbo:reference id="telChannelItemListFacade" interface="com.cn.thinkx.wecard.facade.telrecharge.service.TelChannelItemListFacade" cluster="failfast">
+		<dubbo:method name="saveTelChannelItemList" timeout="10000" retries="0"/>
+		<dubbo:method name="updateTelChannelItemList" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelItemListById" timeout="10000" retries="3"/>
+		<dubbo:method name="deleteTelChannelItemListById" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelItemList" timeout="10000" retries="3"/>
+	</dubbo:reference>
+	
+	<!-- 分销商订单 -->
+	<dubbo:reference id="telChannelOrderInfFacade" interface="com.cn.thinkx.wecard.facade.telrecharge.service.TelChannelOrderInfFacade" cluster="failfast">
+		<dubbo:method name="saveTelChannelOrderInf" timeout="5000" retries="0"/>
+		<dubbo:method name="updateTelChannelOrderInf" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelChannelOrderInfById" timeout="5000" retries="3"/>
+		<dubbo:method name="deleteTelChannelOrderInfById" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelChannelOrderInfList" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelChannelOrderInfPage" timeout="5000" retries="3"/>
+	</dubbo:reference>
+	
+	<!-- 供应商订单 -->
+	<dubbo:reference id="telProviderOrderInfFacade" interface="com.cn.thinkx.wecard.facade.telrecharge.service.TelProviderOrderInfFacade" cluster="failfast">
+		<dubbo:method name="saveTelProviderOrderInf" timeout="5000" retries="0"/>
+		<dubbo:method name="updateTelProviderOrderInf" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelProviderOrderInfById" timeout="5000" retries="3"/>
+		<dubbo:method name="deleteTelProviderOrderInfById" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelProviderOrderInfList" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelProviderOrderInfPage" timeout="5000" retries="3"/>
+	</dubbo:reference>
+</beans>

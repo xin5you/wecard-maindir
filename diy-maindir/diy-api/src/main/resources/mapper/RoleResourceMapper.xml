@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.iboot.diy.api.system.mapper.RoleResourceMapper">
+
+  <sql id="RoleResourceColunms">
+    ROLE_ID, 
+    RESOURCE_ID, 
+    DATA_STAT, 
+    REMARKS, 
+    CREATE_USER, 
+    UPDATE_USER, 
+    CREATE_TIME, 
+    UPDATE_TIME, 
+    LOCK_VERSION
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="map" resultType="RoleResource">
+    select 
+    <include refid="RoleResourceColunms" />
+    from TB_WEB_ROLE_RESOURCE
+    where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+      and RESOURCE_ID = #{resourceId,jdbcType=VARCHAR} and DATA_STAT='0'
+  </select>
+  
+</mapper>

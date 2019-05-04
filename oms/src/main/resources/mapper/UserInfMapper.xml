@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.customer.mapper.UserInfMapper">
+		
+	<resultMap type="UserInf" id="UserInfResultMap">
+		<result column="USER_ID" property="userId"/>
+		<result column="EXTERNAL_ID" property="externalId"/>
+		<result column="USER_NAME" property="userName"/>
+		<result column="USER_TYPE" property="userType"/>
+		<result column="USER_PASSWD" property="userPasswd"/>
+		<result column="PRODUCT_CODE" property="productCode"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="UserInfColumns">
+		m.USER_ID,
+		m.USER_NAME,
+		m.USER_TYPE,
+		m.USER_PASSWD,	
+		m.PRODUCT_CODE,	
+		m.DATA_STAT,			
+		m.REMARKS,
+		m.CREATE_USER, 
+		m.UPDATE_USER, 
+		m.CREATE_TIME, 
+		m.UPDATE_TIME, 
+		m.LOCK_VERSION
+	</sql>
+	<insert id="insertUserInf" parameterType="UserInf">
+		<selectKey resultType="string" order="BEFORE" keyProperty="userId">  
+			<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getCommonId" />
+		</selectKey>
+		INSERT INTO TB_USER_INF (
+			USER_ID,
+			USER_NAME,
+			USER_TYPE,
+			USER_PASSWD,	
+			PRODUCT_CODE,	
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER, 
+			CREATE_TIME, 
+			LOCK_VERSION
+		 )  VALUES ( 
+		 		#{userId},
+		 		#{userName,jdbcType=VARCHAR},
+		 		#{userType,jdbcType=VARCHAR},
+		 		#{userPasswd,jdbcType=VARCHAR},
+		 		#{productCode,jdbcType=VARCHAR},
+		 		#{dataStat,jdbcType=VARCHAR},
+		 		#{remarks,jdbcType=VARCHAR},
+		 		#{createUser,jdbcType=VARCHAR},
+		 		sysdate,
+		 		'0') 
+	</insert>
+	
+
+	<select id="getUserInfById" parameterType="java.lang.String" resultMap="UserInfResultMap">
+		SELECT 
+	  		<include refid="UserInfColumns" />
+		 FROM TB_USER_INF m WHERE  m.USER_ID=#{userId}
+	</select>
+	
+	
+	<update id="updateUserInf" parameterType="PersonInf">
+			UPDATE TB_USER_INF SET
+			USER_NAME=#{userName,jdbcType=VARCHAR},
+			USER_TYPE=#{userType,jdbcType=VARCHAR},
+			PRODUCT_CODE=#{productCode,jdbcType=VARCHAR},	
+			DATA_STAT=#{dataStat,jdbcType=VARCHAR},			
+			REMARKS=#{remarks,jdbcType=VARCHAR},
+			UPDATE_USER=#{updateUser,jdbcType=VARCHAR}, 
+			UPDATE_TIME=sysdate,
+			LOCK_VERSION = LOCK_VERSION+1 
+			WHERE USER_ID=#{userId}
+	</update>
+
+</mapper>

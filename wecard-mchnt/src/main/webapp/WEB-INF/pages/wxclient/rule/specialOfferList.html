@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>知了企服</title>
+    
+    <#include "../../common/wecardHeader.html">
+</head>
+<body>
+<div class="wrap home-page">
+    <div class="title">
+        <h1>优惠管理</h1>
+    </div>
+	    <div class="row card-list" id="cardlist">
+		    <#if tempList??&&tempList?size gt 0>
+	        	<#list tempList as row>
+	        	<a href="${s.base}/wxclient/account/ruleTypeList.html?templateCode=${row.templateCode!}">
+			        <div class="col-xs-12">
+			            <div class="card">
+			            		<div class="row">
+				                    ${row.templateName}
+			                   	</div>
+			                    <div class="des">${row.templateDesp}</div>
+			            </div>
+			        </div>
+		        </a>
+		        </#list>
+	        </#if>	
+	    </div>
+</div>
+</body>
+</html>

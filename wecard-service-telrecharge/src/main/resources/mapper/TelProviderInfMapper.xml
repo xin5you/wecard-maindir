@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wecard.facade.telrecharge.mapper.TelProviderInfMapper">
+		
+	<resultMap type="TelProviderInf" id="TelProviderInfResultMap">
+		<result column="PROVIDER_ID" property="providerId"/>
+	  	<result column="PROVIDER_NAME" property="providerName"/>
+	    <result column="APP_URL" property="appUrl"/>
+	    <result column="APP_SECRET" property="appSecret"/>
+	    <result column="ACCESS_TOKEN" property="accessToken"/>
+	    <result column="DEFAULT_ROUTE" property="defaultRoute"/>
+	    <result column="PROVIDER_RATE" property="providerRate"/>
+	    <result column="OPER_SOLR" property="operSolr"/>
+		<result column="RESV1" property="resv1"/>
+		<result column="RESV2" property="resv2"/>
+		<result column="RESV3" property="resv3"/>
+		<result column="RESV4" property="resv4"/>
+		<result column="RESV5" property="resv5"/>
+		<result column="RESV6" property="resv6"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="TableName">
+			TB_TEL_PROVIDER_INF
+	</sql>
+	
+	<sql id="ColumnResult">
+	 	PROVIDER_ID,
+	  	PROVIDER_NAME,
+	    APP_URL, 
+	    APP_SECRET,
+	    ACCESS_TOKEN, 
+	    DEFAULT_ROUTE,
+	    PROVIDER_RATE, 
+	    OPER_SOLR,
+		RESV1,
+		RESV2,
+		RESV3,
+		RESV4,
+		RESV5,
+		RESV6,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER	,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+
+	<select id="getById" parameterType="java.lang.String" resultMap="TelProviderInfResultMap">
+		SELECT 
+	  		<include refid="ColumnResult" />
+		 		     FROM 	<include refid="TableName" /> m
+		              WHERE m.data_stat='0' AND m.PROVIDER_ID=#{id}
+	</select>
+	
+	<select id="getList" parameterType="TelProviderInf" resultMap="TelProviderInfResultMap">
+		SELECT 
+	  		<include refid="ColumnResult" />
+		FROM 	
+			<include refid="TableName" /> m
+		WHERE 1=1 and m.data_stat='0'
+		<if test="providerName !=null and providerName !='' ">
+			AND m.PROVIDER_NAME LIKE '%' || #{providerName} || '%'
+		</if>
+		ORDER BY M.UPDATE_TIME DESC
+	</select>
+	
+		<insert id="insert" parameterType="TelProviderInf">
+			 <selectKey resultType="string" order="BEFORE" keyProperty="providerId">  
+			<include refid="com.cn.thinkx.wecard.facade.telrecharge.mapper.SqlTelCommonMapper.getTelCommonId" />
+		</selectKey>
+			INSERT INTO <include refid="TableName" /> (
+				<include refid="ColumnResult" />
+			 )  VALUES (
+					#{providerId,jdbcType=VARCHAR},
+					#{providerName,jdbcType=VARCHAR},
+					#{appUrl,jdbcType=VARCHAR},
+					#{appSecret,jdbcType=VARCHAR},
+					#{accessToken,jdbcType=VARCHAR},
+					#{defaultRoute,jdbcType=VARCHAR},
+					#{providerRate,jdbcType=VARCHAR},
+					#{operSolr,jdbcType=VARCHAR},
+			 		#{resv1,jdbcType=VARCHAR},
+			 		#{resv2,jdbcType=VARCHAR},
+			 		#{resv3,jdbcType=VARCHAR},
+			 		#{resv4,jdbcType=VARCHAR},
+			 		#{resv5,jdbcType=VARCHAR},
+			 		#{resv6,jdbcType=VARCHAR},
+			 		#{dataStat,jdbcType=VARCHAR},
+			 		#{remarks,jdbcType=VARCHAR},
+			 		#{createUser,jdbcType=VARCHAR},
+			 		#{createUser,jdbcType=VARCHAR},
+			 		sysdate,
+			 		sysdate,
+			 		'0') 
+		</insert>
+
+		<update id="update"  parameterType="TelProviderInf">
+			UPDATE <include refid="TableName" /> SET
+				PROVIDER_NAME=#{providerName,jdbcType=VARCHAR},
+				APP_URL=#{appUrl,jdbcType=VARCHAR},
+				APP_SECRET=#{appSecret,jdbcType=VARCHAR},
+				ACCESS_TOKEN=#{accessToken,jdbcType=VARCHAR},
+				DEFAULT_ROUTE=#{defaultRoute,jdbcType=VARCHAR},
+				PROVIDER_RATE=#{providerRate,jdbcType=VARCHAR},
+				OPER_SOLR=#{operSolr,jdbcType=VARCHAR},
+		 		RESV1=#{resv1,jdbcType=VARCHAR},
+		 		RESV2=#{resv2,jdbcType=VARCHAR},
+		 		RESV3=#{resv3,jdbcType=VARCHAR},
+		 		RESV4=#{resv4,jdbcType=VARCHAR},
+		 		RESV5=#{resv5,jdbcType=VARCHAR},
+		 		RESV6=#{resv6,jdbcType=VARCHAR},
+				DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+				REMARKS=#{remarks,jdbcType=VARCHAR},
+				UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+				UPDATE_TIME=sysdate,
+				LOCK_VERSION=LOCK_VERSION+1
+			 	WHERE LOCK_VERSION=#{lockVersion} AND PROVIDER_ID = #{providerId} 
+	</update>
+	
+		<update id="deleteById" parameterType="string">
+			UPDATE <include refid="TableName" /> SET DATA_STAT='1'  WHERE　PROVIDER_ID = #{providerId} 
+		</update>
+		
+		<update id="updateByDefaultRoute">
+			UPDATE <include refid="TableName" /> SET DEFAULT_ROUTE= '1'  WHERE　DEFAULT_ROUTE= '0'
+		</update>
+
+</mapper>

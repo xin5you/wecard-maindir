@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.cn.thinkx</groupId>
+	<artifactId>maindir</artifactId>
+	<packaging>pom</packaging>
+	<version>1.0</version>
+	<name>maindir</name>
+	<url>www.thinkx.com.cn</url>
+
+	<prerequisites>
+		<maven>3.2.2</maven>
+	</prerequisites>
+
+	<build>
+		<defaultGoal>install</defaultGoal>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<additionalProjectnatures>
+						<projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
+					</additionalProjectnatures>
+					<additionalBuildcommands>
+						<buildcommand>org.springframework.ide.eclipse.core.springbuilder</buildcommand>
+					</additionalBuildcommands>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>false</downloadJavadocs>
+					<wtpversion>1.5</wtpversion>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-idea-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+					<dependenciesAsLibraries>true</dependenciesAsLibraries>
+					<useFullNames>false</useFullNames>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-scm-plugin</artifactId>
+				<version>1.9.5</version>
+				<configuration>
+					<tag>maindir</tag>
+					<addTimestamp>true</addTimestamp>
+					<timestampFormat>yyyyMMdd</timestampFormat>
+					<message>maindir Daily Build</message>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<nonFilteredFileExtensions>
+						<nonFilteredFileExtension>xls</nonFilteredFileExtension>
+					</nonFilteredFileExtensions>
+				</configuration>
+			</plugin>
+			<plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-surefire-plugin</artifactId>
+	            <configuration>
+	                <testFailureIgnore>true</testFailureIgnore>
+	            </configuration>
+	        </plugin>
+		</plugins>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+		</dependencies>
+	</dependencyManagement>
+
+	<repositories>
+		<repository>
+			<id>mvnrepository</id>
+			<name>mvnrepository</name>
+			<url>http://maven.apache.org</url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<modules>
+		<module>common</module>
+		<module>facade</module>
+		<module>wecard-facade-telrecharge</module>
+		<module>middleware</module>
+		<module>wecard-mchnt</module>
+		<module>wecard-customer</module>
+		<module>wecard-cms</module>
+		<module>wecard-api</module>
+		<module>wecard-centre-web</module>
+		<module>oms</module>
+		<module>wecard-key-api</module>
+    <module>wecard-service-telrecharge</module>
+  </modules>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<!-- Testing dependency versions -->
+        <junit.version>4.12</junit.version>
+        
+		<!-- spring版本号 -->
+		<spring.version>4.3.0.RELEASE</spring.version>
+		<!-- log4j日志文件管理包版本 -->
+		<slf4j.version>1.7.21</slf4j.version>
+		<!-- mybatis版本号 -->
+		<mybatis.version>3.4.0</mybatis.version>
+		<mybatis-spring.version>1.3.0</mybatis-spring.version>
+		<!-- 规则引擎版本号 -->
+		<drools.version>6.4.0.Final</drools.version>
+		<shiro.version>1.2.2</shiro.version>
+		
+		<!-- redis 版本号 -->
+		<jedis.redis.version>2.9.0</jedis.redis.version>
+		<fastjson.version>1.2.7</fastjson.version>
+		
+		<!-- mina 版本号 -->
+		<mina.version>2.0.7</mina.version>
+		
+		<commons-io.version>2.4</commons-io.version>
+		<commons-lang.version>2.6</commons-lang.version>
+		<commons-logging.version>1.1.1</commons-logging.version>
+	</properties>
+</project>

@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.phoneRecharge.mapper.PhoneRechargeShopMapper">
+
+	<sql id="phoneRechargeColumns">
+	   P.ID,
+       P.SUPPLIER,
+       P.OPER,
+       P.SHOP_NO,
+       P.SHOP_FACE,
+       P.SHOP_PRICE,
+       P.SHOP_TYPE,
+       P.IS_USABLE,
+       P.START_VALIDITY,
+       P.END_VALIDITY,
+       P.RESV1,
+       P.RESV2,
+       P.RESV3,
+       P.RESV4,
+       P.RESV5,
+       P.RESV6,
+       P.DATA_STAT,
+       P.REMARKS,
+       P.CREATE_USER,
+       P.UPDATE_USER,
+       P.CREATE_TIME,
+       P.UPDATE_TIME,
+       P.LOCK_VERSION
+	</sql>
+	
+	<select id="getPhoneRechargeShopList" parameterType="PhoneRechargeShop" resultType="PhoneRechargeShop">
+		SELECT P.ID,
+	       P.SUPPLIER,
+	       P.OPER,
+	       P.SHOP_NO,
+	       P.SHOP_FACE,
+	       P.SHOP_PRICE,
+	       P.SHOP_TYPE,
+	       P.IS_USABLE,
+	       P.START_VALIDITY,
+	       P.END_VALIDITY,
+	       P.RESV1,
+	       P.RESV2,
+	       P.RESV3,
+	       P.RESV4,
+	       P.RESV5,
+	       P.RESV6,
+	       P.DATA_STAT,
+	       P.REMARKS,
+	       P.CREATE_USER,
+	       P.UPDATE_USER,
+	       P.CREATE_TIME,
+	       P.UPDATE_TIME,
+	       P.LOCK_VERSION
+	  FROM TB_PHONE_RECHARGE_SHOP P
+	 WHERE P.DATA_STAT = '0'
+		<if test="supplier != null and supplier != '' ">
+			AND P.SUPPLIER = #{supplier}
+		</if>
+		<if test="oper != null and oper != '' ">
+			AND P.OPER = #{oper}
+		</if>
+		ORDER BY P.UPDATE_TIME DESC
+	</select>
+	
+	<select id="getShopFaceByPhoneRechargeShop" parameterType="PhoneRechargeShop" resultType="PhoneRechargeShop">
+			SELECT SHOP_FACE,RESV1
+		    FROM (SELECT P.SHOP_FACE,P.RESV1
+		            FROM TB_PHONE_RECHARGE_SHOP P
+		           WHERE P.DATA_STAT = '0'
+		             AND P.SUPPLIER = #{supplier}
+		             AND P.OPER = '1'
+		             AND P.IS_USABLE = '0'
+		          UNION
+		          SELECT P.SHOP_FACE,P.RESV1
+		            FROM TB_PHONE_RECHARGE_SHOP P
+		           WHERE P.DATA_STAT = '0'
+		             AND P.SUPPLIER = #{supplier}
+		             AND P.OPER = '2'
+		             AND P.IS_USABLE = '0'
+		          UNION
+		          SELECT P.SHOP_FACE,P.RESV1
+		            FROM TB_PHONE_RECHARGE_SHOP P
+		           WHERE P.DATA_STAT = '0'
+		             AND P.SUPPLIER = #{supplier}
+		             AND P.OPER = '3'
+		             AND P.IS_USABLE = '0')
+		   ORDER BY SHOP_FACE
+	</select>
+	
+	<select id="getYDShopFaceByPhoneRechargeShop" parameterType="PhoneRechargeShop" resultType="PhoneRechargeShop">
+		SELECT 
+			<include refid="phoneRechargeColumns" />
+		FROM TB_PHONE_RECHARGE_SHOP P
+           WHERE P.DATA_STAT = '0'
+             AND P.SUPPLIER = #{supplier}
+             AND P.OPER = '1'
+             AND P.IS_USABLE = '0'
+	</select>
+	
+	<select id="getLTShopFaceByPhoneRechargeShop" parameterType="PhoneRechargeShop" resultType="PhoneRechargeShop">
+		SELECT 
+			<include refid="phoneRechargeColumns" />
+		FROM TB_PHONE_RECHARGE_SHOP P
+           WHERE P.DATA_STAT = '0'
+             AND P.SUPPLIER = #{supplier}
+             AND P.OPER = '2'
+             AND P.IS_USABLE = '0'
+	</select>
+	
+	<select id="getDXShopFaceByPhoneRechargeShop" parameterType="PhoneRechargeShop" resultType="PhoneRechargeShop">
+		SELECT 
+			<include refid="phoneRechargeColumns" />
+		FROM TB_PHONE_RECHARGE_SHOP P
+           WHERE P.DATA_STAT = '0'
+             AND P.SUPPLIER = #{supplier}
+             AND P.OPER = '3'
+             AND P.IS_USABLE = '0'
+	</select>
+	
+	<select id="getPhoneRechargeShopByPhoneRechargeShop" parameterType="PhoneRechargeShop" resultType="PhoneRechargeShop">
+		SELECT 
+			<include refid="phoneRechargeColumns" />
+		FROM TB_PHONE_RECHARGE_SHOP P
+           WHERE P.DATA_STAT = '0'
+		   AND P.SUPPLIER = #{supplier}
+		   AND P.OPER = #{oper}
+		   AND P.SHOP_TYPE = #{shopType}
+		   AND P.SHOP_FACE = #{shopFace}
+             
+	</select>
+	
+	<select id="getPhoneRechargeShopById" parameterType="string" resultType="PhoneRechargeShop">
+		SELECT 
+			<include refid="phoneRechargeColumns" />
+		FROM TB_PHONE_RECHARGE_SHOP P
+           WHERE P.DATA_STAT = '0'
+             AND P.ID = #{id}
+	</select>
+	
+	<insert id="insertPhoneRechargeShop" parameterType="PhoneRechargeShop" >
+		INSERT INTO TB_PHONE_RECHARGE_SHOP
+		  (
+		  SUPPLIER,
+		   OPER,
+		   SHOP_NO,
+		   SHOP_FACE,
+		   SHOP_PRICE,
+		   SHOP_TYPE,
+		   IS_USABLE,
+		   START_VALIDITY,
+		   END_VALIDITY,
+		   RESV1,
+		   RESV2,
+		   RESV3,
+		   RESV4,
+		   RESV5,
+		   RESV6,
+		   DATA_STAT,
+		   REMARKS,
+		   CREATE_USER,
+		   UPDATE_USER,
+		   CREATE_TIME,
+		   UPDATE_TIME,
+		   LOCK_VERSION
+		   )
+		VALUES
+		  (
+			#{supplier,jdbcType=VARCHAR},
+			#{oper,jdbcType=VARCHAR},
+			#{shopNo,jdbcType=VARCHAR},
+			#{shopFace,jdbcType=VARCHAR},
+			#{shopPrice,jdbcType=VARCHAR},
+			#{shopType,jdbcType=VARCHAR},
+			'0',
+			to_date(#{startValidity,jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'),
+			to_date(#{endValidity,jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'),
+			#{resv1,jdbcType=VARCHAR},
+			#{resv2,jdbcType=VARCHAR},
+			#{resv3,jdbcType=VARCHAR},
+			#{resv4,jdbcType=VARCHAR},
+			#{resv5,jdbcType=VARCHAR},
+			#{resv6,jdbcType=VARCHAR},
+			'0',
+			#{remarks,jdbcType=VARCHAR},
+			#{createUser,jdbcType=VARCHAR},
+			#{updateUser,jdbcType=VARCHAR},
+			sysdate,
+			sysdate,
+			'0'
+		  )
+	</insert>
+	
+	<update id="updatePhoneRechargeShop" parameterType="PhoneRechargeShop" >
+		UPDATE TB_PHONE_RECHARGE_SHOP SET 
+		<if test="supplier != null  and supplier != '' ">
+			SUPPLIER=#{supplier,jdbcType=VARCHAR},
+		</if>
+		<if test="oper != null  and oper != '' ">
+			OPER=#{oper,jdbcType=VARCHAR},
+		</if>
+		<if test="shopNo != null  and shopNo != '' ">
+			SHOP_NO=#{shopNo,jdbcType=VARCHAR},
+		</if>
+		<if test="shopFace != null  and shopFace != '' ">
+			SHOP_FACE=#{shopFace,jdbcType=VARCHAR},
+		</if>
+		<if test="shopPrice != null  and shopPrice != '' ">
+			SHOP_PRICE=#{shopPrice,jdbcType=VARCHAR},
+		</if>
+		<if test="shopType != null  and shopType != '' ">
+			SHOP_TYPE=#{shopType,jdbcType=VARCHAR},
+		</if>
+		<if test="isUsable != null  and isUsable != '' ">
+			IS_USABLE=#{isUsable,jdbcType=VARCHAR},
+		</if>
+		<if test="startValidity != null  and startValidity != '' ">
+			START_VALIDITY=to_date(#{startValidity,jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'),
+		</if>
+		<if test="endValidity != null  and endValidity != '' ">
+			END_VALIDITY=to_date(#{endValidity,jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'),
+		</if>
+		<if test="resv1 != null  and resv1 != '' ">
+			RESV1=#{resv1},
+		</if>
+		<if test="remarks != null  and remarks != '' ">
+			REMARKS=#{remarks,jdbcType=VARCHAR},
+		</if>
+		LOCK_VERSION = LOCK_VERSION + 1,
+		UPDATE_TIME  = SYSDATE
+		WHERE ID = #{id}
+	</update>
+	
+	<delete id="deletePhoneRechargeShop" parameterType="String">
+		UPDATE TB_PHONE_RECHARGE_SHOP
+		   SET DATA_STAT    = '1',
+		       LOCK_VERSION = LOCK_VERSION + 1,
+		       UPDATE_TIME  = SYSDATE
+		 WHERE ID = #{id}
+	</delete>
+	
+
+</mapper>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>知了企服</title>
+    <#include "../../common/wecardHeader.html">
+</head>
+<body ontouchstart>
+    <div class="page">
+		<div class="hd">
+		    <h1 class="page_title">规则管理</h1>
+		</div>
+		<div class="bd">
+			<div class="weui_panel_hd">
+			<#if mchntManager?? && mchntManager.roleType=='100'>
+				<a class="weui_btn weui_btn_primary"  href="${s.base}/wxclient/account/addRule.html?templateCode=${templateCode!}"/>新增规则</a>
+			 </#if>
+			</div>
+			 <div class="weui_panel_bd">
+			    <#if declareList??&&declareList?size gt 0>
+		        	<#list declareList as row>
+		        		<a href="${s.base}/wxclient/account/editRule.html?ruleId=${row.ruleId!}">
+				          <div class="weui_media_box weui_media_text" >
+		            		  <div class="weui_media_title"><span> ${row.templateName}</span> <span> ${row.ruleName!}</span></div>
+		                     <div class="weui_media_desc">有效期：${row.startTime?string("yyyy-MM-dd")} 至 ${row.endTime?string("yyyy-MM-dd")}</div>
+				        </div>
+				        </a>
+			        </#list>
+		        </#if>	
+		    </div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

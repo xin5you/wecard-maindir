@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<#include "../common/wecardHeader.html">
+		<!--通用媒体查询-->
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+		<title>充值</title>
+	</head>
+	<body>
+		<form id="buyForm" name="buyForm" action="${s.base}/unicomAync/buy.html" method="post">
+			手机号：<input type="text" id="mobile" name="mobile"  /><br />
+			金额(元)：<input type="text" id="itemPrice" name="itemPrice"  /><br />
+			<input id="type" name="type" value="2" type="hidden" /><br />
+			商品编号：<input type="text" id="itemId" name="itemId" /><br />
+			<input type="submit" value="提交" />
+		</form>
+	</body>
+</html>

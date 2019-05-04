@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" lang="en">
+<head th:include="main/header::header" />
+<body>
+	<div class="content_body">
+    	<div class="hkb_platform_error error_500">
+	        <!--背景-->
+	        <div class="hkb_cartoon_pic">
+	            <!-- 背景-->
+	            <div class="bg_500"></div>
+	            <!-- 吊车-->
+	            <div class="crane"></div>
+	            <!--文本-->
+	            <div class="text_500">
+                <div>
+                    <div>
+                        <p>这里的程序出现了意外</p>
+                        <p>工程师们正在抢修啦..</p>
+                    </div>
+                </div>
+            	</div>
+        	</div>
+	        <div class="error_btn_area">
+	            <div class="hkb_error_btn" id="reset">刷新页面</div>
+	        </div>
+    	</div>
+	</div>
+	<script th:src="@{/diy/js/main/error.js}"></script>
+</body>
+</html>

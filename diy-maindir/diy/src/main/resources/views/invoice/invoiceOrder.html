@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	lang="en">
+<link rel="stylesheet" th:href="@{/diy/css/hkbServicePlatform.min.css}" />
+<head th:include="main/header::header" />
+<!-- nav 导航栏-->
+<header th:include="main/navbar::navbar"/>
+<body>
+
+<!-- 个人充值开票 -->
+<form id="searchForm" th:action="@{/invoice/invoiceOrder/getTransQuery}" th:object="${log}" method="post">
+<input id="searchstat" name="searchstat" th:value="1" type="hidden"/>
+<div class="content_body">
+
+    <div class="title_content_title">
+        <p><img th:src="@{/icon/tab_query_data_green.png}" />充值开票查询</p>
+    </div>
+    <div class="info_middle_body">
+    <!-- 操作组件-->
+      <div class="info_content_operation">
+          <!-- data组件-->
+          <div class="control_list half_list">
+			<div class="hkb_date_list">
+                 <span>流水号：</span>
+                 <span>
+                    <input type="text" class="layui-input hkb_item" id="dmsRelatedKey" name="dmsRelatedKey" th:value="*{dmsRelatedKey}" placeholder="请输入流水号后六位"/>
+               </span>
+             </div>
+            <div class="hkb_date_list">
+                <span>用户名：</span>
+                <span>
+                     <input type="text" id="personName" name="personName" th:value="*{personName}" class="layui-input hkb_item" placeholder="请输入用户名"/>
+                </span>
+            </div>
+            
+        </div>
+        
+        <div class="control_list half_list">
+             <div class="hkb_date_list">
+               <span>开票状态：</span>
+               <span>
+                  <select class="layui-input hkb_item" id="invoiceStat" name="invoiceStat">
+                  	<option value="-1" selected="selected">全部</option>
+                    <option value="0" th:selected="${log.invoiceStat=='0'}">可开票</option>
+                    <option value="1" th:selected="${log.invoiceStat=='1'}">已开票</option>
+                  </select>
+               </span>
+            </div>
+            <div class="hkb_date_list">
+                 <span>查询记录：</span>
+                 <span>
+                     <select class="layui-input hkb_item" id="queryType" name="queryType">
+                       <option value="-1" selected="selected">全部</option>
+                       <option value="cur" th:selected="${log.queryType=='cur'}">当天记录</option>
+                       <option value="his" th:selected="${log.queryType=='his'}">历史记录</option>
+                   </select>
+               </span>
+             </div>
+          </div>
+         <div class="control_list half_list" id = "transTime">
+             <div class="hkb_date_list">
+                 <span>交易开始时间：</span>
+                 <span>
+                    <input type="text" class="layui-input hkb_item Wdate" th:value="*{startTransTime}" readonly="readonly" placeholder="请输入开始时间" id = "startTransTime" name = "startTransTime"/>
+               </span>
+             </div>
+             <div class="hkb_date_list">
+                  <span>交易结束时间：</span>
+                  <span>
+                     <input type="text" class="layui-input hkb_item Wdate" th:value="*{endTransTime}" readonly="readonly" placeholder="请输入开始时间"  id = "endTransTime" name = "endTransTime"/>
+                </span>
+              </div>
+         </div>
+        <div class="control_list btn_list list_row" style="text-align: right">
+            <button type="button" class="hkb_btn btn_green" id="btn-search" >查询</button>
+            <button type="button" class="hkb_btn btn_white" id="btn-reset" >重置</button>
+        </div>
+    </div>
+    <!-- table -->
+    <div class="info_content_table">
+        <!-- table 单独-->
+        <table class="table_box" border="0" cellpadding="0" cellspacing="1" rules="cols">
+            <thead>
+            <tr class="hkb_title_tr">
+                <th>流水号</th>
+                <th>清算日</th>
+                <th>用户名</th>
+                <th>商户名称</th>
+                <th>交易类型</th>
+                <th>交易金额</th>
+                <th>交易状态</th>
+                <th>交易时间</th>
+                <th>开票状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr align="center" th:if="${#lists.isEmpty(pageInfo.list)}">
+				<td colspan="8"><span th:text="暂无数据"></span></td>
+			</tr>
+            <tr align="center" th:if="${not #lists.isEmpty(pageInfo.List)}" th:each="trans,transStat : ${pageInfo.list}" th:inline="text">
+                <td><span th:text="${trans.dmsRelatedKey}"></span></td>
+                <td><span th:text="${trans.settleDate}"></span></td>
+                <td><span th:text="${trans.personName}"></span></td>
+                <td><span th:text="${trans.mchntName}"></span></td>
+                <td><span th:text="${trans.transType}"></span></td>
+                <td><span th:text="${trans.transAmt}"></span></td>
+                <td><span th:text="${trans.respCode}"></span></td>
+                <td><span th:text="${trans.transTime}"></span></td>
+                <td>
+                <span th:if="${trans.invoiceStat == '0'}">可开票</span>
+                <span th:if="${trans.invoiceStat != '0'}">已开票</span>
+                </td>
+                <td class="table_operation">
+                	<a sec:authorize="hasRole('ROLE_DIY_INVOICE_ORDER_PER_INTOADD')" class="btn-detail trans_refund" name = "invoice" th:if="${trans.invoiceStat == '0'}" th:attr="dmsKey=${trans.dmsRelatedKey}">开票</a>
+                	<a sec:authorize="hasRole('ROLE_DIY_INVOICE_ORDER_PER_VIEW')" class="btn-detail trans_refund" name = "invoiceDetails" th:if="${trans.invoiceStat != '0'}" th:attr="dmsKey=${trans.dmsRelatedKey}">开票详情</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <!-- next-->
+    <div th:if="${not #lists.isEmpty(pageInfo.list)}" th:include="main/pagination::page" class="info_page"></div>
+    </div>
+</div>
+</form>
+
+
+<!-- 确认开票-->
+<!--确认开票-->
+<div class="hkb_dialog" id="refundsConfirmation">
+
+    <div class="dialog_bg"></div>
+    <div class="dialog_box">
+        <div class="dialog_top">
+            <div class="dialog_close"><span>×</span></div>
+            <p></p>
+        </div>
+        <!-- body-->
+        <div class="dialog_body">
+            <div class="dialog_content">
+                <!-- list 1-->
+                <div class="dialog_list">
+                    <div>
+                        <span>交易流水号：</span>
+                        <span id="dmsKey"></span>
+						<input type="hidden" class="dialog_input" id="itfPrimaryKey" name="itfPrimaryKey" value="" />
+                        <input type="hidden" class="dialog_input" id="phone" name="phone" value="" />
+                    </div>
+                </div>
+                <div class="dialog_list">
+                    <div>
+                        <span>开票金额：</span>
+                        <span id="transAmt"></span>
+                        <input type="hidden" class="dialog_input" id="invoiceAmt" name="invoiceAmt" value="" />
+                    </div>
+                </div>
+                <div class="dialog_list">
+                	<div>
+                        <span>操作人手机号：</span>
+                        <span id="phoneNumber"></span>
+<!--                         <div class="identifying_code" id="identifyingCode">点击获取验证码</div> -->
+                    </div>
+                </div>
+                <div class="dialog_list">
+                	<div>
+                        <span>充值商户：</span>
+                        <span id="mchntName"></span>
+                        <input type="hidden" class="dialog_input" id="mchntCode" name="mchntCode" value="" />
+                    </div>
+                </div>
+                <div class="dialog_list">
+                	<div>
+                        <span>开票门店：</span>
+                        <span id="shopName"></span>
+                        <input type="hidden" class="dialog_input" id="shopCode" name="shopCode" value="" />
+                    </div>
+                </div>
+                <div class="dialog_list">
+                	<div id = "createtime1">
+                        <span>开票时间：</span>
+                        <span id="createtime"></span>
+                    </div>
+                </div>
+                <div class="dialog_list">
+                    <div class="list_textarea">
+                        <span>开票信息描述：</span>
+                        <textarea class="dialog_textarea" id="invoiceInf"></textarea>
+                        <span class="dialog_error" id="dialog_error"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- footer -->
+        <div class="dialog_footer">
+        	<button sec:authorize="hasRole('ROLE_DIY_INVOICE_ORDER_PER_ADDCOMMIT')" type="button" class="hkb_btn btn_green" id="drawBack">确认开票</button>
+            <button type="button" class="hkb_btn btn_white" onclick="refundsDialog.hide()">关闭</button>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 开票成功-->
+<!--开票成功-->
+<div class="hkb_dialog" id="refundsState">
+
+    <div class="dialog_bg"></div>
+    <div class="dialog_box">
+        <div class="dialog_top">
+            <div class="dialog_close"><span>×</span></div>
+            <p>开票成功</p>
+        </div>
+        <!-- body-->
+        <div class="dialog_body">
+            <div class="dialog_content">
+                <!-- 开票动画 成功-->
+                <div class="pay_animation_right">
+
+                    <div class="swal2-icon swal2-success animate">
+
+                        <span class="line tip animate-success-tip"></span>
+
+                        <span class="line long animate-success-long"></span>
+
+                        <div class="placeholder"></div>
+
+                        <div class="fix"></div>
+
+                    </div>
+
+                </div>
+                <!-- 开票动画 失败-->
+                <!--<div class="payment_animation_wrong">-->
+                    <!--<div class="swal2-icon swal2-error animate-error-icon">-->
+             <!--<span class="x-mark animate-x-mark">-->
+             <!--<span class="line left"></span>-->
+             <!--<span class="line right"></span>-->
+             <!--</span>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!-- 开票文案-->
+                <p class="dialog_big_text">开票成功</p>
+            </div>
+        </div>
+        <!-- footer -->
+        <div class="dialog_footer">
+            <button type="button" class="hkb_btn btn_green" id="hkb_close" >关闭</button>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/diy/js/invoice/invoiceOrder.js}"></script>
+	<script th:inline="javascript">
+			$("#transId").val(/*[[${log.transId}]]*/);
+		</script>
+	
+<script>addEventListener('load',function(){
+// 	$(".moredate").each(function(){
+//         $(this).jeDate({
+//             format: "YYYY-MM-DD"
+//         });
+//     });
+	
+    //开票确认
+    refundsDialog = new hkbShowDialog({
+
+        'ele': 'refundsConfirmation'
+    })
+
+    //开票成功
+
+    stateDialog = new hkbShowDialog({
+
+        'ele': 'refundsState'
+    })
+    
+})
+</script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.cardkeys.mapper.WithdrawOrderMapper">
+
+	<sql id="WithdrawOrderColumns">
+		ORDER_ID,
+		BATCH_NO,
+		USER_ID,
+		TOTAL_FEE,
+		TOTAL_AMOUNT,
+		TOTAL_NUM,
+		WITHDRAW_DATE,
+		ORDER_NAME,
+		STAT,
+		PAID_INS,
+		PAID_ID,
+		PAID_RESP_DESC,
+		SUCCESS_AMOUNT,
+		SUCCESS_NUM,
+		SUCCESS_FEE,
+		FAIL_AMOUNT,
+		FAIL_NUM,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+
+	<sql id="WithdrawOrderFields">
+		#{orderId, jdbcType=VARCHAR},
+		#{batchNo, jdbcType=VARCHAR},
+		#{userId, jdbcType=VARCHAR},
+		#{totalFee, jdbcType=VARCHAR},
+		#{totalAmount, jdbcType=VARCHAR},
+		#{totalNum, jdbcType=VARCHAR},
+		#{withdrawDate, jdbcType=VARCHAR},
+		#{orderName, jdbcType=VARCHAR},
+		#{stat, jdbcType=VARCHAR},
+		#{paidIns, jdbcType=VARCHAR},
+		#{paidId, jdbcType=VARCHAR},
+		#{paidRespDesc, jdbcType=VARCHAR},
+		#{successAmount, jdbcType=VARCHAR},
+		#{successNum, jdbcType=VARCHAR},
+		#{successFee, jdbcType=VARCHAR},
+		#{failAmount, jdbcType=VARCHAR},
+		#{failNum, jdbcType=VARCHAR},
+		'0',
+		#{remarks, jdbcType=VARCHAR},
+		#{createUser, jdbcType=VARCHAR},
+		#{updateUser, jdbcType=VARCHAR},
+		SYSDATE,
+		SYSDATE,
+		'0'
+	</sql>
+
+	<sql id="tableName">
+			TB_WITHDRAW_ORDER
+	</sql>
+	
+	<select id="getWithdrawOrderByPaidId" parameterType="java.lang.String" resultType="WithdrawOrder">
+		SELECT 
+	  		<include refid="WithdrawOrderColumns" />
+		FROM 
+			<include refid="tableName" />
+		WHERE DATA_STAT = '0'
+			AND PAID_ID = #{paidId}
+	</select>
+	
+	<update id="updateWithdrawOrder" parameterType="WithdrawOrder">
+		UPDATE 
+			<include refid="tableName" />
+		SET
+		<if test="totalFee !=null and totalFee !='' ">
+			TOTAL_FEE = #{totalFee,jdbcType=VARCHAR},
+		</if>
+		<if test="totalAmount !=null and totalAmount !='' ">
+			TOTAL_AMOUNT = #{totalAmount,jdbcType=VARCHAR},
+		</if>
+		<if test="totalNum !=null and totalNum !='' ">
+			TOTAL_NUM = #{totalNum,jdbcType=VARCHAR},
+		</if>
+		<if test="orderName !=null and orderName !='' ">
+			ORDER_NAME = #{orderName,jdbcType=VARCHAR},
+		</if>
+		<if test="stat !=null and stat !='' ">
+			STAT = #{stat,jdbcType=VARCHAR},
+		</if>
+		<if test="paidIns !=null and paidIns !='' ">
+			PAID_INS = #{paidIns,jdbcType=VARCHAR},
+		</if>
+		<if test="paidId !=null and paidId !='' ">
+			PAID_ID = #{paidId,jdbcType=VARCHAR},
+		</if>
+		<if test="paidRespDesc !=null and paidRespDesc !='' ">
+			PAID_RESP_DESC = #{paidId,jdbcType=VARCHAR},
+		</if>
+		<if test="successAmount !=null and successAmount !='' ">
+			SUCCESS_AMOUNT = #{successAmount,jdbcType=VARCHAR},
+		</if>
+		<if test="successNum !=null and successNum !='' ">
+			SUCCESS_NUM = #{successNum,jdbcType=VARCHAR},
+		</if>
+		<if test="successFee !=null and successFee !='' ">
+			SUCCESS_FEE = #{successFee,jdbcType=VARCHAR},
+		</if>
+		<if test="failAmount !=null and failAmount !='' ">
+			FAIL_AMOUNT = #{failAmount,jdbcType=VARCHAR},
+		</if>
+		<if test="failNum !=null and failNum !='' ">
+			FAIL_NUM = #{failNum,jdbcType=VARCHAR},
+		</if>
+			UPDATE_TIME = sysdate,
+			LOCK_VERSION = LOCK_VERSION+1
+		WHERE ORDER_ID = #{orderId}
+	</update>
+
+</mapper>

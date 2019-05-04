@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.customer.mapper.CardInfMapper">
+		
+	<update id="updateCardInf" parameterType="String">
+		 UPDATE TB_CARD_INF T SET
+		 T.CANCEL_STAT='0',
+		 T.UPDATE_TIME=SYSDATE 
+		 WHERE T.CARD_NO=#{cardNo}
+	</update>
+	
+	<select id = "getCardInfByCardNo" parameterType="String" resultType = "CardInf">
+		SELECT C.CARD_NO,C.CARD_STAT,C.CANCEL_STAT 
+		FROM TB_CARD_INF C WHERE C.CARD_NO = #{cardNo}
+	</select>
+</mapper>

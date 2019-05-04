@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wecard.centre.module.biz.mapper.CardKeysTransLogMapper">
+
+	<resultMap type="CardKeysTransLog" id="CardKeysTransLogMap">
+		<result column="TXN_PRIMARY_KEY" property="txnPrimaryKey"/>
+		<result column="ORDER_ID" property="orderId"/>
+		<result column="TRANS_ID" property="transId"/>
+		<result column="CARD_KEY" property="cardKey"/>
+		<result column="PRODUCT_CODE" property="productCode"/>
+		<result column="USER_NAME" property="userName"/>
+		<result column="TFR_IN_ACCT_NO" property="tfrInAcctNo"/>
+		<result column="TFR_OUT_ACCT_NO" property="tfrOutAcctNo"/>
+		<result column="TRANS_AMT" property="transAmt" />
+		<result column="ORG_TRANS_AMT" property="orgTransAmt" />
+		<result column="TRANS_FEE" property="transFee" />
+		<result column="TRANS_FEE_TYPE" property="transFeeType" />
+		<result column="TRANS_RESULT" property="transResult" />
+		<result column="ADDITIONAL_INFO" property="additionalInfo" />
+		<result column="DATA_STAT" property="dataStat" />
+		<result column="REMARKS" property="remarks" />
+		<result column="CREATE_USER" property="createUser" />
+		<result column="UPDATE_USER" property="updateUser" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="LOCK_VERSION" property="lockVersion" />
+	</resultMap>
+	
+	<sql id="CardKeysTransLogColumns">
+		TXN_PRIMARY_KEY,
+		ORDER_ID,
+		TRANS_ID,
+		CARD_KEY,
+		PRODUCT_CODE,
+		USER_NAME,
+		TFR_IN_ACCT_NO,
+		TFR_OUT_ACCT_NO,
+		TRANS_AMT,
+		ORG_TRANS_AMT,
+		TRANS_FEE,
+		TRANS_FEE_TYPE,
+		TRANS_RESULT,
+		ADDITIONAL_INFO,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+
+	<sql id="CardKeysTransLogFields">
+		#{txnPrimaryKey, jdbcType=VARCHAR},
+		#{orderId, jdbcType=VARCHAR},
+		#{transId, jdbcType=VARCHAR},
+		#{cardKey, jdbcType=VARCHAR},
+		#{productCode, jdbcType=VARCHAR},
+		#{userName, jdbcType=VARCHAR},
+		#{tfrInAcctNo, jdbcType=VARCHAR},
+		#{tfrOutAcctNo, jdbcType=VARCHAR},
+		#{transAmt, jdbcType=VARCHAR},
+		#{orgTransAmt, jdbcType=VARCHAR},
+		#{transFee, jdbcType=VARCHAR},
+		#{transFeeType, jdbcType=VARCHAR},
+		#{transResult, jdbcType=VARCHAR},
+		#{additionalInfo, jdbcType=VARCHAR},
+		'0',
+		#{remarks, jdbcType=VARCHAR},
+		#{createUser, jdbcType=VARCHAR},
+		#{updateUser, jdbcType=VARCHAR},
+		SYSDATE,
+		SYSDATE,
+		'0'
+	</sql>
+
+	<sql id="tableName">
+			TB_CARD_KEYS_TRANS_LOG
+	</sql>
+	
+	<select id="getPrimaryKey" parameterType="java.util.Map" statementType="CALLABLE">
+		<![CDATA[
+			{ CALL PROC_TB_CARD_KEYS_TRANS_LOG(#{id, jdbcType=VARCHAR, mode=OUT}) }
+		]]>
+	</select>
+	
+	<select id="getCardKeysTransLogList" parameterType="CardKeysTransLog" resultMap="CardKeysTransLogMap">
+		SELECT 
+	  		<include refid="CardKeysTransLogColumns" /> 
+		FROM 
+			<include refid="tableName" />
+		WHERE DATA_STAT = '0' AND ROUND(TO_NUMBER(SYSDATE - CREATE_TIME) * 1440) > 2
+		 <if test="orderId !=null and orderId !='' ">
+		 		AND ORDER_ID=#{orderId}
+		 </if>
+		 <if test="transId !=null and transId !='' ">
+				AND TRANS_ID=#{transId}
+		 </if>
+		 <if test="cardKey !=null and cardKey !='' ">
+				AND CARD_KEY=#{cardKey}
+		 </if>
+		 <if test="productCode !=null and productCode !='' ">
+				AND PRODUCT_CODE=#{productCode}
+		 </if>
+		 <if test="userName !=null and userName !='' ">
+				AND USER_NAME=#{userName}
+		 </if>
+		 <if test="tfrInAcctNo !=null and tfrInAcctNo !='' ">
+				AND TFR_IN_ACCT_NO=#{tfrInAcctNo}
+		 </if>
+		 <if test="tfrOutAcctNo !=null and tfrOutAcctNo !='' ">
+				AND TFR_OUT_ACCT_NO=#{tfrOutAcctNo}
+		 </if>
+	</select>
+	
+	<select id="getCardKeysTransLogByCard" parameterType="CardKeysTransLog" resultType="CardKeysTransLog">
+		SELECT
+			<include refid="CardKeysTransLogColumns" />
+		FROM 
+			<include refid="tableName" />
+		WHERE DATA_STAT = '0'
+			AND TFR_IN_ACCT_NO IS NULL
+			AND TFR_OUT_ACCT_NO IS NULL
+			AND CARD_KEY = #{cardKey}
+			AND PRODUCT_CODE = #{productCode}
+			AND TRANS_ID = #{transId}
+	</select>
+	
+	<select id="getCountCardKeys" parameterType="CardKeysTransLog" resultType="Integer">
+		SELECT count(1)
+		FROM 
+			<include refid="tableName" />
+		WHERE DATA_STAT = '0'
+			AND CARD_KEY = #{cardKey}
+			AND TRANS_ID = #{transId}
+	</select>
+	
+	<insert id="insertCardKeysTransLog" parameterType="CardKeysTransLog">
+		INSERT INTO 
+			<include refid="tableName" />
+		(
+			<include refid="CardKeysTransLogColumns" />
+		) VALUES (
+			<include refid="CardKeysTransLogFields" />
+		)
+	</insert>
+
+	<update id="updateCardKeysTransLog" parameterType="CardKeysTransLog">
+		UPDATE 
+			<include refid="tableName" />
+		SET
+		<if test="tfrInAcctNo !=null and tfrInAcctNo !='' ">
+			TFR_IN_ACCT_NO = #{tfrInAcctNo,jdbcType=VARCHAR},
+		</if>
+		<if test="tfrOutAcctNo !=null and tfrOutAcctNo !='' ">
+			TFR_OUT_ACCT_NO = #{tfrOutAcctNo,jdbcType=VARCHAR},
+		</if>
+		<if test="transAmt !=null and transAmt !='' ">
+			TRANS_AMT = #{transAmt,jdbcType=VARCHAR},
+		</if>
+		<if test="orgTransAmt !=null and orgTransAmt !='' ">
+			ORG_TRANS_AMT = #{orgTransAmt,jdbcType=VARCHAR},
+		</if>
+		<if test="transFee !=null and transFee !='' ">
+			TRANS_FEE = #{transFee,jdbcType=VARCHAR},
+		</if>
+		<if test="transFeeType !=null and transFeeType !='' ">
+			TRANS_FEE_TYPE = #{transFeeType,jdbcType=VARCHAR},
+		</if>
+		<if test="transResult !=null and transResult !='' ">
+			TRANS_RESULT = #{transResult,jdbcType=VARCHAR},
+		</if>
+		<if test="additionalInfo !=null and additionalInfo !='' ">
+			ADDITIONAL_INFO = #{additionalInfo,jdbcType=VARCHAR},
+		</if>
+			UPDATE_TIME = sysdate,
+			LOCK_VERSION = LOCK_VERSION+1
+		WHERE 
+			TXN_PRIMARY_KEY = #{txnPrimaryKey,jdbcType=VARCHAR}
+	</update>
+	
+</mapper>

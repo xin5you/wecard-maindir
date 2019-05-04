@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	lang="en">
+<link rel="stylesheet" th:href="@{/diy/css/hkbServicePlatform.min.css}" />
+<head th:include="main/header::header" />
+<!-- nav 导航栏-->
+<header th:include="main/navbar::navbar" />
+<body>
+	<form id="searchForm" th:action="@{/operate/posit/monthView}"
+		th:object="${positOprStatistics}" class="form-inline" method="post">
+				<input type="hidden" name="shopStatisticsId" th:value="${positOprStatistics.id}" />
+				<input type="hidden" name="settleDate" th:value="${positOprStatistics.settleDate}"/>
+				<input type="hidden" name="startDate" th:value="${positOprStatistics.startDate}"/>
+				<input type="hidden" name="endDate" th:value="${positOprStatistics.endDate}"/>
+				<input type="hidden" name="totalPay" th:value="${positOprStatistics.totalPay}"/>
+				<input type="hidden" name="payAmt"  th:value="${positOprStatistics.payAmt}"/>
+	<div class="content_body">
+
+		<div class="title_content_title">
+			<p>
+				<img th:src="@{/icon/tab_set_data_green.png}" /><span>&#x8FD0;&#x8425;&#x6570;&#x636E;&#x8BBE;&#x7F6E;</span>&#xA0;&gt;&#xA0;<span>&#x6708;&#x8FD0;&#x8425;&#x6570;&#x636E;&#x8BE6;&#x60C5;</span>
+			</p>
+			<p>
+				<button id="btn-back" type="button" class="hkb_btn btn_white" 
+				th:attr="startDate=${positOprStatistics.startDate},endDate=${positOprStatistics.endDate}">返回</button>
+			</p>
+		</div>
+		<!-- 操作组件-->
+
+		<div class="info_content_operation">
+			<!-- data组件-->
+			<div class="control_list">
+
+				<div class="hkb_word_list">
+					<span>开始时间：</span> <span th:text="${positOprStatistics.settleDate}"></span>
+				</div>
+
+				<div class="hkb_word_list">
+					<span>消费总金额：</span> <span th:text="${positOprStatistics.totalPay}">
+					</span>
+				</div>
+			</div>
+		</div>
+
+		<!-- table title-->
+
+		<div class="title_content_title title_gray">
+					<span th:text="${positOprStatistics.mchntName}"></span>(<span th:text="${positOprStatistics.shopName}"></span>)门店数据
+		</div>
+
+		<!-- table -->
+		<div class="info_content_table">
+			<!-- table 单独-->
+			<table class="table_box" border="0" cellpadding="0" cellspacing="1"
+				rules="cols">
+				<thead>
+					<tr class="hkb_title_tr">
+						<th align="middle">日期</th>
+						<th>原始总金额</th>
+						<th>调整后总金额</th>
+						<th>状态</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr align="center" th:if="${not #lists.isEmpty(pageInfo.list)}"
+						th:each="entity,orderStat:${pageInfo.list}">
+						<td><span th:text="${entity.settleDate}"></span></td>
+						<td><span th:text="${entity.payAmt}"></span></td>
+						<td><span th:text="${entity.uPayAmt}"></span></td>
+						<td><span th:text="${entity.stat2}"></span></td>
+						<td class="table_operation"><a class="btn-dayview" 
+								th:attr="ssid=${entity.id},settleDate=${entity.settleDate},totalPay=${positOprStatistics.totalPay},payAmt=${entity.payAmt},stat=${entity.stat}"
+								sec:authorize="hasRole('DIY_DAY_OPERATE_DATA_VIEWINTO')">详情</a></td>
+					</tr>
+
+				</tbody>
+			</table>
+
+		</div>
+
+		<!-- next-->
+		<div th:include="main/pagination::page" class="info_page"></div>
+
+
+	</div>
+	</form>
+	<script th:src="@{/diy/js/operate/hkbOperateData.js}"></script>
+
+	<script>
+		addEventListener('load', function() {
+		})
+	</script>
+</body>
+</html>

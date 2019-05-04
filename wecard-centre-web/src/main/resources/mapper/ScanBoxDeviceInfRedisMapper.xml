@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wecard.centre.module.biz.mapper.ScanBoxDeviceInfMapper">
+
+<sql id = "scanBoxDeviceInfColumns">
+		t.DEVICE_ID,
+		t.DEVICE_TYPE,
+		t.DEVICE_NO,
+		t.INS_CODE,
+		t.MCHNT_CODE,
+		t.SHOP_CODE,
+		t.FIXED_PAY_FLAG,
+		t.FIXED_PAY_AMT,
+		t.PRINT,
+		t.PRINT_QR,
+		t.PRINT_TYPE,
+		t.RECEIPT,
+		t.DATA_STAT,
+		t.CHANNEL_NO
+	</sql>
+
+<select id="getScanBoxDeviceInfList" resultType="BoxDeviceInfoVO">
+	SELECT 
+		<include refid="scanBoxDeviceInfColumns"/>,
+		m.MCHNT_NAME,
+    	s.SHOP_NAME
+	FROM TB_SCAN_BOX_DEVICE_INF t,
+	     TB_MERCHANT_INF m,
+     	 TB_SHOP_INF s
+	 WHERE 
+	 <![CDATA[
+  		SYSDATE-1/24 <= T.UPDATE_TIME
+ 	 ]]> 
+ 	   AND t.MCHNT_CODE = m.MCHNT_CODE(+)
+  	   AND t.SHOP_CODE = s.SHOP_CODE(+)
+</select>
+
+</mapper>

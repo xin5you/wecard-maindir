@@ -1,0 +1,160 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" lang="en">
+<head th:include="main/header::header" />
+<body>
+	<!-- nav 导航栏-->
+	<header th:include="main/navbar::navbar" />
+	<form id="searchForm" th:action="@{/system/user/listUser}" class="form-inline" th:object="${user}" method="post">
+	<input type="hidden" id="deleteUserId"/>
+	<div class="content_body">
+	    <div class="title_content_title">
+	        <p>
+		        <img th:src="@{/icon/tab_management_member_green.png}" />
+		                     成员管理
+	        </p>
+	        <p>
+	            <button id="btn-add" type="button" class="hkb_btn btn_green" sec:authorize="hasRole('ROLE_DIY_USERINF_INTOADD')">添加成员</button>
+	        </p>
+	    </div>
+    	<!-- 操作组件-->
+    	<div class="info_content_operation">
+        	<!-- data组件-->
+        	<div class="control_list">
+            	<div class="hkb_date_list">
+	                <span>输入搜索：</span>
+	                <span>
+	                     <input type="text" class="layui-input hkb_item" id="test1" name="phoneNo" th:value="*{phoneNo}" placeholder="请输入手机号码" maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')"/>
+	                </span>
+            	</div>
+        	</div>
+        	<!-- 按钮 双-->
+	        <div class="control_list btn_list" style="text-align: right">
+	            <button id="btn-list" type="submit" class="hkb_btn btn_green">查询</button>
+	            <button id="btn-reset" type="button" class="hkb_btn btn_white">重置</button>
+	        </div>
+    	</div>
+    	<!-- table -->
+    	<div class="info_content_table">
+        	<!-- table 单独-->
+        	<table class="table_box" border="0" cellpadding="0" cellspacing="1" rules="cols">
+	            <thead>
+		            <tr class="hkb_title_tr">
+		                <th>手机号码</th>
+		                <th>用户名</th>
+		                <th>职位</th>
+		                <th>添加时间</th>
+		                <th>操作</th>
+		            </tr>
+	            </thead>
+            	<tbody>
+		            <tr align="center"  th:each="user,userStat : ${pageInfo.list}" th:inline="text">
+		                <td><span th:text="${user.phoneNo}"></span></td>
+		                <td><span th:text="${user.userName}"></span></td>
+		                <td><span th:text="${user.roleName}"></span></td>
+		                <td><span th:text="${user.createTime}"></span></td>
+		                <td class="table_operation">
+		             		<a sec:authorize="hasRole('ROLE_DIY_USERINF_VIEW')" th:attr="userId=${user.id}" class = "btn-detail" onclick="detailDialog.show()">详情</a>
+		             		<a sec:authorize="hasRole('ROLE_DIY_USERINF_INTOEDIT')" th:attr="userId=${user.id}" class = "btn-edit" th:if="${user.seq gt '0' and userSession.seq == '0'}">编辑</a>
+		             		<a sec:authorize="hasRole('ROLE_DIY_USERINF_DELETE')" th:attr="userId=${user.id}" class="btn-delete" th:if="${user.seq gt '0' and userSession.seq == '0'}" onclick="deleteDialog.show()">删除</a>
+		                </td>
+		            </tr>
+	            </tbody>
+        	</table>
+    	</div>
+    	<!-- next-->
+    	<div th:include="main/pagination::page"></div>
+	</div>
+	</form>
+
+<!-- 详情成员 -->
+<!-- 详情成员 模态框-->
+<div class="hkb_dialog" id="addMember">
+
+    <div class="dialog_bg"></div>
+    <div class="dialog_box">
+        <div class="dialog_top">
+            <div class="dialog_close"><span>&#xD7;</span></div>
+            <p>成员详情</p>
+        </div>
+        <!-- body-->
+        <div class="dialog_body">
+            <div class="dialog_content">
+                <!-- list 1-->
+                <div class="dialog_list">
+                    <div>
+                        <span>用户名：</span>
+                        <span id="userName"></span>
+                    </div>
+                    <div>
+                        <span>职位：</span>
+                        <span id="roleName"></span>
+                    </div>
+                </div>
+                <div class="dialog_list">
+                	<div>
+                        <span>登录账号：</span>
+                        <span id="loginPhone"></span>
+                    </div>
+                     <div>
+                        <span>商户：</span>
+                        <span id="mchntName"></span>
+                    </div>
+                </div>
+
+                <!-- list 2-->
+                <div class="dialog_list">
+                	<div>
+                        <span>手机号码：</span>
+                        <span id="userPhone"></span>
+                    </div>
+                    <div>
+                        <span>门店：</span>
+                        <span id="shopName"></span>
+                    </div>
+                </div>
+                <div class="dialog_list">
+                    <div>
+                        <span>所属行业：</span>
+                        <span>餐饮(园区食堂)</span>
+                    </div>
+                    <div>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- footer -->
+        <div class="dialog_footer">
+            <button type="button" class="hkb_btn btn_green" onclick="detailDialog.hide()">关闭</button>
+        </div>
+    </div>
+</div>
+
+<!-- 删除成员-->
+<!--删除成员 模态框-->
+<div class="hkb_dialog" id="delMember">
+    <div class="dialog_bg"></div>
+    <div class="dialog_box">
+        <div class="dialog_top">
+            <div class="dialog_close"><span>&#xD7;</span></div>
+            <p>成员管理删除</p>
+        </div>
+        <!-- body-->
+        <div class="dialog_body">
+            <div class="dialog_content">
+                <p class="dialog_big_text">是否删除该成员</p>
+            </div>
+        </div>
+        <!-- footer -->
+        <div class="dialog_footer">
+            <button type="button" class="hkb_btn btn_white" onclick="deleteDialog.hide()">取消</button>
+            <button type="button" id="ok" class="hkb_btn btn_green">确定</button>
+
+        </div>
+    </div>
+</div>
+	<script th:src="@{/diy/js/system/user/listUser.js}"></script>
+</body>
+</html>

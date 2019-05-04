@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wecard.api.module.welfaremart.mapper.CardKeysProductMapper">
+		
+	<sql id="CardKeysProductColumns">
+		p.PRODUCT_CODE,
+		p.PRODUCT_NAME,
+		p.PRODUCT_TYPE,
+		p.ORG_AMOUNT,
+		p.AMOUNT,
+		p.PRODUCT_UNIT,
+		p.TOTAL_NUM,
+		p.AVAILABLE_NUM,
+		p.SUPPLIER,
+		p.LOGO_URL,
+		p.PRODUCT_DESC,
+		p.IS_PUTAWAY,
+		p.DATA_STAT,
+		p.REMARKS,
+		p.CREATE_USER,
+		p.UPDATE_USER,
+		p.CREATE_TIME,
+		p.UPDATE_TIME,
+		p.LOCK_VERSION	
+	</sql>
+	
+	<sql id="CardKeysProductFields">
+		#{productCode,jdbcType=VARCHAR},
+		#{productName,jdbcType=VARCHAR},
+		#{productType,jdbcType=VARCHAR},
+		#{orgAmount,jdbcType=VARCHAR},
+		#{amount,jdbcType=VARCHAR},
+		#{productUnit,jdbcType=VARCHAR},
+		#{totalNum,jdbcType=VARCHAR},
+		#{availableNum,jdbcType=VARCHAR},
+		#{supplier,jdbcType=VARCHAR},
+		#{logoUrl,jdbcType=VARCHAR},
+		#{productDesc,jdbcType=VARCHAR},
+		'0',
+		'0',
+		#{remarks,jdbcType=VARCHAR},
+		#{createUser,jdbcType=VARCHAR},
+		#{updateUser,jdbcType=VARCHAR},
+		sysdate,
+		sysdate,
+		'0'
+	</sql>
+	
+	<sql id="tableName">
+			TB_CARD_KEYS_PRODUCT p
+	</sql>
+	
+	<select id="getCardKeysProductByCode" parameterType="CardKeysProduct" resultType="CardKeysProduct">
+		SELECT 
+	  		<include refid="CardKeysProductColumns" />
+		FROM 
+			<include refid="tableName" />
+		WHERE 1=1
+		<if test="dataStat !=null and dataStat !='' ">
+			AND DATA_STAT=#{dataStat}
+		</if>
+			AND p.PRODUCT_CODE=#{productCode}
+	</select>
+	
+	<select id="getCardKeysProductByType" parameterType="java.lang.String" resultType="CardKeysProduct">
+		SELECT 
+	  		<include refid="CardKeysProductColumns" />
+		 FROM
+		 	<include refid="tableName" />
+  		 WHERE p.DATA_STAT = '0'
+		 	AND p.PRODUCT_TYPE = #{productType}
+	</select>
+	
+	<select id="getCardKeysProductByCard" parameterType="CardKeysProduct" resultType="CardKeysProduct">
+		SELECT 
+			p.PRODUCT_CODE,
+	  		p.ORG_AMOUNT,
+			p.PRODUCT_NAME,
+			p.PRODUCT_TYPE,
+			p.AMOUNT,
+			#{num} as num,
+		 	(p.ORG_AMOUNT * #{num}) as unusedAmount
+		 FROM
+		 	<include refid="tableName" />
+  		 WHERE p.DATA_STAT = '0'
+  		 	AND p.PRODUCT_CODE=#{productCode}
+	</select>
+	
+	<update id="updateCardKeysProduct" parameterType="CardKeysProduct">
+		UPDATE 
+			<include refid="tableName" />
+		SET
+			p.TOTAL_NUM=TOTAL_NUM+#{totalNum,jdbcType=VARCHAR},
+			p.UPDATE_TIME=sysdate,
+			p.LOCK_VERSION=LOCK_VERSION+1
+			WHERE p.PRODUCT_CODE = #{productCode} 
+	</update>
+	
+</mapper>

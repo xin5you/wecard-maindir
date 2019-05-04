@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1" />
+		<meta content="telephone=no" name="format-detection" />
+		<title>知了企服商户平台-帮助</title>
+		<#include "../../common/head.html">
+		<script src="${s.base}/res/jweixin-1.0.0.js"></script>
+		<script type="text/javascript">
+			$(function () {	
+				$('#backBtn').bind("click", function(){
+		        	wx.closeWindow();
+		        });
+			})
+		</script>
+	</head>
+	<body>
+		<div class="help_center">
+    		<div class="tel">客服电话&nbsp;&nbsp;&nbsp;&nbsp;<a href="tel:17058435791">17058435791</a></div>
+    		<a href="javascript:void(0);" class="btn_area" id="backBtn">
+        		<div class="hkb_btn btn_color">关 闭</div>
+    		</a>
+   		</div>
+	</body>
+</html>

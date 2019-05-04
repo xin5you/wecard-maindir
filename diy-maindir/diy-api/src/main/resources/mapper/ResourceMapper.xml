@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.iboot.diy.api.system.mapper.ResourceMapper">
+
+	<sql id="ResourceColumns">
+		ID,
+		DESCRIPTION,
+		ICON,
+		RESOURCE_NAME,
+		RESOURCE_TYPE,
+		KEY,
+		SEQ,
+		URL,
+		PID,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+
+	<select id="getList" parameterType="Resource" resultType="Resource">
+		select 
+	  		<include refid="ResourceColumns" />
+		from TB_WEB_RESOURCE where  DATA_STAT='0' order by ID asc
+	</select>
+	
+	<!-- 根据roleId获取该用户的权限 -->
+	<select id="getRoleResourceByRoleId" parameterType="String" resultType="Resource">
+		select
+			<include refid="ResourceColumns" />
+		from TB_WEB_RESOURCE WHERE DATA_STAT='0' and id in(
+		select RESOURCE_ID from TB_WEB_ROLE_RESOURCE 
+		where ROLE_ID = #{roleId} and DATA_STAT='0')
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="String">
+		update TB_WEB_RESOURCE SET DATA_STAT='1' where ID = #{id}
+	</delete>
+
+</mapper>

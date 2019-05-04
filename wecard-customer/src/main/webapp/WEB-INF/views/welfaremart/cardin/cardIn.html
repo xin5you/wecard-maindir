@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<#include "../../common/wecardHeader.html">
+    <meta charset="UTF-8">
+    <title>手机充值</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no, email=no">
+	<link rel="stylesheet" href="${s.base}/static/css/hkb_welfare.min.css?v=${s.version}" />
+</head>
+<body>
+	<!--知了企服-流量充值-->
+	<!-- <form id="flowForm" name="flowForm" action="${s.base}/unicomAync/buy.html" method="post"> -->
+	<input type="hidden" id="rechargeShopId" name="rechargeShopId" />
+	<input type="hidden" id="type" name="type" />
+	<div>
+	    <label class="input_number">
+	        <input id="mobile" name="mobile" class="number_tips" type="tel" pattern="[0-9*]" placeholder="请输入手机号码" maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')">
+	        <div class="number_font">
+	            <p class="mynumber"></p>
+	        </div>
+	    </label>
+	    <div class="number_money">
+	        <div class="payfor_phone">
+	            <p>充话费</p>
+	        </div>
+	        <div class="all_fare">
+	            <!--无法选择的样式就是不添加后面两个任何一个样式，可选择的样式 can_checked ；选中的样式 checked_orange ；-->
+	            <#if phoneRechargeShopList ??&& phoneRechargeShopList?size gt 0>
+	            	<#list phoneRechargeShopList as phoneRechargeShop>
+			            <div class="phone_fare" phoneRe="1" data="${phoneRechargeShop.shopFace!}" value="${phoneRechargeShop.id!}">
+			                <p class="phone_fare_price">${phoneRechargeShop.shopFace!}${phoneRechargeShop.resv1!}</p>
+			                <p class="phone_fare_price"><span></span></p>
+			            </div>
+		            </#list>
+	            </#if>
+	        </div>
+	        <!-- <div class="payfor_phone">
+            	<p>充流量</p>
+        	</div>
+	        <div class="all_fare">
+	        	无法选择的样式就是不添加后面两个任何一个样式，可选择的样式 can_checked ；选中的样式 checked_orange ；
+	        	<#if folwRechargeList ??&& folwRechargeList?size gt 0>
+	            	<#list folwRechargeList as flowRecharge>
+			            <div class="phone_fare" phoneRe="2" data="${flowRecharge.value}" value="">
+			                <p class="phone_fare_price">${flowRecharge.value}</p>
+			                <p class="phone_fare_price"><span></span></p>
+			            </div>
+		            </#list>
+	            </#if>
+	        </div> -->
+	        <div class="payfor_phone">
+	            <p>支持全国联通/移动/电信</p>
+	            <!-- <p>由于地区不同，充值到账可能会有5分钟-10分钟延迟</p> -->
+	        </div>
+	    </div>
+	    <div class="card_in_details">
+		    <a href="${s.base}/phoneRecharge/phoneTransDetails.html">充值明细</a>
+		</div>
+	</div>
+	<div>
+		<div class="resell_bottom_plate"></div>
+		<div class="resell_bottom_box">
+	    	<a id="phoneRecharge">立即充值</a>
+	    </div>
+	</div>
+	
+	<!--预加载效果-->
+	<div class="loading_page">
+	    <div class="show_loading">
+	        <main>
+	            <div class="loader">
+	                <div class="loader-inner line-scale">
+	                    <div></div>
+	                    <div></div>
+	                    <div></div>
+	                    <div></div>
+	                    <div></div>
+	                </div>
+	            </div>
+	        </main>
+	        <p>提交中</p>
+	    </div>
+	</div>
+	<!-- </form> -->
+	<script src="${s.base}/static/js/common/fastclick.min.js?v=${s.version}"></script>
+	<script src="${s.base}/static/js/common/hkb_welfare.min.js?v=${s.version}"></script>
+	<script src="${s.base}/static/js/common/LAreaData2.min.js?v=${s.version}"></script>
+	<script>
+		//选择金额
+	    var checkedPrice=document.getElementsByClassName('phone_fare');
+	    for (var i=0;i<checkedPrice.length;i++) {
+	        checkedPrice[i].addEventListener('click',function () {
+	            if (this.className.indexOf('can_checked')>-1) {
+	                this.className = 'phone_fare checked_orange';
+	                for (var i=0;i<checkedPrice.length;i++) {
+	                    if (checkedPrice[i].className.indexOf('checked_orange')>-1) {
+	                        checkedPrice[i].className = 'phone_fare can_checked';
+	                        this.className = 'phone_fare checked_orange';
+	                    }
+	                }
+	            }
+	        },false)
+	    }
+	</script>
+	<script src="${s.base}/static/js/module/welfaremart/cardin/cardIn.js"></script>
+</body>
+</html>

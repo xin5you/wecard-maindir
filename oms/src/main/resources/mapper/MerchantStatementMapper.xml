@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.statement.mapper.MerchantStatementMapper">
+    <select id="getShopDetailList" parameterType="Condition" resultType="ShopDetail">
+	       SELECT T.DMS_RELATED_KEY AS DMS_RELATED_KEY,
+	       I.DMS_RELATED_KEY AS ORG_DMS_RELATED_KEY,
+	       SUBSTR(T.SETTLE_DATE, 1, 4) || '-' || SUBSTR(T.SETTLE_DATE, 5, 2) || '-' ||
+	       SUBSTR(T.SETTLE_DATE, 7, 2) AS SETTLE_DATE,
+	       T.CARD_NO AS CARD_NO,
+	       T.PRI_ACCT_NO AS PRI_ACCT_NO,
+	       DECODE(T.TRANS_ID, 'W10', '会员卡消费', 'W71', '快捷消费') AS TRANS_TYPE,
+	       T.TRANS_AMT AS TRANSAMT,
+	       TO_CHAR(T.CREATE_TIME, 'YYYY-MM-DD HH24:MI:SS') AS TRANSTIME
+		  FROM TB_TRANS_LOG_HIS         T,
+		       TB_INTFACE_TRANS_LOG_HIS I,
+		       TB_SHOP_INF              S1， TB_SHOP_INF S2,
+		       TB_MERCHANT_INF          M
+		 WHERE T.DMS_RELATED_KEY = I.INTERFACE_PRIMARY_KEY
+		   AND T.TRANS_ID = I.TRANS_ID
+		   AND S1.SHOP_CODE = S2.P_SHOP_CODE
+		   AND T.SHOP_CODE = S2.SHOP_CODE
+		   AND T.MCHNT_CODE = M.MCHNT_CODE
+		   AND T.TRANS_ID IN ('W10', 'W71')
+		   AND T.RESP_CODE = '00'
+		   AND T.TRANS_ST = 1
+		   <if test="positCode!=null and positCode!='' " >
+		     AND T.SHOP_CODE = ${positCode}
+		   </if>
+		   AND T.MCHNT_CODE = #{mchntCode} 
+		   AND S1.SHOP_CODE = #{shopCode}
+		   AND T.SETTLE_DATE &gt;= #{startTime}
+		   AND T.SETTLE_DATE &lt;= #{endTime}
+		 ORDER BY T.CREATE_TIME DESC
+    </select>
+    
+    <select id="getMerchantDetailList" parameterType="Condition" resultType="MerchantDetail">
+		   SELECT S.SHOP_NAME,
+		       MEMBER_CARD_CONSUME_AMT,
+		       MEMBER_CARD_CONSUME_COUNT,
+		       SPEEDY_CONSUME_AMT,
+		       SPEEDY_CONSUME_COUNT,
+		       CONSUME_AMT
+		  FROM (SELECT P.SHOP_CODE,
+		               NVL(SUM(P.CARD_PAY_AMT), 0) AS MEMBER_CARD_CONSUME_AMT,
+		               NVL(SUM(P.CARD_PAY_NUM), 0) AS MEMBER_CARD_CONSUME_COUNT,
+		               NVL(SUM(P.QUICK_PAY_AMT), 0) AS SPEEDY_CONSUME_AMT,
+		               NVL(SUM(P.QUICK_PAY_NUM), 0) AS SPEEDY_CONSUME_COUNT,
+		               NVL(SUM(P.PAY_AMT), 0) AS CONSUME_AMT
+		          FROM TB_MCHNT_STATISTICS M,
+		               TB_SHOP_STATISTICS  SH,
+		               TB_POSIT_STATISTICS P
+		         WHERE M.ID = SH.MCHNT_STATISTICS_ID
+		           AND SH.ID = P.SHOP_STATISTICS_ID
+		           AND M.MCHNT_CODE = #{mchntCode}
+		           AND SH.SHOP_CODE = #{shopCode}
+		           AND M.SETTLE_DATE &gt;= #{startTime} 
+		           AND M.SETTLE_DATE &lt;= #{endTime} 
+		         GROUP BY P.SHOP_CODE) T,
+		       TB_SHOP_INF S
+		 WHERE S.SHOP_CODE = T.SHOP_CODE
+    </select>
+    
+    <select id="getMerchantSummarizing" parameterType="Condition" resultType="MerchantSummarizing">
+	    SELECT NVL(SUM(MS.CARD_PAY_AMT), 0) AS MEMBER_CARD_CONSUME_AMT,
+	       NVL(SUM(MS.QUICK_PAY_AMT), 0) AS SPEEDY_CONSUME_AMT,
+	       NVL(SUM(MS.OL_RECHARGE_DEN), 0) AS XS_RECHARGE_TRANS_AMT,
+	       NVL(SUM(MS.OL_RECHARGE_AMT), 0) AS XS_RECHARGE_UPLOAD_AMT,
+	       NVL(SUM(MS.PF_RECHARGE_DEN), 0) AS PT_RECHARGE_TRANS_AMT,
+	       NVL(SUM(MS.PF_RECHARGE_AMT), 0) AS PT_RECHARGE_UPLOAD_AMT,
+	       NVL(SUM(MS.PF_SUBSIDY_NUM), 0) AS PT_SUBSIDY_COUNT,
+	       NVL(SUM(MS.PF_SUBSIDY_AMT), 0) AS PT_SUBSIDY_AMT,
+	       0 AS MEMBER_CARD_BAL,
+	       NVL(SUM(MS.FEE), 0) AS SERVICE_CHARGE,
+	       NVL(SUM(MS.SETTLE_AMT), 0) AS SETTLE_AMT
+	  FROM TB_MCHNT_STATISTICS MS
+	 WHERE MS.SETTLE_DATE &gt;= #{startTime} 
+	   AND MS.SETTLE_DATE &lt;= #{endTime} 
+	   AND MS.MCHNT_CODE = #{mchntCode}
+    </select>
+    
+    <select id="getCardBal" parameterType="Condition" resultType="String">
+	    SELECT M.CARD_BAL
+		  FROM TB_MCHNT_STATISTICS M
+		 WHERE M.SETTLE_DATE = #{endTime} 
+		   AND M.MCHNT_CODE = #{mchntCode}
+    </select>
+    
+    <select id="getMerchantDetailAmount" parameterType="Condition" resultType="MerchantDetail">
+	    SELECT '总计' AS SHOP_NAME,
+	       SUM(MEMBER_CARD_CONSUME_AMT) AS MEMBER_CARD_CONSUME_AMT,
+	       SUM(MEMBER_CARD_CONSUME_COUNT) AS MEMBER_CARD_CONSUME_COUNT,
+	       SUM(SPEEDY_CONSUME_AMT) AS SPEEDY_CONSUME_AMT,
+	       SUM(SPEEDY_CONSUME_COUNT) AS SPEEDY_CONSUME_COUNT,
+	       SUM(CONSUME_AMT) AS CONSUME_AMT
+			  FROM (SELECT P.SHOP_CODE,
+			               NVL(SUM(P.CARD_PAY_AMT), 0) AS MEMBER_CARD_CONSUME_AMT,
+			               NVL(SUM(P.CARD_PAY_NUM), 0) AS MEMBER_CARD_CONSUME_COUNT,
+			               NVL(SUM(P.QUICK_PAY_AMT), 0) AS SPEEDY_CONSUME_AMT,
+			               NVL(SUM(P.QUICK_PAY_NUM), 0) AS SPEEDY_CONSUME_COUNT,
+			               NVL(SUM(P.PAY_AMT), 0) AS CONSUME_AMT
+			          FROM TB_MCHNT_STATISTICS M,
+			               TB_SHOP_STATISTICS  SH,
+			               TB_POSIT_STATISTICS P
+			         WHERE M.ID = SH.MCHNT_STATISTICS_ID
+			           AND SH.ID = P.SHOP_STATISTICS_ID
+			           AND M.MCHNT_CODE = #{mchntCode}
+			           AND SH.SHOP_CODE = #{shopCode}
+			           AND M.SETTLE_DATE &gt;= #{startTime} 
+			           AND M.SETTLE_DATE &lt;= #{endTime} 
+			         GROUP BY P.SHOP_CODE) T,
+			       TB_SHOP_INF S
+			 WHERE S.SHOP_CODE = T.SHOP_CODE
+    </select>
+    
+    <select id="getShopDetailAmount" parameterType="Condition" resultType="ShopDetail">
+        select '总计' as dms_related_key,
+       '/' as org_dms_related_key,
+       '/' as settle_date,
+       '/' as card_no,
+       '/' as pri_acct_no,
+       sum(t.trans_amt) as transAmt,
+       '/' as trans_type,
+       '/' as transTime
+	  from tb_trans_log_his         t,
+	       tb_intface_trans_log_his i,
+	       tb_shop_inf              s1,
+	       tb_shop_inf              s2,
+	       tb_merchant_inf          m
+	 where t.dms_related_key = i.interface_primary_key
+	   and t.trans_id = i.trans_id
+	   and s1.shop_code = s2.p_shop_code
+	   and t.shop_code = s2.shop_code
+	   and t.mchnt_code = m.mchnt_code
+	   and t.trans_id in ('W10', 'W71')
+	   and t.resp_code = '00'
+	   and t.trans_st = 1
+	<if test="positCode!=null and positCode!='' " >
+		     AND T.SHOP_CODE = ${positCode}
+		   </if>
+		   AND T.MCHNT_CODE = #{mchntCode} 
+		   AND S1.SHOP_CODE = #{shopCode}
+		   AND T.SETTLE_DATE &gt;= #{startTime}
+		   AND T.SETTLE_DATE &lt;= #{endTime}
+    </select>
+    
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+		<setting name="logImpl" value="STDOUT_LOGGING" />
+	</settings>
+
+	<typeAliases>
+		<typeAlias type="com.cn.thinkx.wxcms.domain.Account" alias="Account" />
+		<typeAlias type="com.cn.thinkx.wxcms.domain.AccountFans" alias="AccountFans" />
+		<typeAlias type="com.cn.thinkx.wxcms.domain.AccountMenu" alias="AccountMenu" />
+		<typeAlias type="com.cn.thinkx.wxcms.domain.AccountMenuGroup" alias="AccountMenuGroup" />
+		<typeAlias type="com.cn.thinkx.wxcms.domain.MsgBase" alias="MsgBase" />
+		<typeAlias type="com.cn.thinkx.wxcms.domain.MsgNews" alias="MsgNews" />
+		<typeAlias type="com.cn.thinkx.wxcms.domain.MsgNewsVO" alias="MsgNewsVO" />
+		<typeAlias type="com.cn.thinkx.wxcms.domain.MsgText" alias="MsgText" />
+	</typeAliases>
+
+	<mappers>
+	</mappers>
+</configuration>

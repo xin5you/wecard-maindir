@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" lang="en">
+<head th:include="main/header::header" />
+<header th:include="main/navbar::navbar" />
+<body>
+<form id="searchForm" >
+<!-- <input type="hidden" id="shCode" name="shCode" th:value="${shopCode}"/> -->
+<div class="content_body">
+
+    <div class="title_content_title">
+        <p><img th:src="@{/icon/tab_store_data_green.png}" /><span>当日消费统计</span></p>
+    </div>
+
+    <!-- 操作组件-->
+
+    <div class="info_content_operation">
+        <!-- data组件-->
+        <div class="control_list">
+<!-- 			<span th:text="${positOprStatistics.settleDate}"></span>&nbsp;&nbsp; -->
+            <div class="hkb_date_list">
+                <span>开始时间</span>
+                <span>
+                     <input type="text" id="startDate" name="startDate" th:value="${positOprStatistics.startDate}" class="layui-input hkb_item Wdate" placeholder="请选择结束时间" readonly="readonly"/>
+                </span> 
+            </div>
+
+            <div class="hkb_date_list">
+                <span>结束时间</span>
+                <span>
+                     <input type="text" id="endDate" name="endDate" th:value="${positOprStatistics.endDate}" class="layui-input hkb_item Wdate" placeholder="请选择结束时间" readonly="readonly"/>
+                </span>
+  
+            </div>
+            
+      
+        </div>
+
+        <!-- 按钮 双-->
+
+        <div class="control_list btn_list" style="text-align: right">
+
+            <button type="submit" class="hkb_btn btn_green" id="btn-search">&#x67E5;&#x8BE2;</button>
+
+            <button type="button" class="hkb_btn btn_white" id="btn-reset">&#x91CD;&#x7F6E;</button>
+
+        </div>
+        
+        <div class="control_list">
+        
+        	<div class="hkb_word_list">
+				<span>当前时间：</span><span th:text="${positOprStatistics.settleDate}"></span>&nbsp;
+			</div>
+
+			<div class="hkb_word_list">
+				<span>当前消费总金额：</span><span th:text="${positOprStatistics.totalPay}"></span>&nbsp;元
+			</div>
+
+			<div class="hkb_word_list">
+				<span>当前消费总笔数：</span><span th:text="${positOprStatistics.totalNum}"></span>
+			</div>
+		</div>
+
+
+    </div>
+
+
+    <!-- table -->
+
+    <div class="info_content_table">
+
+
+        <!-- table 单独-->
+        <table class="table_box" border="0" cellpadding="0" cellspacing="1" rules="cols">
+           	 <thead>
+						<tr class="hkb_title_tr">
+							<th rowspan="2" align="middle">档口名</th>
+							<th rowspan="2" align="middle">所属商户</th>
+							<th rowspan="2" align="middle">所属门店</th>
+							<th colspan="2">会员卡消费</th>
+							<th colspan="2">快捷消费</th>
+							<th rowspan="2">消费总额</th>
+						</tr>
+						<tr class="hkb_title_tr">
+							<th class="th_border">消费总额</th>
+							<th>消费笔数</th>
+							<th class="th_border">消费总额</th>
+							<th>消费笔数</th>
+						</tr>
+			</thead>
+            <tbody>
+            	<tr align="center" th:if="${#lists.isEmpty(pageInfo.list)}">
+								<td colspan="8"><span th:text="暂无数据"></span></td>
+				</tr>
+       			<tr align="center" th:if="${not #lists.isEmpty(pageInfo.List)}" th:each="entity,orderStat : ${pageInfo.list}" th:inline="text">
+                <td><span th:text="${entity.shopName}"></span></td>
+                <td><span th:text="${positOprStatistics.mchntName}"></span></td>
+                <td><span th:text="${positOprStatistics.shopName}"></span></td>
+                <td><span th:text="${entity.cardPayAmt}"></span></td>
+                <td><span th:text="${entity.cardPayNum}"></span></td>
+                <td><span th:text="${entity.quickPayAmt}"></span></td>
+                <td><span th:text="${entity.quickPayNum}"></span></td>
+                <td><span th:text="${entity.payAmt}"></span></td>
+            	</tr>            
+            </tbody>
+        </table>
+
+    </div>
+
+    <!-- next-->
+			<span th:if="${not #lists.isEmpty(pageInfo.list)}">
+				<div th:include="main/pagination::page" class="info_page"></div>
+			</span>
+	</div>
+</form>
+	<script th:src="@{/diy/js/trans/transCount/hkbTransCount.js}"></script>
+
+<script>addEventListener('load',function(){})
+</script>
+	<script th:inline="javascript">
+	 $(".moredate").each(function(){
+	        $(this).jeDate({
+	            format: "hh:mm:ss"
+	        });
+	    });
+	</script>
+</body>
+</html>

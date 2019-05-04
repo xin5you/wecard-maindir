@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.common.wecard.module.msg.mapper.MsgBaseDao">
+
+	<select id="listForPage" parameterType="MsgBase" resultType="MsgBase">
+		SELECT * FROM t_wx_client_msg_base 
+		<trim prefix="where" prefixOverrides="and|or">
+	        1=1 
+			<if test="msgtype != null and msgtype != '' ">
+			    AND  MSGTYPE = #{msgtype}
+			</if>
+		</trim>	 
+		ORDER BY ID
+	</select>
+
+	<select id="getById" parameterType="java.lang.String" resultType="MsgBase">
+		SELECT * FROM t_wx_client_msg_base WHERE ID = #{id}
+	</select>
+	
+	<select id="getMsgTextByBaseId" parameterType="java.lang.String" resultType="MsgText">
+		SELECT t.* FROM t_wx_client_msg_text t , t_wx_client_msg_base b
+		WHERE t.base_id = b.id
+		AND b.id = #{id}
+	</select>
+	
+	<select id="getMsgTextByAgainSubscribe" resultType="MsgText">
+		SELECT t.* FROM t_wx_client_msg_text t , t_wx_client_msg_base b
+		WHERE t.base_id = b.id
+		AND b.inputcode = 'again_subscribe'
+	</select>
+	
+	<select id="getMsgTextBySubscribe" resultType="MsgText">
+		SELECT t.* FROM t_wx_client_msg_text t , t_wx_client_msg_base b
+		WHERE t.base_id = b.id
+		AND b.inputcode = 'subscribe'
+	</select>
+	
+	<select id="getMsgTextByInputCode" resultType="MsgText">
+		SELECT t.* FROM t_wx_client_msg_text t , t_wx_client_msg_base b
+		WHERE t.base_id = b.id
+		AND b.inputcode = #{inputcode}
+	</select>
+	
+	<select id="listMsgNewsByBaseId" resultType="MsgNews">
+		SELECT t.* FROM t_wx_client_msg_news t , t_wx_client_msg_base b
+		WHERE t.base_id = b.id
+		AND b.id in 
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">  
+		 #{item}  
+		</foreach>  
+	</select>
+
+	<insert id="add" parameterType="MsgBase" flushCache="true">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select SEQ_t_wx_client_MSG_BASE.NEXTVAL from dual
+        </selectKey>
+		INSERT INTO t_wx_client_msg_base ( ID,MSGTYPE,INPUTCODE,RULE,ENABLE,READCOUNT,FAVOURCOUNT,CREATETIME ) VALUES (
+			${id},
+			#{msgtype, jdbcType=VARCHAR},
+			#{inputcode, jdbcType=VARCHAR},
+			#{rule, jdbcType=VARCHAR},
+			#{enable, jdbcType=INTEGER},
+			#{readcount, jdbcType=INTEGER},
+			#{favourcount, jdbcType=VARCHAR},
+			sysdate) 
+	</insert>
+
+	<update id="update" parameterType="MsgBase" flushCache="true">
+		UPDATE t_wx_client_msg_base SET MSGTYPE = #{msgtype},INPUTCODE = #{inputcode},RULE = #{rule},ENABLE = #{enable},READCOUNT = #{readcount},FAVOURCOUNT = #{favourcount},CREATETIME = #{createtime} WHERE ID = #{id} 
+	</update>
+	
+	<update id="updateInputcode" parameterType="MsgBase" flushCache="true">
+		UPDATE t_wx_client_msg_base SET INPUTCODE = #{inputcode} WHERE ID = #{id} 
+	</update>
+
+	<delete id="delete" parameterType="MsgBase" >
+		DELETE FROM t_wx_client_msg_base WHERE ID = #{id}
+	</delete>
+
+</mapper>

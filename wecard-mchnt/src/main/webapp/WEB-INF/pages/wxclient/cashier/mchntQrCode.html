@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1" />
+		<meta content="telephone=no" name="format-detection" />
+		<title>知了企服商户平台-收银台</title>
+		<link rel="stylesheet" href="${s.base}/res/css/public.min.css">
+		<script src="${s.base}/res/jqueryui/js/jquery-2.1.4.js"></script>
+		<script src="${s.base}/res/common/jquery.qrcode.js"></script>
+		<script src="${s.base}/res/common/utf.js"></script>
+		<script src="${s.base}/res/common/jquery-barcode.js"></script>
+		<script src="${s.base}/res/jweixin-1.0.0.js"></script>
+		<script src="${s.base}/res/js/wxclient/cashier/qrcode.js"></script>
+		<script type="text/javascript">
+			var CONETXT_PATH = '${s.base}';
+		</script>
+	</head>
+	<body id="full_body">
+		<input id="pay_url" type="hidden" value="${payUrl!} " />
+		<div class="payment_QR">
+			<div class="main">
+				<div class="prompt">
+					此类收款码供扫码付款时使用
+					<div class="left_circle"></div>
+					<div class="right_circle"></div>
+				</div>
+				<div class="QR_code">
+					<div id="qrcode" style="text-align: center;"></div>
+					<!-- <img src="${s.base}/res/image/temp/qr_code.png" /> -->
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

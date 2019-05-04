@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wecard.facade.telrecharge.mapper.TelChannelProductInfMapper">
+		
+	<resultMap type="TelChannelProductInf" id="TelChannelProductInfResultMap">
+		<result column="PRODUCT_ID" property="productId"/>
+		<result column="OPER_NAME" property="operName"/>
+		<result column="OPER_ID" property="operId"/>
+		<result column="AREA_FLAG" property="areaFlag"/>
+		<result column="PRODUCT_AMT" property="productAmt"/>
+		<result column="PRODUCT_PRICE" property="productPrice"/>
+		<result column="PRODUCT_TYPE" property="productType"/>
+		<result column="CHANNEL_RATE" property="channelRate"/>
+		<result column="RESV1" property="resv1"/>
+		<result column="RESV2" property="resv2"/>
+		<result column="RESV3" property="resv3"/>
+		<result column="RESV4" property="resv4"/>
+		<result column="RESV5" property="resv5"/>
+		<result column="RESV6" property="resv6"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+		<result column="ID" property="id"/>
+		<result column="CHANNEL_RATE" property="channelRate"/>
+		<result column="CHANNEL_ID" property="channelId"/>
+	</resultMap>
+	
+	<sql id="TableName">
+			TB_TEL_CHANNEL_PRODUCT_INF
+	</sql>
+	
+	<sql id="ColumnResult">
+		PRODUCT_ID, 
+		OPER_NAME, 
+		OPER_ID, 
+		AREA_FLAG, 
+		PRODUCT_AMT, 
+		PRODUCT_PRICE,
+		PRODUCT_TYPE,
+		RESV1,
+		RESV2,
+		RESV3,
+		RESV4,
+		RESV5,
+		RESV6,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER	,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+
+	<select id="getById" parameterType="java.lang.String" resultMap="TelChannelProductInfResultMap">
+		SELECT 
+	  		<include refid="ColumnResult" />
+		 		     FROM 	<include refid="TableName" /> m
+		              WHERE m.data_stat='0' AND m.PRODUCT_ID=#{productId}
+	</select>
+	
+	<select id="getList" parameterType="TelChannelProductInf" resultMap="TelChannelProductInfResultMap">
+		SELECT 
+	  		<include refid="ColumnResult" />
+		FROM <include refid="TableName" /> m
+		WHERE m.data_stat='0'
+		<if test="operName !=null and operName !='' ">
+			AND m.OPER_NAME LIKE '%' || #{operName} || '%'
+		</if>
+		<if test="operId !=null and operId !='' ">
+			AND m.OPER_ID = #{operId}
+		</if>
+		<if test="areaFlag !=null and areaFlag !='' ">
+			AND m.AREA_FLAG = #{areaFlag}
+		</if>
+		<if test="productType !=null and productType !='' ">
+			AND m.PRODUCT_TYPE = #{productType}
+		</if>
+		ORDER BY M.UPDATE_TIME DESC
+	</select>
+	
+	<select id="getChannelProductByItemId" parameterType="String" resultMap="TelChannelProductInfResultMap">
+		Select
+			L.ID, 
+			L.CHANNEL_ID,
+		    P.PRODUCT_ID, 
+		    P.OPER_NAME, 
+		    P.OPER_ID, 
+		    P.AREA_FLAG, 
+		    P.PRODUCT_AMT, 
+		    P.PRODUCT_PRICE,
+		    P.PRODUCT_TYPE,
+		    L.CHANNEL_RATE
+        FROM TB_TEL_CHANNEL_PRODUCT_INF P,
+         TB_TEL_CHANNEL_ITEM_LIST L,
+         TB_TEL_CHANNEL_INF A  
+         WHERE  P.DATA_STAT='0'
+        AND L.DATA_STAT='0'
+        AND A.DATA_STAT='0'
+        AND P.PRODUCT_ID=L.PRODUCT_ID
+        AND L.CHANNEL_ID=A.CHANNEL_ID
+		AND L.ID = #{id}
+	</select>
+	
+	<select id="getChannelProductListByChannelId" parameterType="String" resultMap="TelChannelProductInfResultMap">
+		SELECT 
+			CP.PRODUCT_ID, 
+			CP.OPER_NAME, 
+			CP.OPER_ID, 
+			CP.AREA_FLAG, 
+			CP.PRODUCT_AMT, 
+			CP.PRODUCT_PRICE,
+			CP.PRODUCT_TYPE,
+			CP.DATA_STAT,
+			CP.REMARKS,
+			CP.CREATE_USER,
+			CP.UPDATE_USER,
+			CP.CREATE_TIME,
+			CP.UPDATE_TIME,
+			CP.LOCK_VERSION,
+			ITEM.ID,
+			ITEM.CHANNEL_RATE
+		FROM TB_TEL_CHANNEL_PRODUCT_INF CP INNER JOIN TB_TEL_CHANNEL_ITEM_LIST ITEM 
+		ON CP.PRODUCT_ID = ITEM.PRODUCT_ID
+		WHERE CP.DATA_STAT='0'
+		AND ITEM.CHANNEL_ID  = #{channelId}
+		ORDER BY CP.UPDATE_TIME DESC
+	</select>
+	
+	
+		<insert id="insert" parameterType="TelChannelProductInf">
+			 <selectKey resultType="string" order="BEFORE" keyProperty="productId">  
+			<include refid="com.cn.thinkx.wecard.facade.telrecharge.mapper.SqlTelCommonMapper.getTelCommonId" />
+		</selectKey>
+			INSERT INTO <include refid="TableName" /> (
+				<include refid="ColumnResult" />
+			 )  VALUES (
+					#{productId,jdbcType=VARCHAR},
+					#{operName,jdbcType=VARCHAR},
+					#{operId,jdbcType=VARCHAR},
+					#{areaFlag,jdbcType=VARCHAR},
+					#{productAmt,jdbcType=VARCHAR},
+					#{productPrice,jdbcType=VARCHAR},
+					#{productType,jdbcType=VARCHAR},
+			 		#{resv1,jdbcType=VARCHAR},
+			 		#{resv2,jdbcType=VARCHAR},
+			 		#{resv3,jdbcType=VARCHAR},
+			 		#{resv4,jdbcType=VARCHAR},
+			 		#{resv5,jdbcType=VARCHAR},
+			 		#{resv6,jdbcType=VARCHAR},
+			 		#{dataStat,jdbcType=VARCHAR},
+			 		#{remarks,jdbcType=VARCHAR},
+			 		#{createUser,jdbcType=VARCHAR},
+			 		#{createUser,jdbcType=VARCHAR},
+			 		sysdate,
+			 		sysdate,
+			 		'0') 
+		</insert>
+
+		<update id="update"  parameterType="TelChannelProductInf">
+			UPDATE <include refid="TableName" /> SET
+				OPER_NAME=#{operName,jdbcType=VARCHAR},
+				OPER_ID=#{operId,jdbcType=VARCHAR},
+				AREA_FLAG=#{areaFlag,jdbcType=VARCHAR},
+				PRODUCT_AMT=#{productAmt,jdbcType=VARCHAR},
+				PRODUCT_PRICE=#{productPrice,jdbcType=VARCHAR},
+				PRODUCT_TYPE=#{productType,jdbcType=VARCHAR},
+		 		RESV1=#{resv1,jdbcType=VARCHAR},
+		 		RESV2=#{resv2,jdbcType=VARCHAR},
+		 		RESV3=#{resv3,jdbcType=VARCHAR},
+		 		RESV4=#{resv4,jdbcType=VARCHAR},
+		 		RESV5=#{resv5,jdbcType=VARCHAR},
+		 		RESV6=#{resv6,jdbcType=VARCHAR},
+				DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+				REMARKS=#{remarks,jdbcType=VARCHAR},
+				UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+				UPDATE_TIME=sysdate,
+				LOCK_VERSION=LOCK_VERSION+1
+			 	WHERE LOCK_VERSION=#{lockVersion} AND PRODUCT_ID = #{productId} 
+	</update>
+	
+		<update id="deleteById" parameterType="string">
+			UPDATE <include refid="TableName" /> SET DATA_STAT='1'  WHERE　PRODUCT_ID = #{productId} 
+		</update>
+		
+	<select id="getProductRateByMaps" parameterType="java.util.Map" resultMap="TelChannelProductInfResultMap">
+    	Select 
+		p.PRODUCT_ID, 
+		p.OPER_NAME, 
+		p.OPER_ID, 
+		p.AREA_FLAG, 
+		p.PRODUCT_AMT, 
+		p.PRODUCT_PRICE,
+		p.PRODUCT_TYPE,
+    	l.CHANNEL_RATE
+    FROM TB_TEL_CHANNEL_PRODUCT_INF p,
+         TB_TEL_CHANNEL_ITEM_LIST l,
+         TB_TEL_CHANNEL_INF a
+        WHERE  p.DATA_STAT='0'
+        AND l.DATA_STAT='0'
+        AND a.DATA_STAT='0'
+        AND p.PRODUCT_ID=l.PRODUCT_ID
+        AND l.CHANNEL_ID=a.CHANNEL_ID
+        AND p.OPER_ID=#{operId}
+        AND p.PRODUCT_TYPE=#{productType}
+        AND p.PRODUCT_AMT=#{productAmt}
+        AND a.CHANNEL_ID=#{channelId}
+        <if test="productId != null and productId != ''">
+        	AND  p.PRODUCT_ID=#{productId}
+        </if>
+	</select>
+
+</mapper>

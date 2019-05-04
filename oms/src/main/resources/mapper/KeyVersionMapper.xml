@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.key.mapper.KeyVersionMapper">
+	
+	<resultMap type="KeyVersion" id="KeyVersionMapper">
+		<result column="VERSION_ID"      property="versionId"/>
+		<result column="VERSION_CODE"    property="versionCode"/>
+		<result column="VERSION_TYPE"    property="versionType"/>
+		<result column="DFT_STAT"        property="dftStat"/>
+		<result column="REMARKS"         property="remarks"/>
+		<result column="CREATE_USER"     property="createUser"/>
+		<result column="UPDATE_USER"     property="updateUser"/>
+		<result column="CREATE_TIME"     property="createTime"/>
+		<result column="UPDATE_TIME"     property="updateTime"/>
+		<result column="LOCK_VERSION"    property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="KeyVersionColumns">
+		t.VERSION_ID,
+		t.VERSION_CODE,
+		t.VERSION_TYPE,
+		t.DFT_STAT,
+		t.REMARKS,
+		t.CREATE_USER,
+		t.UPDATE_USER,
+		t.CREATE_TIME,
+		t.UPDATE_TIME,
+		t.LOCK_VERSION
+	</sql>
+	
+	<select id="getDefaultKeyVersionByViesionType" parameterType="java.lang.String" resultMap="KeyVersionMapper">
+		SELECT 
+	  		<include refid="KeyVersionColumns" />
+		FROM TB_KEY_VERSION t 
+		WHERE  t.DFT_STAT = 0
+			and t.VERSION_TYPE = #{versionType}
+	</select>
+	
+</mapper>

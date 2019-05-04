@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.merchant.mapper.MerchantInfDao">
+		
+	<resultMap type="MerchantInf" id="MerchantInfResultMap">
+		<result column="MCHNT_ID" property="mchntId"/>
+		<result column="INS_ID" property="insId"/>
+		<result column="MCHNT_CODE" property="mchntCode"/>
+		<result column="MCHNT_NAME" property="mchntName"/>
+		<result column="MCHNT_TYPE" property="mchntType"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+		<result column="INS_CODE" property="insCode"/>
+	</resultMap>
+	
+	<sql id="MerchantInfColumns">
+		m.MCHNT_ID,
+		m.INS_ID,
+		m.MCHNT_CODE,
+		m.MCHNT_NAME,
+		m.MCHNT_TYPE,
+		m.DATA_STAT,
+		m.REMARKS,
+		m.CREATE_USER,
+		m.UPDATE_USER,
+		m.CREATE_TIME,
+		m.UPDATE_TIME,
+		m.LOCK_VERSION	
+	</sql>
+	
+	<select id="getMerchantInfById" parameterType="java.lang.String" resultMap="MerchantInfResultMap">
+		SELECT 
+	  		<include refid="MerchantInfColumns" />
+		 FROM TB_MERCHANT_INF m WHERE m.DATA_STAT='0' AND m.MCHNT_ID=#{mchntId}
+	</select>
+
+	<select id="getMerchantInfByCode" parameterType="java.lang.String" resultMap="MerchantInfResultMap">
+		SELECT 
+	  		<include refid="MerchantInfColumns" />
+		 FROM TB_MERCHANT_INF m WHERE m.DATA_STAT='0' AND m.MCHNT_CODE=#{mchntCode}
+	</select>
+
+	<select id="getMerchantCashManagerByMchntId" parameterType="java.lang.String" resultType="MerchantCashManager">
+		SELECT 
+			m.CHASH_ID,
+			m.MCHNT_ID,
+			m.INS_ID,
+			m.MORTGAGE_FLG,
+			m.MORTGAGE_AMT,
+			m.GET_QUOTA,
+			m.RECHARGE_AMT,
+			m.RECHARGE_FACE_AMT,
+			m.CASH_THRESHOLD_AMT,
+			m.GROSS_PROFIT_RATE,
+			m.DATA_STAT,
+			m.REMARKS,
+			m.CREATE_USER,
+			m.UPDATE_USER,
+			m.CREATE_TIME,
+			m.UPDATE_TIME,
+			m.LOCK_VERSION
+		 	FROM TB_MERCHANT_CASH_MANAGE m  WHERE m.DATA_STAT='0' AND m.MCHNT_ID=#{mchntId}
+	</select>
+	
+   <select id="getInsCodeByInsId" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT  INS_CODE  FROM TB_INS_INF m WHERE m.DATA_STAT='0' AND m.ins_id=#{insId}
+	</select>
+	
+	 <select id="getMchntAndInsInfBymchntId" parameterType="java.lang.String" resultMap="MerchantInfResultMap">
+			SELECT 
+		     mi.MCHNT_ID,
+		     mi.MCHNT_CODE,
+		     ii.INS_ID,
+		     ii.INS_CODE
+	      FROM TB_MERCHANT_INF mi,
+	           TB_INS_INF ii
+	         WHERE mi.DATA_STAT='0'
+	               AND ii.DATA_STAT='0'
+	               AND ii .INS_ID=mi.INS_ID
+            	   AND mi.MCHNT_ID=#{mchntId}
+	</select>
+</mapper>

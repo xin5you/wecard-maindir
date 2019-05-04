@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wecard.api.module.trans.mapper.UserMerchantAcctMapper">
+		
+	<resultMap type="UserMerchantAcct" id="UserMerchantAcctResultMap">
+		<result column="USER_ID" property="userId"/>
+		<result column="USER_NAME" property="userName"/>
+		<result column="CARD_NO" property="cardNo"/>
+		<result column="PIN_STAT" property="pinStat"/>
+		<result column="NOPIN_TXN_AMT" property="nopinTxnAmt"/>
+		<result column="ACCOUNT_NO" property="accountNo"/>
+		<result column="ACC_BAL" property="accBal"/>
+		<result column="INS_ID" property="insId"/>
+		<result column="INS_CODE" property="insCode"/>
+		<result column="INS_NAME" property="insName"/>
+		<result column="MCHNT_ID" property="mchntId"/>
+		<result column="MCHNT_CODE" property="mchntCode"/>
+		<result column="MCHNT_NAME" property="mchntName"/>
+		<result column="PRODUCT_CODE" property="productCode"/>
+		<result column="PRODUCT_NAME" property="productName"/>
+		<result column="MAX_TXN_AMT2" property="maxTxnAmt2"/>
+		<result column="MAX_DAY_TXN_AMT2" property="maxDayTxnAmt2"/>
+		<result column="DAY_TOTAL_AMT2" property="dayTotalAmt2"/>
+		<result column="LAST_TXN_DATE" property="lastTxnDate"/>
+	</resultMap>
+	
+	<sql id="UserMerchantAcctColumns">
+		c.USER_ID,
+		c.USER_NAME,
+		c.CARD_NO,
+		c.PIN_STAT,
+		c.NOPIN_TXN_AMT,
+		c.ACCOUNT_NO,
+		c.ACC_BAL,
+		c.INS_ID,
+		c.INS_CODE,
+		c.INS_NAME,
+		c.MCHNT_ID,
+		c.MCHNT_CODE,
+		c.MCHNT_NAME,
+		c.PRODUCT_CODE,
+		c.PRODUCT_NAME,
+		c.MAX_TXN_AMT2,
+		c.MAX_DAY_TXN_AMT2,
+		c.DAY_TOTAL_AMT2,	
+		c.LAST_TXN_DATE
+	</sql>
+
+	<select id="getUserMerchantAcctByUser" parameterType="UserMerchantAcct" resultMap="UserMerchantAcctResultMap">
+		SELECT　
+	  		<include refid="UserMerchantAcctColumns" />
+	  				FROM VIEW_USER_MERCHANT_ACCT c
+	  				WHERE 1=1
+  				<if test="userId !=null and userId !='' ">
+  					AND USER_ID=#{userId}
+  				</if>
+  				<if test="userName !=null and userName !='' ">
+  					AND USER_NAME=#{userName}
+  				</if>
+  				 <if test="productCode !=null and productCode !='' ">
+  					AND PRODUCT_CODE=#{productCode}
+  				</if>
+  				 <if test="insId !=null and insId !='' ">
+  					AND INS_ID=#{insId}
+  				</if>
+  				<if test="insCode !=null and insCode !='' ">
+  					AND INS_CODE=#{insCode}
+  				</if>
+  				 <if test="mchntId !=null and mchntId !='' ">
+  					AND MCHNT_ID=#{mchntId}
+  				</if>
+  				<if test="mchntCode !=null and mchntCode !='' ">
+  					AND MCHNT_CODE=#{mchntCode}
+  				</if>
+  				 <if test="channelCode !=null and channelCode !='' ">
+  					AND CHANNEL_CODE=#{channelCode}
+  				</if>
+  				 <if test="externalId !=null and externalId !='' ">
+  					AND EXTERNAL_ID=#{externalId}
+  				</if>
+	</select>
+	
+	
+	<select id="getMerchantCardByMchnt" parameterType="UserMerchantAcct" resultMap="UserMerchantAcctResultMap">
+		SELECT
+		       INSF.INS_ID,
+		       INSF.INS_CODE,
+		       INSF.INS_NAME,
+		       MCHT.MCHNT_ID,
+		       MCHT.MCHNT_CODE,
+		       MCHT.MCHNT_NAME,
+		       PROD.PRODUCT_CODE,
+		       PROD.PRODUCT_NAME
+		  FROM 
+		       TB_PRODUCT          PROD,
+		       TB_REL_INS_PRODUCT  REPI,
+		       TB_INS_INF          INSF,
+		       TB_MERCHANT_INF     MCHT
+		 WHERE MCHT.INS_ID = INSF.INS_ID
+		   AND INSF.INS_ID = REPI.INS_ID
+		   AND REPI.PRODUCT_CODE = PROD.PRODUCT_CODE
+		   AND PROD.DATA_STAT = '0'
+		   AND REPI.DATA_STAT = '0'
+		   AND INSF.DATA_STAT = '0'
+		   AND MCHT.DATA_STAT = '0'
+			<if test="productCode !=null and productCode !='' ">
+				AND PRODUCT_CODE=#{productCode}
+			</if>
+			 <if test="insId !=null and insId !='' ">
+				AND INS_ID=#{insId}
+			</if>
+			<if test="insCode !=null and insCode !='' ">
+				AND INS_CODE=#{insCode}
+			</if>
+			 <if test="mchntId !=null and mchntId !='' ">
+				AND MCHNT_ID=#{mchntId}
+			</if>
+			<if test="mchntCode !=null and mchntCode !='' ">
+				AND MCHNT_CODE=#{mchntCode}
+			</if>
+	</select>
+
+</mapper>

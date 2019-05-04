@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	lang="en">
+<link rel="stylesheet" th:href="@{/diy/css/hkbServicePlatform.min.css}" />
+<head th:include="main/header::header" />
+<!-- nav 导航栏-->
+<header th:include="main/navbar::navbar"/>
+<body>
+
+<!-- 个人充值开票 -->
+<form id="searchForm" th:action="@{/invoice/invoOrdStatistics/getInvoOrdStatistics}" th:object="${invoiceOrder}" method="post">
+<div class="content_body">
+
+    <div class="title_content_title">
+        <p><img th:src="@{/icon/tab_query_data_green.png}" />充值开票统计</p>
+    </div>
+    <div class="info_middle_body">
+    <!-- 操作组件-->
+      <div class="info_content_operation">
+         <div class="control_list half_list" id = "transTime">
+             <div class="hkb_date_list">
+                 <span>开始时间：</span>
+                 <span>
+                    <input type="text" class="layui-input hkb_item Wdate" th:value="${invoiceOrder.startDate}" readonly="readonly" placeholder="请输入开始时间" id = "startDate" name = "startDate"/>
+               </span>
+             </div>
+             <div class="hkb_date_list">
+                  <span>结束时间：</span>
+                  <span>
+                     <input type="text" class="layui-input hkb_item Wdate" th:value="${invoiceOrder.endDate}"  readonly="readonly"  placeholder="请输入开始时间"  id = "endDate" name = "endDate"/>
+                </span>
+              </div>
+         </div>
+        <div class="control_list btn_list list_row" style="text-align: right">
+            <button type="button" class="hkb_btn btn_green" id="btn-search" >查询</button>
+            <button type="button" class="hkb_btn btn_white" id="btn-reset" >重置</button>
+        </div>
+    </div>
+    <!-- table -->
+    <div class="info_content_table">
+        <!-- table 单独-->
+        <table class="table_box" border="0" cellpadding="0" cellspacing="1" rules="cols">
+            <thead>
+            <tr class="hkb_title_tr">
+                <th>门店</th>
+				<th>所属商户</th>
+				<th>个充开票总金额（元）</th>
+				<th>批量开票总金额（元）</th>
+				<th>总计开票金额（元）</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr align="center" th:if="${#lists.isEmpty(pageInfo.list)}">
+				<td colspan="8"><span th:text="暂无数据"></span></td>
+			</tr>
+            <tr align="center" th:each="entity,invoStat : ${pageInfo.list}" th:inline="text">
+                <td><span th:text="${entity.shopName}"></span></td>
+				<td><span th:text="${entity.mchntName}"></span></td>
+				<td><span th:text="${entity.invoiceAmtCount}"></span></td>
+				<td><span th:text="${entity.binvoiceAmtCount}"></span></td>
+				<td><span th:text="${entity.amtCount}"></span></td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <!-- next-->
+    <div th:if="${not #lists.isEmpty(pageInfo.list)}" th:include="main/pagination::page" class="info_page"></div>
+    </div>
+</div>
+</form>
+
+<script th:src="@{/diy/js/invoice/invoOrdStatistics.js}"></script>
+
+</body>
+</html>

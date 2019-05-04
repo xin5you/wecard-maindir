@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <#include "../../common/wecardHeader.html">
+ <script type="text/javascript" src="${s.base}/static/js/module/wallet/payfail.js?v=${s.version}"></script>
+ 
+    <!--通用媒体查询-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+    <title>知了企服</title>
+</head>
+<body>
+<!--操作失败-->
+<div class="hkb_fail_animation">
+    <!--失败动画-->
+    <div class="fail_animation_wrong">
+        <div class="swal2-icon swal2-error animate-error-icon">
+             <span class="x-mark animate-x-mark">
+                <span class="line left"></span>
+                <span class="line right"></span>
+             </span>
+        </div>
+    </div>
+    <div class="hkb_text_fail">支付&#x5931;&#x8D25;</div>
+    <input id="mchntCode" type="hidden" value="${mchntCode!}" />
+    <!--消费账单-->
+    <#if errorInfo?? && transAmt?? >
+	    <div class="hkb_fail_text_bill">
+	        <div class="hkb_fail_bill font_org">
+	            <span class="fail_bill_text">&#x91D1;&#x989D;&#xFF1A;</span>
+	            <span class="fail_bill_text"> ${transAmt!}&#x5143;</span>
+	        </div>
+	        <div class="hkb_fail_bill">
+	            <span class="fail_bill_text">原因&#xFF1A;</span>
+	            <span class="fail_bill_text"> ${errorInfo!}</span>
+	        </div>
+	    </div>
+    </#if>
+    
+    <!--关闭-->
+    <div class="hkb_button_fail">
+     <a class="main_btn" href="#"><span>&#x5173;&#x95ED;</span>
+        </a>
+    <#if transId=='W10'>
+      <#if transCode ?? && transCode=='55'>
+            <a class="secondary_btn" href="#" id="scanBtn"><span>扫一扫买单</span></a>
+      </#if>
+      
+      <#if transCode ?? && transCode=='51'>
+            <a class="secondary_btn" href="#" id="buyMchntCardBtn"><span>购卡</span></a>
+      </#if>
+  </#if>
+       
+    </div>
+<!--     <#if transCode ?? && transCode=='55'> -->
+<!--             <div class="pay_success_forget"><a href="${s.base}/customer/user/userSettings.html" class="pay_success_sky_blue">忘记密码>></a></div> -->
+<!--     </#if> -->
+</div>
+<script>
+// 阻止浏览器后退按钮  
+$(document).ready(function(e) {	
+	var counter = 0;
+	if (window.history && window.history.pushState) {
+		$(window).on('popstate', function () {
+			window.history.pushState('forward', null, '#');
+			window.history.forward(1);
+		});
+	}
+	window.history.pushState('forward', null, '#'); //在IE中必须得有这两行
+	window.history.forward(1);
+});
+</script>
+
+</body>
+</html>

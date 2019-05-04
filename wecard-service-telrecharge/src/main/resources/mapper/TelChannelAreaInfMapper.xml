@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wecard.facade.telrecharge.mapper.TelChannelAreaInfMapper">
+		
+	<resultMap type="TelChannelAreaInf" id="TelChannelAreaInfResultMap">
+		<result column="AREA_ID" property="areaId"/>
+		<result column="AREA_NAME" property="areaName"/>
+		<result column="RESV1" property="resv1"/>
+		<result column="RESV2" property="resv2"/>
+		<result column="RESV3" property="resv3"/>
+		<result column="RESV4" property="resv4"/>
+		<result column="RESV5" property="resv5"/>
+		<result column="RESV6" property="resv6"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="TableName">
+		TB_TEL_CHANNEL_AREA_INF
+	</sql>
+	
+	<sql id="ColumnResult">
+		AREA_ID,
+		AREA_NAME,
+		RESV1,
+		RESV2,
+		RESV3,
+		RESV4,
+		RESV5,
+		RESV6,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER	,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+
+	<select id="getById" parameterType="java.lang.String" resultMap="TelChannelAreaInfResultMap">
+		SELECT 
+	  		<include refid="ColumnResult" />
+		 		     FROM 	<include refid="TableName" /> m
+		              WHERE m.data_stat='0' AND m.AREA_ID=#{areaId}
+	</select>
+	
+	<select id="getList" parameterType="TelChannelAreaInf" resultMap="TelChannelAreaInfResultMap">
+		SELECT 
+	  		<include refid="ColumnResult" />
+		 		     FROM 	<include refid="TableName" /> m
+		              WHERE m.data_stat='0'
+	</select>
+	
+		<insert id="insert" parameterType="TelChannelAreaInf">
+			 <selectKey resultType="string" order="BEFORE" keyProperty="areaId">  
+			<include refid="com.cn.thinkx.wecard.facade.telrecharge.mapper.SqlTelCommonMapper.getTelCommonId" />
+		</selectKey>
+			INSERT INTO <include refid="TableName" /> (
+				<include refid="ColumnResult" />
+			 )  VALUES (
+			 		#{areaId,jdbcType=VARCHAR},
+			 		#{areaName,jdbcType=VARCHAR},
+			 		#{resv1,jdbcType=VARCHAR},
+			 		#{resv2,jdbcType=VARCHAR},
+			 		#{resv3,jdbcType=VARCHAR},
+			 		#{resv4,jdbcType=VARCHAR},
+			 		#{resv5,jdbcType=VARCHAR},
+			 		#{resv6,jdbcType=VARCHAR},
+			 		#{dataStat,jdbcType=VARCHAR},
+			 		#{remarks,jdbcType=VARCHAR},
+			 		#{createUser,jdbcType=VARCHAR},
+			 		#{createUser,jdbcType=VARCHAR},
+			 		sysdate,
+			 		sysdate,
+			 		'0') 
+		</insert>
+		
+		<update id="update"  parameterType="TelChannelAreaInf">
+			UPDATE <include refid="TableName" /> SET
+				AREA_NAME=#{areaName,jdbcType=VARCHAR},
+		 		RESV1=#{resv1,jdbcType=VARCHAR},
+		 		RESV2=#{resv2,jdbcType=VARCHAR},
+		 		RESV3=#{resv3,jdbcType=VARCHAR},
+		 		RESV4=#{resv4,jdbcType=VARCHAR},
+		 		RESV5=#{resv5,jdbcType=VARCHAR},
+		 		RESV6=#{resv6,jdbcType=VARCHAR},
+				DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+				REMARKS=#{remarks,jdbcType=VARCHAR},
+				UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+				UPDATE_TIME=sysdate,
+				LOCK_VERSION=LOCK_VERSION+1
+			 	WHERE LOCK_VERSION=#{lockVersion} AND AREA_ID = #{areaId} 
+	</update>
+	
+		<update id="deleteById" parameterType="string">
+			UPDATE <include refid="TableName" /> SET DATA_STAT='1'  WHERE　AREA_ID = #{areaId} 
+		</update>
+
+</mapper>

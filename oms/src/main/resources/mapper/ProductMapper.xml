@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.merchant.mapper.ProductMapper">
+	
+	<resultMap type="Product" id="ProductResultMap">
+		<result column="PRODUCT_CODE"    property="productCode"/>
+		<result column="VERSION_ID"      property="versionId"/>
+		<result column="CARD_BIN"        property="cardBin"/>
+		<result column="PRODUCT_NAME"    property="productName"/>
+		<result column="ONYMOUS_STAT"    property="onymousStat"/>
+		<result column="BUSINESS_TYPE"   property="businessType"/>
+		<result column="PRODUCT_TYPE"    property="productType"/>
+		<result column="VALIDITY_PERIOD" property="validityPeriod"/>
+		<result column="MAX_BALANCE"     property="maxBalance"/>
+		<result column="CONSUM_TIMES"    property="consumTimes"/>
+		<result column="RECHARGE_TIMES"  property="rechargeTimes"/>
+		<result column="CVV2_ERR_TIMES"  property="cvv2ErrTimes"/>
+		<result column="CARD_FACE"       property="cardFace"/>
+		<result column="DATA_STAT"       property="dataStat"/>
+		<result column="BAL_KEY_INDEX"   property="balKeyIndex"/>
+		<result column="CVV_KEY_INDEX"   property="cvvKeyIndex"/>
+		<result column="PWD_KEY_INDEX"   property="pwdKeyIndex"/>
+		<result column="LAST_CARD_NUM"   property="lastCardNum"/>
+		<result column="REMARKS"         property="remarks"/>
+		<result column="CREATE_USER"     property="createUser"/>
+		<result column="UPDATE_USER"     property="updateUser"/>
+		<result column="CREATE_TIME"     property="createTime"/>
+		<result column="UPDATE_TIME"     property="updateTime"/>
+		<result column="LOCK_VERSION"    property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="ProductColumns">
+		t.PRODUCT_CODE,
+		t.VERSION_ID,
+		t.CARD_BIN,
+		t.PRODUCT_NAME,
+		t.ONYMOUS_STAT,
+		t.BUSINESS_TYPE,
+		t.PRODUCT_TYPE,
+		t.VALIDITY_PERIOD,
+		t.MAX_BALANCE,
+		t.CONSUM_TIMES,
+		t.RECHARGE_TIMES,
+		t.CVV2_ERR_TIMES,
+		t.CARD_FACE,
+		t.DATA_STAT,
+		t.BAL_KEY_INDEX,
+		t.CVV_KEY_INDEX,
+		t.PWD_KEY_INDEX,
+		t.LAST_CARD_NUM,
+		t.REMARKS,
+		t.CREATE_USER,
+		t.UPDATE_USER,
+		t.CREATE_TIME,
+		t.UPDATE_TIME,
+		t.LOCK_VERSION
+	</sql>
+	
+	<select id="getProductByProductCode" parameterType="java.lang.String" resultMap="ProductResultMap">
+		SELECT 
+	  		<include refid="ProductColumns" />
+		 FROM TB_PRODUCT t WHERE  t.DATA_STAT = '0' and t.PRODUCT_CODE=#{productCode}
+	</select>
+	
+	<select id="getProductByMerchantId" parameterType="java.lang.String" resultMap="ProductResultMap">
+		SELECT 
+	  		<include refid="ProductColumns" />
+		 FROM TB_PRODUCT t,TB_REL_INS_PRODUCT r,TB_INS_INF i,TB_MERCHANT_INF m
+  		WHERE t.PRODUCT_CODE = r.PRODUCT_CODE
+  			AND r.INS_ID = i.INS_ID
+  			AND i.INS_ID = m.INS_ID
+  			AND t.DATA_STAT = '0'
+  			AND m.MCHNT_ID = #{mchntId}
+	</select>
+	
+	<select id="getMerchantIdByProductCode" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT 
+	  		m.MCHNT_ID
+		 FROM TB_PRODUCT t,TB_REL_INS_PRODUCT r,TB_INS_INF i,TB_MERCHANT_INF m
+  		WHERE t.PRODUCT_CODE = r.PRODUCT_CODE
+  			AND r.INS_ID = i.INS_ID
+  			AND i.INS_ID = m.INS_ID
+  			AND t.DATA_STAT = '0'
+  			AND t.PRODUCT_CODE= #{productCode}
+	</select>
+	
+	<select id="getProductList" parameterType="Product" resultMap="ProductResultMap">
+		SELECT 
+	  		<include refid="ProductColumns" />
+		FROM TB_PRODUCT t where 0 = 0
+				AND t.DATA_STAT = '0'
+		    <if test="productCode !=null and productCode !='' ">
+				AND t.PRODUCT_CODE=#{productCode}
+			</if>
+			<if test="productName !=null and productName !='' ">
+				AND t.PRODUCT_NAME LIKE '%' || #{productName} || '%' 
+			</if>
+			<if test="cardBin !=null and cardBin !='' ">
+				AND t.CARD_BIN=#{cardBin}
+			</if>
+			<if test="businessType !=null and businessType !='' ">
+				AND t.BUSINESS_TYPE=#{businessType}
+			</if>
+		ORDER BY t.UPDATE_TIME DESC
+	</select>
+	
+	<insert id="insertProduct" parameterType="Product" useGeneratedKeys="false" keyProperty="productCode">
+	   <selectKey resultType="java.lang.String" order="BEFORE" keyProperty="productCode">  
+			<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getProductCode" />
+		</selectKey>
+		INSERT INTO TB_PRODUCT (
+			    PRODUCT_CODE,
+				VERSION_ID,
+				CARD_BIN,
+				PRODUCT_NAME,
+				ONYMOUS_STAT,
+				BUSINESS_TYPE,
+				PRODUCT_TYPE,
+				VALIDITY_PERIOD,
+				MAX_BALANCE,
+				CONSUM_TIMES,
+				RECHARGE_TIMES,
+				CVV2_ERR_TIMES,
+				CARD_FACE,
+				DATA_STAT,
+				BAL_KEY_INDEX,
+				CVV_KEY_INDEX,
+				PWD_KEY_INDEX,
+				LAST_CARD_NUM,
+				REMARKS,
+				CREATE_USER,
+				UPDATE_USER,
+				CREATE_TIME,
+				UPDATE_TIME,
+				LOCK_VERSION
+		 )  VALUES ( 
+		 		#{productCode ,jdbcType=VARCHAR},
+				#{versionId,jdbcType=VARCHAR},
+				#{cardBin,jdbcType=VARCHAR},
+				#{productName,jdbcType=VARCHAR},
+				#{onymousStat,jdbcType=VARCHAR},
+				#{businessType,jdbcType=VARCHAR},
+				#{productType,jdbcType=VARCHAR},
+				#{validityPeriod,jdbcType=VARCHAR},
+				#{maxBalance,jdbcType=VARCHAR},
+				#{consumTimes,jdbcType=VARCHAR},
+				#{rechargeTimes,jdbcType=VARCHAR},
+				#{cvv2ErrTimes,jdbcType=VARCHAR},
+				#{cardFace,jdbcType=VARCHAR},
+				#{dataStat,jdbcType=VARCHAR},
+				#{balKeyIndex,jdbcType=VARCHAR},
+				#{cvvKeyIndex,jdbcType=VARCHAR},
+				#{pwdKeyIndex,jdbcType=VARCHAR},
+				#{lastCardNum,jdbcType=VARCHAR},
+				#{remarks,jdbcType=VARCHAR},
+				#{createUser,jdbcType=VARCHAR},
+				#{updateUser,jdbcType=VARCHAR},
+				sysdate,
+				sysdate,
+				'0') 
+	</insert>
+	
+	<insert id="saveRelInfProduct" parameterType="RelInsProduct">
+		INSERT INTO TB_REL_INS_PRODUCT (
+			INS_ID,
+			PRODUCT_CODE,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			UPDATE_USER,
+			CREATE_TIME,
+			UPDATE_TIME,
+			LOCK_VERSION) 
+		VALUES(
+		 	#{insId},
+		 	#{productCode},
+		 	#{dataStat,jdbcType=VARCHAR},
+			#{remarks,jdbcType=VARCHAR},
+			#{createUser,jdbcType=VARCHAR},
+			#{updateUser,jdbcType=VARCHAR},
+			sysdate,
+			sysdate,
+			'0')
+	</insert>
+	
+	<update id="updateProduct" parameterType="Product">
+		UPDATE TB_PRODUCT
+		<set>
+			PRODUCT_NAME   =#{productName,jdbcType=VARCHAR},
+			ONYMOUS_STAT   =#{onymousStat,jdbcType=VARCHAR},
+			BUSINESS_TYPE  =#{businessType,jdbcType=VARCHAR},
+			PRODUCT_TYPE   =#{productType,jdbcType=VARCHAR},
+			VALIDITY_PERIOD=#{validityPeriod,jdbcType=VARCHAR},
+			MAX_BALANCE    =#{maxBalance,jdbcType=VARCHAR},
+			CONSUM_TIMES   =#{consumTimes,jdbcType=VARCHAR},
+			RECHARGE_TIMES =#{rechargeTimes,jdbcType=VARCHAR},
+			CVV2_ERR_TIMES =#{cvv2ErrTimes,jdbcType=VARCHAR},
+			CARD_FACE      =#{cardFace,jdbcType=VARCHAR},
+			DATA_STAT      =#{dataStat,jdbcType=VARCHAR},
+			REMARKS        =#{remarks,jdbcType=VARCHAR},
+			UPDATE_USER    =#{updateUser,jdbcType=VARCHAR},
+			UPDATE_TIME    =sysdate,
+			LOCK_VERSION   =LOCK_VERSION+1
+		</set>
+			WHERE PRODUCT_CODE=#{productCode}
+	</update>
+
+	<delete id="deleteProduct" parameterType="java.lang.String" >
+		 UPDATE TB_PRODUCT SET DATA_STAT='1' WHERE　PRODUCT_CODE=#{productCode}
+	</delete>
+</mapper>

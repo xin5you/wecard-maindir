@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wxcms.mapper.AccountFansDao">
+
+<!-- 		<resultMap type="AccountFans" id="AccountFansResultMap"> -->
+<!-- 			<result column="ID" property="id"/> -->
+<!-- 			<result column="OPENID" property="openId"/> -->
+<!-- 			<result column="WXID" property="wxid"/> -->
+<!-- 			<result column="SUBSCRIBESTATUS" property="subscribeStatus"/> -->
+<!-- 			<result column="SUBSCRIBETIME" property="subscribeTime"/> -->
+<!-- 			<result column="NICKNAME" property="nickname"/> -->
+<!-- 			<result column="GENDER" property="gender"/> -->
+<!-- 			<result column="LANGUAGE" property="language"/> -->
+<!-- 			<result column="COUNTRY" property="country"/> -->
+<!-- 			<result column="PROVINCE" property="province"/> -->
+<!-- 			<result column="CITY" property="city"/> -->
+<!-- 			<result column="HEADIMGURL" property="headimgurl"/> -->
+<!-- 			<result column="FANS_STATUS" property="fansStatus"/> -->
+<!-- 			<result column="CREATETIME" property="createtime"/> -->
+<!-- 			<result column="STATUS" property="status"/> -->
+<!-- 			<result column="REMARK" property="remark"/> -->
+<!-- 		</resultMap> -->
+	<sql id="AccountFansColumns">
+		id,
+		openid,
+		wxid,
+		subscribestatus,
+		subscribetime,
+		nickname,
+		gender,
+		language,
+		country,
+		province,
+		city,
+		headimgurl,
+		fans_status,
+		createtime,
+		status,
+		unionid,
+		groupid,
+		remark
+	</sql>
+
+	<select id="list" parameterType="AccountFans" resultType="AccountFans">
+		SELECT 
+		 <include refid="AccountFansColumns" />
+		 FROM TB_WX_MERCHANT_FANS ORDER BY ID
+	</select>
+
+	<select id="getTotalItemsCount" parameterType="AccountFans" resultType="java.lang.Integer">
+		SELECT count(id) FROM TB_WX_MERCHANT_FANS 
+	</select>
+
+	<select id="paginationEntity" resultType="AccountFans">
+		SELECT 
+		 <include refid="AccountFansColumns" />
+		 FROM TB_WX_MERCHANT_FANS 
+		WHERE rownum &gt;= #{param2.start,jdbcType=INTEGER} AND rownum &lt;=#{param2.pageSize,jdbcType=INTEGER}
+		ORDER BY ID 
+	</select>
+	
+	<select id="getLastOpenId" resultType="AccountFans">
+		SELECT 
+		 <include refid="AccountFansColumns" />
+		 FROM TB_WX_MERCHANT_FANS 
+		WHERE rownum &gt;= 0 AND rownum &lt;=1
+		ORDER BY ID DESC
+	</select>
+
+	<select id="getById" parameterType="java.lang.String" resultType="AccountFans">
+		SELECT 
+		 <include refid="AccountFansColumns" />
+		 FROM TB_WX_MERCHANT_FANS WHERE ID = #{id}
+	</select>
+	
+	<select id="getByOpenId" parameterType="java.lang.String" resultType="AccountFans">
+		SELECT 
+		 <include refid="AccountFansColumns" />
+		 FROM TB_WX_MERCHANT_FANS WHERE OPENID = #{openId}
+	</select>
+
+	<insert id="add" parameterType="AccountFans">
+		<![CDATA[ 
+		INSERT INTO TB_WX_MERCHANT_FANS (
+			OPENID,
+			WXID,
+			SUBSCRIBESTATUS,
+			SUBSCRIBETIME,
+			NICKNAME,
+			GENDER,
+			LANGUAGE,
+			COUNTRY,
+			PROVINCE,
+			CITY,
+			HEADIMGURL,
+			FANS_STATUS,
+			REMARK,
+			STATUS,
+			UNIONID,
+			GROUPID,
+			CREATETIME
+		) VALUES ( 
+			#{openId},
+			#{wxid,jdbcType=VARCHAR},
+			#{subscribestatus,jdbcType=VARCHAR},
+			sysDate,
+			#{nickname,jdbcType=VARCHAR},
+			#{gender,jdbcType=VARCHAR},
+			#{language,jdbcType=VARCHAR},
+			#{country,jdbcType=VARCHAR},
+			#{province,jdbcType=VARCHAR},
+			#{city,jdbcType=VARCHAR},
+			#{headimgurl,jdbcType=VARCHAR},
+			#{fansStatus,jdbcType=VARCHAR},
+			#{remark,jdbcType=VARCHAR},
+			#{status,jdbcType=VARCHAR},
+			#{unionid,jdbcType=VARCHAR},
+			#{groupid,jdbcType=VARCHAR},
+			sysDate) 
+		 ]]>
+	</insert>
+	
+	<insert id="addList" parameterType="list">  
+        INSERT INTO TB_WX_MERCHANT_FANS ( OPENID,SUBSCRIBESTATUS,SUBSCRIBETIME,NICKNAME,GENDER,LANGUAGE,COUNTRY,PROVINCE,CITY,HEADIMGURL,REMARK,STATUS,ID,WXID,CREATETIME )
+        VALUES
+        <foreach  collection="list" item="item" index="index" separator="," >  
+        	<![CDATA[
+            ( #{item.openId},#{item.subscribestatus},#{item.subscribeTime},#{item.nickname},#{item.gender},#{item.language},#{item.country},#{item.province},#{item.city},#{item.headimgurl},#{item.remark},#{item.status},#{item.id},#{item.wxid},#{item.createtime} ) 
+        	 ]]>
+        </foreach> 
+    </insert>
+	
+	<update id="update" parameterType="AccountFans" flushCache="true">
+		UPDATE TB_WX_MERCHANT_FANS SET 
+			wxid=#{wxid,jdbcType=VARCHAR},
+			subscribeStatus=#{subscribestatus,jdbcType=VARCHAR},
+			nickname=#{nickname,jdbcType=VARCHAR},
+			gender=#{gender,jdbcType=VARCHAR},
+			language=#{language,jdbcType=VARCHAR},
+			country=#{country,jdbcType=VARCHAR},
+			province=#{province,jdbcType=VARCHAR},
+			city=#{city,jdbcType=VARCHAR},
+			headimgurl=#{headimgurl,jdbcType=VARCHAR},
+			remark=#{remark,jdbcType=VARCHAR},
+			status=#{status,jdbcType=VARCHAR},
+			unionid=#{unionid,jdbcType=VARCHAR}
+			WHERE ID = #{id} 
+	</update>
+
+	<delete id="delete" parameterType="AccountFans" >
+		DELETE FROM TB_WX_MERCHANT_FANS WHERE ID = #{id}
+	</delete>
+	
+	<delete id="deleteByOpenId" parameterType="java.lang.String" >
+		DELETE FROM TB_WX_MERCHANT_FANS WHERE OPENID = #{openId}
+	</delete>
+	
+	<update id="updateAccountFansByStatus" parameterType="AccountFans">
+			UPDATE TB_WX_MERCHANT_FANS SET
+			 SUBSCRIBESTATUS = #{subscribestatus},
+			 SUBSCRIBETIME =sysDate,
+			 STATUS = #{status}  WHERE OPENID = #{openId} 
+	</update>
+	
+	<update id="updateAccountFansByMcht" parameterType="AccountFans">
+			UPDATE TB_WX_MERCHANT_FANS SET
+				WXID=#{wxid,jdbcType=VARCHAR},
+				GENDER=#{gender,jdbcType=VARCHAR},
+				LANGUAGE=#{language,jdbcType=VARCHAR},
+				COUNTRY=#{country,jdbcType=VARCHAR},
+				PROVINCE=#{province,jdbcType=VARCHAR},
+				CITY=#{city,jdbcType=VARCHAR},
+				FANS_STATUS=#{fansStatus,jdbcType=VARCHAR},
+				REMARK=	#{remark,jdbcType=VARCHAR},
+				GROUPID=#{groupid,jdbcType=VARCHAR},
+				STATUS=#{status,jdbcType=VARCHAR}
+			 WHERE ID = #{id} 
+	</update>
+
+</mapper>

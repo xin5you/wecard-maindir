@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.cardkeys.mapper.CardKeysProductMapper">
+		
+	<sql id="CardKeysProductColumns">
+		PRODUCT_CODE,
+		PRODUCT_NAME,
+		PRODUCT_TYPE,
+		ORG_AMOUNT,
+		PRODUCT_UNIT,
+		AMOUNT,
+		TOTAL_NUM,
+		AVAILABLE_NUM,
+		SUPPLIER,
+		LOGO_URL,
+		PRODUCT_DESC,
+		IS_PUTAWAY,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION	
+	</sql>
+	
+	<sql id="CardKeysProductFields">
+		#{productCode,jdbcType=VARCHAR},
+		#{productName,jdbcType=VARCHAR},
+		#{productType,jdbcType=VARCHAR},
+		#{orgAmount,jdbcType=VARCHAR},
+		#{productUnit,jdbcType=VARCHAR},
+		#{amount,jdbcType=VARCHAR},
+		#{totalNum,jdbcType=VARCHAR},
+		#{availableNum,jdbcType=VARCHAR},
+		#{supplier,jdbcType=VARCHAR},
+		#{logoUrl,jdbcType=VARCHAR},
+		#{productDesc,jdbcType=VARCHAR},
+		'0',
+		'0',
+		#{remarks,jdbcType=VARCHAR},
+		#{createUser,jdbcType=VARCHAR},
+		#{updateUser,jdbcType=VARCHAR},
+		sysdate,
+		sysdate,
+		'0'
+	</sql>
+	
+	<sql id="tableName">
+			TB_CARD_KEYS_PRODUCT
+	</sql>
+	
+	<select id="getPrimaryKey" parameterType="java.util.Map" statementType="CALLABLE">
+		<![CDATA[
+			{ CALL PROC_TB_CARD_KEYS_PRODUCT(#{id, jdbcType=VARCHAR, mode=OUT}) }
+		]]>
+	</select>
+	
+	<select id="getCardKeysProductById" parameterType="java.lang.String" resultType="CardKeysProduct">
+		SELECT 
+	  		<include refid="CardKeysProductColumns" />
+		FROM 
+			<include refid="tableName" />
+		WHERE DATA_STAT = '0' AND PRODUCT_CODE=#{productCode}
+	</select>
+	
+	<select id="getCardKeysProductList" parameterType="CardKeysProduct" resultType="CardKeysProduct">
+		SELECT 
+	  		<include refid="CardKeysProductColumns" />
+		 FROM
+		 	<include refid="tableName" />
+		 WHERE DATA_STAT = '0'
+		 <if test="productCode !=null and productCode !='' ">
+				AND PRODUCT_CODE = #{productCode}
+		 </if>
+		 <if test="productName !=null and productName !='' ">
+		 		AND PRODUCT_NAME LIKE '%' || #{productName} || '%'
+		 </if>
+		  <if test="productType !=null and productType !='' ">
+		 		AND PRODUCT_TYPE = #{productType}
+		 </if>
+		 <if test="isPutaway !=null and isPutaway !='' ">
+				AND IS_PUTAWAY = #{isPutaway}
+		 </if>
+		  ORDER BY CREATE_TIME DESC
+	</select>
+	
+	<insert id="insertCardKeysProduct" parameterType="CardKeysProduct">
+		INSERT INTO 
+			<include refid="tableName" />
+		(
+			<include refid="CardKeysProductColumns" />
+		 )  VALUES (
+			 <include refid="CardKeysProductFields" />
+		 ) 
+	</insert>
+	
+	<update id="updateCardKeysProduct" parameterType="CardKeysProduct">
+		UPDATE 
+			<include refid="tableName" />
+		SET
+			PRODUCT_NAME=#{productName,jdbcType=VARCHAR},
+			PRODUCT_TYPE=#{productType,jdbcType=VARCHAR},
+			ORG_AMOUNT=#{orgAmount,jdbcType=VARCHAR},
+			PRODUCT_UNIT=#{productUnit,jdbcType=VARCHAR},
+			AMOUNT=#{amount,jdbcType=VARCHAR},
+			TOTAL_NUM=#{totalNum,jdbcType=VARCHAR},
+			<if test="availableNum != null">AVAILABLE_NUM=#{availableNum,jdbcType=VARCHAR},</if>
+			<if test="supplier != null">SUPPLIER=#{supplier,jdbcType=VARCHAR},</if>
+			<if test="logoUrl != null">LOGO_URL=#{logoUrl,jdbcType=VARCHAR},</if>
+			<if test="productDesc != null">PRODUCT_DESC=#{productDesc,jdbcType=VARCHAR},</if>
+			<if test="remarks != null">REMARKS=#{remarks,jdbcType=VARCHAR},</if>
+			UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+			UPDATE_TIME=sysdate,
+			LOCK_VERSION=LOCK_VERSION+1
+			WHERE PRODUCT_CODE = #{productCode} 
+	</update>
+
+	<update id="updateStandUpAndDown" parameterType="CardKeysProduct">
+		UPDATE 
+			<include refid="tableName" /> 
+		SET IS_PUTAWAY=#{isPutaway,jdbcType=VARCHAR} 
+		WHERE　PRODUCT_CODE = #{productCode} 
+	</update>
+	
+	<delete id="deleteCardKeysProduct" parameterType="java.lang.String">
+		UPDATE 
+			<include refid="tableName" /> 
+		SET DATA_STAT='1'
+		WHERE　PRODUCT_CODE = #{productCode}
+	</delete>
+	
+</mapper>

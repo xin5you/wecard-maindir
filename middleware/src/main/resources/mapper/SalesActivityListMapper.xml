@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.thinkx.biz.salesactivity.mapper.SalesActivityListMapper">
+		
+	<resultMap type="SalesActivityList" id="SalesActivityListResultMap">
+		<result column="ACTIVITY_LIST_ID" property="activityListId"/>
+		<result column="ACTIVITY_ID" property="activityId"/>
+		<result column="ACTIVITY_DETAIL_ID" property="activityDetailId"/>
+		<result column="JOIN_BODY" property="joinBody"/>
+		<result column="TRANS_CHNL" property="transChnl"/>
+		<result column="INTERFACE_KEY" property="interfaceKey"/>
+		<result column="ORG_INTERFACE_KEY" property="orgInterfaceKey"/>
+		<result column="RESP_CODE" property="respCode"/>
+		<result column="TRANS_DATE" property="transDate"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+		<result column="CARD_NUM" property="cardNum"/>
+		<result column="ACTIVITY_BODY" property="activityBody"/>
+		<result column="ALL_STOCK_NUM" property="allStockNum"/>
+		<result column="USER_STOCK_NUM" property="userStockNum"/>
+		<result column="COMMODITY_STOCKS" property="commodityStocks"/>
+	</resultMap>
+	
+	
+	<resultMap type="SalesActivityDetail" id="SalesActivityDetailResultMap">
+		<result column="ACTIVITY_DETAIL_ID" property="activityDetailId"/>
+		<result column="ACTIVITY_ID" property="activityId"/>
+		<result column="COMMODITY_ID" property="commodityId"/>
+		<result column="ALL_STOCK_NUM" property="allStockNum"/>
+		<result column="COMMODITY_STOCKS" property="commodityStocks"/>
+		<result column="USER_STOCK_NUM" property="userStockNum"/>
+		<result column="ACTIVITY_INFO" property="activityInfo"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+		
+		<result column="ACTIVITY_DSP" property="activityDsp"/>
+		
+	</resultMap>
+
+	<sql id="SalesActivityListColumns">
+		ACTIVITY_LIST_ID,
+		ACTIVITY_ID,
+		JOIN_BODY,
+		TRANS_CHNL,
+		INTERFACE_KEY,
+		ORG_INTERFACE_KEY,
+		RESP_CODE,
+		TRANS_DATE,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+	<sql id="SalesActivityColumns">
+			m.ACTIVITY_ID,
+			m.ACTIVITY_TYPE,
+			m.ACTIVITY_BODY,
+			m.START_TIME,
+			m.END_TIME,
+			m.ACTIVITY_DSP,
+			m.DATA_STAT,
+			m.REMARKS,
+			m.CREATE_USER,
+			m.UPDATE_USER,
+			m.CREATE_TIME,
+			m.UPDATE_TIME,
+			m.LOCK_VERSION,
+			m.ALL_STOCK_NUM,
+			m.USER_STOCK_NUM,
+			m.ACTIVITY_INFO
+	</sql>
+	<select id="getSalesActivitByCommodityId" resultMap="SalesActivityDetailResultMap">
+		SELECT 
+			m.ACTIVITY_ID,
+			m.ACTIVITY_BODY,
+			m.ACTIVITY_DSP,
+			md.ACTIVITY_DETAIL_ID,
+			md.ALL_STOCK_NUM,
+			md.USER_STOCK_NUM,
+			md.ACTIVITY_INFO
+			  	FROM TB_SALES_ACTIVITY m,
+			  	TB_SALES_ACTIVITY_DETAIL md,
+              	VIEW_MERCHANT_ACTIVE_COMMODITY v1
+              WHERE  
+              		 m.DATA_STAT = '0'
+              		AND md.DATA_STAT = '0'
+              		AND md.ACTIVITY_ID=m.ACTIVITY_ID
+              		AND md.COMMODITY_ID=v1.COMMODITY_ID
+              		AND m.ACTIVITY_BODY=v1.active_id
+              		AND m.START_TIME &lt;= SYSDATE
+		            AND m.END_TIME &gt;=SYSDATE
+                    AND v1.START_TIME &lt;= SYSDATE
+                    AND v1.END_TIME &gt;= SYSDATE
+                    AND md.COMMODITY_ID=#{commodityId}
+	</select>
+	
+    <insert id="insertSalesActivityList"  parameterType="SalesActivityList">
+		INSERT INTO TB_SALES_ACTIVITY_LIST
+		  (	ACTIVITY_LIST_ID,
+			ACTIVITY_ID,
+			ACTIVITY_DETAIL_ID,
+			JOIN_BODY,
+			TRANS_CHNL,
+			INTERFACE_KEY,
+			ORG_INTERFACE_KEY,
+			RESP_CODE,
+			TRANS_DATE,
+			CARD_NUM,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			UPDATE_USER,
+			CREATE_TIME,
+			UPDATE_TIME,
+			LOCK_VERSION)
+		VALUES
+		  (#{activityListId,jdbcType=VARCHAR},
+		   #{activityId,jdbcType=VARCHAR},
+		   #{activityDetailId,jdbcType=VARCHAR},
+		   #{joinBody,jdbcType=VARCHAR},
+		   #{transChnl,jdbcType=VARCHAR},
+		   #{interfaceKey,jdbcType=VARCHAR},
+		   #{orgInterfaceKey,jdbcType=VARCHAR},
+		   #{respCode,jdbcType=VARCHAR},
+		   sysdate,
+		   #{cardNum,jdbcType=VARCHAR},
+		   #{dataStat,jdbcType=VARCHAR},
+		   #{remarks,jdbcType=VARCHAR},
+		   '99999999',
+		   '99999999',
+		   sysdate,
+		   sysdate,
+		   1)
+    </insert>
+    
+    <update id="updateSalesActivityList" parameterType="SalesActivityList">
+		UPDATE TB_SALES_ACTIVITY_LIST
+		SET 
+		 INTERFACE_KEY= #{interfaceKey,jdbcType=VARCHAR},
+		 DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+		 RESP_CODE=#{respCode,jdbcType=VARCHAR},
+		 UPDATE_TIME=sysdate
+		 WHERE ACTIVITY_LIST_ID = #{activityListId} 
+	</update>
+
+	<select id="getSalesActivityListCardStocks" resultMap="SalesActivityDetailResultMap">
+		SELECT a1.*,NVL(b1.COMMODITY_STOCKS,0) as COMMODITY_STOCKS FROM 
+		(      
+           SELECT 
+            m.ACTIVITY_ID,
+            m.ACTIVITY_BODY,
+            md.COMMODITY_ID,
+            md.ALL_STOCK_NUM,
+            md.USER_STOCK_NUM
+            FROM TB_SALES_ACTIVITY M
+            INNER JOIN TB_SALES_ACTIVITY_DETAIL md ON md.ACTIVITY_ID=m.ACTIVITY_ID AND md.COMMODITY_ID=#{commodityId}
+            WHERE m.DATA_STAT='0'
+            AND md.DATA_STAT='0'
+            AND m.ACTIVITY_BODY =#{activityBody}
+            AND SYSDATE BETWEEN START_TIME AND END_TIME 
+		) a1 
+		LEFT JOIN
+		(
+		        SELECT 
+		           s1.ACTIVITY_ID,
+		           s1.ACTIVITY_BODY,
+		           md.COMMODITY_ID,
+		           NVL(SUM(s2.CARD_NUM),0) AS CARD_NUM,
+		           (md.USER_STOCK_NUM-nvl(SUM(s2.CARD_NUM),0)) AS COMMODITY_STOCKS
+		           FROM TB_SALES_ACTIVITY s1 
+		           INNER JOIN TB_SALES_ACTIVITY_DETAIL md ON md.ACTIVITY_ID=s1.ACTIVITY_ID AND md.COMMODITY_ID=#{commodityId}
+		           LEFT JOIN
+		           TB_SALES_ACTIVITY_LIST s2 ON s1.ACTIVITY_ID=s2.ACTIVITY_ID
+		           AND s2.JOIN_BODY=#{joinBody}
+				WHERE   
+		           s1.DATA_STAT='0'
+		           AND md.DATA_STAT='0'
+		           AND s2.RESP_CODE = '00'
+		           AND s1.START_TIME &lt;= SYSDATE
+		           AND s1.END_TIME &gt;=SYSDATE
+		           AND s1.ACTIVITY_BODY =#{activityBody}
+		           GROUP BY s1.ACTIVITY_ID,md.COMMODITY_ID,s1.ACTIVITY_BODY,md.USER_STOCK_NUM
+		
+		 )b1 ON a1.ACTIVITY_ID=b1.ACTIVITY_ID
+		           AND a1.ACTIVITY_BODY=b1.ACTIVITY_BODY
+		           AND b1.ACTIVITY_BODY=#{activityBody}
+	</select>
+	
+	
+	<select id="getSalesActivityCommodityNumByUserId" resultType="java.lang.Integer">
+		SELECT 
+			NVL(SUM(m.CARD_NUM), 0) as sumNumber
+		  	FROM TB_SALES_ACTIVITY_LIST m
+		 	WHERE m.RESP_CODE = '00'
+			   AND m.ACTIVITY_ID = #{activityId}
+			   AND m.JOIN_BODY = #{userId}
+	</select>
+</mapper>

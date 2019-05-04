@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cn.thinkx.oms.module.merchant.mapper.ScanBoxDeviceInfMapper">
+
+	<sql id="MerchantInfColumns">
+		m.MCHNT_ID,
+		m.INS_ID,
+		m.MCHNT_CODE
+	</sql>
+	<sql id = "scanBoxDeviceInfColumns">
+		t.DEVICE_ID,
+		t.DEVICE_TYPE,
+		t.DEVICE_NO,
+		t.INS_CODE,
+		t.MCHNT_CODE,
+		t.SHOP_CODE,
+		t.FIXED_PAY_FLAG,
+		t.FIXED_PAY_AMT,
+		t.PRINT,
+		t.PRINT_QR,
+		t.PRINT_TYPE,
+		t.RECEIPT,
+		t.CHANNEL_NO,
+		t.DATA_STAT,
+		t.REMARKS,
+		t.CREATE_USER,
+		t.UPDATE_USER,
+		t.CREATE_TIME,
+		t.UPDATE_TIME,
+		t.LOCK_VERSION
+	</sql>
+	<resultMap type="ScanBoxDeviceInf" id="ScanBoxDeviceInfMap">
+		<result column="DEVICE_ID" property="deviceId"/>
+		<result column="DEVICE_TYPE" property="deviceType"/>
+		<result column="DEVICE_NO" property="deviceNo"/>
+		<result column="INS_CODE" property="insCode"/>
+		<result column="MCHNT_CODE" property="mchntCode"/>
+		<result column="SHOP_CODE" property="shopCode"/>
+		<result column="FIXED_PAY_FLAG" property="fixedPayFlag"/>
+		<result column="FIXED_PAY_AMT" property="fixedPayAmt"/>
+		<result column="PRINT" property="print"/>
+		<result column="PRINT_QR" property="printQr"/>
+		<result column="PRINT_TYPE" property="printType"/>
+		<result column="RECEIPT" property="remarks"/>
+		<result column="CHANNEL_NO" property="channelNo"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+		<insert id="insertScanBoxDeviceInf" parameterType = "ScanBoxDeviceInf">	
+		<selectKey resultType="string" order="BEFORE" keyProperty="deviceId">  
+				<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getCommonId" />
+		</selectKey>	
+		insert into TB_SCAN_BOX_DEVICE_INF(
+			DEVICE_ID,
+			DEVICE_TYPE,
+			DEVICE_NO,
+			INS_CODE,
+			MCHNT_CODE,
+			SHOP_CODE,
+			FIXED_PAY_FLAG,
+			FIXED_PAY_AMT,
+			PRINT,
+			PRINT_QR,
+			PRINT_TYPE,
+			RECEIPT,
+			CHANNEL_NO,
+			DATA_STAT,
+ 			REMARKS,
+			CREATE_USER,
+			UPDATE_USER,
+			CREATE_TIME,
+			UPDATE_TIME,
+			LOCK_VERSION
+		) values (
+			#{deviceId},
+			#{deviceType,jdbcType=VARCHAR},
+			#{deviceNo,jdbcType=VARCHAR},
+			#{insCode,jdbcType=VARCHAR},
+			#{mchntCode,jdbcType=VARCHAR},
+			#{shopCode,jdbcType=VARCHAR},
+			#{fixedPayFlag,jdbcType=VARCHAR},
+			#{fixedPayAmt,jdbcType=VARCHAR},
+			#{print,jdbcType=VARCHAR},
+			#{printQr,jdbcType=VARCHAR},
+			#{printType,jdbcType=VARCHAR},
+			#{receipt,jdbcType=VARCHAR},
+			#{channelNo,jdbcType=VARCHAR},
+			#{dataStat,jdbcType=CHAR},
+			#{remarks,jdbcType=VARCHAR},
+			#{createUser,jdbcType=VARCHAR},
+			#{updateUser,jdbcType=VARCHAR},
+			sysdate,
+			sysdate，
+			'0'
+		)
+	</insert>
+	
+	<select id="getMerchantInfByMchntCode" parameterType="java.lang.String" resultType="MerchantInf">
+		SELECT 
+	  		<include refid="MerchantInfColumns" />
+			FROM TB_MERCHANT_INF m 
+				WHERE 
+				  m.MCHNT_CODE=#{mchntCode}
+	</select>
+	
+	<select id = "getScanBoxDeviceInfList" parameterType="ScanBoxDeviceInf" resultMap="ScanBoxDeviceInfMap">
+		select 
+		<include refid="scanBoxDeviceInfColumns" /> 
+		,TM.MCHNT_NAME,TS.SHOP_NAME,P.CHANNEL_NAME
+	FROM TB_SCAN_BOX_DEVICE_INF T LEFT JOIN TB_MERCHANT_INF TM
+  	ON T.MCHNT_CODE = TM.MCHNT_CODE LEFT JOIN TB_SHOP_INF TS
+  	ON T.SHOP_CODE = TS.SHOP_CODE LEFT JOIN TB_PAYMENT_CHANNELS_INF P
+  	ON T.CHANNEL_NO = P.CHANNEL_NO
+  	WHERE T.DATA_STAT = '0' AND TM.DATA_STAT = '0'
+   			AND TS.DATA_STAT = '0' 
+   			<if test="mchntName !=null and mchntName !='' ">
+			 		AND TM.MCHNT_NAME LIKE '%' || #{mchntName} || '%'
+			 </if>
+			 <if test="mchntCode !=null and mchntCode !='' ">
+			 		AND T.MCHNT_CODE=#{mchntCode}
+			 </if>
+			 <if test="shopName !=null and shopName !='' ">
+			 		AND TS.SHOP_NAME LIKE '%' || #{shopName} || '%'
+			 </if>
+			 <if test="shopCode !=null and shopCode !='' ">
+			 		AND T.SHOP_CODE = #{shopCode}
+			 </if>
+			 <if test="deviceNo !=null and deviceNo !='' ">
+			 		AND T.DEVICE_NO LIKE '%' || #{deviceNo} || '%'
+			 </if>
+  	ORDER BY T.UPDATE_TIME DESC
+	</select>
+	
+	<update id="deleteScanBoxDeviceInfByDeviceId" parameterType="java.lang.String">
+		UPDATE TB_SCAN_BOX_DEVICE_INF SET DATA_STAT = '1',UPDATE_TIME = sysdate WHERE DEVICE_ID = #{deviceId}
+	</update>
+	
+	<select id = "getScanBoxDeviceInfByDeviceId" resultType="ScanBoxDeviceInf" parameterType="java.lang.String">
+		select 
+		<include refid="scanBoxDeviceInfColumns" /> 
+		,TM.MCHNT_NAME,TS.SHOP_NAME,P.CHANNEL_NAME
+	FROM TB_SCAN_BOX_DEVICE_INF T LEFT JOIN TB_MERCHANT_INF TM
+  	ON T.MCHNT_CODE = TM.MCHNT_CODE LEFT JOIN TB_SHOP_INF TS
+  	ON T.SHOP_CODE = TS.SHOP_CODE LEFT JOIN TB_PAYMENT_CHANNELS_INF P
+  	ON T.CHANNEL_NO = P.CHANNEL_NO
+  	WHERE DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
+	</select>
+	
+	<update id="editScanBoxDeviceInf" parameterType="ScanBoxDeviceInf">
+		UPDATE TB_SCAN_BOX_DEVICE_INF SET 
+		DEVICE_TYPE = #{deviceType,jdbcType=VARCHAR},
+		DEVICE_NO = #{deviceNo,jdbcType=VARCHAR},
+		INS_CODE = #{insCode,jdbcType=VARCHAR},
+		MCHNT_CODE = #{mchntCode,jdbcType=VARCHAR},
+		SHOP_CODE = #{shopCode,jdbcType=VARCHAR},
+		FIXED_PAY_FLAG = #{fixedPayFlag,jdbcType=VARCHAR},
+		FIXED_PAY_AMT = #{fixedPayAmt,jdbcType=VARCHAR},
+		PRINT = #{print,jdbcType=VARCHAR},
+		PRINT_QR = #{printQr,jdbcType=VARCHAR},
+		PRINT_TYPE = #{printType,jdbcType=VARCHAR},
+		RECEIPT = #{receipt,jdbcType=VARCHAR},
+		CHANNEL_NO = #{channelNo,jdbcType=VARCHAR},
+		DATA_STAT = #{dataStat,jdbcType=CHAR},
+		REMARKS = #{remarks,jdbcType=VARCHAR},
+		UPDATE_USER = #{updateUser,jdbcType=VARCHAR},
+		UPDATE_TIME = sysdate,
+		LOCK_VERSION = LOCK_VERSION +1 
+		WHERE DEVICE_ID = #{deviceId,jdbcType=VARCHAR}
+	</update>
+	<select id="getScanBoxDeviceInfByDeviceTypeAndDeviceNo" parameterType="ScanBoxDeviceInf" resultType="ScanBoxDeviceInf">
+		select count(*) count,t.DEVICE_ID deviceId from TB_SCAN_BOX_DEVICE_INF t 
+		where t.DEVICE_TYPE = #{deviceType,jdbcType=VARCHAR} and t.DEVICE_NO = #{deviceNo,jdbcType=VARCHAR} and t.DATA_STAT = '0'
+		group by t.DEVICE_ID
+	</select>
+</mapper>

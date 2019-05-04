@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+		<title>知了企服</title> <#include "../../common/head.html">
+	</head>
+	<body>
+		<div class="transaction_detail">
+			<!--店铺名称-->
+			<div class="shop_name">
+				<img src="${s.base}/res/image/icon/icon_shop.png">${shopInf.shopName!}
+			</div>
+			<!--店铺名称 结束-->
+			<!--时间 数据-->
+			<div class="total_container">
+				<form id="merchantForm" action="${s.base}/wxclient/account/mchntTransList.html" method="post">
+					<label>
+						<div class="date date_start">
+							<div>
+								<img src="${s.base}/res/image/icon/icon_date.png" />
+								<span id="choose_date_start">${ts.startDate!}</span>
+							</div>
+							<div>点击选择开始时间<img src="${s.base}/res/image/icon/icon_arrow.png">
+								<input type="date" id="input_data_start" name="settleDateStart" class="settle_date" value="${ts.startDate!}" />
+							</div>
+						</div>
+					</label>
+					<label>
+						<div class="date date_end">
+							<div>
+								<img src="${s.base}/res/image/icon/icon_date.png" />
+								<span id="choose_date_end">${ts.endDate!}</span>
+							</div>
+							<div>点击选择结束时间<img src="${s.base}/res/image/icon/icon_arrow.png">
+								<input type="date" id="input_data_end" name="settleDateEnd" class="settle_date" value="${ts.endDate!}" />
+							</div>
+						</div>
+					</label>
+					<div class="total_data">
+						<div  class="total_data_left">
+							<p>消费总额：</p>
+							<p>
+								<span>￥</span>
+								<span style="text-align: center; color: #10a6e2;">
+									${(resultTransLog.consumerAmount!/100)?string("0.00")}
+								</span>
+							</p>
+						</div>
+						<div class="total_data_right">
+							<p>退款总额：</p>
+							<p>
+								<span>￥</span>
+								<span style="text-align: center; color: #ffacac;">
+									${(resultTransLog.paybackAmount!/100)?string("0.00")}
+								</span>
+							</p>
+						</div>
+					</div>
+					<div class="num_pens">
+				        <div class="transaction">
+				            <p>消费笔数：<span>${resultTransLog.consumerCount!}</span></p>
+				        </div>
+				        <div class="refund">
+				            <p style="padding-left:15px;">退款笔数：<span>${resultTransLog.paybackCount!}</span></p>
+				        </div>
+				    </div>    
+				</form>
+			</div>
+			<!--列表-->
+			<div class="list_container">
+				<#if transLogList??&& transLogList?size gt 0> <#list transLogList as row>
+				<div class="list">
+					<div class="list_icon">
+						<a href="${s.base}/wxclient/account/transLogDetail.html?txnPrimaryKey=${row.txnPrimaryKey}">
+							<#if row.transSt='1'>
+							<div class="list_icon_consumption"></div>
+							<div class="consumption_font">消费</div> 
+							</#if> 
+							<#if row.transSt='3'>
+							<div class="list_icon_payback"></div>
+							<div class="payback_font">已退款</div> 
+							</#if>
+						</a>
+					</div>
+					<div class="list_content">
+						<div>
+							<div>手机：*** **** ${row.mobilePhoneNo!}</div>
+							<div class="time">时间：${row.createTime?string("yyyy-MM-dd HH:mm:ss")}</div>
+						</div>
+						<#if row.transSt='1'>
+						<div class="price" style="color: #10a6e2;">${row.transAmt!}</div>
+						</#if>
+						<#if row.transSt='3'>
+						<div class="price" style="color: #ffacac;">${row.transAmt!}</div>
+						</#if>
+					</div>
+				</div>
+	
+				</#list>
+				<div style="height: 1px; margin: 0px auto; padding: 1px; background-color: #D5D5D5; overflow: hidden;"></div>
+				</#if>
+			</div>
+		</div>
+		<script>
+			/* var d = new Date();
+			$('#choose_date_start').text(d.getFullYear()+'-'+p(d.getMonth()+1)+"-"+p(d.getDate()));
+			$('#choose_date_end').text(d.getFullYear()+'-'+p(d.getMonth()+1)+"-"+p(d.getDate())); */
+			//点击可查看其它时间
+			var u = navigator.userAgent;
+			var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+			$('.transaction_detail .date_start').on('click', function() { //监听点击整个tab
+				$('#input_data_start').focus();//input组件获得焦点
+			});
+			$('.transaction_detail .date_end').on('click', function() { //监听点击整个tab
+				$('#input_data_end').focus();//input组件获得焦点
+			});
+	
+			$('#input_data_start').on('change', function() { //
+				$('#choose_date_start').html($('#input_data_start').val());//将input获得的值代入
+				if (!isiOS) { //判断是否是ios
+					searchMain(); //安卓发生事件
+				}
+			});
+			$('#input_data_end').on('change', function() { //
+				$('#choose_date_end').html($('#input_data_end').val());//将input获得的值代入
+				if (!isiOS) { //判断是否是ios
+					searchMain(); //安卓发生事件
+				}
+			});
+			if (isiOS) { //ios机型
+				$(".settle_date").on('blur', function() { //ios时间控件失去焦点之后 发生事件
+					searchMain()
+				});
+			}
+			//发生事件function
+			function searchMain() {
+				var startTime = $("#input_data_start").val();
+				var endTime = $("#input_data_end").val();
+				if(startTime != null && startTime != '' && endTime != null && endTime != ''){
+					var start = new Date(startTime.replace("-", "/").replace("-", "/"));
+					var end = new Date(endTime.replace("-", "/").replace("-", "/"));
+					if(end < start){
+						alert("结束时间不能在开始时间之前！");
+					 	return false;
+					}
+					var iDays = parseInt(Math.abs(start - end) / 1000 / 60 / 60 / 24); //把相差的毫秒数转换为天数
+					if(iDays > 61){
+						alert("当前查询时间间隔大于两个月！");
+					 	return false;
+					}
+					$('#merchantForm').submit();
+				}
+			}
+			function p(s) {
+			    return s < 10 ? '0' + s: s;
+			}
+		</script>
+	</body>
+</html>

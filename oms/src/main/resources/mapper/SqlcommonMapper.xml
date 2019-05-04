@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper">
+
+	 <!-- 系统管理模块  用户表主键 -->
+	<sql id="getSysUserId">
+     	select web_user_seq.nextval as id from dual
+	</sql>
+
+	<!-- 系统管理模块 角色表主键 -->
+	<sql id="getSysRoleId">
+     	select web_role_seq.nextval as id from dual
+	</sql>
+	
+	 <!-- 系统管理模块  组织机构表主键 -->
+	<sql id="getSysOrganizationId">
+     	select web_organization_seq.nextval as id from dual
+	</sql>
+	
+	<!-- 系统管理模块  组织机构表主键 -->
+	<sql id="getSysResourceId">
+     	select web_resource_seq.nextval as id from dual
+	</sql>
+	
+	<!-- 系统管理模块  组织机构表主键 -->
+	<sql id="getSysDictionaryId">
+     	select web_dictionary_seq.nextval as id from dual
+	</sql>
+	
+	<sql id="getCommonId">
+		select to_char(sysdate, 'YYYYMMDDHHMISS') || to_char(seq_oms_all_tb_id.nextval, 'fm00000000') as id from dual
+	</sql>
+	
+	<sql id="getProductCode">
+		select to_char(seq_tb_product_product_code.nextval,'fm00000000') as productCode from dual
+	</sql>
+	
+	<!-- 商户自助服务平台管理模块 数据权限表主键 -->
+	<sql id="getDiyDataAuthId">
+     	select SEQ_TB_WEB_DATA_AUTH.currval as id from dual
+	</sql>
+	
+	<!-- 商户自助服务平台管理模块 资源表主键 -->
+	<sql id="getDiyResourceId">
+     	select SEQ_TB_WEB_RESOURCE.currval as id from dual
+	</sql>
+	
+	<!-- 商户自助服务平台管理模块 角色表主键 -->
+	<sql id="getDiyRoleId">
+     	select SEQ_TB_WEB_ROLE.currval as id from dual
+	</sql>
+	
+	<!-- 商户自助服务平台管理模块 用户表主键 -->
+	<sql id="getDiyUserId">
+     	select SEQ_TB_WEB_USER.currval as id from dual
+	</sql>
+	
+	<!-- oms 批量充值开票订单表主键 -->
+	<sql id="getBatchInvoiceOrderid">
+     	select SEQ_TB_BATCH_INVOICE_ORDER.nextval as id from dual
+	</sql>
+	
+	<sql id = "getChnnelNo">
+		select SEQ_CHANNEL_NO.nextval as channelNo from dual
+	</sql>
+	
+	<!-- 提现黑名单表主键 -->
+	<sql id = "getWithdrawBlacklistId">
+		select SEQ_TB_WITHDRAW_BLACKLIST_INF.nextval as id from dual
+	</sql>
+</mapper>

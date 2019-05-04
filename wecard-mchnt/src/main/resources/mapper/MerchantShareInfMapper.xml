@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wxclient.mapper.MerchantShareInfDao">
+	<resultMap type="MerchantShareInf" id="MerchantShareInfResultMap">
+		<result column="SHARE_ID" property="shareId"/>
+		<result column="SHARE_TYPE" property="shareType"/>
+		<result column="MCHNT_ID" property="mchntId"/>
+		<result column="MCHNT_NAME" property="mchntName"/>
+		<result column="SHOP_ID" property="shopId"/>
+		<result column="SHOP_NAME" property="shopName"/>
+		<result column="ROLE_TYPE" property="roleType"/>
+		<result column="ROLE_NAME" property="roleName"/>
+		<result column="MANGER_ID" property="mangerId"/>
+		<result column="RESERVE1" property="reserve1"/>
+		<result column="RESERVE2" property="reserve2"/>
+		
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="MerchantShareInfColumns">
+		m.SHARE_ID, 
+		m.SHARE_TYPE, 
+		m.MCHNT_ID, 
+		m.SHOP_ID, 
+		m.ROLE_TYPE, 
+		m.MANGER_ID, 
+		m.RESERVE1, 
+		m.RESERVE2, 
+		m.DATA_STAT, 
+		m.REMARKS,
+		m.CREATE_USER, 
+		m.UPDATE_USER, 
+		m.CREATE_TIME, 
+		m.UPDATE_TIME, 
+		m.LOCK_VERSION
+	</sql>
+	
+	<select id="getMerchantShareInfById" parameterType="java.lang.String" resultMap="MerchantShareInfResultMap">
+	SELECT 
+	      m.SHARE_ID, 
+	      m.SHARE_TYPE, 
+	      m.MCHNT_ID, 
+	      mi.MCHNT_NAME,
+	      m.SHOP_ID, 
+	      si.SHOP_NAME,
+	      m.ROLE_TYPE, 
+	      wr.ROLE_NAME,
+	      m.MANGER_ID, 
+	      m.RESERVE1, 
+	      m.RESERVE2, 
+	      m.DATA_STAT, 
+	      m.REMARKS,
+	      m.CREATE_USER, 
+	      m.UPDATE_USER, 
+	      m.CREATE_TIME, 
+	      m.UPDATE_TIME, 
+	      m.LOCK_VERSION
+	        
+	      FROM TB_WX_MERCHANT_SHARE_INF m
+	          LEFT JOIN Tb_Wx_Role wr on wr.role_type=m.role_type
+	          LEFT JOIN TB_MERCHANT_INF mi on mi.mchnt_id=m.mchnt_id
+	          LEFT JOIN TB_SHOP_INF si on si.shop_id=m.shop_id
+			WHERE  m.SHARE_ID=#{shareId}
+	</select>
+	
+	<insert id="insertMerchantShareInf" parameterType="MerchantShareInf" >
+      	
+      	<selectKey keyProperty="shareId" resultType="String" order="BEFORE">
+      			<include refid="com.cn.thinkx.pub.mapper.CommonDao.getCommonId"/>
+        </selectKey>
+        
+		INSERT INTO TB_WX_MERCHANT_SHARE_INF (
+			SHARE_ID,
+			SHARE_TYPE,
+			MCHNT_ID,
+			SHOP_ID,
+			ROLE_TYPE,
+			MANGER_ID,
+			RESERVE1, 
+			RESERVE2, 
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER, 
+			CREATE_TIME, 
+			LOCK_VERSION
+		 )  VALUES (
+		 		#{shareId},
+		 		#{shareType,jdbcType=VARCHAR},
+		 		#{mchntId,jdbcType=VARCHAR},
+		 		#{shopId,jdbcType=VARCHAR},
+		 		#{roleType,jdbcType=VARCHAR},
+		 		#{mangerId,jdbcType=VARCHAR},
+		 		#{reserve1,jdbcType=VARCHAR},
+		 		#{reserve2,jdbcType=VARCHAR},
+		 		#{dataStat,jdbcType=VARCHAR},
+		 		#{remarks,jdbcType=VARCHAR},
+		 		#{createUser,jdbcType=VARCHAR},
+		 		sysdate,
+		 		'0') 
+	</insert>
+
+	<update id="updateShareInfDateStat" parameterType="java.lang.String">
+		UPDATE TB_WX_MERCHANT_SHARE_INF SET 
+				DATA_STAT='1',
+				UPDATE_TIME=sysdate WHERE SHARE_ID=#{shareId}
+	</update>
+	
+	<update id="updateMerchantShareInf" parameterType="MerchantShareInf" >
+		UPDATE TB_WX_MERCHANT_SHARE_INF SET
+			SHARE_TYPE=#{shareType,jdbcType=VARCHAR},
+			MCHNT_ID=#{mchntId},
+			SHOP_ID=#{shopId},
+			ROLE_TYPE=#{roleType},
+			DATA_STAT=#{dataStat},
+			REMARKS=#{remarks,jdbcType=VARCHAR},
+			UPDATE_TIME=sysdate
+			
+			WHERE SHARE_ID=#{shareId}
+	</update>
+</mapper>

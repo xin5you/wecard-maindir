@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<#include "../../common/wecardHeader.html"> 
+    	<!--通用媒体查询-->
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+    	<title>购卡</title>
+	</head>
+	<body>
+		<div class="jf_homepage_autoplay">
+		    <div class="jf_autoplay_images jf_autoplay_init">
+		    <#if shopInf ??&& shopInf.shopImages?size gt 0>
+		  		<#list shopInf.shopImages as img>
+		        	<a><img src="${img}" /></a>
+		        </#list>
+		    </#if>
+		    </div>
+		    <div class="jf_pagination">
+		    </div>
+		</div>
+		<div class="hkb_information">
+		    <div class="name">${shopInf.mchntName!}(${shopInf.shopName!})</div>
+		    <div class="hkb_alignment_center">
+		        <div class="star">
+		        <#if shopInf ??&& shopInf.stars?size gt 0>
+		       		<#list shopInf.stars as star>
+		       			<#if star == '1'>
+			            	<span class="star_on"></span>
+			            </#if>
+				        <#if star == '0'>
+			            	<span class="star_off"></span>
+			            </#if>
+				        <#if star != '0' && star != '1'>
+			            	<span class="star_half"></span>
+			            </#if>
+			        </#list>
+		        </#if>
+		        </div>
+		        <div><span class="sort">${shopInf.industryType!}</span></div>
+		    </div>
+		</div>
+		
+		<div class="hkb_address_phone hkb_alignment_center hkb_shadow">
+		    <a class="hkb_address hkb_alignment_left" href="${s.base}/customer/surround/viewShopInfAddress.html?innerMerchantNo=${shopInf.mchntCode!}&innerShopNo=${shopInf.shopCode!}&detailFlag=1">
+		        <img src="${s.base}/static/images/detail_loaction.png">
+		        <span>${shopInf.shopAddr!}</span>
+		    </a>
+		    <a class="phone" href="${s.base}/customer/surround/viewShopInfPhone.html?innerMerchantNo=${shopInf.mchntCode!}&innerShopNo=${shopInf.shopCode!}&detailFlag=1"><img src="${s.base}/static/images/detail_phone.png"></a>
+		</div>
+		<#if sellingCardList ??&& sellingCardList.cardList?size gt 0>
+			<#list sellingCardList.cardList as cards>
+				<a class="hkb_menbers_card hkb_alignment_center hkb_shadow" href="${s.base!}/customer/card/buyCardRecharge.html?mchntCode=${shopInf.mchntCode!}&productCode=${cards.productCode!}&commodityCode=${cards.commodityCode!}">
+				    <div class="card_content hkb_alignment_left">
+				        <span><img src="${sellingCardList.productImage}"></span>
+				        <div>
+				            <p>${cards.commodityName!}</p>
+				            <p>&#xFFE5;${cards.commodityPrice!}<span>&#x4F18;&#x60E0;:&#xFFE5;${cards.favorablePrice!}</span></p>
+				        </div>
+				    </div>
+				    <div class="buy_btn">
+				        <span>&#x8D2D;&#x4E70;</span>
+				    </div>
+				</a>
+			</#list>
+		</#if>
+		<div class="hkb_use_rules hkb_shadow">
+		    <div class="title"><img src="${s.base}/static/images/detail_rules.png">&#x4F7F;&#x7528;&#x89C4;&#x5219;</div>
+		    <div>
+		        ${activeRule!}
+		    </div>
+		</div>
+		
+		<script>addEventListener('load',function(){
+		    jfAutoPlay.jfCarouselInit();
+		})
+		</script>
+	</body>
+</html>

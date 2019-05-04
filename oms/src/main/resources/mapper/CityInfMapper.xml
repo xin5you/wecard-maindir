@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cn.thinkx.oms.module.city.mapper.CityInfMapper">
+
+	<resultMap type="CityInf" id="CityInfResultMap">
+	
+		<result column="ID" property="id"/>
+		<result column="CITY_NAME" property="cityName"/>
+		<result column="CITY_GRADE" property="cityGrade"/>
+		<result column="PARENT_ID" property="parentId"/>
+		<result column="CITY_DSP" property="cityDsp"/>
+
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+
+	<sql id="CityInfColumns">
+	   m.ID,
+	   m.CITY_NAME,
+       m.CITY_GRADE,
+       m.PARENT_ID,
+       m.CITY_DSP,
+		m.DATA_STAT,
+		m.REMARKS,
+		m.CREATE_USER,
+		m.UPDATE_USER,
+		m.CREATE_TIME,
+		m.UPDATE_TIME
+	</sql>
+	
+	<select id="getCityInfById" parameterType="java.lang.String" resultMap="CityInfResultMap">
+				SELECT 
+	  		<include refid="CityInfColumns" />
+	  		
+		 	FROM TB_CITY_INF m WHERE ID=#{id}
+	</select>
+		
+	<select id="findCityInfList" parameterType="CityInf" resultMap="CityInfResultMap">
+		SELECT 
+	  		<include refid="CityInfColumns" />
+	  		
+		 	FROM TB_CITY_INF m WHERE m.DATA_STAT='0' 
+		 
+		 <if test="parentId !=null and parentId !='' ">
+		 		AND m.PARENT_ID=#{parentId}
+		 </if>
+		 
+		 <if test="cityGrade !=null and cityGrade !='' ">
+				AND m.CITY_GRADE=#{cityGrade}
+		 </if>
+	</select>
+	
+</mapper>

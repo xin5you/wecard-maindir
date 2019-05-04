@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.sys.mapper.OrganizationMapper">
+		
+	<resultMap type="Organization" id="OrganizationResultMap">
+		<result column="ID" property="id"/>
+		<result column="CREATEDATETIME" property="createdatetime"/>
+		<result column="ADDRESS" property="address"/>
+		<result column="CODE" property="code"/>
+		<result column="ICON" property="icon"/>
+		<result column="NAME" property="name"/>
+		<result column="SEQ" property="seq"/>
+		<result column="PID" property="pid"/>
+		<result column="PNAME" property="pname"/>
+	</resultMap>
+	
+	<sql id="OrganizationColumns">
+		 ID, 
+		 ADDRESS,
+		 CODE,
+		 CREATEDATETIME,
+		 ICON, 
+		 NAME, 
+		 SEQ,
+		 PID 
+	</sql>
+	
+	<select id="getOrganizationById" parameterType="java.lang.String" resultMap="OrganizationResultMap">
+		SELECT 
+	  		<include refid="OrganizationColumns" />
+		 		FROM TB_WEB_Organization m WHERE  m.ID=#{id}
+	</select>
+	
+	<insert id="saveOrganization" parameterType="Organization" useGeneratedKeys="false" keyProperty="id">
+	   <selectKey resultType="java.lang.String" order="BEFORE" keyProperty="id">  
+			<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getSysOrganizationId" />
+		</selectKey>
+		INSERT INTO TB_WEB_ORGANIZATION (
+			 ID, 
+			 ADDRESS,
+			 CODE,
+			 ICON, 
+			 NAME, 
+			 SEQ,
+			 PID,
+			 CREATEDATETIME
+		 )  VALUES ( 
+		 		#{id},
+		 		#{address,jdbcType=VARCHAR},
+		 		#{code,jdbcType=VARCHAR},
+		 		#{icon,jdbcType=VARCHAR},
+		 		#{name,jdbcType=VARCHAR},
+		 		#{seq,jdbcType=VARCHAR},
+		 		#{pid,jdbcType=VARCHAR},
+		 		sysdate
+		 	) 
+	</insert>
+	
+  <update id="updateOrganization" parameterType="Organization">
+	UPDATE TB_WEB_ORGANIZATION
+		<set>
+			address=#{address,jdbcType=VARCHAR},
+	 		code=#{code,jdbcType=VARCHAR},
+	 		icon=#{icon,jdbcType=VARCHAR},
+	 		name=#{name,jdbcType=VARCHAR},
+	 		seq=#{seq,jdbcType=VARCHAR},
+	 		pid=#{pid,jdbcType=VARCHAR}
+		</set>
+			WHERE id=#{id}
+	</update>
+
+	<delete id="deleteOrganization" parameterType="java.lang.String" >
+		 DELETE TB_WEB_ORGANIZATION m WHERE  m.ID=#{id}
+	</delete>
+	
+	<select id="getOrganizationList" parameterType="Organization" resultMap="OrganizationResultMap">
+		SELECT 
+	  		<include refid="OrganizationColumns" />
+	  			FROM TB_WEB_ORGANIZATION m
+         		START WITH PID = 0 CONNECT BY PRIOR ID = PID ORDER SIBLINGS BY SEQ
+	</select>
+</mapper>

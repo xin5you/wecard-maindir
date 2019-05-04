@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+		<setting name="logImpl" value="SLF4J" />
+		<!-- <setting name="logImpl" value="STDOUT_LOGGING" /> -->
+	</settings>
+	<typeAliases>
+		<typeAlias alias="Integer" type="java.lang.Integer" />
+		<typeAlias alias="Long" type="java.lang.Long" />
+		<typeAlias alias="HashMap" type="java.util.HashMap" />
+		<typeAlias alias="LinkedHashMap" type="java.util.LinkedHashMap" />
+		<typeAlias alias="ArrayList" type="java.util.ArrayList" />
+		<typeAlias alias="LinkedList" type="java.util.LinkedList" />
+
+		<typeAlias alias="User" type="com.cn.iboot.diy.api.system.domain.User" />
+		<typeAlias alias="RoleResource" type="com.cn.iboot.diy.api.system.domain.RoleResource" />
+		<typeAlias alias="Resource" type="com.cn.iboot.diy.api.system.domain.Resource" />
+		<typeAlias alias="Role" type="com.cn.iboot.diy.api.system.domain.Role" />
+		<typeAlias alias="DataAuth" type="com.cn.iboot.diy.api.system.domain.DataAuth" />
+		<typeAlias alias="UserRole" type="com.cn.iboot.diy.api.system.domain.UserRole" />
+		<typeAlias alias="UserDataAuth" type="com.cn.iboot.diy.api.system.domain.UserDataAuth" />
+		
+		<typeAlias alias="MchntOprStatistics" type="com.cn.iboot.diy.api.operate.domain.MchntOprStatistics" />
+		<typeAlias alias="PositOprStatistics" type="com.cn.iboot.diy.api.operate.domain.PositOprStatistics" />
+		<typeAlias alias="ShopOprStatistics" type="com.cn.iboot.diy.api.operate.domain.ShopOprStatistics" />
+		<typeAlias alias="PositOprUpdate" type="com.cn.iboot.diy.api.operate.domain.PositOprUpdate" />
+		
+		<typeAlias alias="MchntStatistics" type="com.cn.iboot.diy.api.original.domain.MchntStatistics" />
+		<typeAlias alias="PositStatistics" type="com.cn.iboot.diy.api.original.domain.PositStatistics" />
+		<typeAlias alias="PositStatisticsUpload" type="com.cn.iboot.diy.api.original.domain.PositStatisticsUpload" />
+		<typeAlias alias="PositDetail" type="com.cn.iboot.diy.api.original.domain.PositDetail" />
+		<typeAlias alias="PositDetailUpload" type="com.cn.iboot.diy.api.original.domain.PositDetailUpload" />
+		<typeAlias alias="ShopStatistics" type="com.cn.iboot.diy.api.original.domain.ShopStatistics" />
+		<typeAlias alias="ShopStatisticsUpload" type="com.cn.iboot.diy.api.original.domain.ShopStatisticsUpload" />
+		
+		<typeAlias alias="TransLog" type="com.cn.iboot.diy.api.trans.domain.TransLog" />
+		<typeAlias alias="TransRefundReq" type="com.cn.iboot.diy.api.trans.domain.TransRefundReq" />
+		
+		<typeAlias alias="InvoiceOrder" type="com.cn.iboot.diy.api.invoice.domain.InvoiceOrder" />
+	</typeAliases>
+
+</configuration>

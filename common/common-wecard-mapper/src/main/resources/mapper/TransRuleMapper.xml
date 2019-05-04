@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.common.wecard.module.trans.mapper.TransRuleDao">
+		
+	<resultMap type="TransRule" id="TransRuleResultMap">
+		<result column="TRANS_RULE_ID" property="transRuleId"/>
+		<result column="INS_ID" property="insId"/>
+		<result column="PLATFORM_ID" property="platformId"/>
+		<result column="MCHNT_ID" property="mchntId"/>
+		<result column="MCHNT_NAME" property="mchntName"/>
+		<result column="SHOP_ID" property="shopId"/>
+		<result column="SHOP_NAME" property="shopName"/>
+		<result column="START_TIME" property="startTime"/>
+		<result column="END_TIME" property="endTime"/>
+		<result column="IS_SUPERPOSED" property="isSuperposed"/>
+		<result column="SALIENCE" property="salience"/>
+		<result column="IS_SUPERPOSED" property="transRuleDesp"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+		<result column="template_name" property="lockVersion"/>
+		<result column="rule_name" property="lockVersion"/>
+	</resultMap>
+	
+	
+	<resultMap type="TransRuleDeclare" id="ViewTransRuleResultMap">
+		<result column="TRANS_RULE_ID" property="transRuleId"/>
+		<result column="INS_ID" property="insId"/>
+		<result column="PLATFORM_ID" property="platformId"/>
+		<result column="MCHNT_ID" property="mchntId"/>
+		<result column="SHOP_ID" property="shopId"/>
+		<result column="START_TIME" property="startTime"/>
+		<result column="END_TIME" property="endTime"/>
+		<result column="TRANS_RULE_DESP" property="transRuleDesp"/>
+		<result column="IS_SUPERPOSED" property="isSuperposed"/>
+		<result column="SALIENCE" property="salience"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="TEMPLATE_CODE" property="templateCode" />
+		<result column="TEMPLATE_NAME" property="templateName" />
+		<result column="TEMPLATE_DESP" property="templateDesp" />
+		<result column="TEMPLATE_FROM" property="templateFrom" />
+		<result column="RULE_TYPE_CODE" property="ruleTypeCode"/>
+		<result column="RULE_NAME" property="ruleName"/>
+		<result column="RULE_TYPE" property="ruleType"/>
+		<result column="RULE_ID" property="ruleId"/>
+		<result column="RULE_FACTOR_NUM" property="ruleFactorNum"/>
+		<result column="RULEFACTORID" property="ruleFactorId"/>
+		<result column="RULE_FACTOR" property="ruleFactor"/>
+		<result column="RULE_PARAM" property="ruleParam"/>
+	</resultMap>
+	
+	<sql id="TransRuleColumns">
+		m.TRANS_RULE_ID,
+		m.INS_ID,
+		m.PLATFORM_ID,
+		m.MCHNT_ID,
+		m.SHOP_ID,
+		m.START_TIME,
+		m.END_TIME,
+		m.IS_SUPERPOSED,
+		m.SALIENCE,
+		m.TRANS_RULE_DESP,
+		m.DATA_STAT,
+		m.REMARKS,
+		m.CREATE_USER,
+		m.UPDATE_USER,
+		m.CREATE_TIME,
+		m.UPDATE_TIME,
+		m.LOCK_VERSION	
+	</sql>
+	
+	<insert id="insertTransRule" parameterType="TransRule">
+		INSERT INTO TB_TRANS_RULE (
+			TRANS_RULE_ID,
+			INS_ID,
+			PLATFORM_ID,
+			MCHNT_ID,
+			SHOP_ID,
+			START_TIME,
+			END_TIME,
+			IS_SUPERPOSED,
+			SALIENCE,
+			TRANS_RULE_DESP,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER, 
+			CREATE_TIME, 
+			LOCK_VERSION
+		 )  VALUES ( 
+		 		#{transRuleId},
+		 		#{insId,jdbcType=VARCHAR},
+		 		#{platformId,jdbcType=VARCHAR},
+		 		#{mchntId,jdbcType=VARCHAR},
+		 		#{shopId,jdbcType=VARCHAR},
+		 		#{startTime,jdbcType=VARCHAR},
+		 		#{endTime,jdbcType=VARCHAR},
+		 		#{isSuperposed,jdbcType=VARCHAR},
+		 		#{salience,jdbcType=VARCHAR},
+		 		#{transRuleDesp,jdbcType=VARCHAR},
+		 		#{dataStat,jdbcType=VARCHAR},
+		 		#{remarks,jdbcType=VARCHAR},
+		 		#{createUser,jdbcType=VARCHAR},
+		 		sysdate,
+		 		'0') 
+	</insert>
+	
+	<update id="updateTransRule" parameterType="TransRule">
+			UPDATE TB_TRANS_RULE SET
+		 		INS_ID=#{insId,jdbcType=VARCHAR},
+		 		PLATFORM_ID=#{platformId,jdbcType=VARCHAR},
+		 		MCHNT_ID=#{mchntId,jdbcType=VARCHAR},
+		 		SHOP_ID=#{shopId,jdbcType=VARCHAR},
+		 		START_TIME=#{startTime,jdbcType=VARCHAR},
+		 		END_TIME=#{endTime,jdbcType=VARCHAR},
+		 		IS_SUPERPOSED=#{isSuperposed,jdbcType=VARCHAR},
+		 		SALIENCE=#{salience,jdbcType=VARCHAR},
+		 		TRANS_RULE_DESP=#{transRuleDesp,jdbcType=VARCHAR},
+				DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+				REMARKS=#{remarks,jdbcType=VARCHAR},
+				UPDATE_TIME=sysdate
+			 WHERE TRANS_RULE_ID = #{transRuleId} 
+	
+	</update>
+	
+	<select id="getTransRuleById" parameterType="java.lang.String" resultMap="TransRuleResultMap">
+		SELECT 
+	  		<include refid="TransRuleColumns" />
+		 FROM TB_TRANS_RULE m WHERE m.DATA_STAT='0' AND m.TRANS_RULE_ID=#{transRuleId}
+	</select>
+	
+	<select id="getTransRuleDeclareList" parameterType="java.util.Map" resultMap="ViewTransRuleResultMap">
+		SELECT 
+	  	   TRANS_RULE_ID,
+	       INS_ID,
+	       PLATFORM_ID,
+	       MCHNT_ID,
+	       SHOP_ID,
+	       START_TIME,
+	       END_TIME,
+	       IS_SUPERPOSED,
+	       DATA_STAT,
+	       SALIENCE,
+	       TEMPLATE_CODE,
+	       TEMPLATE_NAME,
+	       TEMPLATE_DESP,
+	       TEMPLATE_FROM,
+		   RULE_TYPE_CODE,
+		   RULE_NAME,
+		   RULE_TYPE,
+	       RULE_ID,
+	       RULE_FACTOR_NUM,
+	       RULE_FACTOR_ID,
+	       RULE_FACTOR,
+	       RULE_PARAM
+		 	    FROM VIEW_TRANS_RULE_DECLARE vt 
+		 		
+		 		WHERE vt.DATA_STAT='0'
+		 		
+		 	   <if test="templateCode !=null and templateCode !='' ">
+  					 AND vt.TEMPLATE_CODE＝#{templateCode}
+  			  </if>
+		 	   <if test="insId !=null and insId !='' ">
+  					AND vt.INS_ID＝#{insId}
+  			   </if>
+  			   <if test="platformId !=null and platformId !='' ">
+  					AND vt.PLATFORM_ID＝#{platformId}
+  			   </if>
+  			   <if test="mchntId !=null and mchntId !='' ">
+  					 AND vt.MCHNT_ID＝#{mchntId}
+  			   </if>
+  			  <if test="shopId !=null and shopId !='' ">
+  					 AND vt.SHOP_ID＝#{shopId}
+  			  </if>
+  			  
+	</select>
+	
+	<select id="getTransRuleByMchntCount" parameterType="TransRuleDeclare" resultType="int">
+		SELECT 
+		 	count(RULE_ID)
+		 FROM VIEW_TRANS_RULE_DECLARE vt
+              LEFT JOIN TB_MERCHANT_INF mi on  mi.mchnt_id=vt.MCHNT_ID
+              LEFT JOIN  TB_SHOP_INF si on si.SHOP_ID =vt.SHOP_ID
+		         WHERE vt.DATA_STAT='0'
+		         	AND　  vt.END_TIME>sysdate
+		           <if test="entity.insId !=null and entity.insId !='' ">
+	  					AND vt.INS_ID＝#{entity.insId}
+	  			   </if>
+	  			   <if test="entity.platformId !=null and entity.platformId !='' ">
+	  					AND vt.PLATFORM_ID＝#{entity.platformId}
+	  			   </if>
+	  			   <if test="entity.mchntId !=null and entity.mchntId !='' ">
+	  					 AND vt.MCHNT_ID＝#{entity.mchntId}
+	  			   </if>
+	  			  <if test="entity.shopId !=null and entity.shopId !='' ">
+	  					 AND vt.SHOP_ID＝#{entity.shopId}
+	  			  </if>
+	</select>
+	<select id="getTransRuleByMchnt" resultType="TransRuleDeclare">
+		SELECT * FROM (
+  			SELECT a.*, ROWNUM rn  FROM (
+			        SELECT 
+			           vt.RULE_ID,
+			           vt.MCHNT_ID,
+			           mi.MCHNT_NAME,
+			           vt.SHOP_ID,
+			           si.SHOP_NAME,
+			           vt.TRANS_RULE_DESP,
+			           vt.START_TIME,
+			           vt.END_TIME
+			            FROM VIEW_TRANS_RULE_DECLARE vt
+			              LEFT JOIN TB_MERCHANT_INF mi on  mi.mchnt_id=vt.MCHNT_ID
+			              LEFT JOIN  TB_SHOP_INF si on si.SHOP_ID =vt.SHOP_ID
+					         WHERE vt.DATA_STAT='0'
+					         　		AND　  vt.END_TIME>sysdate
+					           <if test="entity.insId !=null and entity.insId !='' ">
+				  					AND vt.INS_ID＝#{entity.insId}
+				  			   </if>
+				  			   <if test="entity.platformId !=null and entity.platformId !='' ">
+				  					AND vt.PLATFORM_ID＝#{entity.platformId}
+				  			   </if>
+				  			   <if test="entity.mchntId !=null and entity.mchntId !='' ">
+				  					 AND vt.MCHNT_ID＝#{entity.mchntId}
+				  			   </if>
+				  			  <if test="entity.shopId !=null and entity.shopId !='' ">
+				  					 AND vt.SHOP_ID＝#{entity.shopId}
+				  			  </if>
+				  			 ORDER　BY vt.END_TIME DESC
+				 ) a  WHERE ROWNUM &lt;= (#{page.pageNum}* #{page.pageSize})
+		) b  WHERE rn &gt;= (((#{page.pageNum}-1)* #{page.pageSize})+1)
+	</select>
+	
+	<select id="getTransRuleDeclareByRuleId" parameterType="TransRuleDeclare" resultMap="ViewTransRuleResultMap">
+		SELECT 
+	  	   TRANS_RULE_ID,
+	       INS_ID,
+	       PLATFORM_ID,
+	       MCHNT_ID,
+	       SHOP_ID,
+	       START_TIME,
+	       END_TIME,
+	       TRANS_RULE_DESP,
+	       IS_SUPERPOSED,
+	       DATA_STAT,
+	       SALIENCE,
+	       TEMPLATE_CODE,
+	       TEMPLATE_NAME,
+	       TEMPLATE_DESP,
+	       TEMPLATE_FROM,
+		   RULE_TYPE_CODE,
+		   RULE_NAME,
+		   RULE_TYPE,
+	       RULE_ID,
+	       RULE_FACTOR_NUM,
+	       RULE_FACTOR_ID,
+	       RULE_FACTOR,
+	       RULE_PARAM
+		 FROM VIEW_TRANS_RULE_DECLARE m WHERE m.DATA_STAT='0' AND m.RULE_ID=#{ruleId}
+	</select>
+</mapper>

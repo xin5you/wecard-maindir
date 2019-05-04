@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="  
+       http://www.springframework.org/schema/beans  
+       http://www.springframework.org/schema/beans/spring-beans.xsd  
+       http://www.springframework.org/schema/context  
+       http://www.springframework.org/schema/context/spring-context.xsd  
+       http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+	<!-- <context:annotation-config /> <import resource="classpath:META-INF/cxf/cxf.xml" 
+		/> <import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" /> <import 
+		resource="classpath:META-INF/cxf/cxf-servlet.xml" /> -->
+
+
+	<bean id="java2TXNBusinessService"
+		class="com.cn.thinkx.pms.connect.service.impl.Java2TXNBusinessServiceImpl">
+		<property name="managedAsyn2SynClient" ref="managedAsyn2SynClient"></property>
+	</bean>
+	<bean id="heartBeatService" class="com.cn.thinkx.pms.connect.service.impl.HeartBeatServiceImpl">
+		<property name="java2TXNBusinessService" ref="java2TXNBusinessService"></property>
+	</bean>
+
+	<bean id="connectionMaintainJob" class="com.cn.thinkx.pms.connect.job.ConnectionMaintainJob">
+		<property name="connectionProcessor" ref="connectionProcessor"></property>
+	</bean>
+	<bean id="connectionPool" class="com.cn.thinkx.pms.connect.pool.ConnectionPool"
+		init-method="initialConnection">
+		<property name="connectionMaintainJob" ref="connectionMaintainJob"></property>
+	</bean>
+
+	<bean id="managedAsyn2SynClient" class="com.cn.thinkx.pms.connect.service.impl.ManagedAsyn2SynClient">
+		<property name="connectionPool" ref="connectionPool"></property>
+		<property name="connectionMaintainJob" ref="connectionMaintainJob"></property>
+	</bean>
+	<bean id="connectionProcessor" class="com.cn.thinkx.pms.connect.pool.ConnectionProcessor">
+		<property name="connector" ref="ioConnectorAsyn2Syn"></property>
+		<property name="connectionPool" ref="connectionPool"></property>
+	</bean>
+
+	<bean id="managedAsyn2SynClientCoordinateHandler"
+		class="com.cn.thinkx.pms.connect.mina.handler.ManagedAsyn2SynClientCoordinateHandler">
+		<property name="managedAsyn2SynClient" ref="managedAsyn2SynClient"></property>
+		<property name="connectionPool" ref="connectionPool"></property>
+		<property name="connectionMaintainJob" ref="connectionMaintainJob"></property>
+	</bean>
+	<bean id="ioConnectorAsyn2Syn" class="org.apache.mina.transport.socket.nio.NioSocketConnector">
+		<property name="handler" ref="managedAsyn2SynClientCoordinateHandler" />
+		<property name="filterChainBuilder" ref="filterChain" />
+	</bean>
+
+	<bean id="pmsPaymentGateService"
+		class="com.cn.thinkx.pms.connect.pmspaymentgate.PMSPaymentGateServicePortTypeImpl">
+		<property name="businessService" ref="java2TXNBusinessService" />
+	</bean>
+
+</beans>

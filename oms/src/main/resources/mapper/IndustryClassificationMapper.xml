@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cn.thinkx.oms.module.common.mapper.IndustryClassificationMapper">
+
+	<resultMap type="IndustryClassification" id="IndustryClassificationResultMap">
+	
+		<result column="ID" property="id"/>
+		<result column="MCHNT_ID" property="industryName"/>
+		<result column="MCHNT_TYPE" property="industryGrade"/>
+		<result column="MCHNT_NAME" property="parentId"/>
+		<result column="MCHNT_CODE" property="transDsp"/>
+
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+
+	<sql id="IndustryClassificationColumns">
+		m.ID,
+		m.INDUSTRY_NAME,
+		m.INDUSTRY_GRADE,
+		m.PARENT_ID,
+		m.TRANS_DSP,
+		m.DATA_STAT,
+		m.REMARKS,
+		m.CREATE_USER,
+		m.UPDATE_USER,
+		m.CREATE_TIME,
+		m.UPDATE_TIME
+	</sql>
+	
+		
+	<select id="findIndustryClassificationList" parameterType="IndustryClassification" resultMap="IndustryClassificationResultMap">
+		SELECT 
+	  		<include refid="IndustryClassificationColumns" />
+	  		
+		 FROM TB_INDUSTRY_CLASSIFICATION m WHERE m.DATA_STAT='0' 
+		 
+		 <if test="industryGrade !=null and industryGrade !='' ">
+		 		AND m.industry_grade=#{industryGrade}
+		 </if>
+		 <if test="parentId !=null and parentId !='' ">
+				AND m.PARENT_ID=#{parentId}
+		 </if>
+	</select>
+	
+</mapper>

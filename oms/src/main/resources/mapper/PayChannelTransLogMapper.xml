@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.thinkx.oms.module.trans.mapper.PayChannelTransLogMapper">
+
+	<sql id="WxTransLogColumns">
+		 TL.WX_PRIMARY_KEY,
+		 TL.SETTLE_DATE,
+		 TL.ORG_WX_PRIMARY_KEY,
+		 TL.DMS_RELATED_KEY,
+		 TL.ORG_DMS_RELATED_KEY,
+		 TL.TRANS_ID,
+		 TL.TRANS_ST,
+ 		 TL.INS_CODE,
+ 		 TL.MCHNT_CODE,
+ 		 TL.SHOP_CODE,
+ 		 TL.RESP_CODE,
+ 		 TL.PRI_ACCT_NO,
+ 		 TL.CARD_NO,
+ 		 TL.USER_INF_USER_NAME,
+ 		 TL.PRODUCT_CODE,
+ 		 TL.TRANS_AMT,
+ 		 TL.UPLOAD_AMT,
+ 		 TL.TRANS_CURR_CD,
+ 		 TL.TRANS_CHNL,
+ 		 TL.TRANS_FEE,
+ 		 TL.TRANS_FEE_TYPE,
+ 		 TL.TFR_IN_ACCT_NO,
+ 		 TL.TFR_OUT_ACCT_NO,
+ 		 TL.ADDITIONAL_INFO,
+ 		 TL.REMARKS,
+ 		 TL.CREATE_TIME,
+ 		 TL.UPDATE_TIME,
+ 		 TL.TERM_CODE
+	</sql>
+
+	<select id="getWxTransLogCurByMchntCode" parameterType="PayChannelTransInf" resultType="PayChannelTransLog">
+		SELECT 
+			<include refid="WxTransLogColumns" />,TL.sponsor,
+			 M.MCHNT_NAME,    S.SHOP_NAME,PCI.CHANNEL_NAME as payChannelName
+		FROM TB_WX_TRANS_LOG${tableNum} TL
+		INNER JOIN TB_INTFACE_TRANS_LOG${tableNum} IL ON IL.DMS_RELATED_KEY = TL.WX_PRIMARY_KEY
+       LEFT JOIN TB_MERCHANT_INF M ON IL.MCHNT_CODE=M.MCHNT_CODE        
+       LEFT JOIN TB_SHOP_INF S ON IL.SHOP_CODE=S.SHOP_CODE        
+       LEFT JOIN TB_WX_CLIENT_FANS CF ON CF.OPENID = IL.USER_INF_USER_NAME   
+       LEFT JOIN TB_PAYMENT_CHANNELS_INF PCI ON PCI.CHANNEL_NO = IL.REMARKS
+       WHERE 1=1  AND IL.REMARKS IS NOT NULL                                                
+		<if test="mchntName !=null and mchntName !='' ">
+			AND m.MCHNT_NAME LIKE '%' || #{mchntName} || '%'
+		</if>
+		<if test="mchntCode !=null and mchntCode !='' ">
+			AND TL.MCHNT_CODE=#{mchntCode}
+		</if>
+		<if test="shopName !=null and shopName !='' ">
+			AND s.SHOP_NAME LIKE '%' || #{shopName} || '%'
+		</if>
+		<if test="shopCode !=null and shopCode !='' ">
+			AND TL.SHOP_CODE=#{shopCode}
+		</if>
+		
+		<if test="channelCode !=null and channelCode != '' ">
+			and  TL.TRANS_CHNL =#{channelCode}
+		</if>
+		
+		<if test="transType !=null and transType !='' ">
+			AND TL.TRANS_ID=#{transType}
+		</if>
+		<if test="startTime != null and startTime != ''">
+            AND TL.CREATE_TIME &gt;= to_date(#{startTime}, 'YYYY-MM-DD HH24:MI:SS')
+        </if>
+        <if test="endTime != null  and endTime != ''">
+           	AND TL.CREATE_TIME &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+        </if>
+		ORDER BY TL.CREATE_TIME DESC
+	</select>
+	
+	<select id="getWxTransLogHisByMchntCode" parameterType="PayChannelTransInf" resultType="PayChannelTransLog">
+		SELECT 
+			<include refid="WxTransLogColumns" />,TL.sponsor,
+			M.MCHNT_NAME,    S.SHOP_NAME,PCI.CHANNEL_NAME as payChannelName
+		FROM TB_WX_TRANS_LOG_HIS TL
+		INNER JOIN TB_INTFACE_TRANS_LOG_HIS IL ON IL.DMS_RELATED_KEY = TL.WX_PRIMARY_KEY
+       LEFT JOIN TB_MERCHANT_INF M ON IL.MCHNT_CODE=M.MCHNT_CODE        
+       LEFT JOIN TB_SHOP_INF S ON IL.SHOP_CODE=S.SHOP_CODE        
+       LEFT JOIN TB_WX_CLIENT_FANS CF ON CF.OPENID = IL.USER_INF_USER_NAME   
+       LEFT JOIN TB_PAYMENT_CHANNELS_INF PCI ON PCI.CHANNEL_NO = IL.REMARKS
+       WHERE 1=1 AND IL.REMARKS IS NOT NULL 
+		<if test="mchntName !=null and mchntName !='' ">
+			AND m.MCHNT_NAME LIKE '%' || #{mchntName} || '%'
+		</if>
+		<if test="mchntCode !=null and mchntCode !='' ">
+			AND TL.MCHNT_CODE=#{mchntCode}
+		</if>
+		<if test="shopName !=null and shopName !='' ">
+			AND s.SHOP_NAME LIKE '%' || #{shopName} || '%'
+		</if>
+		<if test="userName !=null and userName !='' ">
+			AND p.PERSONAL_NAME LIKE '%' || #{userName} || '%'
+		</if>
+		<if test="shopCode !=null and shopCode !='' ">
+			AND TL.SHOP_CODE=#{shopCode}
+		</if>
+		
+		<if test="channelCode !=null and channelCode != '' ">
+			and  TL.TRANS_CHNL =#{channelCode}
+		</if>
+		
+		<if test="transType !=null and transType !='' ">
+			AND TL.TRANS_ID=#{transType}
+		</if>
+		<if test="startTime != null and startTime != ''">
+            AND TL.CREATE_TIME &gt;= to_date(#{startTime}, 'YYYY-MM-DD HH24:MI:SS')
+        </if>
+        <if test="endTime != null  and endTime != ''">
+           	AND TL.CREATE_TIME &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+        </if>
+		ORDER BY TL.CREATE_TIME DESC
+	</select>
+	
+	<select id="getCurLogNum" resultType="string">
+		SELECT cur_log_num FROM TB_CTRL_ST WHERE rownum &gt;= 0 AND rownum &lt;=1
+    </select>
+
+	<select id="getWxTransLogUploadCurByMchntCode" parameterType="PayChannelTransInf" resultType="PayChannelTransLogUpload">
+		SELECT 
+			TL.WX_PRIMARY_KEY,
+			TL.SETTLE_DATE,
+			TL.TRANS_ID,
+			TL.RESP_CODE,
+			TL.PRI_ACCT_NO,
+			TL.CARD_NO,
+			TL.TERM_CODE,
+			TL.TRANS_AMT,
+			TL.TRANS_CHNL,
+			TL.CREATE_TIME,
+			TL.TRANS_ST,
+			m.MCHNT_NAME,
+<!-- 			s.SHOP_NAME, -->
+			PCI.CHANNEL_NAME as payChannelName
+			FROM TB_WX_TRANS_LOG${tableNum} TL
+		INNER JOIN TB_INTFACE_TRANS_LOG${tableNum} IL ON IL.DMS_RELATED_KEY = TL.WX_PRIMARY_KEY
+       LEFT JOIN TB_MERCHANT_INF M ON IL.MCHNT_CODE=M.MCHNT_CODE        
+       LEFT JOIN TB_SHOP_INF S ON IL.SHOP_CODE=S.SHOP_CODE        
+       LEFT JOIN TB_WX_CLIENT_FANS CF ON CF.OPENID = IL.USER_INF_USER_NAME   
+       LEFT JOIN TB_PAYMENT_CHANNELS_INF PCI ON PCI.CHANNEL_NO = IL.REMARKS
+       WHERE 1=1  AND IL.REMARKS IS NOT NULL  
+		<if test="mchntName !=null and mchntName !='' ">
+			AND m.MCHNT_NAME LIKE '%' || #{mchntName} || '%'
+		</if>
+		<if test="mchntCode !=null and mchntCode !='' ">
+			AND TL.MCHNT_CODE=#{mchntCode}
+		</if>
+<!-- 		<if test="shopName !=null and shopName !='' "> -->
+<!-- 			AND s.SHOP_NAME LIKE '%' || #{shopName} || '%' -->
+<!-- 		</if> -->
+<!-- 		<if test="shopCode !=null and shopCode !='' "> -->
+<!-- 			AND TL.SHOP_CODE=#{shopCode} -->
+<!-- 		</if> -->
+		
+		<if test="channelCode !=null and channelCode != '' ">
+			and  TL.TRANS_CHNL =#{channelCode}
+		</if>
+		
+		<if test="transType !=null and transType !='' ">
+			AND TL.TRANS_ID=#{transType}
+		</if>
+		<if test="startTime != null and startTime != ''">
+            AND TL.CREATE_TIME &gt;= to_date(#{startTime}, 'YYYY-MM-DD HH24:MI:SS')
+        </if>
+        <if test="endTime != null  and endTime != ''">
+           	AND TL.CREATE_TIME &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+        </if>
+		ORDER BY TL.CREATE_TIME DESC
+	</select>
+	
+	<select id="getWxTransLogUploadHisByMchntCode" parameterType="PayChannelTransInf" resultType="PayChannelTransLogUpload">
+		SELECT 
+			TL.WX_PRIMARY_KEY,
+			TL.SETTLE_DATE,
+			TL.TRANS_ID,
+			TL.RESP_CODE,
+			TL.PRI_ACCT_NO,
+			TL.CARD_NO,
+			TL.TERM_CODE,
+			TL.TRANS_AMT,
+			TL.TRANS_CHNL,
+			TL.CREATE_TIME,
+			TL.TRANS_ST,
+			m.MCHNT_NAME,
+<!-- 			s.SHOP_NAME, -->
+			PCI.CHANNEL_NAME as payChannelName
+		FROM TB_WX_TRANS_LOG_HIS TL
+		INNER JOIN TB_INTFACE_TRANS_LOG_HIS IL ON IL.DMS_RELATED_KEY = TL.WX_PRIMARY_KEY
+       LEFT JOIN TB_MERCHANT_INF M ON IL.MCHNT_CODE=M.MCHNT_CODE        
+       LEFT JOIN TB_SHOP_INF S ON IL.SHOP_CODE=S.SHOP_CODE        
+       LEFT JOIN TB_WX_CLIENT_FANS CF ON CF.OPENID = IL.USER_INF_USER_NAME   
+       LEFT JOIN TB_PAYMENT_CHANNELS_INF PCI ON PCI.CHANNEL_NO = IL.REMARKS
+       WHERE 1=1  AND IL.REMARKS IS NOT NULL 
+		<if test="mchntName !=null and mchntName !='' ">
+			AND m.MCHNT_NAME LIKE '%' || #{mchntName} || '%'
+		</if>
+		<if test="mchntCode !=null and mchntCode !='' ">
+			AND TL.MCHNT_CODE=#{mchntCode}
+		</if>
+<!-- 		<if test="shopName !=null and shopName !='' "> -->
+<!-- 			AND s.SHOP_NAME LIKE '%' || #{shopName} || '%' -->
+<!-- 		</if> -->
+		<if test="userName !=null and userName !='' ">
+			AND p.PERSONAL_NAME LIKE '%' || #{userName} || '%'
+		</if>
+<!-- 		<if test="shopCode !=null and shopCode !='' "> -->
+<!-- 			AND TL.SHOP_CODE=#{shopCode} -->
+<!-- 		</if> -->
+		
+		<if test="channelCode !=null and channelCode != '' ">
+			and  TL.TRANS_CHNL =#{channelCode}
+		</if>
+		
+		<if test="transType !=null and transType !='' ">
+			AND TL.TRANS_ID=#{transType}
+		</if>
+		<if test="startTime != null and startTime != ''">
+            AND TL.CREATE_TIME &gt;= to_date(#{startTime}, 'YYYY-MM-DD HH24:MI:SS')
+        </if>
+        <if test="endTime != null  and endTime != ''">
+           	AND TL.CREATE_TIME &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+        </if>
+		ORDER BY TL.CREATE_TIME DESC
+	</select>
+	
+	<select id="getIntfaceTransLogByOrgDmsRelatedKey" resultType="WxTransLog">
+		SELECT <include refid="WxTransLogColumns" />,TL.SPONSOR
+		FROM TB_WX_TRANS_LOG${tableNum} TL
+		INNER JOIN TB_INTFACE_TRANS_LOG${tableNum} IL ON IL.DMS_RELATED_KEY = TL.WX_PRIMARY_KEY
+		 WHERE IL.DMS_RELATED_KEY=#{dmsRelatedKey} AND ROWNUM=1
+	</select>
+	
+	<select id="getIntfaceTransLogHisByDmsRelatedKey" resultType="WxTransLog">
+		SELECT <include refid="WxTransLogColumns" />,TL.SPONSOR
+		 FROM TB_WX_TRANS_LOG_HIS TL
+		INNER JOIN TB_INTFACE_TRANS_LOG_HIS IL ON IL.DMS_RELATED_KEY = TL.WX_PRIMARY_KEY
+		 WHERE IL.DMS_RELATED_KEY=#{dmsRelatedKey} AND ROWNUM=1
+	</select>
+	
+</mapper>

@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.thinkx.biz.mchnt.mapper.BizMchtMapper">
+		
+	<resultMap type="ShopListInf" id="ShopListInfResultMap">
+		<result column="MCHNT_CODE" property="mchntCode"/>
+		<result column="MCHNT_NAME" property="mchntName"/>
+		<result column="INDUSTRY_TYPE" property="industryType"/>
+		<result column="SHOP_CODE" property="shopCode"/>
+		<result column="SHOP_NAME" property="shopName"/>
+		<result column="SHOP_ADDR" property="shopAddr"/>
+		<result column="EVALUATE" property="evaluate"/>
+		<result column="LATITUDE" property="latitude"/>
+		<result column="LONGITUDE" property="longitude"/>
+		<result column="SOLD_COUNT" property="soldCount"/>
+		<result column="ACTIVE_EXPLAIN" property="activeExplain"/>
+		<result column="DISTANCE" property="distance"/>
+	        <result column="COMMODITY_STOCKS" property="commodityStocks"/>
+	</resultMap>
+
+	<resultMap type="MerchantManager" id="MerchantManagerResultMap">
+		<result column="MANGER_ID" property="mangerId"/>
+		<result column="MANGER_NAME" property="mangerName"/>
+		<result column="MCHNT_ID" property="mchntId"/>
+		<result column="MCHNT_CODE" property="mchntCode"/>
+		<result column="MCHNT_NAME" property="mchntName"/>
+		<result column="INS_ID" property="insId"/>
+		<result column="INS_CODE" property="insCode"/>
+		<result column="SHOP_ID" property="shopId"/>
+		<result column="SHOP_CODE" property="shopCode"/>
+		<result column="SHOP_NAME" property="shopName"/>
+		<result column="ROLE_TYPE" property="roleType"/>
+		<result column="ROLE_NAME" property="roleName"/>
+		<result column="CASH_PASSWD" property="cashPasswd"/>
+		<result column="NAME" property="name"/>
+		<result column="PHONE_NUMBER" property="phoneNumber"/>
+		<result column="nickname" property="nickname"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	<sql id="ShopListInfColumns">
+		MCHNT_CODE,
+		MCHNT_NAME,
+		INDUSTRY_TYPE,
+		SHOP_CODE,
+		SHOP_NAME,
+		SHOP_ADDR,
+		NVL(EVALUATE,0) as EVALUATE,
+		LATITUDE,
+		LONGITUDE,
+		SOLD_COUNT,
+		ACTIVE_EXPLAIN,
+		DISTANCE
+	</sql>
+	
+	<select id="getMerchantInfByCode" parameterType="String" resultType="MerchantInf">
+		SELECT 
+     		mi.MCHNT_ID,
+     		mi.MCHNT_CODE,
+     		mi.MCHNT_TYPE,
+     		mi.MCHNT_NAME,
+     		mi.SOLD_COUNT,
+     		mi.INS_ID,
+     		ii.INS_CODE
+      	FROM TB_MERCHANT_INF mi,
+           	TB_INS_INF ii
+        WHERE ROWNUM=1
+        	AND mi.DATA_STAT='0'
+            AND ii.DATA_STAT='0'
+            AND ii .INS_ID=mi.INS_ID
+           	AND mi.MCHNT_CODE=#{mchntCode}
+	</select>
+	
+	<select id="getProCodeByMchntCode" parameterType="String" resultType="String">
+		SELECT　product_code 
+		FROM VIEW_MERCHANT_ACTIVE_COMMODITY 
+		WHERE MCHNT_CODE=#{mchntCode} 
+			AND COMMODITY_STAT='1'
+			AND ACTIVE_STAT='1'
+            AND START_TIME &lt;= SYSDATE
+            AND END_TIME &gt;= SYSDATE
+			AND ROWNUM=1
+	</select>
+	
+	<select id="getSellingCardList" parameterType="String" resultType="MchtCommodities">
+		SELECT　
+		   selling_price as commodity_price,
+	       product_code,
+	       commodity_id as commodity_code,
+	       commodity_name,
+	       commodity_facevalue as commodity_amount,
+	       commodity_cost as commodity_price,
+	       commodity_stat as commodity_status,
+	       active_rule
+		FROM VIEW_MERCHANT_ACTIVE_COMMODITY 
+		WHERE
+			 COMMODITY_STAT='1'
+			AND ACTIVE_STAT='1'
+            AND START_TIME &lt;= SYSDATE
+            AND END_TIME &gt;= SYSDATE
+            AND MCHNT_CODE=#{mchntCode} 
+	</select>
+	
+	<select id="getSellingCardStocksByCommodityId" parameterType="String" resultType="MchtCommodities">
+		SELECT　
+		   active_id,
+		   selling_price as commodity_price,
+	       product_code,
+	       commodity_id as commodity_code,
+	       commodity_name,
+	       commodity_facevalue as commodity_amount,
+	       commodity_cost as commodity_price,
+	       commodity_stat as commodity_status,
+	       active_rule
+		FROM VIEW_MERCHANT_ACTIVE_COMMODITY 
+		WHERE
+			 COMMODITY_STAT='1'
+			AND ACTIVE_STAT='1'
+            AND START_TIME &lt;= SYSDATE
+            AND END_TIME &gt;= SYSDATE
+            AND COMMODITY_ID=#{commodityId} 
+	</select>
+	
+	<select id="getSellingCard" parameterType="String" resultType="MchtCommodities">
+		SELECT　
+		   selling_price as commodity_price,
+	       product_code,
+	       commodity_id as commodity_code,
+	       commodity_name,
+	       commodity_facevalue as commodity_amount,
+	       commodity_cost as commodity_price,
+	       commodity_stat as commodity_status
+		FROM VIEW_MERCHANT_ACTIVE_COMMODITY 
+		WHERE MCHNT_CODE=#{mchntCode} 
+			AND COMMODITY_ID=#{commodityCode} 
+			AND COMMODITY_STAT='1'
+			AND ACTIVE_STAT='1'
+            AND START_TIME &lt;= SYSDATE
+            AND END_TIME &gt;= SYSDATE
+            AND ROWNUM=1
+	</select>
+
+	<select id="getShopSimpleInfo" parameterType="ShopInf" resultType="ShopDetailInf">
+		SELECT　
+		   mchnt_code,
+       	   mchnt_name,
+       	   shop_code,
+       	   shop_name
+		FROM VIEW_INS_MCHNT_SHOP_MANAGER 
+		WHERE MCHNT_CODE=#{mchntCode} AND SHOP_CODE=#{shopCode} AND ROWNUM=1
+	</select>
+	
+	<select id="getShopDetailInfo" parameterType="ShopInf" resultType="ShopDetailInf">
+		SELECT　
+		   mchnt_code,
+       	   mchnt_name,
+       	   shop_code,
+       	   shop_name,
+       	   industry_type1 as industry_type,
+       	   evaluate,
+       	   sold_count,
+       	   shop_addr,
+       	   longitude,
+       	   latitude,
+           telephone
+		FROM VIEW_INS_MCHNT_SHOP_MANAGER 
+		WHERE MCHNT_CODE=#{mchntCode} AND SHOP_CODE=#{shopCode} AND ROWNUM=1
+	</select>
+	
+	<sql id="TB_ShopListInfByGH">
+		(
+			  SELECT 
+			   m.MCHNT_CODE,
+		       m.MCHNT_NAME,
+		       m.INDUSTRY_TYPE1 as INDUSTRY_TYPE,
+		       m.SOLD_COUNT,
+		       s.SHOP_CODE,
+		       s.SHOP_NAME,
+		       s.SHOP_ADDR,
+		       s.EVALUATE,
+		       s.LATITUDE,
+		       s.LONGITUDE,
+		       a.ACTIVE_EXPLAIN,
+		       GetDistance(#{latitude}, #{longitude}, s.LATITUDE, s.LONGITUDE) as DISTANCE
+          FROM TB_SHOP_INF s, TB_MERCHANT_INF m,TB_MERCHANT_ACTIVE_INF a
+		         WHERE m.DATA_STAT = '0'
+		           AND s.DATA_STAT = '0'
+		           AND a.DATA_STAT='0'
+		           AND a.ACTIVE_STAT='1' 
+		           AND S.SELL_CARD_FLAG = '0' 
+		           AND SYSDATE BETWEEN a.START_TIME AND a.END_TIME
+		           AND s.MCHNT_ID = m.MCHNT_ID
+		           and a.MERCHANT_ID=m.MCHNT_ID
+				   <if test="industryType !=null and industryType !='' ">
+				   		AND m.INDUSTRY_TYPE1=#{industryType}
+				   </if>
+				   AND substr(s.geohash,0,#{geoLength}) in
+				   <foreach collection="geohashs" item="geohash" index="index" open="(" close=")" separator=",">
+			           #{geohash}
+			       </foreach>
+        	)
+	</sql>
+
+	<select id="getShopListInfo" parameterType="ShopInf" resultMap="ShopListInfResultMap">
+		SELECT 
+	  		<include refid="ShopListInfColumns" />
+	  		 FROM 
+	  				<include refid="TB_ShopListInfByGH" />
+	  			WHERE 1=1
+	  			<if test="distance !=null and distance !='' ">
+	  				 AND　DISTANCE &lt;= #{distance}
+	  			</if>
+	  			<choose>
+	                <when test="sort=='10'">
+	                       ORDER BY SOLD_COUNT DESC,DISTANCE ASC,SHOP_CODE ASC
+	                </when>
+	                <when test="sort=='20'">
+	                       ORDER BY EVALUATE DESC,DISTANCE ASC,SHOP_CODE ASC
+	                </when>
+	                <otherwise>
+	                    	 ORDER BY DISTANCE ASC,SHOP_CODE ASC
+	                 </otherwise>
+	         	</choose>
+	</select>
+	
+	<select id="getCardTransDetailList" parameterType="UserMerchantAcct" resultType="CardTransInf">
+		SELECT 
+			il.INTERFACE_PRIMARY_KEY AS TXN_FLOW_NO,
+			il.DMS_RELATED_KEY AS SWT_FLOW_NO,
+			il.MCHNT_CODE,
+			m.MCHNT_NAME,
+			il.SHOP_CODE,
+			s.SHOP_NAME,
+			il.TRANS_AMT AS TXN_AMOUNT,
+			il.TRANS_ID,
+			al.ACC_VALID_BAL AS BALANCE,
+			il.CREATE_TIME,
+            il.CREATE_TIME as TRANS_TIME
+  		FROM TB_INTFACE_TRANS_LOG_HIS il 
+  		INNER JOIN TB_TRANS_LOG_HIS tl ON il.INTERFACE_PRIMARY_KEY=tl.DMS_RELATED_KEY
+  		INNER JOIN TB_ACCOUNT_LOG_HIS al ON tl.TXN_PRIMARY_KEY=al.TXN_PRIMARY_KEY
+       	LEFT JOIN TB_MERCHANT_INF m ON il.MCHNT_CODE=m.MCHNT_CODE
+       	LEFT JOIN TB_SHOP_INF s ON il.SHOP_CODE=s.SHOP_CODE
+ 		WHERE il.RESP_CODE='00'
+ 			AND il.TRANS_ST IN ('1','3','17')
+   			AND il.TRANS_ID=al.TRANS_ID
+   			AND tl.PRI_ACCT_NO=#{accountNo}
+   			AND tl.MCHNT_CODE=#{mchntCode}
+ 	UNION ALL
+		SELECT 
+	      	il.INTERFACE_PRIMARY_KEY AS TXN_FLOW_NO,
+			il.DMS_RELATED_KEY AS SWT_FLOW_NO,
+			il.MCHNT_CODE,
+			m.MCHNT_NAME,
+			il.SHOP_CODE,
+			s.SHOP_NAME,
+			il.TRANS_AMT AS TXN_AMOUNT,
+			il.TRANS_ID,
+			al.ACC_VALID_BAL AS BALANCE,
+			il.CREATE_TIME,
+            il.CREATE_TIME as TRANS_TIME
+      	FROM TB_INTFACE_TRANS_LOG1 il 
+  		INNER JOIN TB_TRANS_LOG1 tl ON il.INTERFACE_PRIMARY_KEY=tl.DMS_RELATED_KEY
+  		INNER JOIN TB_ACCOUNT_LOG1 al ON tl.TXN_PRIMARY_KEY=al.TXN_PRIMARY_KEY
+       	LEFT JOIN TB_MERCHANT_INF m ON il.MCHNT_CODE=m.MCHNT_CODE
+       	LEFT JOIN TB_SHOP_INF s ON il.SHOP_CODE=s.SHOP_CODE
+ 		WHERE il.RESP_CODE='00'
+ 			AND il.TRANS_ST IN ('1','3','17')
+   			AND il.TRANS_ID=al.TRANS_ID
+   			AND tl.PRI_ACCT_NO=#{accountNo}
+   			AND tl.MCHNT_CODE=#{mchntCode}
+	UNION ALL
+		SELECT 
+	      	il.INTERFACE_PRIMARY_KEY AS TXN_FLOW_NO,
+			il.DMS_RELATED_KEY AS SWT_FLOW_NO,
+			il.MCHNT_CODE,
+			m.MCHNT_NAME,
+			il.SHOP_CODE,
+			s.SHOP_NAME,
+			il.TRANS_AMT AS TXN_AMOUNT,
+			il.TRANS_ID,
+			al.ACC_VALID_BAL AS BALANCE,
+			il.CREATE_TIME,
+            il.CREATE_TIME as TRANS_TIME
+      	FROM TB_INTFACE_TRANS_LOG2 il 
+  		INNER JOIN TB_TRANS_LOG2 tl ON il.INTERFACE_PRIMARY_KEY=tl.DMS_RELATED_KEY
+  		INNER JOIN TB_ACCOUNT_LOG2 al ON tl.TXN_PRIMARY_KEY=al.TXN_PRIMARY_KEY
+       	LEFT JOIN TB_MERCHANT_INF m ON il.MCHNT_CODE=m.MCHNT_CODE
+       	LEFT JOIN TB_SHOP_INF s ON il.SHOP_CODE=s.SHOP_CODE
+ 		WHERE il.RESP_CODE='00'
+ 			AND il.TRANS_ST IN ('1','3','17')
+   			AND il.TRANS_ID=al.TRANS_ID
+   			AND tl.PRI_ACCT_NO=#{accountNo}
+   			AND tl.MCHNT_CODE=#{mchntCode}
+   		    ORDER BY CREATE_TIME DESC,TXN_FLOW_NO DESC
+	</select>
+	
+	<select id="getProductNameByCode" resultType="String">
+	
+		SELECT PRODUCT_NAME FROM TB_PRODUCT WHERE PRODUCT_CODE=#{productCode}
+		
+	</select>
+	
+	<select id="getMerchantManagerByRoleType"  resultMap="MerchantManagerResultMap">
+			SELECT m.*,mi.MCHNT_NAME,s.SHOP_NAME FROM 
+				TB_MERCHANT_MANAGER m,
+                TB_MERCHANT_INF mi ,
+                TB_SHOP_INF s
+                WHERE 
+                       m.DATA_STAT='0'
+                   AND mi.DATA_STAT='0'
+                   AND s.DATA_STAT='0'
+                   AND m.MCHNT_ID=MI.MCHNT_ID
+                   AND m.SHOP_ID=S.SHOP_ID
+                   AND s.MCHNT_ID=MI.MCHNT_ID
+                   AND m.ROLE_TYPE LIKE '%' || #{roleType} || '%' 
+                   AND s.SHOP_CODE=#{shopCode}
+                   AND mi.MCHNT_CODE=#{mchntCode}
+		</select>
+
+	
+</mapper>

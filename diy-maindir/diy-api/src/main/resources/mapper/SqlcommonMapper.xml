@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cn.iboot.diy.api.base.mapper.SqlCommonMapper">
+	
+	<!-- 系统管理模块  用户表主键 -->
+	<sql id="getSysUserId">
+		SELECT SEQ_TB_WEB_USER.CURRVAL FROM DUAL
+<!--      	select SEQ_TB_WEB_USER.nextval as id from dual -->
+	</sql>
+
+	<!-- 系统管理模块 角色表主键 -->
+	<sql id="getSysRoleId">
+     	select SEQ_TB_WEB_ROLE.nextval as id from dual
+	</sql>
+	
+	<!-- 系统管理模块  资源表主键 -->
+	<sql id="getSysResourceId">
+     	select SEQ_TB_WEB_RESOURCE.nextval as id from dual
+	</sql>
+	
+	<!-- 系统管理模块  数据权限表主键 -->
+	<sql id="getSysDataAuthId">
+		SELECT SEQ_TB_WEB_DATA_AUTH.CURRVAL FROM DUAL
+<!--      	select SEQ_TB_WEB_DATA_AUTH.nextval as id from dual -->
+	</sql>
+	
+	<!-- 开票订单表主键 -->
+	<sql id="getInvoiceOrderId">
+		SELECT SEQ_TB_INVOICE_ORDER.CURRVAL FROM DUAL
+	</sql>
+</mapper>

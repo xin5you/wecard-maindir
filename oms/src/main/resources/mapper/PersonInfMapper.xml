@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.customer.mapper.PersonInfMapper">
+		
+	<resultMap type="PersonInf" id="PersonInfResultMap">
+		<result column="PERSONAL_ID" property="personalId"/>
+		<result column="USER_ID" property="userId"/>
+		<result column="PERSONAL_NAME" property="personalName"/>
+		<result column="PERSONAL_CARD_TYPE" property="personalCardType"/>
+		<result column="PERSONAL_CARD_NO" property="personalCardNo"/>
+		<result column="SEX" property="sex"/>
+		<result column="BIRTHDAY" property="birthday"/>
+		<result column="NATIVE_PLACE" property="nativePlace"/>
+		<result column="MOBILE_PHONE_NO" property="mobilePhoneNo"/>
+		<result column="EMAIL" property="email"/>
+		<result column="MARRIAGE_STAT" property="marriageStat"/>
+		<result column="HOME_ADDRESS" property="homeAddress"/>
+		<result column="COMPANY_ADDRESS" property="companyAddress"/>
+		<result column="TRANS_HABIT" property="transHabit"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+		<result column="EXTERNAL_ID" property="externalId"/>
+		
+	</resultMap>
+	
+	<sql id="PersonInfColumns">
+		m.PERSONAL_ID,
+		m.USER_ID,
+		m.PERSONAL_NAME,
+		m.PERSONAL_CARD_TYPE,
+		m.PERSONAL_CARD_NO,
+		m.SEX,		
+		m.BIRTHDAY,
+		m.NATIVE_PLACE,
+		m.MOBILE_PHONE_NO,
+		m.EMAIL,
+		m.MARRIAGE_STAT,
+		m.HOME_ADDRESS,
+		m.COMPANY_ADDRESS,
+		m.TRANS_HABIT,
+		m.DATA_STAT,
+		m.REMARKS,
+		m.CREATE_USER, 
+		m.UPDATE_USER, 
+		m.CREATE_TIME, 
+		m.UPDATE_TIME, 
+		m.LOCK_VERSION
+	</sql>
+	
+	<insert id="insertPersonInf" parameterType="PersonInf">
+		<selectKey resultType="string" order="BEFORE" keyProperty="personalId">  
+			<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getCommonId" />
+		</selectKey>
+		INSERT INTO TB_PERSON_INF (
+			PERSONAL_ID,
+			USER_ID,
+			PERSONAL_NAME,
+			PERSONAL_CARD_TYPE,
+			PERSONAL_CARD_NO,
+			SEX,		
+			BIRTHDAY,
+			NATIVE_PLACE,
+			MOBILE_PHONE_NO,
+			EMAIL,
+			MARRIAGE_STAT,
+			HOME_ADDRESS,
+			COMPANY_ADDRESS,
+			TRANS_HABIT,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER, 
+			CREATE_TIME, 
+			LOCK_VERSION
+		 )  VALUES (
+		 		#{personalId},
+		 		#{userId},
+		 		#{personalName,jdbcType=VARCHAR},
+		 		#{personalCardType,jdbcType=VARCHAR},
+		 		#{personalCardNo,jdbcType=VARCHAR},
+		 		#{sex,jdbcType=VARCHAR},
+		 		#{birthday,jdbcType=VARCHAR},
+		 		#{nativePlace,jdbcType=VARCHAR},
+		 		#{mobilePhoneNo,jdbcType=VARCHAR},
+		 		#{email,jdbcType=VARCHAR},
+		 		#{marriageStat,jdbcType=VARCHAR},
+		 		#{homeAddress,jdbcType=VARCHAR},
+		 		#{companyAddress,jdbcType=VARCHAR},
+		 		#{transHabit,jdbcType=VARCHAR},
+		 		'0',
+		 		#{remarks,jdbcType=VARCHAR},
+		 		#{createUser,jdbcType=VARCHAR},
+		 		sysdate,
+		 		'0') 
+	</insert>
+	
+	<select id="getPersonInfById" parameterType="java.lang.String" resultMap="PersonInfResultMap">
+		SELECT 
+	  		<include refid="PersonInfColumns" />
+		 FROM TB_PERSON_INF m WHERE  m.PERSONAL_ID=#{personId} AND m.DATA_STAT = '0'
+	</select>
+	
+	<update id="updatePersonInf" parameterType="PersonInf">
+			UPDATE TB_PERSON_INF SET
+				USER_ID=#{userId},
+				PERSONAL_NAME=#{personalName,jdbcType=VARCHAR},
+				PERSONAL_CARD_TYPE=#{personalCardType,jdbcType=VARCHAR},
+				PERSONAL_CARD_NO=#{personalCardNo,jdbcType=VARCHAR},
+				SEX=#{sex,jdbcType=VARCHAR},		
+				BIRTHDAY=#{birthday,jdbcType=VARCHAR},
+				NATIVE_PLACE=#{nativePlace,jdbcType=VARCHAR},
+				MOBILE_PHONE_NO=#{mobilePhoneNo,jdbcType=VARCHAR},
+				EMAIL=#{email,jdbcType=VARCHAR},
+				MARRIAGE_STAT=#{marriageStat,jdbcType=VARCHAR},
+				HOME_ADDRESS=#{homeAddress,jdbcType=VARCHAR},
+				COMPANY_ADDRESS=#{companyAddress,jdbcType=VARCHAR},
+				TRANS_HABIT=#{transHabit,jdbcType=VARCHAR},
+				DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+				REMARKS=#{remarks,jdbcType=VARCHAR},
+				UPDATE_USER=#{updateUser,jdbcType=VARCHAR}, 
+				UPDATE_TIME=sysdate,
+				LOCK_VERSION = LOCK_VERSION+1
+	 			WHERE PERSONAL_ID = #{personalId} 
+	</update>
+
+	
+	<select id="getPersonInfByPhoneAndChnl" parameterType="java.lang.String" resultMap="PersonInfResultMap"> 
+		SELECT 
+		<include refid="PersonInfColumns" />,
+					c.EXTERNAL_ID
+		       FROM  TB_PERSON_INF m, 
+		       		 TB_USER_INF ui,
+		             TB_CHANNEL_USER_INF c
+		             WHERE ui.DATA_STAT='0'
+		             AND c.DATA_STAT='0'
+		             AND m.DATA_STAT='0'
+		             AND m.USER_ID=ui.USER_ID
+		             AND ui.USER_ID=c.USER_ID
+                 	 AND c.CHANNEL_CODE=#{channel}
+		             AND m.MOBILE_PHONE_NO=#{phoneNo}
+	</select>
+	
+	<select id="getPersonInfByPhoneNo" parameterType="java.lang.String" resultMap="PersonInfResultMap"> 
+		SELECT 
+		<include refid="PersonInfColumns" />
+		       FROM  TB_PERSON_INF m  WHERE m.DATA_STAT = '0' AND m.MOBILE_PHONE_NO=#{phoneNo}  
+	</select>
+	
+	<select id="getPersonInfList" parameterType="PersonInf" resultType="PersonInf"> 
+		SELECT 
+			M.USER_ID,
+			M.PERSONAL_NAME,
+			M.MOBILE_PHONE_NO,
+			M.CREATE_TIME,
+			M.UPDATE_TIME,
+	    	M.UPDATE_USER,
+	    	M.DATA_STAT,
+	    	M.REMARKS,
+			COUNT(C.CHANNEL_USER_ID) AS CHANNEL_USER_ID
+		FROM TB_PERSON_INF M, 
+			 TB_CHANNEL_USER_INF C,
+			 TB_USER_INF U 
+       WHERE 1=1  and  M.USER_ID = C.USER_ID and  M.USER_ID = U.USER_ID
+             <if test = "personalName != null and personalName != '' ">
+               	 AND M.PERSONAL_NAME LIKE '%' || #{personalName} || '%'
+           	 </if>
+           	 <if test = "mobilePhoneNo != null and mobilePhoneNo != '' ">
+             	AND M.MOBILE_PHONE_NO=#{mobilePhoneNo}
+             </if>
+             GROUP BY  M.USER_ID,M.PERSONAL_NAME,M.MOBILE_PHONE_NO,M.CREATE_TIME,M.UPDATE_TIME, M.UPDATE_USER,M.DATA_STAT,M.REMARKS
+             ORDER BY M.UPDATE_TIME DESC
+	</select>
+	
+	<select id="getPersonInfByUserId" parameterType="java.lang.String" resultMap="PersonInfResultMap"> 
+		SELECT 
+		<include refid="PersonInfColumns" />
+		       FROM  TB_PERSON_INF m  WHERE m.USER_ID=#{userId} AND m.DATA_STAT = '0'
+	</select>
+</mapper>

@@ -1,0 +1,85 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+ 	<parent>
+		<groupId>com.cn.thinkx</groupId>
+		<artifactId>common</artifactId>
+		<version>1.0</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<groupId>com.cn.thinkx.common</groupId>
+	<artifactId>pms-connect</artifactId>
+	<packaging>jar</packaging>
+	<name>pms-connect</name>
+	<version>1.0-SNAPSHOT</version>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.mina</groupId>
+			<artifactId>mina-core</artifactId>
+			<version>${mina.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mina</groupId>
+			<artifactId>mina-integration-beans</artifactId>
+			<version>${mina.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mina</groupId>
+			<artifactId>mina-filter-compression</artifactId>
+			<version>${mina.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mina</groupId>
+			<artifactId>mina-integration-jmx</artifactId>
+			<version>${mina.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mina</groupId>
+			<artifactId>mina-integration-ognl</artifactId>
+			<version>${mina.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mina</groupId>
+			<artifactId>mina-integration-xbean</artifactId>
+			<version>${mina.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mina</groupId>
+			<artifactId>mina-statemachine</artifactId>
+			<version>${mina.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mina</groupId>
+			<artifactId>mina-transport-apr</artifactId>
+			<version>${mina.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.cn.thinkx.common</groupId>
+			<artifactId>pms-base</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		
+	</dependencies>
+</project>

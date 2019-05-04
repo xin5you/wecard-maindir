@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.iboot.diy.api.invoice.mapper.InvoOrdStatisticsMapper">
+	
+	<select id="getInvoOrdStatistics" parameterType="InvoiceOrder" resultType="InvoiceOrder">
+		SELECT 
+			NVL(IO.SHOP_NAME,BIO.SHOP_NAME) SHOP_NAME,
+ 			NVL(IO.MCHNT_NAME,BIO.MCHNT_NAME) MCHNT_NAME,
+  			NVL(SUM(IO.INVOICE_AMT_COUNT),0) INVOICE_AMT_COUNT ,
+  			NVL(SUM(BIO.BINVOICE_AMT_COUNT),0) BINVOICE_AMT_COUNT,
+  			NVL((NVL(SUM(IO.INVOICE_AMT_COUNT),0)+NVL(SUM(BIO.BINVOICE_AMT_COUNT),0)),0) AMTCOUNT FROM 
+	    (SELECT IO.SHOP_CODE AS SHOP_CODE,
+	    IO.MCHNT_CODE AS MCHNT_CODE,
+	    M.MCHNT_NAME,
+	    S.SHOP_NAME, 
+	    SUM(IO.INVOICE_AMT) AS INVOICE_AMT_COUNT 
+		FROM TB_INVOICE_ORDER IO LEFT JOIN TB_MERCHANT_INF M ON IO.MCHNT_CODE = M.MCHNT_CODE  LEFT JOIN TB_SHOP_INF S ON IO.SHOP_CODE = S.SHOP_CODE
+		WHERE IO.DATA_STAT = '0' AND IO.MCHNT_CODE = #{mchntCode} 
+		<if test="shopCode != null and shopCode != '' ">
+			AND IO.SHOP_CODE = #{shopCode}
+		</if>
+		<if test="startDate != null and startDate != '' ">
+			AND to_char(IO.CREATE_TIME,'yyyyMMdd') &gt;= #{startDate}
+		</if>
+		<if test="endDate != null and endDate != '' ">
+			AND to_char(IO.CREATE_TIME,'yyyyMMdd') &lt;= #{endDate}
+		</if>
+		GROUP BY IO.SHOP_CODE,IO.MCHNT_CODE,M.MCHNT_NAME, S.SHOP_NAME)IO  
+		FULL JOIN 
+		(SELECT  BIO.SHOP_CODE AS SHOP_CODE,
+		BIO.MCHNT_CODE AS MCHNT_CODE,
+		M.MCHNT_NAME, S.SHOP_NAME,
+		SUM(BIO.INVOICE_AMT) AS BINVOICE_AMT_COUNT 
+		FROM TB_BATCH_INVOICE_ORDER BIO LEFT JOIN TB_MERCHANT_INF M ON BIO.MCHNT_CODE = M.MCHNT_CODE  LEFT JOIN TB_SHOP_INF S ON BIO.SHOP_CODE = S.SHOP_CODE
+		WHERE BIO.DATA_STAT = '0' AND BIO.MCHNT_CODE = #{mchntCode}  
+		<if test="shopCode != null and shopCode != '' ">
+			AND BIO.SHOP_CODE = #{shopCode}
+		</if>
+		<if test="startDate != null and startDate != '' ">
+			AND to_char(BIO.CREATE_TIME,'yyyyMMdd') &gt;= #{startDate}
+		</if>
+		<if test="endDate != null and endDate != '' ">
+			AND to_char(BIO.CREATE_TIME,'yyyyMMdd') &lt;= #{endDate}
+		</if>
+		GROUP BY BIO.SHOP_CODE,BIO.MCHNT_CODE,M.MCHNT_NAME, S.SHOP_NAME)BIO
+			ON  IO.SHOP_CODE = BIO.SHOP_CODE
+			GROUP BY IO.SHOP_NAME, BIO.SHOP_NAME,IO.MCHNT_NAME,BIO.MCHNT_NAME
+	</select>
+	
+</mapper>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.iboot.diy.api.system.mapper.UserRoleMapper">
+
+  <sql id="UserRoleColunmns">
+    USER_ID, 
+    ROLE_ID, 
+    DATA_STAT, 
+    REMARKS, 
+    CREATE_USER, 
+    UPDATE_USER, 
+    CREATE_TIME, 
+    UPDATE_TIME, 
+    LOCK_VERSION
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="String" resultType="UserRole">
+    select 
+    	<include refid="UserRoleColunmns" />
+    from TB_WEB_USER_ROLE
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteUserRoleByUserId" parameterType="String">
+    update TB_WEB_USER_ROLE SET DATA_STAT='1' where USER_ID = #{userId}
+  </delete>
+  
+  <insert id="insert" parameterType="UserRole">
+    insert into TB_WEB_USER_ROLE (
+    	USER_ID, 
+    	ROLE_ID, 
+    	DATA_STAT, 
+        REMARKS, 
+        CREATE_USER, 
+        UPDATE_USER, 
+        CREATE_TIME, 
+        UPDATE_TIME, 
+        LOCK_VERSION
+      ) values (
+      	#{userId,jdbcType=VARCHAR}, 
+      	#{roleId,jdbcType=VARCHAR}, 
+      	'0', 
+        #{remarks,jdbcType=VARCHAR}, 
+        #{createUser,jdbcType=VARCHAR}, 
+        #{updateUser,jdbcType=VARCHAR}, 
+        sysdate, 
+        sysdate, 
+        0
+      )
+  </insert>
+  
+  <update id="updateUserRole" parameterType="UserRole">
+    update TB_WEB_USER_ROLE
+  	<set>
+  	 	ROLE_ID = #{roleId,jdbcType=VARCHAR},
+	    UPDATE_USER = #{updateUser,jdbcType=VARCHAR},
+	    UPDATE_TIME = SYSDATE,
+		LOCK_VERSION = LOCK_VERSION +1
+    </set>
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="getUserRoleByUserId" parameterType="String" resultType="UserRole">
+	 select 
+	 	<include refid="UserRoleColunmns"/>
+	 from TB_WEB_USER_ROLE where USER_ID = #{id} and  DATA_STAT='0'
+  </select>
+  
+</mapper>

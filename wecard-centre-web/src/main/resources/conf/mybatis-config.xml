@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+				<setting name="logImpl" value="SLF4J" />
+<!-- 		<setting name="logImpl" value="STDOUT_LOGGING" /> -->
+	</settings>
+	<typeAliases>
+		<typeAlias type="com.cn.thinkx.wechat.base.wxapi.domain.Account" alias="Account" />
+		<typeAlias type="com.cn.thinkx.common.service.module.channel.domain.ChannelSecurityInf" alias="ChannelSecurityInf" />
+		<typeAlias type="com.cn.thinkx.common.service.module.dict.domain.BaseDict" alias="BaseDict" />
+		<typeAlias type="com.cn.thinkx.common.redis.vo.BoxDeviceInfoVO" alias="BoxDeviceInfoVO" />
+		<typeAlias type="com.cn.thinkx.common.redis.vo.ShopInfVO" alias="ShopInfVO" />
+		<typeAlias type="com.cn.thinkx.common.redis.vo.PaymentChannelVO" alias="PaymentChannelVO" />
+		<typeAlias type="com.cn.thinkx.common.redis.vo.PaymentChannelApiVO" alias="PaymentChannelApiVO" />
+		
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.cardkeys.CardKeys" alias="CardKeys" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.cardkeys.CardKeysTransLog" alias="CardKeysTransLog" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.cardkeys.CardKeysOrderInf" alias="CardKeysOrderInf" />
+	</typeAliases>
+	<mappers>
+	</mappers>
+</configuration>

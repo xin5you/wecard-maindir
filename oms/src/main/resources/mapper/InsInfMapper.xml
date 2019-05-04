@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.merchant.mapper.InsInfMapper">
+		
+	<resultMap type="InsInf" id="InsInfResultMap">
+		<result column="INS_ID" property="insId"/>
+		<result column="INS_CODE" property="insCode"/>
+		<result column="INS_NAME" property="insName"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="InsInfColumns">
+		m.INS_ID,
+		m.INS_CODE,
+		m.INS_NAME,	
+		m.DATA_STAT,
+		m.REMARKS,
+		m.CREATE_USER, 
+		m.UPDATE_USER, 
+		m.CREATE_TIME, 
+		m.UPDATE_TIME, 
+		m.LOCK_VERSION
+	</sql>
+	
+	<insert id="insertInsInf" parameterType="InsInf"  flushCache="true">
+		 <selectKey resultType="string" order="BEFORE" keyProperty="insId">  
+			<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getCommonId" />
+		</selectKey>
+		INSERT INTO TB_INS_INF (
+			INS_ID,
+			INS_CODE,
+			INS_NAME,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER, 
+			CREATE_TIME, 
+			LOCK_VERSION
+		 )  VALUES ( 
+		 		#{insId,jdbcType=VARCHAR},
+		 		#{insCode,jdbcType=VARCHAR},
+		 		#{insName,jdbcType=VARCHAR},
+		 		#{dataStat,jdbcType=VARCHAR},
+		 		#{remarks,jdbcType=VARCHAR},
+		 		#{createUser,jdbcType=VARCHAR},
+		 		sysdate,
+		 		'0') 
+	</insert>
+	
+	<select id="getInsInfById" parameterType="java.lang.String" resultMap="InsInfResultMap">
+		SELECT 
+	  		<include refid="InsInfColumns" />
+		 FROM TB_INS_INF m WHERE m.DATA_STAT='0' AND m.INS_ID=#{shopId}
+	</select>
+	
+	
+	<update id="updateInsInf" parameterType="InsInf">
+			UPDATE TB_INS_INF SET
+				INS_NAME=#{insName,jdbcType=VARCHAR},
+				UPDATE_TIME=sysdate
+			 WHERE INS_ID = #{insId} 
+	</update>
+</mapper>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wecard.key.api.cardkeysproduct.mappper.CardKeysProductMapper">
+		
+	<sql id="CardKeysProductColumns">
+		PRODUCT_CODE,
+		PRODUCT_NAME,
+		PRODUCT_TYPE,
+		ORG_AMOUNT,
+		AMOUNT,
+		TOTAL_NUM,
+		AVAILABLE_NUM,
+		SUPPLIER,
+		LOGO_URL,
+		PRODUCT_DESC,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION	
+	</sql>
+	
+	<sql id="CardKeysProductFields">
+		#{productCode,jdbcType=VARCHAR},
+		#{productName,jdbcType=VARCHAR},
+		#{productType,jdbcType=VARCHAR},
+		#{orgAmount,jdbcType=VARCHAR},
+		#{amount,jdbcType=VARCHAR},
+		#{totalNum,jdbcType=VARCHAR},
+		#{availableNum,jdbcType=VARCHAR},
+		#{supplier,jdbcType=VARCHAR},
+		#{logoUrl,jdbcType=VARCHAR},
+		#{productDesc,jdbcType=VARCHAR},
+		'0',
+		#{remarks,jdbcType=VARCHAR},
+		#{createUser,jdbcType=VARCHAR},
+		#{updateUser,jdbcType=VARCHAR},
+		sysdate,
+		sysdate,
+		'0'
+	</sql>
+	
+	<sql id="tableName">
+			TB_CARD_KEYS_PRODUCT
+	</sql>
+	
+	<select id="getProductCode" parameterType="CardKeysProduct" resultType="java.lang.String">
+		SELECT 
+	  		PRODUCT_CODE
+		 FROM
+		 	<include refid="tableName" />
+  		 WHERE DATA_STAT = '0'
+		 	AND PRODUCT_TYPE = #{productType}
+			AND ORG_AMOUNT = #{orgAmount}
+	</select>
+	
+	<select id="getCardKeysProductList" parameterType="CardKeysProduct" resultType="CardKeysProduct">
+		SELECT 
+	  		<include refid="CardKeysProductColumns" />
+		 FROM
+		 	<include refid="tableName" />
+  		 WHERE DATA_STAT = '0'
+		 	AND PRODUCT_TYPE = #{productType}
+			AND SUPPLIER = #{supplier}
+	</select>
+	
+</mapper>

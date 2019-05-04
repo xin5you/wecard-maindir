@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.enterpriseorder.mapper.BatchOrderMapper">
+	
+	<select id="getBatchOrderList" parameterType="BatchOrder" resultType="BatchOrder">
+	
+			SELECT O.ORDER_ID,
+		       O.PRODUCT_CODE,
+		       O.PRODUCT_NAME,
+		       O.ORDER_NAME,
+		       O.ORDER_TYPE,
+		       O.ORDER_DATE,
+		       O.ORDER_STAT,
+		       O.DATA_STAT,
+		       O.REMARKS,
+		       O.CREATE_USER,
+		       O.UPDATE_USER,
+		       O.CREATE_TIME,
+		       O.UPDATE_TIME,
+		       O.LOCK_VERSION,
+		       O.COMPANY_NAME,
+	       	   O.BIZ_TYPE,
+		       (SELECT COUNT(L.ORDER_LIST_ID)
+              FROM TB_BATCH_ORDER_LIST L
+             WHERE L.DATA_STAT='0' AND O.ORDER_ID = L.ORDER_ID) AS ORDERCOUNT,
+             (SELECT SUM(L.AMOUNT)
+              FROM TB_BATCH_ORDER_LIST L
+             WHERE L.DATA_STAT = '0'
+               AND L.ORDER_ID = O.ORDER_ID) AS SUMAMOUNT,
+               NVL(BI.INVOICE_STAT,0) AS INVOICE_STAT
+		    FROM TB_BATCH_ORDER O LEFT JOIN TB_BATCH_INVOICE_ORDER BI
+        ON O.ORDER_ID = BI.ORDER_ID
+		 WHERE O.DATA_STAT = '0' and O.ORDER_TYPE=#{orderType}
+		 <if test="orderId != null and orderId != '' " >
+		 AND O.ORDER_ID = #{orderId} 
+		 </if>
+		 <if test="orderName !=null and orderName != '' ">
+		 AND O.ORDER_NAME LIKE '%'|| #{orderName} ||'%' 
+		 </if>
+		 <if test="productCode !=null and productCode != '' ">
+		      AND O.PRODUCT_CODE = #{productCode} 
+		 </if>
+		 <if test="orderStat !=null and orderStat != '' ">
+		 AND O.ORDER_STAT = #{orderStat} 
+		 </if>
+		 <if test="bizType !=null and bizType != '' ">
+		 AND O.BIZ_TYPE = #{bizType} 
+		 </if>
+		 <if test="invoiceStat ==0">
+			AND  BI.INVOICE_STAT is null AND O.ORDER_STAT IN (40,90)
+		 </if>
+		 <if test="invoiceStat ==1">
+			AND BI.INVOICE_STAT = #{invoiceStat}
+		 </if>
+		 <if test="invoiceStat ==2">
+			AND O.ORDER_STAT != '40' AND O.ORDER_STAT != '90'
+		 </if>
+		 <if test="startTime !=null and startTime != '' ">
+		 AND O.CREATE_TIME &gt;=  to_date(#{startTime}, 'YYYY-MM-DD HH24:MI:SS') 
+		 </if>
+		 <if test="endTime !=null and endTime != '' ">
+		 AND O.CREATE_TIME &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+		 </if>
+		 ORDER BY O.UPDATE_TIME DESC
+	
+	</select>
+	
+	<select id="getBatchOrderByOrderId" parameterType="string"  resultType="BatchOrder">
+		SELECT O.ORDER_ID,
+           O.ORDER_NAME,
+           O.ORDER_STAT,
+           O.PRODUCT_NAME,
+           O.REMARKS,
+           O.COMPANY_NAME,
+	       O.BIZ_TYPE,
+           (SELECT COUNT(L.ORDER_LIST_ID)
+              FROM TB_BATCH_ORDER_LIST L
+             WHERE L.DATA_STAT = '0'
+               AND L.ORDER_ID = O.ORDER_ID) AS ORDERCOUNT,
+           (SELECT COUNT(L.ORDER_LIST_ID)
+              FROM TB_BATCH_ORDER_LIST L
+             WHERE L.DATA_STAT = '0'
+               AND L.ORDER_ID = O.ORDER_ID
+               AND L.ORDER_STAT = '0') AS DISPOSEWAIT,
+           (SELECT COUNT(L.ORDER_LIST_ID)
+              FROM TB_BATCH_ORDER_LIST L
+             WHERE L.DATA_STAT = '0'
+               AND L.ORDER_ID = O.ORDER_ID
+               AND L.ORDER_STAT = '00') AS DISPOSESUCCESS,
+           (SELECT COUNT(L.ORDER_LIST_ID)
+              FROM TB_BATCH_ORDER_LIST L
+             WHERE L.DATA_STAT = '0'
+               AND L.ORDER_ID = O.ORDER_ID
+               AND L.ORDER_STAT = '99') AS DISPOSEFAIL,
+           (SELECT SUM(L.AMOUNT)
+              FROM TB_BATCH_ORDER_LIST L
+             WHERE L.DATA_STAT = '0'
+               AND L.ORDER_ID = O.ORDER_ID) AS SUMAMOUNT
+	      FROM TB_BATCH_ORDER O
+	     WHERE O.DATA_STAT = '0'  AND O.ORDER_ID= #{orderId}
+	  
+	</select>
+	
+	<select id="getBatchOrderById" parameterType="string" resultType="BatchOrder">
+		SELECT O.ORDER_ID,
+	       O.PRODUCT_CODE,
+	       O.PRODUCT_NAME,
+	       O.ORDER_NAME,
+	       O.ORDER_TYPE,
+	       O.ORDER_DATE,
+	       O.ORDER_STAT,
+	       O.DATA_STAT,
+	       O.REMARKS,
+	       O.CREATE_USER,
+	       O.UPDATE_USER,
+	       O.CREATE_TIME,
+	       O.UPDATE_TIME,
+	       O.LOCK_VERSION,
+	       O.COMPANY_NAME,
+	       O.BIZ_TYPE,
+	       O.RESV1,
+	       O.RESV2,
+	       O.RESV3,
+	       O.RESV4,
+	       O.RESV5,
+	       O.RESV6
+	  FROM TB_BATCH_ORDER O
+	 WHERE O.ORDER_ID = #{orderId}
+	</select>
+	
+	<insert id="addBatchOrder" parameterType="BatchOrder" >
+		    <selectKey resultType="string" order="BEFORE" keyProperty="orderId">  
+	            <include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getCommonId" />
+	        </selectKey>
+			INSERT INTO TB_BATCH_ORDER
+		   (ORDER_ID,
+		    PRODUCT_CODE,
+		    PRODUCT_NAME,
+		    ORDER_NAME,
+		    ORDER_TYPE,
+		    ORDER_DATE,
+		    ORDER_STAT,
+		    DATA_STAT,
+		    REMARKS,
+		    CREATE_USER,
+		    UPDATE_USER,
+		    CREATE_TIME,
+		    UPDATE_TIME,
+		    LOCK_VERSION,
+		    COMPANY_NAME,
+	        BIZ_TYPE,
+	        RESV1,
+	        RESV2,
+	        RESV3,
+	        RESV4,
+	        RESV5,
+	        RESV6
+		    )
+		 VALUES
+		   (
+		   #{orderId},
+		   #{productCode,jdbcType=VARCHAR},
+		   #{productName,jdbcType=VARCHAR},
+		   #{orderName,jdbcType=VARCHAR},
+		   #{orderType,jdbcType=VARCHAR},
+		   sysdate,
+		   #{orderStat,jdbcType=VARCHAR},
+		   '0',
+		   #{remarks,jdbcType=VARCHAR},
+           #{createUser,jdbcType=VARCHAR},
+           #{createUser,jdbcType=VARCHAR},
+           sysdate,
+           sysdate,
+           '0',
+            #{companyName,jdbcType=VARCHAR},
+            #{bizType,jdbcType=VARCHAR},
+            #{resv1,jdbcType=VARCHAR},
+            #{resv2,jdbcType=VARCHAR},
+            #{resv3,jdbcType=VARCHAR},
+            #{resv4,jdbcType=VARCHAR},
+            #{resv5,jdbcType=VARCHAR},
+            #{resv6,jdbcType=VARCHAR}
+		   )
+	</insert>
+	
+	<update id="updateBatchOrder"  parameterType="BatchOrder" >
+		UPDATE TB_BATCH_ORDER
+	    <trim prefix="SET" suffixOverrides=","> 
+	        <if test="productCode != null and productCode != '' ">PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},</if>
+	        <if test="productName != null and productName != '' ">PRODUCT_NAME = #{productName,jdbcType=VARCHAR},</if>
+	        <if test="orderName != null and orderName != '' ">ORDER_NAME   = #{orderName,jdbcType=VARCHAR},</if>
+	        <if test="orderType != null and orderType != '' ">ORDER_TYPE   = #{orderType,jdbcType=VARCHAR},</if>
+	        <if test="orderStat != null and orderStat != '' ">ORDER_STAT   = #{orderStat,jdbcType=VARCHAR},</if>
+	        <if test="dataStat != null and dataStat != '' ">DATA_STAT    = #{dataStat,jdbcType=VARCHAR},</if>
+	        <if test="remarks != null and remarks != '' ">REMARKS      = #{remarks,jdbcType=VARCHAR},</if>
+	        <if test="updateUser != null and updateUser != '' ">UPDATE_USER  = #{updateUser,jdbcType=VARCHAR},</if>
+	        <if test="companyName != null and companyName != '' ">COMPANY_NAME  = #{companyName,jdbcType=VARCHAR},</if>
+	        <if test="bizType != null and bizType != '' ">BIZ_TYPE  = #{bizType,jdbcType=VARCHAR},</if>
+	        UPDATE_TIME  = sysdate,
+	        LOCK_VERSION = LOCK_VERSION+1 
+	        </trim>
+	  WHERE ORDER_ID = #{orderId,jdbcType=VARCHAR}
+	</update>
+	
+	
+	<update id="deleteBatchOrder" parameterType="string">
+	 UPDATE TB_BATCH_ORDER SET DATA_STAT = '1',LOCK_VERSION=LOCK_VERSION+1 WHERE ORDER_ID = #{orderId}
+	</update>
+	
+	<select id = "getOpenIdByPhoneNo" parameterType = "String" resultType="String">
+		select  c.external_id from TB_PERSON_INF p left join tb_channel_user_inf c on p.user_id = c.user_id
+		where c.channel_code = '40001010' and  p.data_stat = '0' and c.data_stat = '0' and  p.mobile_phone_no = #{phoneNo} 
+	</select>
+</mapper>

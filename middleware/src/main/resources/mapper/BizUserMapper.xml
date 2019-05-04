@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.thinkx.biz.user.mapper.BizUserMapper">
+
+	<select id="getPrimaryKey" parameterType="java.util.Map" statementType="CALLABLE">
+		<![CDATA[
+			{ call PROC_MW_GET_PRIMARY_KEY(#{id, jdbcType=VARCHAR, mode=OUT}) }
+		]]>
+	</select>
+
+	<select id="getUserInfByUserName" parameterType="String" resultType="UserInf">
+		SELECT
+			m.USER_ID,
+			m.USER_NAME,
+			m.USER_TYPE,
+			m.PRODUCT_CODE,
+			m.DATA_STAT,
+			m.REMARKS,
+			m.CREATE_USER,
+			m.UPDATE_USER,
+			m.CREATE_TIME,
+			m.UPDATE_TIME,
+			m.LOCK_VERSION,
+			c.EXTERNAL_ID 
+		FROM
+			TB_USER_INF m,
+			TB_CHANNEL_USER_INF c
+		WHERE m.user_id=c.user_id
+			AND m.DATA_STAT='0'
+			AND c.DATA_STAT='0'
+			AND c.CHANNEL_CODE=#{channel}
+			AND c.EXTERNAL_ID=#{userName}
+	</select>
+
+	<select id="getUserIdByUserName" resultType="String">
+		SELECT m.USER_ID FROM TB_USER_INF m, TB_CHANNEL_USER_INF c
+		WHERE m.user_id = c.user_id
+			AND m.DATA_STAT='0'
+			AND c.DATA_STAT='0'
+			AND c.CHANNEL_CODE=#{channel}
+			AND c.EXTERNAL_ID=#{userName}
+	</select>
+
+	<insert id="insertUserInf" parameterType="UserInf">
+		INSERT INTO TB_USER_INF(
+			USER_ID,
+			USER_NAME,
+			USER_TYPE,
+			USER_PASSWD,
+			PRODUCT_CODE,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			CREATE_TIME,
+			LOCK_VERSION
+		) VALUES (
+			#{userId},
+			#{userName,jdbcType=VARCHAR},
+			#{userType,jdbcType=VARCHAR},
+			#{userPasswd,jdbcType=VARCHAR},
+			#{productCode,jdbcType=VARCHAR},
+			#{dataStat,jdbcType=VARCHAR},
+			#{remarks,jdbcType=VARCHAR},
+			#{createUser,jdbcType=VARCHAR},
+			SYSDATE,
+			'0')
+	</insert>
+
+	<insert id="insertPersonInf" parameterType="PersonInf">
+		INSERT INTO
+			TB_PERSON_INF (
+			USER_ID,
+			PERSONAL_NAME,
+			PERSONAL_CARD_TYPE,
+			PERSONAL_CARD_NO,
+			SEX,
+			BIRTHDAY,
+			NATIVE_PLACE,
+			MOBILE_PHONE_NO,
+			EMAIL,
+			MARRIAGE_STAT,
+			HOME_ADDRESS,
+			COMPANY_ADDRESS,
+			TRANS_HABIT,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			CREATE_TIME,
+			LOCK_VERSION
+		) VALUES (
+			#{userId},
+			#{personalName,jdbcType=VARCHAR},
+			#{personalCardType,jdbcType=VARCHAR},
+			#{personalCardNo,jdbcType=VARCHAR},
+			#{sex,jdbcType=VARCHAR},
+			#{birthday,jdbcType=VARCHAR},
+			#{nativePlace,jdbcType=VARCHAR},
+			#{mobilePhoneNo,jdbcType=VARCHAR},
+			#{email,jdbcType=VARCHAR},
+			#{marriageStat,jdbcType=VARCHAR},
+			#{homeAddress,jdbcType=VARCHAR},
+			#{companyAddress,jdbcType=VARCHAR},
+			#{transHabit,jdbcType=VARCHAR},
+			'0',
+			#{remarks,jdbcType=VARCHAR},
+			#{createUser,jdbcType=VARCHAR},
+			SYSDATE,
+			'0')
+	</insert>
+
+	<select id="getPersonInfByUserName" parameterType="String" resultType="PersonInf">
+		SELECT
+			m.PERSONAL_ID,
+			m.USER_ID,
+			m.PERSONAL_NAME,
+			m.PERSONAL_CARD_TYPE,
+			m.PERSONAL_CARD_NO,
+			m.SEX,
+			m.BIRTHDAY,
+			m.NATIVE_PLACE,
+			m.MOBILE_PHONE_NO,
+			m.EMAIL,
+			m.MARRIAGE_STAT,
+			m.HOME_ADDRESS,
+			m.COMPANY_ADDRESS,
+			m.TRANS_HABIT,
+			m.REMARKS
+		FROM TB_PERSON_INF m,
+			TB_USER_INF t,
+			TB_CHANNEL_USER_INF c
+		WHERE m.USER_ID=t.USER_ID
+			AND c.USER_ID=t.USER_ID
+			AND m.DATA_STAT = '0'
+			AND c.DATA_STAT = '0'
+			AND t.DATA_STAT = '0'
+			AND c.EXTERNAL_ID=#{userName}
+			AND c.channel_code=#{channel}
+	</select>
+
+	<select id="getPhoneNoByUserId" parameterType="String" resultType="String">
+		SELECT MOBILE_PHONE_NO
+		FROM TB_PERSON_INF
+		WHERE USER_ID=#{userId} AND DATA_STAT = '0'
+	</select>
+
+	<select id="getAccBalance" parameterType="UserMerchantAcct" resultType="String">
+		SELECT ACC_BAL FROM VIEW_USER_MERCHANT_ACCT
+		WHERE EXTERNAL_ID=#{externalId} AND CHANNEL_CODE=#{channelCode} AND
+		MCHNT_CODE=#{mchntCode}
+	</select>
+
+	<select id="getCardNo" parameterType="UserMerchantAcct" resultType="String">
+		SELECT CARD_NO FROM VIEW_USER_MERCHANT_ACCT
+		WHERE EXTERNAL_ID=#{externalId} AND MCHNT_CODE=#{mchntCode} AND CHANNEL_CODE=#{channelCode}
+	</select>
+
+	<select id="getCusAccList" parameterType="UserMerchantAcct" resultType="CustomerAccount">
+		SELECT
+			MCHNT_CODE,
+			PRODUCT_CODE,
+			PRODUCT_NAME,
+			ACC_BAL AS PRODUCTBALANCE,
+			REMARKS
+		FROM VIEW_USER_MERCHANT_ACCT
+		WHERE CHANNEL_CODE=#{channelCode}
+		<if test="mchntCode !=null and mchntCode !=''">
+			AND MCHNT_CODE=#{mchntCode}
+		</if>
+		<if test="externalId !=null and externalId !=''">
+			AND EXTERNAL_ID=#{externalId}
+		</if>
+		<if test="remarks !=null and remarks !=''">
+			AND REMARKS=#{remarks}
+		</if>
+	</select>
+
+	<select id="getManagerIdByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT m.MANGER_ID FROM TB_MERCHANT_MANAGER m WHERE m.DATA_STAT='0' AND m.MANGER_NAME=#{openid}
+	</select>
+
+	<select id="getUserIdByOpenId" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT m.USER_ID FROM TB_USER_INF m WHERE m.DATA_STAT='0' AND m.USER_NAME=#{openid}
+	</select>
+
+	<insert id="insertChannelUserInf" parameterType="ChannelUserInf">
+		INSERT INTO TB_CHANNEL_USER_INF (
+			USER_ID,
+			EXTERNAL_ID,
+			CHANNEL_CODE,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			UPDATE_USER,
+			CREATE_TIME,
+			UPDATE_TIME,
+			LOCK_VERSION
+		) VALUES (
+			#{userId},
+			#{externalId,jdbcType=VARCHAR},
+			#{channelCode,jdbcType=VARCHAR},
+			#{dataStat,jdbcType=VARCHAR},
+			#{remarks,jdbcType=VARCHAR},
+			#{createUser,jdbcType=VARCHAR},
+			#{updateUser,jdbcType=VARCHAR},
+			SYSDATE,
+			SYSDATE,
+			'0')
+	</insert>
+
+	<select id="getPersonInfByPhoneNo" parameterType="java.lang.String" resultType="PersonInf">
+		SELECT
+			m.PERSONAL_ID,
+			m.USER_ID,
+			m.PERSONAL_NAME,
+			m.PERSONAL_CARD_TYPE,
+			m.PERSONAL_CARD_NO,
+			m.SEX,
+			m.BIRTHDAY,
+			m.NATIVE_PLACE,
+			m.MOBILE_PHONE_NO,
+			m.EMAIL,
+			m.MARRIAGE_STAT,
+			m.HOME_ADDRESS,
+			m.COMPANY_ADDRESS,
+			m.TRANS_HABIT,
+			m.REMARKS,
+			m.CREATE_USER,
+			m.UPDATE_USER,
+			m.CREATE_TIME,
+			m.UPDATE_TIME,
+			m.LOCK_VERSION
+		FROM TB_PERSON_INF m,
+			TB_USER_INF ui,
+			TB_CHANNEL_USER_INF c
+		WHERE ui.DATA_STAT='0'
+			AND c.DATA_STAT='0'
+			AND m.DATA_STAT='0'
+			AND m.USER_ID=ui.USER_ID
+			AND ui.USER_ID=c.USER_ID
+			AND c.CHANNEL_CODE=#{channel}
+			AND m.MOBILE_PHONE_NO=#{phoneNo}
+	</select>
+
+	<select id="getUserInfByPhoneNo" parameterType="java.lang.String" resultType="userInf">
+		SELECT
+			m.USER_ID,
+			m.USER_NAME,
+			m.USER_TYPE,
+			m.PRODUCT_CODE,
+			m.DATA_STAT,
+			m.REMARKS,
+			m.CREATE_USER,
+			m.CREATE_TIME,
+			m.LOCK_VERSION
+		FROM
+			TB_USER_INF m,
+			TB_PERSON_INF p,
+			TB_CHANNEL_USER_INF c
+		WHERE m.DATA_STAT='0'
+			AND c.DATA_STAT='0'
+			AND p.DATA_STAT='0'
+			AND m.USER_ID=p.USER_ID
+			AND m.USER_ID=c.USER_ID
+			AND C.CHANNEL_CODE=#{channel}
+			AND p.MOBILE_PHONE_NO=#{phoneNo}
+	</select>
+
+	<select id="getAccountNoByExternalId" parameterType="UserMerchantAcct" resultType="java.lang.String">
+		SELECT ACCOUNT_NO FROM VIEW_USER_MERCHANT_ACCT
+		WHERE CHANNEL_CODE=#{channelCode}
+		<if test="mchntCode !=null and mchntCode !=''">
+			AND MCHNT_CODE=#{mchntCode}
+		</if>
+		<if test="externalId !=null and externalId !=''">
+			AND EXTERNAL_ID=#{externalId}
+		</if>
+	</select>
+
+</mapper>

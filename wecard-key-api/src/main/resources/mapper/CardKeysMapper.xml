@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wecard.key.api.cardkey.mapper.CardKeysMapper">
+
+	<sql id="CardKeysColumns">
+		CARD_KEY,
+		PRODUCT_CODE,
+		ACCOUNT_ID,
+		TXN_RIMARY_KEY,
+		ACTIVE_START_DATE,
+		ACTIVE_END_DATE,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+
+	<sql id="CardKeysFields">
+		#{cardKey, jdbcType=VARCHAR},
+		#{productCode, jdbcType=VARCHAR},
+		#{accountId, jdbcType=VARCHAR},
+		#{txnPrimaryKey, jdbcType=VARCHAR},
+		#{activeStartDate, jdbcType=VARCHAR},
+		#{activeEndDate, jdbcType=VARCHAR},
+		'0',
+		#{remarks, jdbcType=VARCHAR},
+		#{createUser, jdbcType=VARCHAR},
+		#{updateUser, jdbcType=VARCHAR},
+		SYSDATE,
+		SYSDATE,
+		'0'
+	</sql>
+
+	<select id="getCardKeysList" parameterType="CardKeys" resultType="CardKeys">
+		SELECT
+		<include refid="CardKeysColumns" />
+		FROM TB_CARD_KEYS
+		WHERE DATA_STAT = '0'
+			AND PRODUCT_CODE =
+			#{productCode}
+			AND ACCOUNT_ID = #{accountId}
+			AND TXN_TYPE = #{txnType}
+			AND ROWNUM &lt;= #{rowNum}
+	</select>
+
+	<insert id="insertCardKeys" parameterType="CardKeys">
+		INSERT INTO TB_CARD_KEYS
+		(
+		<include refid="CardKeysColumns" />
+		) VALUES (
+		<include refid="CardKeysFields" />
+		)
+	</insert>
+
+	<update id="updateCardKeys" parameterType="CardKeys">
+		UPDATE TB_CARD_KEYS
+		SET
+			DATA_STAT = '1',
+			UPDATE_TIME = sysdate,
+			LOCK_VERSION = LOCK_VERSION+1
+		WHERE CARD_KEY = #{cardKey}
+	</update>
+
+</mapper>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.merchant.mapper.MchntAcctInfDao">
+		
+
+	
+	<sql id="MerchantInfColumns">
+		m.account_no,
+		m.ins_id,
+		m.mancht_id,
+		m.account_type,
+		m.account_stat,
+		m.acc_bal,
+		m.acc_bal_code,
+		m.max_txn_amt1,
+		m.max_day_txn_amt1,
+		m.day_total_amt1,
+		m.max_txn_amt2,
+		m.max_day_txn_amt2,
+		m.day_total_amt2,
+		m.freeze_amt,
+		m.last_txn_date,
+		m.last_txn_time,
+		m.remarks,
+		m.create_user,
+		m.update_user,
+		m.create_time,
+		m.update_time,
+		m.lock_version
+	</sql>
+	
+	<select id="getSumAccBalByMchnt"  parameterType="java.lang.String" resultType="long">
+		SELECT 
+	  		 NVL(SUM(ACC_BAL),'0') as  accBal
+				FROM TB_MCHNT_ACCT_INF m where 1=1
+		 	  	 <if test="acctType !=null and acctType !='' ">
+						AND m.account_type=#{acctType}	 	  		
+			 	  </if>
+			 	  <if test="acctSata !=null and acctSata !='' ">
+						AND m.account_stat=#{acctSata}	 	  		
+			 	  </if>
+			 	  <if test="insId !=null and insId !='' ">
+						AND m.INS_ID=#{insId}	 	  		
+			 	  </if>
+			 	  <if test="manchtId !=null and manchtId !='' ">
+						AND m.mancht_id=#{manchtId}		 	  		
+			 	  </if>
+	</select>
+	
+	
+	<select id="getSumCardBalByMchnt" parameterType="java.lang.String" resultType="long">
+			SELECT 
+					NVL(SUM(CB.CARD_BAL),0) as cardBal 
+					FROM
+				       	TB_CARD_BAL cb,
+		           		TB_PRODUCT p,
+		           		TB_REL_INS_PRODUCT rif ,
+				       	TB_INS_INF ii, 
+		           		TB_MERCHANT_INF mi
+		      		 WHERE 
+		           cb.PRODUCT_CODE=p.PRODUCT_CODE
+		           and cb.ins_code=ii.ins_code
+		           and  p.PRODUCT_CODE=rif.PRODUCT_CODE
+		           and  rif.INS_ID=ii.INS_ID
+		           and  ii.INS_ID=mi.INS_ID
+
+			 	   <if test="settleDate !=null and settleDate !='' ">
+						and cb.SETTLE_DATE=#{settleDate}		 	  		
+			 	  </if>
+			 	   <if test="insId !=null and insId !='' ">
+					  	and mi.ins_id=#{insId}	 	  		
+			 	  </if>
+			 	   <if test="manchtId !=null and manchtId !='' ">
+						and mi.mchnt_id=#{manchtId}		 	  		
+			 	  </if>
+	</select>
+
+</mapper>

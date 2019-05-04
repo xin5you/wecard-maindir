@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>知了企服商户管理</title>
+	<link rel="stylesheet" href="${s.base}/res/bootstrap/css/bootstrap.min.css">
+	<script src="${s.base}/res/jqueryui/js/jquery-2.1.4.js"></script>
+	<script src="${s.base}/res/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div>
+	<div class="list-group">
+	   <span class="list-group-item active">
+	      <h4 class="list-group-item-heading">
+	         	资金管理
+	      </h4>
+	   </span>
+	   <span  class="list-group-item">
+	   
+	      <p class="list-group-item-heading">
+	        	沉淀资金：${sumDepsositMoney!}元
+	      </p>
+	      <p class="list-group-item-text">
+			   <a href="${s.base}/wxclient/account/mchntWithdraw.html" class="btn btn-info">提现</a>
+			   <a href="${s.base}/wxclient/account/withdrawDetaillist.html" class="btn btn-primary">提现记录 </a>
+			   <a href="${s.base}/wxclient/account/mchntSetting.html"class="btn btn-danger">提现设置 </a>
+		 </p>
+	   </span>
+	</div>
+	<div class="list-group">
+	    <span  class="list-group-item active">
+	      <h4 class="list-group-item-heading">
+	         	卡余额统计
+	      </h4>
+	    </span>
+	   <span  class="list-group-item">
+	      <h4 class="list-group-item-heading">
+	      		 卡余额汇总：${sumCardBal!}元
+	      </h4>
+	      <p class="list-group-item-text">
+	     		  截止日期：${abortDate!} 00:00:00
+	      </p>
+	      <button type="button" class="btn btn-info">交易统计</button>
+	    </span>
+	</div>
+</div>
+</body>
+</html>

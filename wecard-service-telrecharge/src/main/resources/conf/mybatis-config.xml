@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+			<setting name="logImpl" value="SLF4J" />
+<!-- 		<setting name="logImpl" value="STDOUT_LOGGING" /> -->
+	</settings>
+
+	<typeAliases>
+		<typeAlias type="com.cn.thinkx.wecard.facade.telrecharge.model.TelChannelAreaInf" alias="TelChannelAreaInf" />
+		<typeAlias type="com.cn.thinkx.wecard.facade.telrecharge.model.TelChannelInf" alias="TelChannelInf" />
+		<typeAlias type="com.cn.thinkx.wecard.facade.telrecharge.model.TelChannelItemList" alias="TelChannelItemList" />
+		<typeAlias type="com.cn.thinkx.wecard.facade.telrecharge.model.TelChannelOrderInf" alias="TelChannelOrderInf" />
+		<typeAlias type="com.cn.thinkx.wecard.facade.telrecharge.model.TelChannelProductInf" alias="TelChannelProductInf" />
+		<typeAlias type="com.cn.thinkx.wecard.facade.telrecharge.model.TelChannelReserveDetail" alias="TelChannelReserveDetail" />
+		<typeAlias type="com.cn.thinkx.wecard.facade.telrecharge.model.TelProviderInf"   alias="TelProviderInf" />
+		<typeAlias type="com.cn.thinkx.wecard.facade.telrecharge.model.TelProviderOrderInf" alias="TelProviderOrderInf" />
+		<typeAlias type="com.cn.thinkx.wecard.facade.telrecharge.model.TelChannelOrderInfUpload" alias="TelChannelOrderInfUpload" />
+	</typeAliases>
+	
+	<mappers>
+	
+	</mappers>
+</configuration>

@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wecard.facade.telrecharge.mapper.TelChannelOrderInfMapper">
+		
+	<resultMap type="TelChannelOrderInf" id="TelChannelOrderInfResultMap">
+		<result column="CHANNEL_ORDER_ID" property="channelOrderId"/>
+		<result column="CHANNEL_ID" property="channelId"/>
+		<result column="OUTER_TID" property="outerTid"/>
+		<result column="RECHARGE_PHONE" property="rechargePhone"/>
+	    <result column="RECHARGE_TYPE" property="rechargeType"/>
+		<result column="RECHARGE_VALUE" property="rechargeValue"/>
+		<result column="ITEM_NUM" property="itemNum"/>
+		<result column="PAY_AMT" property="payAmt"/>
+		<result column="ORDER_STAT" property="orderStat"/>
+		<result column="NOTIFY_STAT" property="notifyStat"/>
+		<result column="NOTIFY_FLAG" property="notifyFlag"/>
+		<result column="NOTIFY_URL" property="notifyUrl"/>
+		<result column="APP_VERSION" property="appVersion"/>
+		<result column="PRODUCT_ID" property="productId"/>
+		<result column="CHANNEL_RATE" property="channelRate"/>
+		<result column="RESV1" property="resv1"/>
+		<result column="RESV2" property="resv2"/>
+		<result column="RESV3" property="resv3"/>
+		<result column="RESV4" property="resv4"/>
+		<result column="RESV5" property="resv5"/>
+		<result column="RESV6" property="resv6"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+		<result column="CHANNEL_NAME" property="channelName"/>
+	</resultMap>
+	
+	<sql id="TableName">
+		TB_TEL_CHANNEL_ORDER_INF
+	</sql>
+	
+	<sql id="ColumnResult">
+		CHANNEL_ORDER_ID, 
+		CHANNEL_ID, 
+		OUTER_TID, 
+		RECHARGE_PHONE, 
+	    RECHARGE_TYPE,
+		RECHARGE_VALUE, 
+		ITEM_NUM, 
+		PAY_AMT,
+		ORDER_STAT, 
+		NOTIFY_STAT, 
+		NOTIFY_FLAG, 
+		NOTIFY_URL, 
+		APP_VERSION,
+		PRODUCT_ID, 
+		CHANNEL_RATE,
+		RESV1,
+		RESV2,
+		RESV3,
+		RESV4,
+		RESV5,
+		RESV6,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER	,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+
+	<select id="getById" parameterType="java.lang.String" resultMap="TelChannelOrderInfResultMap">
+		SELECT 
+	  		<include refid="ColumnResult" />
+		 		     FROM 	<include refid="TableName" /> m
+		              WHERE m.data_stat='0' AND m.CHANNEL_ORDER_ID=#{channelOrderId}
+	</select>
+	
+	<select id="getList" parameterType="TelChannelOrderInf" resultMap="TelChannelOrderInfResultMap">
+		SELECT 
+	  		M.CHANNEL_ORDER_ID, 
+			M.CHANNEL_ID, 
+			M.OUTER_TID, 
+			M.RECHARGE_PHONE, 
+		    M.RECHARGE_TYPE,
+			M.RECHARGE_VALUE, 
+			M.ITEM_NUM, 
+			M.PAY_AMT,
+			M.ORDER_STAT, 
+			M.NOTIFY_STAT, 
+			M.NOTIFY_FLAG, 
+			M.NOTIFY_URL, 
+			M.APP_VERSION,
+			M.PRODUCT_ID, 
+			M.CHANNEL_RATE,
+			M.RESV1,
+			M.RESV2,
+			M.RESV3,
+			M.RESV4,
+			M.RESV5,
+			M.RESV6,
+			M.DATA_STAT,
+			M.REMARKS,
+			M.CREATE_USER,
+			M.UPDATE_USER,
+			M.CREATE_TIME,
+			M.UPDATE_TIME,
+			M.LOCK_VERSION,
+	  		C.CHANNEL_NAME
+		FROM <include refid="TableName" /> M LEFT JOIN TB_TEL_CHANNEL_INF C ON M.CHANNEL_ID = C.CHANNEL_ID
+		WHERE M.DATA_STAT='0' 
+		<if test="channelName !=null and channelName !='' ">
+			AND C.CHANNEL_NAME LIKE '%' || #{channelName} || '%'
+		</if>
+		<if test="channelOrderId !=null and channelOrderId !='' ">
+			AND M.CHANNEL_ORDER_ID = #{channelOrderId}
+		</if>
+		<if test="outerTid !=null and outerTid !='' ">
+			AND M.OUTER_TID = #{outerTid}
+		</if>
+		<if test="rechargeType !=null and rechargeType !='' ">
+			AND M.RECHARGE_TYPE = #{rechargeType}
+		</if>
+		<if test="orderStat !=null and orderStat !='' ">
+			AND M.ORDER_STAT = #{orderStat}
+		</if>
+		<if test="notifyStat !=null and notifyStat !='' ">
+			AND M.NOTIFY_STAT = #{notifyStat}
+		</if>
+		ORDER BY M.UPDATE_TIME DESC
+		
+	</select>
+	
+		<insert id="insert" parameterType="TelChannelOrderInf">
+			 <selectKey resultType="string" order="BEFORE" keyProperty="channelOrderId">  
+			<include refid="com.cn.thinkx.wecard.facade.telrecharge.mapper.SqlTelCommonMapper.getTelCommonId" />
+		</selectKey>
+			INSERT INTO <include refid="TableName" /> (
+				<include refid="ColumnResult" />
+			 )  VALUES (
+				    #{channelOrderId,jdbcType=VARCHAR},
+					#{channelId,jdbcType=VARCHAR},
+					#{outerTid,jdbcType=VARCHAR},
+					#{rechargePhone,jdbcType=VARCHAR},
+				    #{rechargeType,jdbcType=VARCHAR},
+					#{rechargeValue,jdbcType=VARCHAR},
+					#{itemNum,jdbcType=VARCHAR},
+					#{payAmt,jdbcType=VARCHAR},
+					#{orderStat,jdbcType=VARCHAR},
+					#{notifyStat,jdbcType=VARCHAR},
+					#{notifyFlag,jdbcType=VARCHAR},
+					#{notifyUrl,jdbcType=VARCHAR},
+					#{appVersion,jdbcType=VARCHAR},
+					#{productId,jdbcType=VARCHAR},
+					#{channelRate,jdbcType=VARCHAR},
+			 		#{resv1,jdbcType=VARCHAR},
+			 		#{resv2,jdbcType=VARCHAR},
+			 		#{resv3,jdbcType=VARCHAR},
+			 		#{resv4,jdbcType=VARCHAR},
+			 		#{resv5,jdbcType=VARCHAR},
+			 		#{resv6,jdbcType=VARCHAR},
+			 		#{dataStat,jdbcType=VARCHAR},
+			 		#{remarks,jdbcType=VARCHAR},
+			 		#{createUser,jdbcType=VARCHAR},
+			 		#{createUser,jdbcType=VARCHAR},
+			 		sysdate,
+			 		sysdate,
+			 		'0') 
+		</insert>
+		
+		<update id="update"  parameterType="TelChannelOrderInf">
+			UPDATE <include refid="TableName" /> SET
+<!-- 				CHANNEL_ID=#{channelId,jdbcType=VARCHAR}, -->
+				OUTER_TID=#{outerTid,jdbcType=VARCHAR},
+				RECHARGE_PHONE=#{rechargePhone,jdbcType=VARCHAR},
+				RECHARGE_TYPE=#{rechargeType,jdbcType=VARCHAR},
+				RECHARGE_VALUE=#{rechargeValue,jdbcType=VARCHAR},
+				ITEM_NUM=#{itemNum,jdbcType=VARCHAR},
+				PAY_AMT=#{payAmt,jdbcType=VARCHAR},
+				ORDER_STAT=#{orderStat,jdbcType=VARCHAR},
+				NOTIFY_STAT=#{notifyStat,jdbcType=VARCHAR},
+				NOTIFY_FLAG=#{notifyFlag,jdbcType=VARCHAR},
+				NOTIFY_URL=#{notifyUrl,jdbcType=VARCHAR},
+				APP_VERSION=#{appVersion,jdbcType=VARCHAR},
+				PRODUCT_ID=#{productId,jdbcType=VARCHAR},
+				CHANNEL_RATE=#{channelRate,jdbcType=VARCHAR},
+		 		RESV1=#{resv1,jdbcType=VARCHAR},
+		 		RESV2=#{resv2,jdbcType=VARCHAR},
+		 		RESV3=#{resv3,jdbcType=VARCHAR},
+		 		RESV4=#{resv4,jdbcType=VARCHAR},
+		 		RESV5=#{resv5,jdbcType=VARCHAR},
+		 		RESV6=#{resv6,jdbcType=VARCHAR},
+				DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+				REMARKS=#{remarks,jdbcType=VARCHAR},
+				UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+				UPDATE_TIME=sysdate,
+				LOCK_VERSION=LOCK_VERSION+1
+			 	WHERE LOCK_VERSION=#{lockVersion} AND CHANNEL_ORDER_ID=#{channelOrderId}
+	</update>
+
+	<update id="deleteById" parameterType="string">
+		UPDATE <include refid="TableName" /> SET DATA_STAT='1'  WHERE　CHANNEL_ORDER_ID=#{channelOrderId}
+	</update>
+	
+	<select id="getTelChannelOrderInfByOuterId" parameterType="java.lang.String" resultMap="TelChannelOrderInfResultMap">
+		SELECT 
+	  		<include refid="ColumnResult" />
+		 		     FROM 	<include refid="TableName" /> m
+		              WHERE m.data_stat='0' AND m.OUTER_TID=#{outerId} AND m.CHANNEL_ID=#{channelId}
+	</select>
+	
+	<select id="getTelChannelOrderInfList" parameterType="TelChannelOrderInf" resultType="TelChannelOrderInf">
+		SELECT O.CHANNEL_ORDER_ID,
+		       P.OPER_NAME,
+		       O.RECHARGE_PHONE,
+		       O.ITEM_NUM,
+		       O.RECHARGE_VALUE,
+		       O.PAY_AMT,
+		       PR.RECHARGE_STATE,
+		       O.CREATE_TIME
+		  FROM TB_TEL_CHANNEL_ORDER_INF   O,
+		       TB_TEL_CHANNEL_PRODUCT_INF P,
+		       TB_TEL_CHANNEL_INF         C,
+		       TB_TEL_PROVIDER_ORDER_INF  PR
+		 WHERE O.PRODUCT_ID = P.PRODUCT_ID
+		   AND O.CHANNEL_ID = C.CHANNEL_ID
+		   AND O.CHANNEL_ORDER_ID = PR.CHANNEL_ORDER_ID
+		   AND O.DATA_STAT = '0'
+		   AND P.DATA_STAT = '0'
+		   AND C.DATA_STAT = '0'
+		   AND PR.DATA_STAT = '0'
+		   AND C.RESV1 = #{mchntCode}
+		   <if test="channelOrderId != null and channelOrderId != '' ">
+		   AND O.CHANNEL_ORDER_ID = #{channelOrderId}
+		   </if>
+		   <if test="rechargePhone != null and rechargePhone != '' ">
+		   AND O.RECHARGE_PHONE = #{rechargePhone}
+		   </if>
+		   <if test="rechargeState != null and rechargeState != '' ">
+		   AND PR.RECHARGE_STATE = #{rechargeState}
+		   </if>
+		   <if test="startDate != null and startDate != '' ">
+		   AND O.CREATE_TIME &gt;= TO_DATE(#{startDate}, 'YYYY-MM-DD HH24:MI:SS')
+		   </if>
+		   <if test="endDate != null and endDate != '' ">
+		   AND O.CREATE_TIME &lt;= TO_DATE(#{endDate}, 'YYYY-MM-DD HH24:MI:SS')
+		   </if>
+		 ORDER BY O.CREATE_TIME DESC
+	</select>
+	
+	<select  id="getTelChannelOrderInfListToUpload" parameterType="TelChannelOrderInf" resultType="TelChannelOrderInfUpload">
+		SELECT O.CHANNEL_ORDER_ID,
+		       P.OPER_NAME,
+		       O.RECHARGE_PHONE,
+		       O.ITEM_NUM,
+		       O.RECHARGE_VALUE,
+		       O.PAY_AMT,
+		       PR.RECHARGE_STATE,
+		       O.CREATE_TIME
+		  FROM TB_TEL_CHANNEL_ORDER_INF   O,
+		       TB_TEL_CHANNEL_PRODUCT_INF P,
+		       TB_TEL_CHANNEL_INF         C,
+		       TB_TEL_PROVIDER_ORDER_INF  PR
+		 WHERE O.PRODUCT_ID = P.PRODUCT_ID
+		   AND O.CHANNEL_ID = C.CHANNEL_ID
+		   AND O.CHANNEL_ORDER_ID = PR.CHANNEL_ORDER_ID
+		   AND O.DATA_STAT = '0'
+		   AND P.DATA_STAT = '0'
+		   AND C.DATA_STAT = '0'
+		   AND PR.DATA_STAT = '0'
+		   AND C.RESV1 = #{mchntCode}
+		   <if test="channelOrderId != null and channelOrderId != '' ">
+		   AND O.CHANNEL_ORDER_ID = #{channelOrderId}
+		   </if>
+		   <if test="rechargePhone != null and rechargePhone != '' ">
+		   AND O.RECHARGE_PHONE = #{rechargePhone}
+		   </if>
+		   <if test="rechargeState != null and rechargeState != '' ">
+		   AND PR.RECHARGE_STATE = #{rechargeState}
+		   </if>
+		   <if test="startDate != null and startDate != '' ">
+		   AND O.CREATE_TIME &gt;= TO_DATE(#{startDate}, 'YYYY-MM-DD HH24:MI:SS')
+		   </if>
+		   <if test="endDate != null and endDate != '' ">
+		   AND O.CREATE_TIME &lt;= TO_DATE(#{endDate}, 'YYYY-MM-DD HH24:MI:SS')
+		   </if>
+		 ORDER BY O.CREATE_TIME DESC
+	</select>
+	
+	<select  id="getTelChannelOrderInfCount" parameterType="TelChannelOrderInf" resultType="TelChannelOrderInf">
+		SELECT COUNT(1) AS ORDER_COUNT,
+	       NVL(SUM(O.RECHARGE_VALUE), 0) AS ORDER_RECHARGE_AMT,
+       	   NVL(SUM(O.PAY_AMT), 0) AS ORDER_PAY_AMT
+	  FROM TB_TEL_CHANNEL_ORDER_INF   O,
+	       TB_TEL_CHANNEL_PRODUCT_INF P,
+	       TB_TEL_CHANNEL_INF         C,
+	       TB_TEL_PROVIDER_ORDER_INF  PR
+	 WHERE O.PRODUCT_ID = P.PRODUCT_ID
+	   AND O.CHANNEL_ID = C.CHANNEL_ID
+	   AND O.CHANNEL_ORDER_ID = PR.CHANNEL_ORDER_ID
+	   AND O.DATA_STAT = '0'
+	   AND P.DATA_STAT = '0'
+	   AND C.DATA_STAT = '0'
+	   AND PR.DATA_STAT = '0'
+	   AND PR.RECHARGE_STATE = '1'
+	   AND C.RESV1 = #{mchntCode}
+	   <if test="startDate != null and startDate != '' ">
+	   AND O.CREATE_TIME &gt;= TO_DATE(#{startDate}, 'YYYY-MM-DD HH24:MI:SS')
+	   </if>
+	   <if test="endDate != null and endDate != '' ">
+	   AND O.CREATE_TIME &lt;= TO_DATE(#{endDate}, 'YYYY-MM-DD HH24:MI:SS')
+	   </if>
+	</select>
+	
+</mapper>

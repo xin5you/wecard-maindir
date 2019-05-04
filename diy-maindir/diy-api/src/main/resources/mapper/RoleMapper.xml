@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.iboot.diy.api.system.mapper.RoleMapper">
+
+	<sql id="roleColumns">
+		ID,
+		ROLE_NAME,
+		DESCRIPTION,
+		SEQ,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+
+	<select id="getUserRoleByUserId" parameterType="String" resultType="Role">
+		SELECT
+			<include refid="roleColumns" />
+		FROM TB_WEB_ROLE WHERE DATA_STAT = '0' and id in (
+		SELECT ROLE_ID FROM TB_WEB_USER_ROLE
+		WHERE USER_ID=#{useId}) and DATA_STAT = '0'
+	</select>
+	
+	<select id="getRoleNameByUserId" parameterType="String" resultType="String">
+		SELECT a.ROLE_NAME
+		FROM TB_WEB_ROLE a, TB_WEB_USER_ROLE b
+		WHERE a.id=b.role_id
+		and b.USER_ID=#{useId} and a.DATA_STAT = '0' and b.DATA_STAT = '0'
+	</select>
+	
+	<select id="getRoleList" resultType="Role">
+		SELECT
+			<include refid="roleColumns" />
+		FROM TB_WEB_ROLE
+		WHERE SEQ > '0' and DATA_STAT = '0'
+		order by seq asc
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="String">
+		update TB_WEB_ROLE SET DATA_STAT='1' where ID = #{id}
+	</delete>
+
+</mapper>

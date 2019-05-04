@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!--通用媒体查询-->
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+		<title>个人中心</title>
+		<#include "../../common/wecardHeader.html">
+		<!-- <script type="text/javascript" src="${s.base}/static/js/module/user/userAccHKBInfo.js?v=${s.version}"></script> -->
+	</head>
+	<body>
+		<!--我的账户-->
+		<!--个人信息-->
+		<div class="hkb_account_details">
+			<div class="hkb_account_background">
+				<div class="account_background_big">
+					<img src="${s.base}/static/images/hkb_background_big.png" />
+				</div>
+				<div class="hkb_account_information">
+					<div class="account_background_small">
+						<img src="${s.base}/static/images/hkb_mine_background.png" />
+					</div>
+					<div class="account_information_mime">
+						<div class="account_information_appear">
+							<img src="${fansInfo.headimgurl! }" />
+						</div>
+						<div class="account_information_name">${fansInfo.nicknameStr! }</div>
+						<div class="account_information_tel">${personInf.mobilePhoneNo! }</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--余额详情-->
+		<div class="hkb_account_balance">
+			<div class="hkb_available_balance">
+				<div class="balance_text">知了余额</div>
+				<div class="balance_sum">${userAccInfo.accBal! }</div>
+			</div>
+			<a class="hkb_available_balance button" href="${s.base}/customer/card/cardTransList.html?innerMerchantNo=${userAccInfo.mchntCode!}">
+				<div class="balance_text">&#x4F59;&#x989D;&#x660E;&#x7EC6;</div>
+				<div class="balance_go">
+					<img src="${s.base}/static/images/hkb_account_go.png" />
+				</div>
+			</a>
+			<a class="hkb_available_balance button" href="${s.base}/welfareMart/toBankCardList.html">
+				<div class="balance_text">银行卡</div>
+				<div class="balance_go">
+					<img src="${s.base}/static/images/hkb_account_go.png" />
+				</div>
+			</a>
+			<a class="hkb_available_balance button" href="${s.base}/customer/user/userSettings.html">
+				<div class="balance_text">密码重置</div>
+				<div class="balance_go">
+					<img src="${s.base}/static/images/hkb_account_go.png" />
+				</div>
+			</a>
+		</div>
+		<!--服务-->
+<!-- 		<div class="hkb_account_service"> -->
+<!-- 			<div class="hkb_available_balance"> -->
+<!-- 				<div class="balance_text">&#x670D;&#x52A1;</div> -->
+<!-- 			</div> -->
+<!-- 			<div class="hkb_service_type"> -->
+<!-- 				<a class="service_type_main" href="${s.base}/eshop/mchntEshop/AccHKBEshop.html?channel=40006003"> -->
+<!-- 					<div class="service_icon mass"> -->
+<!-- 						<img src="${s.base}/static/images/jd_logo.png" /> -->
+<!-- 					</div> -->
+<!-- 					<div class="service_title">京东商城</div> -->
+<!-- 				</a>  -->
+<!-- 				<a class="service_type_main" href="${s.base}/eshop/mchntEshop/AccHKBEshop.html?channel=40006004"> -->
+<!-- 					<div class="service_icon second"> -->
+<!-- 						<img src="${s.base}/static/images/meituan_logo.png" /> -->
+<!-- 					</div> -->
+<!-- 					<div class="service_title hungry">美团外卖</div> -->
+<!-- 				</a> -->
+<!-- 				<a class="service_type_main" href="${s.base}/eshop/mchntEshop/AccHKBEshop.html?channel=40006005"> -->
+<!-- 					<div class="service_icon"> -->
+<!-- 						<img src="${s.base}/static/images/dianping_logo.png" /> -->
+<!-- 					</div> -->
+<!-- 					<div class="service_title hungry">大众点评</div> -->
+<!-- 				</a>  -->
+<!-- 			</div> -->
+<!-- 			<div class="hkb_service_type"> -->
+<!-- 				<a class="service_type_main" href="${s.base}/eshop/mchntEshop/AccHKBEshop.html?channel=40006007"> -->
+<!-- 					<div class="service_icon mass"> -->
+<!-- 						<img src="${s.base}/static/images/haituntong.png" /> -->
+<!-- 					</div> -->
+<!-- 					<div class="service_title">海豚通通兑</div> -->
+<!-- 				</a> -->
+<!-- 				<a class="service_type_main" href="${s.base}/eshop/mchntEshop/AccHKBEshop.html?channel=40006008"> -->
+<!-- 					<div class="service_icon second"> -->
+<!-- 						<img src="${s.base}/static/images/pay_icon.png" /> -->
+<!-- 					</div> -->
+<!-- 					<div class="service_title hungry">手机充值</div> -->
+<!-- 				</a>  -->
+<!-- 				<a class="service_type_main" href="${s.base}/eshop/mchntEshop/AccHKBEshop.html?channel=40006009"> -->
+<!-- 					<div class="service_icon second"> -->
+<!-- 						<img src="${s.base}/static/images/pay_icon.png" /> -->
+<!-- 					</div> -->
+<!-- 					<div class="service_title hungry">卡券集市</div> -->
+<!-- 				</a> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+		<script>
+			addEventListener('load', function() {})
+		</script>
+	</body>
+</html>

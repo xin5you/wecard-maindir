@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" lang="en">
+<head th:include="main/header::header" />
+<body id = "mainbody">
+	<!-- nav 导航栏-->
+	<header th:include="main/navbar::navbar" />
+	<!-- 内容 欢迎使用知了企服商户自助服务平台-->
+	<div class="hkb_frame_content" id="hkbFrameContent">
+   		<div class="welcome_page">
+	       	<p class="welcome_img"></p>
+	       	<p class="welcome_font"></p>
+   		</div>
+	</div>
+	<!-- footer -->
+<!-- 	<footer th:include="main/footer::footer" class="footer_hkb_links"></footer> -->
+</body>
+</html>
+
+<script type="text/javascript">
+ //禁止滚动条
+ $("#mainbody").css({
+   "overflow-y":"hidden"
+ });
+  
+</script> 

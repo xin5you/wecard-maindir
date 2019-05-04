@@ -1,0 +1,14 @@
+.pagination ul > li > div > a,.pagination ul > li > div > span {float: left;padding: 0 14px;line-height: 38px;text-decoration: none;background-color: #ffffff;border: 1px solid #dddddd;border-left-width: 0}
+.pagination ul > li > div > a:hover,.pagination ul > .active > div > a,.pagination ul > .active > div > span {background-color: #f5f5f5}
+.pagination ul > .active > div > a,.pagination ul > .active > div > span {color: #999999;cursor: default}
+.pagination ul > .disabled > div > span,.pagination ul > .disabled > div > a,.pagination ul > .disabled > div > a:hover {color: #999999;cursor: default;background-color: transparent}
+.pagination ul > li:first-child > div > a,.pagination ul > li:first-child > div > span {border-left-width: 1px;-webkit-border-radius: 3px 0 0 3px;-moz-border-radius: 3px 0 0 3px;border-radius: 3px 0 0 3px}
+.pagination ul > li:last-child > div > a,.pagination ul > li:last-child > div > span {-webkit-border-radius: 0 3px 3px 0;-moz-border-radius: 0 3px 3px 0;border-radius: 0 3px 3px 0}
+
+.pagination {height:26px}
+.pagination a.active {background-color: #f5f5f5}
+.pagination a.active {color: #999;cursor: default}
+.pagination ul > li > a,.pagination ul > li > span,.pagination ul > li > div > a,.pagination ul > li > div > span {line-height: 24px;padding:0 10px}
+.pagination ul > li > div.page {display:inline}
+
+.pager a {-webkit-border-radius: 6px;-moz-border-radius: 6px;-ms-border-radius: 6px;border-radius: 6px;padding:4px 12px}

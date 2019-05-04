@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.thinkx.oms.module.sys.mapper.RoleMapper">
+	
+	<resultMap type="Role" id="RoleResultMap">
+		<result column="ID" property="id"/>
+		<result column="NAME" property="name"/>
+		<result column="SEQ" property="seq"/>
+		<result column="DESCRIPTION" property="description"/>
+		<result column="ISDEFAULT" property="isdefault"/>
+	</resultMap>
+	
+	<sql id="roleColumns">
+		 ID,
+		 NAME,
+		 DESCRIPTION, 
+		 ISDEFAULT,
+		 SEQ
+	</sql>
+	
+	<select id="getRoleById" parameterType="java.lang.String" resultMap="RoleResultMap">
+		SELECT
+		<include refid="roleColumns" />
+		FROM TB_WEB_ROLE WHERE ID=#{Id}
+	</select>
+	
+	
+	<insert id="insertRole" parameterType="Role" useGeneratedKeys="false" keyProperty="id">
+	   <selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="id">  
+			<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getSysRoleId" />
+		</selectKey>
+		INSERT INTO TB_WEB_ROLE(
+			ID,
+			NAME,
+			DESCRIPTION,
+			ISDEFAULT,
+			SEQ
+		)VALUES (
+			#{id},
+			#{name,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{isdefault,jdbcType=VARCHAR},
+			#{seq,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<select id="getRoleList" parameterType="Role" resultMap="RoleResultMap">
+		SELECT
+			<include refid="roleColumns"/>
+			FROM TB_WEB_ROLE ROLE
+	</select>
+	
+	<delete id="deleteRoleById" parameterType="java.lang.String">
+		DELETE FROM TB_WEB_ROLE WHERE ID=#{id}
+	</delete>
+	
+	<update id="updateRole" parameterType="Role">
+		UPDATE TB_WEB_ROLE
+		<set>
+			NAME=#{name,jdbcType=VARCHAR},
+			DESCRIPTION=#{description,jdbcType=VARCHAR},
+			ISDEFAULT=#{isdefault,jdbcType=VARCHAR},
+			SEQ=#{seq,jdbcType=VARCHAR}
+		</set>
+		WHERE ID=#{id}
+	</update>
+	
+	<select id="getUserRoleByUserId" parameterType="java.lang.String" resultMap="RoleResultMap">
+		select
+		<include refid="roleColumns" />
+		from TB_WEB_ROLE where id in (SELECT ROLE_ID FROM TB_WEB_USER_ROLE
+		WHERE USER_ID=#{id})
+	</select>
+	
+
+	
+	<delete id="deleteUserRoleByRoleId" parameterType="java.lang.String">
+		delete from TB_WEB_USER_ROLE where role_id=#{roleId}
+	</delete>
+	
+	<delete id="deleteRoleResourceByRoleId" parameterType="java.lang.String">
+		delete from tb_web_role_resource where role_id=#{roleId}
+	</delete>
+	
+		<!-- 增加角色资源 -->
+	<insert id="saveRoleResource" parameterType="RoleResource">
+		insert into TB_WEB_ROLE_RESOURCE(role_id,RESOURCE_ID) values (#{roleId},#{resourceId})
+	</insert>
+</mapper>

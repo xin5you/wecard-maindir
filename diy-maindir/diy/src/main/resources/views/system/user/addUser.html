@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" lang="en">
+<head th:include="main/header::header" />
+<body>
+	<!-- nav 导航栏-->
+	<header th:include="main/navbar::navbar" />
+	<!--成员管理-->
+<!-- 	<form id="searchForm" method="post"> -->
+	<input id="roleIdTmp" type="hidden" th:value="${roleIdTmp}"/>
+	<div class="content_body">
+	    <div class="title_content_title">
+	        <p>
+		        <img th:src="@{/icon/tab_add_membersa_green.png}" />
+		        <span>成员管理</span>
+		        &nbsp;&gt;&nbsp;
+		        <span>添加成员</span>
+		    </p>
+	        <p>
+	            <button id="btn-back" type="button" class="hkb_btn btn_white">返回</button>
+	        </p>
+	    </div>
+    	<div class="info_content_operation">
+        	<div class="control_list_center">
+            	<div class="hkb_list text_list">
+	                <span>用户名：</span>
+	                <span>
+	                     <input id="userName" name="userName" type="text" class="text_input" placeholder="请输入用户名" maxlength="15"/>
+	                     <span id="warn-name" class="input_tips"></span>
+	                </span>
+            	</div>
+	            <div class="hkb_list text_list">
+	                <span>手机号码：</span>
+	                <span>
+	                     <input id="phoneNo" name="phoneNo" type="text" class="text_input" placeholder="请输入手机号码" maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')"/>
+	                     <span id="warn-phone" class="input_tips"></span>
+	                </span>
+	            </div>
+	            <div class="hkb_list text_list">
+	                <span>登录密码：</span>
+	                <span>
+	                     <input id="password" name="password" type="password" class="text_input" placeholder="请输入登录密码" maxlength="16" onkeyup="this.value=this.value.replace(/\s+/g,'')" />
+	                     <span id="warn-pass" class="input_tips"></span>
+	                </span>
+	            </div>
+	            <div class="hkb_list text_list">
+	                <span>确认密码：</span>
+	                <span>
+	                     <input id="upassword" name="upassword" type="password" class="text_input" placeholder="请输入确认密码" maxlength="16" onkeyup="this.value=this.value.replace(/\s+/g,'')" />
+	                     <span id="warn-upass" class="input_tips"></span>
+	                </span>
+	            </div>
+        	</div>
+        	<div class="control_list_center right_list">
+	            <div class="hkb_list word_list">
+	                <span>所属行业：</span>
+	                <span>餐饮(园区食堂)</span>
+	            </div>
+	            <div class="hkb_list word_list">
+	                <span>所属商户：</span>
+	                <input id="mchntCode" name="mchntCode" th:value="${mchntCode}" type="hidden"/>
+	                <span th:text="${mchntName}"></span>
+	            </div>
+	            <div class="hkb_list select_list">
+	                <span>职位选择：</span>
+	                <span>
+	                    <select class="hkb_selectinput" id="roleId" name="roleId">
+	                        <option value="0" selected="selected">请选择</option>
+	                        <option th:each="role,roleStat : ${roleList}" th:value="${role.id}"><span th:text="${role.roleName}"></span></option>
+	                    </select>
+	                </span>
+	                <span id="warn-role" class="input_tips"></span>
+	            </div>
+	            <div class="hkb_list select_list" id = "shopId">
+	                <span>门店选择：</span>
+	                <span>
+	                    <select class="hkb_selectinput" id="shopCode" name="shopCode">
+	                       <option value="0" selected="selected">请选择</option>
+	                        <option th:each="shop,shopStat : ${shopList}" th:value="${shop.shopCode}"><span th:text="${shop.shopName}"></span></option>
+	                    </select>
+	                </span>
+	                <span id="warn-shop" class="input_tips"></span>
+	            </div>
+        	</div>
+    	</div>
+        <!-- button-->
+        <div class="page_button">
+            <a sec:authorize="hasRole('ROLE_DIY_USERINF_ADDCOMMIT')"><button id="btn-submit" type="submit" class="hkb_bottom_btn confirm_btn">提交</button></a>
+        </div>
+	</div>
+<!-- 	</form> -->
+	<!-- <div th:include="main/dialog::error"></div> -->
+	<div class="hkb_dialog" id="text1">
+	    <div class="dialog_bg"></div>
+	    <div class="dialog_box">
+	        <div class="dialog_top">
+	            <div class="dialog_close"><span>×</span></div>
+	            <p id="dialogTitle"></p>
+	        </div>
+	        <!-- body-->
+	        <div class="dialog_body">
+	            <div class="dialog_content" id="dialogContent"></div>
+	        </div>
+	        <!-- footer -->
+	        <div class="dialog_footer">
+	            <button type="button" id="btn-error" class="hkb_btn btn_green">关闭</button>
+	        </div>
+	    </div>
+	</div>
+	<script th:src="@{/diy/js/system/user/addUser.js}"></script>
+</body>
+</html>

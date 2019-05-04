@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.customer.mapper.ChannelUserInfMapper">
+		
+	<insert id="insertChannelUserInf" parameterType="ChannelUserInf">
+		INSERT INTO TB_CHANNEL_USER_INF (
+			USER_ID,
+			EXTERNAL_ID,
+			CHANNEL_CODE,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			UPDATE_USER,
+			CREATE_TIME,
+			UPDATE_TIME,
+			LOCK_VERSION
+		 )  VALUES (
+		 		#{userId},
+		 		#{externalId,jdbcType=VARCHAR},
+		 		#{channelCode,jdbcType=VARCHAR},
+		 		#{dataStat,jdbcType=VARCHAR},
+		 		#{remarks,jdbcType=VARCHAR},
+		 		#{createUser,jdbcType=VARCHAR},
+		 		#{updateUser,jdbcType=VARCHAR},
+		 		sysdate,
+		 		sysdate,
+		 		'0') 
+	</insert>
+
+	<delete id = "deldteChannelUserInfByUserId" parameterType = "ChannelUserInf">
+		UPDATE TB_CHANNEL_USER_INF SET 
+			DATA_STAT = '1',
+			REMARKS=#{remarks,jdbcType=VARCHAR},
+			UPDATE_USER=#{updateUser,jdbcType=VARCHAR}, 
+			UPDATE_TIME=sysdate,
+			LOCK_VERSION = LOCK_VERSION+1  
+		WHERE USER_ID = #{userId}
+	</delete>
+</mapper>

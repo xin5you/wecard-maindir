@@ -1,0 +1,54 @@
+<div th:fragment="page">
+	<span th:with="p=${pageInfo},prefixLength=2,suffixLength=2,pageBarSize=${prefixLength + suffixLength + 1}">
+		<div class="info_page">
+				<span class="page_record">第<span th:text="${p.startRow}">0</span>到<span th:text="${p.endRow}">0</span>条
+	        &nbsp;共有</span><span class="page_record" th:text="${p.total}">0</span>条数据&nbsp;&nbsp;&nbsp;
+	        <span th:if="${p.pages > 0}">
+				<span th:with="beginIndex=${(p.pageNum - prefixLength) > 1 ? (p.pageNum - prefixLength) : 1},endIndex=${pageBarSize > (p.pageNum + suffixLength) ? pageBarSize : (p.pageNum + suffixLength)}">
+					<span th:with="beginIndex=${pageBarSize > (endIndex - beginIndex) and endIndex >= pageBarSize ? endIndex - pageBarSize + 1 : beginIndex},endIndex=${endIndex > p.pages ? p.pages : endIndex}">
+				        <ul class="pagination">
+				            <li th:class="${p.pageNum > 1} ? 'prev ' : 'disabled'">
+								<a th:class="${p.pageNum  > 1} ? ' ' : 'pagination_none'" href="javascript:void(0)" onclick="first();">首页</a>
+							</li>				
+							<li th:class="${p.pageNum > 1} ? 'prev ' : 'disabled'">
+								<a th:class="${p.pageNum  > 1} ? ' ' : 'pagination_none'" href="javascript:void(0)" onclick="pre();">«</a>
+							</li>
+							<li id="str1"></li>
+							<script th:inline="javascript">
+							/*<![CDATA[*/
+								var str1='';
+							    for(var i=[[${beginIndex}]]; i <= [[${p.pageNum-1}]]; i++) {
+							    	str1 += '<a href="javascript:void(0)" onclick="skip('+i+');">'+i+'</span></a>';
+								}  
+							    $('#str1').html(str1);
+							/*]]>*/	
+							</script>
+				            <li><a class="active" href="javascript:void(0)"><span th:text="${p.pageNum}"></span></a></li>
+				            <li id="str2"></li>
+							<script th:inline="javascript">
+							/*<![CDATA[*/
+							    var str2='';
+								for(var j=[[${p.pageNum + 1}]]; j <= [[${endIndex}]]; j++) {
+									str2 += '<a href="javascript:void(0)" onclick="skip('+j+');">'+j+'</a>';
+								}      
+								$('#str2').html(str2);
+							/*]]>*/	
+							</script>
+				            <li th:class="${p.pageNum lt p.pages} ? 'next ' : 'disabled'">
+								<a th:class="${p.pageNum lt p.pages} ? ' ' : 'pagination_none'" href="javascript:void(0)" onclick="next();">»</a>
+							</li>
+							<li th:class="${p.pageNum lt p.pages} ? 'next ' : 'disabled'">
+								<a th:class="${p.pageNum lt p.pages} ? ' ' : 'pagination_none'" href="javascript:void(0)" onclick="last();">末页 </a>
+							</li>
+				            <div style="clear: both"></div>
+				        </ul>
+				    </span>
+				</span>
+			</span>
+			<input type="hidden" id="hid_pageSize" name="pageSize" th:value="${p.pageSize}" />
+			<input type="hidden" id="hid_pageNum" name="pageNum" th:value="${p.pageNum}" />
+			<input type="hidden" id="hid_totalPages" name="totalPages" th:value="${p.pages}" />
+			<input type="hidden" id="hid_pageTurning" name="pageTurning" th:value="false" />
+    	</div>
+	</span>
+</div>	

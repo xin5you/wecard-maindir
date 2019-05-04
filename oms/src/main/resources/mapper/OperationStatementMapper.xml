@@ -1,0 +1,739 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.statement.mapper.OperationStatementMapper">
+    <select id="getOperationDetailList" parameterType="Condition" resultType="OperationDetail">
+        select t.mchnt_name,
+       sum(member_card_consume_amt) as member_card_consume_amt,
+       sum(member_card_consume_count) as member_card_consume_count,
+       sum(wx_consume_amt) as wx_consume_amt,
+       sum(wx_consume_count) as wx_consume_count,
+       sum(jf_consume_amt) as jf_consume_amt,
+       sum(jf_consume_count) as jf_consume_count,
+       sum(wx_recharge_upload_amt) as wx_recharge_upload_amt,
+       sum(wx_recharge_trans_amt) as wx_recharge_trans_amt,
+       sum(wx_recharge_count) as wx_recharge_count,
+       sum(jf_recharge_upload_amt) as jf_recharge_upload_amt,
+       sum(jf_recharge_trans_amt) as jf_recharge_trans_amt,
+       sum(jf_recharge_count) as jf_recharge_count,
+       sum(pt_recharge_upload_amt) as pt_recharge_upload_amt,
+       sum(pt_recharge_trans_amt) as pt_recharge_trans_amt,
+       sum(pt_recharge_count) as pt_recharge_count,
+       sum(member_card_bal) as member_card_bal
+  from (select m.mchnt_name as mchnt_name,
+               count(1) as wx_consume_count,
+               sum(t.trans_amt) as wx_consume_amt,
+               0 as jf_consume_count,
+               0 as jf_consume_amt,
+               0 as member_card_consume_count,
+               0 as member_card_consume_amt,
+               0 as wx_recharge_count,
+               0 as wx_recharge_upload_amt,
+               0 as wx_recharge_trans_amt,
+               0 as jf_recharge_count,
+               0 as jf_recharge_upload_amt,
+               0 as jf_recharge_trans_amt,
+               0 as pt_recharge_count,
+               0 as pt_recharge_upload_amt,
+               0 as pt_recharge_trans_amt,
+               0 as member_card_bal
+          from tb_trans_log_his         t,
+                  tb_intface_trans_log_his i,
+                  tb_merchant_inf m
+         where t.dms_related_key = i.interface_primary_key
+           and t.trans_id = i.trans_id
+           and t.mchnt_code = m.mchnt_code
+           and m.remarks = 'ACC_ITF'
+           and t.trans_id = 'W71'
+           and t.resp_code = '00'
+           and t.trans_st = 1
+           and t.trans_chnl in ('40001010', '40002001')
+           and t.settle_date &gt;= #{startTime} 
+           and t.settle_date &lt;= #{endTime}
+         group by m.mchnt_name
+        union
+        select m.mchnt_name as mchnt_name,
+               0 as wx_consume_count,
+               0 as wx_consume_amt,
+               count(1) as jf_consume_count,
+               sum(t.trans_amt) as jf_consume_amt,
+               0 as member_card_consume_count,
+               0 as member_card_consume_amt,
+               0 as wx_recharge_count,
+               0 as wx_recharge_upload_amt,
+               0 as wx_recharge_trans_amt,
+               0 as jf_recharge_count,
+               0 as jf_recharge_upload_amt,
+               0 as jf_recharge_trans_amt,
+               0 as pt_recharge_count,
+               0 as pt_recharge_upload_amt,
+               0 as pt_recharge_trans_amt,
+               0 as member_card_bal
+          from tb_trans_log_his         t,
+                  tb_intface_trans_log_his i,
+                  tb_merchant_inf m
+         where t.dms_related_key = i.interface_primary_key
+           and t.trans_id = i.trans_id
+           and t.mchnt_code = m.mchnt_code
+           and m.remarks = 'ACC_ITF'
+           and t.trans_id = 'W71'
+           and t.resp_code = '00'
+           and t.trans_st = 1
+           and t.trans_chnl = '40004001'
+           and t.settle_date &gt;= #{startTime} 
+           and t.settle_date &lt;= #{endTime}
+         group by m.mchnt_name
+        union
+        select m.mchnt_name as mchnt_name,
+               0 as wx_consume_count,
+               0 as jf_consume_count,
+               0 as jf_consume_amt,
+               0 as wx_consume_amt,
+               count(1) as member_card_consume_count,
+               sum(t.trans_amt) as member_card_consume_amt,
+               0 as wx_recharge_count,
+               0 as wx_recharge_upload_amt,
+               0 as wx_recharge_trans_amt,
+               0 as jf_recharge_count,
+               0 as jf_recharge_upload_amt,
+               0 as jf_recharge_trans_amt,
+               0 as pt_recharge_count,
+               0 as pt_recharge_upload_amt,
+               0 as pt_recharge_trans_amt,
+               0 as member_card_bal
+          from tb_trans_log_his         t,
+                  tb_intface_trans_log_his i,
+                  tb_merchant_inf m
+         where t.dms_related_key = i.interface_primary_key
+           and t.trans_id = i.trans_id
+           and t.mchnt_code = m.mchnt_code
+           and m.remarks = 'ACC_ITF'
+           and t.trans_id = 'W10'
+           and t.resp_code = '00'
+           and t.trans_st = 1
+           and t.settle_date &gt;= #{startTime} 
+           and t.settle_date &lt;= #{endTime}
+         group by m.mchnt_name
+        union
+        select m.mchnt_name as mchnt_name,
+               0 as wx_consume_count,
+               0 as wx_consume_amt,
+               0 as jf_consume_count,
+               0 as jf_consume_amt,
+               0 as member_card_consume_count,
+               0 as member_card_consume_amt,
+               count(1) as wx_recharge_count,
+               sum(t.org_trans_amt) as wx_recharge_upload_amt,
+               sum(t.trans_amt) as wx_recharge_trans_amt,
+               0 as jf_recharge_count,
+               0 as jf_recharge_upload_amt,
+               0 as jf_recharge_trans_amt,
+               0 as pt_recharge_count,
+               0 as pt_recharge_upload_amt,
+               0 as pt_recharge_trans_amt,
+               0 as member_card_bal
+          from tb_trans_log_his         t,
+                  tb_intface_trans_log_his i,
+                  tb_merchant_inf m
+         where t.dms_related_key = i.interface_primary_key
+           and t.trans_id = i.trans_id
+           and t.mchnt_code = m.mchnt_code
+           and m.remarks = 'ACC_ITF'
+           and t.trans_id = 'W20'
+           and t.resp_code = '00'
+           and t.trans_st = 1
+           and t.trans_chnl = '40002001'
+           and t.settle_date &gt;= #{startTime} 
+           and t.settle_date &lt;= #{endTime}
+         group by m.mchnt_name
+        union
+        select m.mchnt_name as mchnt_name,
+               0 as wx_consume_count,
+               0 as wx_consume_amt,
+               0 as jf_consume_count,
+               0 as jf_consume_amt,
+               0 as member_card_consume_count,
+               0 as member_card_consume_amt,
+               0 as wx_recharge_count,
+               0 as wx_recharge_upload_amt,
+               0 as wx_recharge_trans_amt,
+               count(1) as jf_recharge_count,
+               sum(t.org_trans_amt) as jf_recharge_upload_amt,
+               sum(t.trans_amt) as jf_recharge_trans_amt,
+               0 as pt_recharge_count,
+               0 as pt_recharge_upload_amt,
+               0 as pt_recharge_trans_amt,
+               0 as member_card_bal
+          from tb_trans_log_his         t,
+                  tb_intface_trans_log_his i,
+                  tb_merchant_inf m
+         where t.dms_related_key = i.interface_primary_key
+           and t.trans_id = i.trans_id
+           and t.mchnt_code = m.mchnt_code
+           and m.remarks = 'ACC_ITF'
+           and t.trans_id = 'W20'
+           and t.resp_code = '00'
+           and t.trans_st = 1
+           and t.trans_chnl = '40004001'
+           and t.settle_date &gt;= #{startTime} 
+           and t.settle_date &lt;= #{endTime}
+         group by m.mchnt_name
+        union
+        select m.mchnt_name as mchnt_name,
+               0 as wx_consume_count,
+               0 as wx_consume_amt,
+               0 as jf_consume_count,
+               0 as jf_consume_amt,
+               0 as member_card_consume_count,
+               0 as member_card_consume_amt,
+               0 as wx_recharge_count,
+               0 as wx_recharge_upload_amt,
+               0 as wx_recharge_trans_amt,
+               0 as jf_recharge_count,
+               0 as jf_recharge_upload_amt,
+               0 as jf_recharge_trans_amt,
+               count(1) as pt_recharge_count,
+               sum(t.org_trans_amt) as pt_recharge_upload_amt,
+               sum(t.trans_amt) as pt_recharge_trans_amt,
+               0 as member_card_bal
+          from tb_trans_log_his         t,
+                  tb_intface_trans_log_his i,
+                  tb_merchant_inf m
+         where t.dms_related_key = i.interface_primary_key
+           and t.trans_id = i.trans_id
+           and t.mchnt_code = m.mchnt_code
+           and m.remarks = 'ACC_ITF'
+           and t.trans_id = 'W20'
+           and t.resp_code = '00'
+           and t.trans_st = 1
+           and t.trans_chnl = '10001001'
+           and t.settle_date &gt;= #{startTime} 
+           and t.settle_date &lt;= #{endTime}
+         group by m.mchnt_name
+        union
+        select m.mchnt_name as mchnt_name,
+               0 as wx_consume_count,
+               0 as wx_consume_amt,
+               0 as jf_consume_count,
+               0 as jf_consume_amt,
+               0 as member_card_consume_count,
+               0 as member_card_consume_amt,
+               0 as wx_recharge_count,
+               0 as wx_recharge_upload_amt,
+               0 as wx_recharge_trans_amt,
+               0 as jf_recharge_count,
+               0 as jf_recharge_upload_amt,
+               0 as jf_recharge_trans_amt,
+               0 as pt_recharge_count,
+               0 as pt_recharge_upload_amt,
+               0 as pt_recharge_trans_amt,
+               sum(c.card_bal) as member_card_bal
+          from tb_merchant_inf m,
+               tb_ins_inf      i,
+               tb_card_bal     c
+         where m.ins_id = i.ins_id
+           and c.ins_code = i.ins_code 
+           and m.remarks = 'ACC_ITF'
+           and c.settle_date = #{endTime}
+         group by m.mchnt_name) t
+ group by mchnt_name
+    </select>
+    
+    <select id="getOperationSummarizing" parameterType="Condition" resultType="OperationSummarizing">
+	    select sum(member_card_consume_amt) as member_card_consume_amt,
+       sum(wx_consume_amt) as wx_consume_amt,
+       sum(jf_consume_amt) as jf_consume_amt,
+       sum(wx_recharge_upload_amt) as wx_recharge_upload_amt,
+       sum(wx_recharge_trans_amt) as wx_recharge_trans_amt,
+       sum(jf_recharge_upload_amt) as jf_recharge_upload_amt,
+       sum(jf_recharge_trans_amt) as jf_recharge_trans_amt,
+       sum(pt_recharge_upload_amt) as pt_recharge_upload_amt,
+       sum(pt_recharge_trans_amt) as pt_recharge_trans_amt,
+       sum(pt_subsidy_amt) as pt_subsidy_amt,
+       sum(member_card_bal) as member_card_bal
+  from (select sum(t.trans_amt) as wx_consume_amt,
+               0 as jf_consume_amt,
+               0 as member_card_consume_amt,
+               0 as wx_recharge_upload_amt,
+               0 as wx_recharge_trans_amt,
+               0 as jf_recharge_upload_amt,
+               0 as jf_recharge_trans_amt,
+               0 as pt_recharge_upload_amt,
+               0 as pt_recharge_trans_amt,
+               0 as pt_subsidy_amt,
+               0 as member_card_bal
+          from tb_trans_log_his t, tb_intface_trans_log_his i, tb_merchant_inf m
+         where t.dms_related_key = i.interface_primary_key
+           and t.trans_id = i.trans_id
+           and t.mchnt_code = m.mchnt_code
+           and m.remarks = 'ACC_ITF'
+           and t.trans_id = 'W71'
+           and t.resp_code = '00'
+           and t.trans_st = 1
+           and t.trans_chnl in ('40001010', '40002001')
+        and t.settle_date &gt;= #{startTime} 
+        and t.settle_date &lt;= #{endTime}
+        union
+        select 0 as wx_consume_amt,
+               sum(t.trans_amt) as jf_consume_amt,
+               0 as member_card_consume_amt,
+               0 as wx_recharge_upload_amt,
+               0 as wx_recharge_trans_amt,
+               0 as jf_recharge_upload_amt,
+               0 as jf_recharge_trans_amt,
+               0 as pt_recharge_upload_amt,
+               0 as pt_recharge_trans_amt,
+               0 as pt_subsidy_amt,
+               0 as member_card_bal
+          from tb_trans_log_his t, tb_intface_trans_log_his i, tb_merchant_inf m
+         where t.dms_related_key = i.interface_primary_key
+           and t.trans_id = i.trans_id
+           and t.mchnt_code = m.mchnt_code
+           and m.remarks = 'ACC_ITF'
+           and t.trans_id = 'W71'
+           and t.resp_code = '00'
+           and t.trans_st = 1
+           and t.trans_chnl = '40004001'
+        and t.settle_date &gt;= #{startTime} 
+        and t.settle_date &lt;= #{endTime}
+        union
+        select 0 as jf_consume_amt,
+               0 as wx_consume_amt,
+               sum(t.trans_amt) as member_card_consume_amt,
+               0 as wx_recharge_upload_amt,
+               0 as wx_recharge_trans_amt,
+               0 as jf_recharge_upload_amt,
+               0 as jf_recharge_trans_amt,
+               0 as pt_recharge_upload_amt,
+               0 as pt_recharge_trans_amt,
+               0 as pt_subsidy_amt,
+               0 as member_card_bal
+          from tb_trans_log_his t, tb_intface_trans_log_his i, tb_merchant_inf m
+         where t.dms_related_key = i.interface_primary_key
+           and t.trans_id = i.trans_id
+           and t.mchnt_code = m.mchnt_code
+           and m.remarks = 'ACC_ITF'
+           and t.trans_id = 'W10'
+           and t.resp_code = '00'
+           and t.trans_st = 1
+        and t.settle_date &gt;= #{startTime} 
+        and t.settle_date &lt;= #{endTime}
+        union
+        select 0 as wx_consume_amt,
+               0 as jf_consume_amt,
+               0 as member_card_consume_amt,
+               sum(t.org_trans_amt) as wx_recharge_upload_amt,
+               sum(t.trans_amt) as wx_recharge_trans_amt,
+               0 as jf_recharge_upload_amt,
+               0 as jf_recharge_trans_amt,
+               0 as pt_recharge_upload_amt,
+               0 as pt_recharge_trans_amt,
+               0 as pt_subsidy_amt,
+               0 as member_card_bal
+          from tb_trans_log_his t, tb_intface_trans_log_his i, tb_merchant_inf m
+         where t.dms_related_key = i.interface_primary_key
+           and t.trans_id = i.trans_id
+           and t.mchnt_code = m.mchnt_code
+           and m.remarks = 'ACC_ITF'
+           and t.trans_id = 'W20'
+           and t.resp_code = '00'
+           and t.trans_st = 1
+           and t.trans_chnl = '40002001'
+        and t.settle_date &gt;= #{startTime} 
+        and t.settle_date &lt;= #{endTime}
+        union
+        select 0 as wx_consume_amt,
+               0 as jf_consume_amt,
+               0 as member_card_consume_amt,
+               0 as wx_recharge_upload_amt,
+               0 as wx_recharge_trans_amt,
+               sum(t.org_trans_amt) as jf_recharge_upload_amt,
+               sum(t.trans_amt) as jf_recharge_trans_amt,
+               0 as pt_recharge_upload_amt,
+               0 as pt_recharge_trans_amt,
+               0 as pt_subsidy_amt,
+               0 as member_card_bal
+          from tb_trans_log_his t, tb_intface_trans_log_his i, tb_merchant_inf m
+         where t.dms_related_key = i.interface_primary_key
+           and t.trans_id = i.trans_id
+           and t.mchnt_code = m.mchnt_code
+           and m.remarks = 'ACC_ITF'
+           and t.trans_id = 'W20'
+           and t.resp_code = '00'
+           and t.trans_st = 1
+           and t.trans_chnl = '40004001'
+        and t.settle_date &gt;= #{startTime} 
+        and t.settle_date &lt;= #{endTime}
+        union
+        select 0 as wx_consume_amt,
+               0 as jf_consume_amt,
+               0 as member_card_consume_amt,
+               0 as wx_recharge_upload_amt,
+               0 as wx_recharge_trans_amt,
+               0 as jf_recharge_upload_amt,
+               0 as jf_recharge_trans_amt,
+               sum(t.org_trans_amt) as pt_recharge_upload_amt,
+               sum(t.trans_amt) as pt_recharge_trans_amt,
+               0 as pt_subsidy_amt,
+               0 as member_card_bal
+          from tb_trans_log_his t, tb_intface_trans_log_his i, tb_merchant_inf m
+         where t.dms_related_key = i.interface_primary_key
+           and t.trans_id = i.trans_id
+           and t.mchnt_code = m.mchnt_code
+           and m.remarks = 'ACC_ITF'
+           and t.trans_id = 'W20'
+           and t.resp_code = '00'
+           and t.trans_st = 1
+           and t.trans_chnl = '10001001'
+        and t.settle_date &gt;= #{startTime} 
+        and t.settle_date &lt;= #{endTime}
+        union
+        select 0 as wx_consume_amt,
+               0 as jf_consume_amt,
+               0 as member_card_consume_amt,
+               0 as wx_recharge_upload_amt,
+               0 as wx_recharge_trans_amt,
+               0 as jf_recharge_upload_amt,
+               0 as jf_recharge_trans_amt,
+               0 as pt_recharge_upload_amt,
+               0 as pt_recharge_trans_amt,
+               sum(t.trans_amt) as pt_subsidy_amt,
+               0 as member_card_bal
+          from tb_trans_log_his t, tb_intface_trans_log_his i, tb_merchant_inf m
+         where t.dms_related_key = i.interface_primary_key
+           and t.trans_id = i.trans_id
+           and t.mchnt_code = m.mchnt_code
+           and m.remarks = 'ACC_ITF'
+           and t.trans_id = 'S20'
+           and t.resp_code = '00'
+           and t.trans_st = 1
+        and t.settle_date &gt;= #{startTime} 
+        and t.settle_date &lt;= #{endTime}
+        union
+        select 0 as wx_consume_amt,
+               0 as jf_consume_amt,
+               0 as member_card_consume_amt,
+               0 as wx_recharge_upload_amt,
+               0 as wx_recharge_trans_amt,
+               0 as jf_recharge_upload_amt,
+               0 as jf_recharge_trans_amt,
+               0 as pt_recharge_upload_amt,
+               0 as pt_recharge_trans_amt,
+               0 as pt_subsidy_amt,
+               sum(c.card_bal) as member_card_bal
+          from tb_merchant_inf m, tb_ins_inf i, tb_card_bal c
+         where m.ins_id = i.ins_id
+        and c.ins_code = i.ins_code 
+        and m.remarks = 'ACC_ITF'
+        and c.settle_date = #{endTime}
+        ) t
+    </select>
+    
+    <select id="getCustomerInfo" parameterType="Condition" resultType="CustomerInfo">
+	    select sum(attention_count) as attention_count,
+	       sum(open_account_count) as open_account_count,
+	       sum(open_card_count) as open_card_count
+	  from (select count(1) as attention_count,
+	               0 as open_account_count,
+	               0 as open_card_count
+	          from tb_wx_client_fans t
+	         where t.subscribestatus = '1'
+	           and t.createtime &gt;= to_date(#{startTime}||' 000000', 'YYYYMMDD HH24:MI:SS')
+	           and t.createtime &lt;= to_date(#{endTime}||' 235959', 'YYYYMMDD HH24:MI:SS')
+	        union
+	        select 0 as attention_count,
+	               count(1) as open_account_count,
+	               0 as open_card_count
+	          from tb_user_inf t
+	         where t.data_stat = '0'
+	           and t.create_time &gt;= to_date(#{startTime}||' 000000', 'YYYYMMDD HH24:MI:SS')
+               and t.create_time &lt;= to_date(#{endTime}||' 235959', 'YYYYMMDD HH24:MI:SS')
+	        union
+	        select 0 as attention_count,
+	               0 as open_account_count,
+	               count(1) as open_card_count
+	          from tb_card_inf t,
+		          tb_product         p,
+			       tb_rel_ins_product r,
+			       tb_ins_inf         i,
+			       tb_merchant_inf    m
+			 where t.product_code = p.product_code
+			   and r.product_code = p.product_code
+			   and r.ins_id = i.ins_id
+			   and m.ins_id = i.ins_id
+			   and m.remarks = 'ACC_ITF'
+	           and t.create_time &gt;= to_date(#{startTime}||' 000000', 'YYYYMMDD HH24:MI:SS')
+               and t.create_time &lt;= to_date(#{endTime}||' 235959', 'YYYYMMDD HH24:MI:SS')
+	           ) t
+    </select>
+    <select id="getCustomerInfoDetail" parameterType="Condition" resultType="CustomerInfoDetail">
+	    select m.mchnt_name, count(1) as open_card_count
+		  from tb_merchant_inf m, tb_ins_inf i, tb_rel_ins_product p, tb_card_inf t
+		 where m.ins_id = i.ins_id
+		   and i.ins_id = p.ins_id
+		   and p.product_code = t.product_code
+		   and m.mchnt_code = #{mchntCode}
+		   and t.create_time &gt;= to_date(#{startTime}||' 000000', 'YYYYMMDD HH24:MI:SS')
+		   and t.create_time &lt;= to_date(#{endTime}||' 235959', 'YYYYMMDD HH24:MI:SS')
+		 group by m.mchnt_name
+    </select>
+    
+    <select id="getMarketingDetailList" parameterType="Condition" resultType="MarketingDetail">
+        select m.mchnt_name,
+       count(1) as pt_subsidy_count,
+       sum(t.trans_amt) as pt_subsidy_amt
+          from tb_trans_log_his t, tb_intface_trans_log_his i, tb_merchant_inf m
+         where t.dms_related_key = i.interface_primary_key
+           and t.trans_id = i.trans_id
+           and t.mchnt_code = m.mchnt_code
+           and m.remarks = 'ACC_ITF'
+           and t.trans_id = 'S20'
+           and t.resp_code = '00'
+           and t.trans_st = 1
+           and t.settle_date &gt;= #{startTime} 
+           and t.settle_date &lt;= #{endTime}
+         group by m.mchnt_name
+    </select>
+    
+    <select id="getOperationDetailAmount" parameterType="Condition" resultType="OperationDetail">
+	    select '总计' as mchnt_name,
+	       sum(member_card_consume_amt) as member_card_consume_amt,
+	       sum(member_card_consume_count) as member_card_consume_count,
+	       sum(wx_consume_amt) as wx_consume_amt,
+	       sum(wx_consume_count) as wx_consume_count,
+	       sum(jf_consume_amt) as jf_consume_amt,
+	       sum(jf_consume_count) as jf_consume_count,
+	       sum(wx_recharge_upload_amt) as wx_recharge_upload_amt,
+	       sum(wx_recharge_trans_amt) as wx_recharge_trans_amt,
+	       sum(wx_recharge_count) as wx_recharge_count,
+	       sum(jf_recharge_upload_amt) as jf_recharge_upload_amt,
+	       sum(jf_recharge_trans_amt) as jf_recharge_trans_amt,
+	       sum(jf_recharge_count) as jf_recharge_count,
+	       sum(pt_recharge_upload_amt) as pt_recharge_upload_amt,
+	       sum(pt_recharge_trans_amt) as pt_recharge_trans_amt,
+	       sum(pt_recharge_count) as pt_recharge_count,
+	       sum(member_card_bal) as member_card_bal
+	  from (select t.mchnt_name,
+	               sum(member_card_consume_amt) as member_card_consume_amt,
+	               sum(member_card_consume_count) as member_card_consume_count,
+	               sum(wx_consume_amt) as wx_consume_amt,
+	               sum(wx_consume_count) as wx_consume_count,
+	               sum(jf_consume_amt) as jf_consume_amt,
+	               sum(jf_consume_count) as jf_consume_count,
+	               sum(wx_recharge_upload_amt) as wx_recharge_upload_amt,
+	               sum(wx_recharge_trans_amt) as wx_recharge_trans_amt,
+	               sum(wx_recharge_count) as wx_recharge_count,
+	               sum(jf_recharge_upload_amt) as jf_recharge_upload_amt,
+	               sum(jf_recharge_trans_amt) as jf_recharge_trans_amt,
+	               sum(jf_recharge_count) as jf_recharge_count,
+	               sum(pt_recharge_upload_amt) as pt_recharge_upload_amt,
+	               sum(pt_recharge_trans_amt) as pt_recharge_trans_amt,
+	               sum(pt_recharge_count) as pt_recharge_count,
+	               sum(member_card_bal) as member_card_bal
+	          from (select m.mchnt_name as mchnt_name,
+	                       count(1) as wx_consume_count,
+	                       sum(t.trans_amt) as wx_consume_amt,
+	                       0 as jf_consume_count,
+	                       0 as jf_consume_amt,
+	                       0 as member_card_consume_count,
+	                       0 as member_card_consume_amt,
+	                       0 as wx_recharge_count,
+	                       0 as wx_recharge_upload_amt,
+	                       0 as wx_recharge_trans_amt,
+	                       0 as jf_recharge_count,
+	                       0 as jf_recharge_upload_amt,
+	                       0 as jf_recharge_trans_amt,
+	                       0 as pt_recharge_count,
+	                       0 as pt_recharge_upload_amt,
+	                       0 as pt_recharge_trans_amt,
+	                       0 as member_card_bal
+	                  from tb_trans_log_his t, tb_intface_trans_log_his i, tb_merchant_inf m
+	                 where t.dms_related_key = i.interface_primary_key
+			           and t.trans_id = i.trans_id
+			           and t.mchnt_code = m.mchnt_code
+			           and m.remarks = 'ACC_ITF'
+	                   and t.trans_id = 'W71'
+	                   and t.resp_code = '00'
+	                   and t.trans_st = 1
+	                   and t.trans_chnl in ('40001010', '40002001')
+	                   and t.settle_date &gt;= #{startTime} 
+	                   and t.settle_date &lt;= #{endTime}
+	                 group by m.mchnt_name
+	                union
+	                select m.mchnt_name as mchnt_name,
+	                       0 as wx_consume_count,
+	                       0 as wx_consume_amt,
+	                       count(1) as jf_consume_count,
+	                       sum(t.trans_amt) as jf_consume_amt,
+	                       0 as member_card_consume_count,
+	                       0 as member_card_consume_amt,
+	                       0 as wx_recharge_count,
+	                       0 as wx_recharge_upload_amt,
+	                       0 as wx_recharge_trans_amt,
+	                       0 as jf_recharge_count,
+	                       0 as jf_recharge_upload_amt,
+	                       0 as jf_recharge_trans_amt,
+	                       0 as pt_recharge_count,
+	                       0 as pt_recharge_upload_amt,
+	                       0 as pt_recharge_trans_amt,
+	                       0 as member_card_bal
+	                  from tb_trans_log_his t, tb_intface_trans_log_his i, tb_merchant_inf m
+	                 where t.dms_related_key = i.interface_primary_key
+                       and t.trans_id = i.trans_id
+                       and t.mchnt_code = m.mchnt_code
+                       and m.remarks = 'ACC_ITF'
+	                   and t.trans_id = 'W71'
+	                   and t.resp_code = '00'
+	                   and t.trans_st = 1
+	                   and t.trans_chnl = '40004001'
+	                   and t.settle_date &gt;= #{startTime} 
+	                   and t.settle_date &lt;= #{endTime}
+	                 group by m.mchnt_name
+	                union
+	                select m.mchnt_name as mchnt_name,
+	                       0 as wx_consume_count,
+	                       0 as jf_consume_count,
+	                       0 as jf_consume_amt,
+	                       0 as wx_consume_amt,
+	                       count(1) as member_card_consume_count,
+	                       sum(t.trans_amt) as member_card_consume_amt,
+	                       0 as wx_recharge_count,
+	                       0 as wx_recharge_upload_amt,
+	                       0 as wx_recharge_trans_amt,
+	                       0 as jf_recharge_count,
+	                       0 as jf_recharge_upload_amt,
+	                       0 as jf_recharge_trans_amt,
+	                       0 as pt_recharge_count,
+	                       0 as pt_recharge_upload_amt,
+	                       0 as pt_recharge_trans_amt,
+	                       0 as member_card_bal
+	                  from tb_trans_log_his t, tb_intface_trans_log_his i, tb_merchant_inf m
+	                 where t.dms_related_key = i.interface_primary_key
+                       and t.trans_id = i.trans_id
+                       and t.mchnt_code = m.mchnt_code
+                       and m.remarks = 'ACC_ITF'
+	                   and t.trans_id = 'W10'
+	                   and t.resp_code = '00'
+	                   and t.trans_st = 1
+	                   and t.settle_date &gt;= #{startTime} 
+	                   and t.settle_date &lt;= #{endTime}
+	                 group by m.mchnt_name
+	                union
+	                select m.mchnt_name as mchnt_name,
+	                       0 as wx_consume_count,
+	                       0 as wx_consume_amt,
+	                       0 as jf_consume_count,
+	                       0 as jf_consume_amt,
+	                       0 as member_card_consume_count,
+	                       0 as member_card_consume_amt,
+	                       count(1) as wx_recharge_count,
+	                       sum(t.org_trans_amt) as wx_recharge_upload_amt,
+	                       sum(t.trans_amt) as wx_recharge_trans_amt,
+	                       0 as jf_recharge_count,
+	                       0 as jf_recharge_upload_amt,
+	                       0 as jf_recharge_trans_amt,
+	                       0 as pt_recharge_count,
+	                       0 as pt_recharge_upload_amt,
+	                       0 as pt_recharge_trans_amt,
+	                       0 as member_card_bal
+	                  from tb_trans_log_his t, tb_intface_trans_log_his i, tb_merchant_inf m
+	                 where t.dms_related_key = i.interface_primary_key
+                       and t.trans_id = i.trans_id
+                       and t.mchnt_code = m.mchnt_code
+                       and m.remarks = 'ACC_ITF'
+	                   and t.trans_id = 'W20'
+	                   and t.resp_code = '00'
+	                   and t.trans_st = 1
+	                   and t.trans_chnl = '40002001'
+	                   and t.settle_date &gt;= #{startTime} 
+	                   and t.settle_date &lt;= #{endTime}
+	                 group by m.mchnt_name
+	                union
+	                select m.mchnt_name as mchnt_name,
+	                       0 as wx_consume_count,
+	                       0 as wx_consume_amt,
+	                       0 as jf_consume_count,
+	                       0 as jf_consume_amt,
+	                       0 as member_card_consume_count,
+	                       0 as member_card_consume_amt,
+	                       0 as wx_recharge_count,
+	                       0 as wx_recharge_upload_amt,
+	                       0 as wx_recharge_trans_amt,
+	                       count(1) as jf_recharge_count,
+	                       sum(t.org_trans_amt) as jf_recharge_upload_amt,
+	                       sum(t.trans_amt) as jf_recharge_trans_amt,
+	                       0 as pt_recharge_count,
+	                       0 as pt_recharge_upload_amt,
+	                       0 as pt_recharge_trans_amt,
+	                       0 as member_card_bal
+	                  from tb_trans_log_his t, tb_intface_trans_log_his i, tb_merchant_inf m
+	                 where t.dms_related_key = i.interface_primary_key
+                       and t.trans_id = i.trans_id
+                       and t.mchnt_code = m.mchnt_code
+                       and m.remarks = 'ACC_ITF'
+	                   and t.trans_id = 'W20'
+	                   and t.resp_code = '00'
+	                   and t.trans_st = 1
+	                   and t.trans_chnl = '40004001'
+	                   and t.settle_date &gt;= #{startTime} 
+	                   and t.settle_date &lt;= #{endTime}
+	                 group by m.mchnt_name
+	                union
+	                select m.mchnt_name as mchnt_name,
+	                       0 as wx_consume_count,
+	                       0 as wx_consume_amt,
+	                       0 as jf_consume_count,
+	                       0 as jf_consume_amt,
+	                       0 as member_card_consume_count,
+	                       0 as member_card_consume_amt,
+	                       0 as wx_recharge_count,
+	                       0 as wx_recharge_upload_amt,
+	                       0 as wx_recharge_trans_amt,
+	                       0 as jf_recharge_count,
+	                       0 as jf_recharge_upload_amt,
+	                       0 as jf_recharge_trans_amt,
+	                       count(1) as pt_recharge_count,
+	                       sum(t.org_trans_amt) as pt_recharge_upload_amt,
+	                       sum(t.trans_amt) as pt_recharge_trans_amt,
+	                       0 as member_card_bal
+	                  from tb_trans_log_his t, tb_intface_trans_log_his i, tb_merchant_inf m
+	                 where t.dms_related_key = i.interface_primary_key
+                       and t.trans_id = i.trans_id
+                       and t.mchnt_code = m.mchnt_code
+                       and m.remarks = 'ACC_ITF'
+	                   and t.trans_id = 'W20'
+	                   and t.resp_code = '00'
+	                   and t.trans_st = 1
+	                   and t.trans_chnl = '10001001'
+	                   and t.settle_date &gt;= #{startTime} 
+	                   and t.settle_date &lt;= #{endTime}
+	                 group by m.mchnt_name
+	                union
+	                select m.mchnt_name as mchnt_name,
+	                       0 as wx_consume_count,
+	                       0 as wx_consume_amt,
+	                       0 as jf_consume_count,
+	                       0 as jf_consume_amt,
+	                       0 as member_card_consume_count,
+	                       0 as member_card_consume_amt,
+	                       0 as wx_recharge_count,
+	                       0 as wx_recharge_upload_amt,
+	                       0 as wx_recharge_trans_amt,
+	                       0 as jf_recharge_count,
+	                       0 as jf_recharge_upload_amt,
+	                       0 as jf_recharge_trans_amt,
+	                       0 as pt_recharge_count,
+	                       0 as pt_recharge_upload_amt,
+	                       0 as pt_recharge_trans_amt,
+	                       sum(c.card_bal) as member_card_bal
+	                  from tb_merchant_inf m, tb_ins_inf i, tb_card_bal c
+	                 where m.ins_id = i.ins_id
+	                   and c.ins_code = i.ins_code
+	                   and m.remarks = 'ACC_ITF'
+	                   and c.settle_date = #{endTime}
+	                 group by m.mchnt_name) t
+	         group by mchnt_name)
+    </select>
+    
+    
+</mapper>

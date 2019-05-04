@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wxclient.mapper.WxRoleDao">
+		
+	<resultMap type="WxRole" id="WxRoleResultMap">
+		<result column="ROLE_ID" property="roleId"/>
+		<result column="ROLE_TYPE" property="roleType"/>
+		<result column="ROLE_NAME" property="roleName"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="WxRoleColumns">
+		m.ROLE_ID,
+		m.ROLE_TYPE,
+		m.ROLE_NAME,
+		m.DATA_STAT,
+		m.REMARKS,
+		m.CREATE_USER, 
+		m.UPDATE_USER, 
+		m.CREATE_TIME, 
+		m.UPDATE_TIME, 
+		m.LOCK_VERSION
+	</sql>
+	
+	<insert id="insertWxRole" parameterType="WxRole">
+		INSERT INTO TB_WX_ROLE (
+			ROLE_TYPE,
+			ROLE_NAME,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER, 
+			CREATE_TIME, 
+			LOCK_VERSION
+		 )  VALUES ( 
+		 		#{roleType},
+		 		#{roleName,jdbcType=VARCHAR},
+		 		#{dataStat,jdbcType=VARCHAR},
+		 		#{remarks,jdbcType=VARCHAR},
+		 		#{createUser,jdbcType=VARCHAR},
+		 		sysdate,
+		 		'0') 
+	</insert>
+	
+	<select id="findWxRoleByRoleType" parameterType="java.lang.String" resultMap="WxRoleResultMap">
+		SELECT 
+	  		<include refid="WxRoleColumns" />
+		 FROM TB_WX_ROLE m WHERE DATA_STAT='0' and m.ROLE_TYPE=#{roleType} 
+	</select>
+	
+	
+	<select id="findWxRoleByFansId" parameterType="java.lang.String" resultMap="WxRoleResultMap">
+	SELECT 
+	       WR.ROLE_TYPE, 
+	       WR.ROLE_NAME
+	  FROM TB_WX_ROLE WR
+	        WHERE  WR.DATA_STAT='0'
+	              AND WR.ROLE_ID IN 
+	              (
+	              	   SELECT FR.ROLE_ID
+					     FROM TB_WX_MERCHANT_FANS MF
+					     LEFT JOIN TB_WX_FANS_ROLE FR 
+					     
+					     ON MF.ID = FR.FANS_ID
+					     AND FR.DATA_STAT = '0'
+					   
+					    WHERE MF.STATUS='1'
+					    AND MF.ID=#{fansId}
+	              )
+	</select>
+	
+	<select id="findWxRoleByOpenId" parameterType="java.lang.String" resultMap="WxRoleResultMap">
+		SELECT 
+		       WR.ROLE_TYPE, 
+		       WR.ROLE_NAME
+		  FROM TB_WX_ROLE WR
+		        WHERE  WR.DATA_STAT='0'
+		              AND WR.ROLE_ID IN 
+		              (
+		              	   SELECT FR.ROLE_ID
+						     FROM TB_WX_MERCHANT_FANS MF
+						     LEFT JOIN TB_WX_FANS_ROLE FR 
+						     
+						     ON MF.ID = FR.FANS_ID
+						     AND FR.DATA_STAT = '0'
+						   
+						    WHERE MF.STATUS='1'
+						    AND MF.OPENID=#{openId}
+		              )
+	</select>
+
+</mapper>

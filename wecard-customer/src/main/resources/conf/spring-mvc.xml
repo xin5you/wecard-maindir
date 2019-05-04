@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans  xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:mvc="http://www.springframework.org/schema/mvc"
+    	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    						http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    						http://www.springframework.org/schema/context
+   							http://www.springframework.org/schema/context/spring-context-4.0.xsd
+   							http://www.springframework.org/schema/mvc
+						    http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+
+	<context:component-scan base-package="com.cn.thinkx.*.*.module.*.ctrl" />
+	<context:annotation-config />
+	
+	<!-- 微信OAuth2的拦截器,此处拦截只为展示OAuth2接口获取openid -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**/*.html" />
+			<bean class="com.cn.thinkx.wecard.customer.module.wxapi.interceptor.WxOAuth2Interceptor">
+				<property name="includes">
+					<list>
+						<value>/customer/user/qrCode.html</value>
+						<value>/customer/user/scanCode.html</value>
+ 						<value>/customer/user/userRegister.html</value>
+						<value>/customer/user/userSettings.html</value>
+						<value>/customer/card/cardList.html</value>
+						<value>/customer/card/cardTransList.html</value>
+						<value>/customer/card/cardRecharge.html</value>
+						<value>/customer/card/toMyHKBAccount.html</value>
+                        <value>/customer/mchnt/mchntDiscountList.html</value>
+                        <value>/customer/mchnt/openAccountByMchnt.html</value>
+                        <value>/customer/surround/surroundPreferentialPage.html</value>
+                        <value>/customer/surround/buyCardRecharge.html</value>
+						<value>/customer/surround/viewShopInfPhone.html</value>
+						<value>/customer/surround/viewShopInfAddress.html</value>
+						<value>/pay/cardRecharge.html</value>
+						<value>/pay/insertWxTransLog.html</value>
+						<value>/eshop/mchntEshop/mchntEshopList.html</value>
+						<value>/eshop/mchntEshop/redirectUrl.html</value>
+						<value>/eshop/mchntEshop/redirectOrderUrl.html</value>
+						<value>/eshop/mchntEshop/toHKBEshop.html</value>
+						<value>/unicomAync/buy.html</value>
+						<value>/welfareMart/toWelfareMartHomePage.html</value>
+						<value>/welfareMart/welfareBuyCardCommit.html</value>
+						<value>/welfareMart/welfareResellCardCommit.html</value>
+						<value>/welfareMart/toWelfareResellCard.html</value>
+						<value>/welfareMart/toWelfareResellSuccess.html</value>
+						<value>/welfareMart/welfareCardBagList.html</value>
+						<value>/welfareMart/toWelfareAddBank.html</value>
+						<value>/welfareMart/welfareAddBankCommit.html</value>
+						<value>/welfareMart/toBankCardList.html</value>
+						<value>/welfareMart/toCardBagTransDetails.html</value>
+						<value>/welfareMart/isDefaultBankCard.html</value>
+						<value>/welfareMart/deleteBankCard.html</value>
+						<value>/welfareMart/welfareCardRecharge.html</value>
+						<value>/welfareMart/welfareCardRechargeCommit.html</value>
+						<value>/welfareMart/isWithdrawBlacklistInf.html</value>
+						<value>/phoneRecharge/toPhoneRecharge.html</value>
+						<value>/phoneRecharge/phoneRechargeMobileValid.html</value>
+						<value>/phoneRecharge/phoneRechargeCommit.html</value>
+						<value>/phoneRecharge/flowRechargeCommit.html</value>
+						<value>/phoneRecharge/phoneTransDetails.html</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	<!-- 微信扫二维码 支付判断是否已经关注，并且是微信客户端访问 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**/*.html" />
+			<bean class="com.cn.thinkx.wecard.customer.module.wxapi.interceptor.WxFansInterceptor">
+				<property name="includes">
+					<list>
+						<value>/customer/user/userRegister.html</value>
+						<value>/customer/user/scanCode.html</value>
+						<value>/customer/mchnt/openAccountByMchnt.html</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	<bean id="mappingJackson2HttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				  <value>text/plain;charset=UTF-8</value>  
+                  <value>text/html;charset=UTF-8</value>  
+                  <value>application/json;charset=UTF-8</value> 
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+		<constructor-arg value="UTF-8" />
+		<property name="supportedMediaTypes">  
+            <list>
+                  <value>text/plain;charset=UTF-8</value>
+                  <value>text/html;charset=UTF-8</value>
+            </list>
+        </property> 
+	</bean>
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+                <ref bean="stringHttpMessageConverter" />  
+                <ref bean="mappingJackson2HttpMessageConverter" />  
+			</list>
+		</property>
+	</bean>
+	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">  
+	    <property name="templateLoaderPath" value="/WEB-INF/views/" />
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="tag_syntax">auto_detect</prop>
+				<prop key="template_update_delay">1</prop>
+				<prop key="defaultEncoding">UTF-8</prop>
+				<prop key="url_escaping_charset">UTF-8</prop>
+				<prop key="locale">zh_CN</prop>
+				<prop key="boolean_format">true,false</prop>
+				<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+				<prop key="date_format">yyyy-MM-dd</prop>
+				<prop key="time_format">HH:mm:ss</prop>
+				<prop key="number_format">0.######</prop>
+				<prop key="whitespace_stripping">true</prop>
+				<prop key="auto_import">/ftl/spring.ftl as s</prop>
+			</props>
+		</property>
+	</bean>
+		
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+    	<property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView" />
+		<property name="suffix" value=".html" />
+		<property name="cache" value="true" />
+		<property name="contentType" value="text/html; charset=UTF-8" />
+		<property name="requestContextAttribute" value="request" />
+		<property name="order" value="0"/>
+	</bean>
+	
+</beans>

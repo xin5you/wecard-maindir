@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wecard.facade.telrecharge.mapper.TelChannelInfMapper">
+		
+	<resultMap type="TelChannelInf" id="TelChannelInfResultMap">
+		<result column="CHANNEL_ID" property="channelId"/>
+		<result column="CHANNEL_NAME" property="channelName"/>
+		<result column="CHANNEL_CODE" property="channelCode"/>
+		<result column="CHANNEL_KEY" property="channelKey"/>
+		<result column="CHANNEL_RESERVE_AMT" property="channelReserveAmt"/>
+		<result column="CHANNEL_PREWARNING_AMT" property="channelPrewarningAmt"/>
+		<result column="PHONE_NO" property="phoneNo"/>
+		<result column="EMAIL" property="email"/>
+		<result column="RESV1" property="resv1"/>
+		<result column="RESV2" property="resv2"/>
+		<result column="RESV3" property="resv3"/>
+		<result column="RESV4" property="resv4"/>
+		<result column="RESV5" property="resv5"/>
+		<result column="RESV6" property="resv6"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="TableName">
+		TB_TEL_CHANNEL_INF
+	</sql>
+	
+	<sql id="ColumnResult">
+		CHANNEL_ID,
+		CHANNEL_NAME,
+		CHANNEL_CODE,
+		CHANNEL_KEY,
+		CHANNEL_RESERVE_AMT,
+		CHANNEL_PREWARNING_AMT,
+		PHONE_NO,
+		EMAIL,
+		RESV1,
+		RESV2,
+		RESV3,
+		RESV4,
+		RESV5,
+		RESV6,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER	,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+
+	<select id="getById" parameterType="java.lang.String" resultMap="TelChannelInfResultMap">
+		SELECT 
+	  		<include refid="ColumnResult" />
+		 		     FROM 	<include refid="TableName" /> m
+		              WHERE m.data_stat='0' AND m.CHANNEL_ID=#{channelId}
+	</select>
+	
+	<select id="getList" parameterType="TelChannelInf" resultMap="TelChannelInfResultMap">
+		SELECT 
+	  		<include refid="ColumnResult" />
+		FROM 	<include refid="TableName" /> m
+		WHERE m.data_stat='0' 
+		<if test="channelName != null and channelName != '' ">
+			AND M.CHANNEL_NAME LIKE '%' || #{channelName} || '%'
+		</if>
+		ORDER BY M.UPDATE_TIME DESC
+	</select>
+	
+		<insert id="insert" parameterType="TelChannelInf">
+			 <selectKey resultType="string" order="BEFORE" keyProperty="channelId">  
+			<include refid="com.cn.thinkx.wecard.facade.telrecharge.mapper.SqlTelCommonMapper.getTelCommonId" />
+		</selectKey>
+			INSERT INTO <include refid="TableName" /> (
+				<include refid="ColumnResult" />
+			 )  VALUES (
+			 		#{channelId,jdbcType=VARCHAR},
+			 		#{channelName,jdbcType=VARCHAR},
+			 		#{channelCode,jdbcType=VARCHAR},
+			 		#{channelKey,jdbcType=VARCHAR},
+			 		#{channelReserveAmt,jdbcType=VARCHAR},
+			 		#{channelPrewarningAmt,jdbcType=VARCHAR},
+			 		#{phoneNo,jdbcType=VARCHAR},
+			 		#{email,jdbcType=VARCHAR},
+			 		#{resv1,jdbcType=VARCHAR},
+			 		#{resv2,jdbcType=VARCHAR},
+			 		#{resv3,jdbcType=VARCHAR},
+			 		#{resv4,jdbcType=VARCHAR},
+			 		#{resv5,jdbcType=VARCHAR},
+			 		#{resv6,jdbcType=VARCHAR},
+			 		'0',
+			 		#{remarks,jdbcType=VARCHAR},
+			 		#{createUser,jdbcType=VARCHAR},
+			 		#{createUser,jdbcType=VARCHAR},
+			 		sysdate,
+			 		sysdate,
+			 		'0') 
+		</insert>
+		
+		<update id="update"  parameterType="TelChannelInf">
+			UPDATE <include refid="TableName" /> SET
+			<if test="channelName != null and channelName != '' ">
+				CHANNEL_NAME=#{channelName,jdbcType=VARCHAR},
+			</if>
+			<if test="channelCode != null and channelCode != '' ">
+			 	CHANNEL_CODE=#{channelCode,jdbcType=VARCHAR},
+			 </if>
+			<if test="channelKey != null and channelKey != '' ">
+			 	CHANNEL_KEY=#{channelKey,jdbcType=VARCHAR},
+			 </if>
+			<if test="channelReserveAmt != null and channelReserveAmt != '' ">
+			 	CHANNEL_RESERVE_AMT=#{channelReserveAmt,jdbcType=VARCHAR},
+			</if>
+			<if test="channelPrewarningAmt != null and channelPrewarningAmt != '' ">
+			 	CHANNEL_PREWARNING_AMT=#{channelPrewarningAmt,jdbcType=VARCHAR},
+			</if>
+			<if test="phoneNo != null and phoneNo != '' ">
+			 	PHONE_NO=#{phoneNo,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null and email != '' ">
+			 	EMAIL=#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="resv1 != null and resv1 != '' ">
+		 		RESV1=#{resv1,jdbcType=VARCHAR},
+		 	</if>
+			<if test="resv2 != null and resv2 != '' ">
+		 		RESV2=#{resv2,jdbcType=VARCHAR},
+		 	</if>
+			<if test="resv3 != null and resv3 != '' ">
+		 		RESV3=#{resv3,jdbcType=VARCHAR},
+		 	</if>
+			<if test="resv4 != null and resv4 != '' ">
+		 		RESV4=#{resv4,jdbcType=VARCHAR},
+		 	</if>
+			<if test="resv5 != null and resv5 != '' ">
+		 		RESV5=#{resv5,jdbcType=VARCHAR},
+		 	</if>
+			<if test="resv6 != null and resv6 != '' ">
+		 		RESV6=#{resv6,jdbcType=VARCHAR},
+		 	</if>
+			<if test="dataStat != null and dataStat != '' ">
+				DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+			</if>
+			<if test="remarks != null and remarks != '' ">
+				REMARKS=#{remarks,jdbcType=VARCHAR},
+			</if>
+			<if test="updateUser != null and updateUser != '' ">
+				UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+			</if>
+				UPDATE_TIME=sysdate,
+				LOCK_VERSION=LOCK_VERSION+1
+			 	WHERE LOCK_VERSION=#{lockVersion} AND CHANNEL_ID = #{channelId} 
+	</update>
+
+	<update id="deleteById" parameterType="string">
+		UPDATE <include refid="TableName" /> SET DATA_STAT='1'  WHERE　CHANNEL_ID = #{channelId} 
+	</update>
+	
+	
+	<select id="getTelChannelInfByMchntCode" parameterType="string" resultType="TelChannelInf">
+		SELECT C.CHANNEL_ID,
+	       C.CHANNEL_NAME,
+	       C.CHANNEL_CODE,
+	       C.CHANNEL_KEY,
+	       C.CHANNEL_RESERVE_AMT,
+	       C.CHANNEL_PREWARNING_AMT,
+	       C.PHONE_NO,
+	       C.EMAIL,
+	       C.RESV1,
+	       C.RESV2,
+	       C.RESV3,
+	       C.RESV4,
+	       C.RESV5,
+	       C.RESV6,
+	       C.DATA_STAT,
+	       C.REMARKS,
+	       C.CREATE_USER,
+	       C.UPDATE_USER,
+	       C.CREATE_TIME,
+	       C.UPDATE_TIME,
+	       C.LOCK_VERSION
+	  FROM TB_TEL_CHANNEL_INF C
+	 WHERE C.DATA_STAT = '0' 
+	 AND C.RESV1 = #{mchntCode}
+	</select>
+	
+	
+</mapper>

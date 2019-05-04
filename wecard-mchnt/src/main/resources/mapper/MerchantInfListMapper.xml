@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.merchant.mapper.MerchantInfListDao">
+		
+	<resultMap type="MerchantInfList" id="MerchantInfListResultMap">
+		<result column="INS_ID" property="insId"/>
+		<result column="MCHNT_ID" property="mchntId"/>
+		<result column="MCHNT_TYPE" property="mchntType"/>
+		<result column="MCHNT_NAME" property="mchntName"/>
+		<result column="MCHNT_CODE" property="mchntCode"/>
+		<result column="BUS_LICENCE_CODE" property="busLicence"/>
+		<result column="NAME" property="name"/>
+		<result column="ID_CARD_NO" property="idCardNo"/>
+		<result column="PHONE_NUMBER" property="phoneNumber"/>
+		<result column="BACK_NAME" property="backName"/>
+		<result column="BACK_ACT" property="backAct"/>
+		<result column="BACK_ACT_NAME" property="backActName"/>
+		<result column="INS_SCALE" property="insScale"/>
+		<result column="BRAND_NAME" property="brandName"/>
+		<result column="INS_CODE_CARD" property="insCodeCard"/>
+		<result column="BUSINESS_LICENCE" property="businessLicence"/>
+		<result column="ID_CARD" property="idCard"/>
+		<result column="BRAND_LOGO" property="brandLogo"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="INVITE_CODE" property="inviteCode"/>
+		<result column="INVITE_CODE_STAT" property="inviteCodeStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="MerchantInfListColumns">
+		m.INS_ID,	
+		m.MCHNT_ID,
+		m.MCHNT_TYPE,
+		m.MCHNT_NAME,
+		m.MCHNT_CODE,
+		m.BUS_LICENCE_CODE,
+		m.NAME,
+		m.ID_CARD_NO,
+		m.PHONE_NUMBER,
+		m.BACK_NAME,
+		m.BACK_ACT,
+		m.BACK_ACT_NAME,
+		m.INS_SCALE,
+		m.BRAND_NAME,
+		m.INS_CODE_CARD,
+		m.BUSINESS_LICENCE,
+		m.ID_CARD,
+		m.BRAND_LOGO,
+		m.DATA_STAT,
+		m.INVITE_CODE,
+		m.INVITE_CODE_STAT,
+		m.REMARKS,
+		m.CREATE_USER,
+		m.UPDATE_USER,
+		m.CREATE_TIME,
+		m.UPDATE_TIME,
+		m.LOCK_VERSION	
+
+	</sql>
+	
+	<select id="getMerchantInfListByCode" parameterType="java.lang.String" resultMap="MerchantInfListResultMap">
+		SELECT 
+	  		<include refid="MerchantInfListColumns" />
+		 FROM TB_MERCHANT_INF_LIST m WHERE m.DATA_STAT='0' AND m.INVITE_CODE_STAT='0'  AND m.INVITE_CODE=#{id}
+	</select>
+	
+	<update id="updateMerchantInfListDateStat" parameterType="java.lang.String">
+		UPDATE TB_MERCHANT_INF_LIST SET 
+				INVITE_CODE_STAT='1',
+				UPDATE_TIME=sysdate WHERE INS_ID=#{insId}
+	</update>
+
+</mapper>

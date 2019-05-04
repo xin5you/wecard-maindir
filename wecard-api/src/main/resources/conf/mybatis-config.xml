@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+			<setting name="logImpl" value="SLF4J" />
+<!-- 		<setting name="logImpl" value="STDOUT_LOGGING" /> -->
+	</settings>
+
+	<typeAliases>
+		<typeAlias type="com.cn.thinkx.wecard.api.module.customer.model.PersonInf" alias="PersonInf" />
+		<typeAlias type="com.cn.thinkx.common.service.module.channel.domain.ChannelSecurityInf" alias="ChannelSecurityInf" />
+		<typeAlias type="com.cn.thinkx.common.service.module.dict.domain.BaseDict" alias="BaseDict" />
+		<typeAlias type="com.cn.thinkx.wecard.api.module.mchnt.model.ShopInf" alias="ShopInf" />
+		<typeAlias type="com.cn.thinkx.beans.CtrlSystem" alias="CtrlSystem" />
+		<typeAlias type="com.cn.thinkx.wecard.api.module.trans.model.WxTransLog" alias="WxTransLog" />
+		<typeAlias type="com.cn.thinkx.wecard.api.module.trans.model.UserMerchantAcct" alias="UserMerchantAcct" />
+		<typeAlias type="com.cn.thinkx.wecard.api.module.accmchnt.model.AccMchntTransLog" alias="AccMchntTransLog" />
+		<typeAlias type="com.cn.thinkx.wecard.api.module.pub.model.DetailBizInfo" alias="DetailBizInfo" />
+		<typeAlias type="com.cn.thinkx.wecard.api.module.mchnt.model.MerchantInf" alias="MerchantInf" />
+		<typeAlias type="com.cn.thinkx.wecard.api.module.pub.model.ChannelUserInf" alias="ChannelUserInf" />
+		
+		<typeAlias type="com.cn.thinkx.wecard.api.module.welfaremart.model.CardKeys" alias="CardKeys" />
+		<typeAlias type="com.cn.thinkx.wecard.api.module.welfaremart.model.CardKeysOrderInf" alias="CardKeysOrderInf" />
+		<typeAlias type="com.cn.thinkx.wecard.api.module.welfaremart.model.CardKeysProduct" alias="CardKeysProduct" />
+		<typeAlias type="com.cn.thinkx.wecard.api.module.welfaremart.model.CardKeysTransLog" alias="CardKeysTransLog" />
+		<typeAlias type="com.cn.thinkx.wecard.api.module.welfaremart.model.UserBankInf" alias="UserBankInf" />
+		
+		<typeAlias type="com.cn.thinkx.wecard.api.module.withdraw.domain.WithdrawOrder" alias="WithdrawOrder" />
+		<typeAlias type="com.cn.thinkx.wecard.api.module.withdraw.domain.WithdrawOrderDetail" alias="WithdrawOrderDetail" />
+		
+		<typeAlias type="com.cn.thinkx.wecard.api.module.phoneRecharge.model.PhoneRechargeOrder" alias="PhoneRechargeOrder" />
+	</typeAliases>
+	<mappers>
+	
+	</mappers>
+</configuration>

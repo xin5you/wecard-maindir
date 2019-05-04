@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.iboot.diy.api.original.mapper.ShopStatisticsMapper">
+	
+	<resultMap type="ShopStatistics" id="ShopStatisticsMap">
+			<result column="SHOP_NAME" property="shopName"/>
+			<result column="SHOP_CODE" property="shopCode"/>
+			<result column="CARD_PAY_AMT" property="cardPayAmt"/>
+			<result column="CARD_PAY_NUM" property="cardPayNum"/>
+			<result column="QUICK_PAY_AMT" property="quickPayAmt"/>
+			<result column="QUICK_PAY_NUM" property="quickPayNum"/>
+			<result column="OL_RECHARGE_AMT" property="olRechargeAmt"/>
+			<result column="OL_RECHARGE_DEN" property="olRechargeDen"/>
+			<result column="PF_RECHARGE_AMT" property="pfRechargeAmt"/>
+			<result column="PF_RECHARGE_DEN" property="pfRechargeDen"/>
+			<result column="PF_SUBSIDY_NUM" property="pfSubsidyNum"/>
+			<result column="PF_SUBSIDY_AMT" property="pfSubsidyAmt"/>
+		</resultMap>
+
+	<select id="getShopStatisticsList" parameterType="ShopStatistics" resultMap="ShopStatisticsMap">
+		SELECT S.SHOP_NAME,
+		       S.SHOP_CODE,
+		       CARD_PAY_AMT,
+		       CARD_PAY_NUM,
+		       QUICK_PAY_AMT,
+		       QUICK_PAY_NUM,
+		       OL_RECHARGE_AMT,
+		       OL_RECHARGE_DEN,
+		       PF_RECHARGE_AMT,
+		       PF_RECHARGE_DEN,
+		       PF_SUBSIDY_NUM,
+		       PF_SUBSIDY_AMT
+		  FROM (SELECT S.SHOP_CODE,
+		               SUM(S.CARD_PAY_AMT) AS CARD_PAY_AMT,
+		               SUM(S.CARD_PAY_NUM) AS CARD_PAY_NUM,
+		               SUM(S.QUICK_PAY_AMT) AS QUICK_PAY_AMT,
+		               SUM(S.QUICK_PAY_NUM) AS QUICK_PAY_NUM,
+		               SUM(S.OL_RECHARGE_AMT) AS OL_RECHARGE_AMT,
+		               SUM(S.OL_RECHARGE_DEN) AS OL_RECHARGE_DEN,
+		               SUM(S.PF_RECHARGE_AMT) AS PF_RECHARGE_AMT,
+		               SUM(S.PF_RECHARGE_DEN) AS PF_RECHARGE_DEN,
+		               SUM(S.PF_SUBSIDY_NUM) AS PF_SUBSIDY_NUM,
+		               SUM(S.PF_SUBSIDY_AMT) AS PF_SUBSIDY_AMT
+		          FROM TB_SHOP_STATISTICS S, TB_MCHNT_STATISTICS M
+		         WHERE S.DATA_STAT = '0'
+		           AND M.ID = S.MCHNT_STATISTICS_ID
+		           AND M.MCHNT_CODE = #{mchntCode}
+				<if test="shopCodes != null and shopCodes.size > 0 ">
+					AND S.SHOP_CODE IN
+					<foreach collection="shopCodes"  index="index" item="item"  open="(" separator="," close=")" >
+						${item}
+					</foreach>
+				</if>
+				<if test="startDate != null and startDate != '' ">
+					AND S.SETTLE_DATE &gt;= #{startDate}
+				</if>
+				<if test="endDate != null and endDate != '' ">
+					AND S.SETTLE_DATE &lt;= #{endDate}
+				</if>
+		         GROUP BY S.SHOP_CODE) T,
+		       TB_SHOP_INF S
+		 WHERE S.SHOP_CODE = T.SHOP_CODE
+	</select>
+	
+	<select id="getShopStatisticsUploadList" parameterType="ShopStatistics" resultType="ShopStatisticsUpload">
+		SELECT S.SHOP_NAME,
+		       CARD_PAY_AMT,
+		       QUICK_PAY_AMT,
+		       PF_SUBSIDY_NUM,
+		       PF_SUBSIDY_AMT
+		  FROM (SELECT S.SHOP_CODE,
+		               SUM(S.CARD_PAY_AMT) AS CARD_PAY_AMT,
+		               SUM(S.CARD_PAY_NUM) AS CARD_PAY_NUM,
+		               SUM(S.QUICK_PAY_AMT) AS QUICK_PAY_AMT,
+		               SUM(S.QUICK_PAY_NUM) AS QUICK_PAY_NUM,
+		               SUM(S.PF_SUBSIDY_NUM) AS PF_SUBSIDY_NUM,
+		               SUM(S.PF_SUBSIDY_AMT) AS PF_SUBSIDY_AMT
+		          FROM TB_SHOP_STATISTICS S, TB_MCHNT_STATISTICS M
+		         WHERE S.DATA_STAT = '0'
+		           AND M.ID = S.MCHNT_STATISTICS_ID
+		           AND M.MCHNT_CODE = #{mchntCode}
+				<if test="shopCodes != null and shopCodes.size > 0 ">
+					AND S.SHOP_CODE IN
+					<foreach collection="shopCodes"  index="index" item="item"  open="(" separator="," close=")" >
+						${item}
+					</foreach>
+				</if>
+				<if test="startDate != null and startDate != '' ">
+					AND S.SETTLE_DATE &gt;= #{startDate}
+				</if>
+				<if test="endDate != null and endDate != '' ">
+					AND S.SETTLE_DATE &lt;= #{endDate}
+				</if>
+		         GROUP BY S.SHOP_CODE) T,
+		       TB_SHOP_INF S
+		 WHERE S.SHOP_CODE = T.SHOP_CODE
+	</select>
+
+</mapper>

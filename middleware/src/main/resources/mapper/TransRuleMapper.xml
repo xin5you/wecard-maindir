@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cn.thinkx.biz.drools.mapper.TransRuleMapper">
+	
+	<resultMap type="TransRule" id="ViewTransRuleResultMap">
+		<result column="IS_SUPERPOSED" property="isSuperposed"/>
+		<result column="SALIENCE" property="salience"/>
+		<result column="RULE_TYPE_CODE" property="ruleTypeCode"/>
+		<result column="RULE_TYPE" property="ruleType"/>
+		<result column="RULE_FACTOR" property="ruleFactor"/>
+		<result column="RULE_PARAM" property="ruleParam"/>
+	</resultMap>
+	
+	<select id="getTransRuleList" parameterType="TransRule" resultMap="ViewTransRuleResultMap">
+		SELECT 
+		   RULE_TYPE_CODE,
+		   RULE_TYPE,
+	 	   SALIENCE,
+	 	   IS_SUPERPOSED,
+	       RULE_FACTOR,
+	       RULE_PARAM
+			 FROM VIEW_TRANS_RULE_DECLARE 
+				<where>
+					DATA_STAT='0'
+			 		AND sysdate between START_TIME AND END_TIME
+			 	   <if test="inMoney !=null">
+			 	 		AND RULE_FACTOR &lt;=#{inMoney,jdbcType=INTEGER}
+			 	   </if>
+			 	   <if test="templateCode !=null and templateCode !=''">
+						AND TEMPLATE_CODE=#{templateCode}
+	  			  </if>
+			 	   <if test="insId !=null and insId !=''">
+	  					AND INS_ID=#{insId}
+	  			   </if>
+	  			   <if test="platformId !=null and platformId !=''">
+	  					AND PLATFORM_ID=#{platformId}
+	  			   </if>
+	  			   <if test="mchntId !=null and mchntId !=''">
+						AND MCHNT_ID=#{mchntId}
+	  			   </if>
+	  			  <if test="shopId !=null and shopId !=''">
+						AND SHOP_ID＝#{shopId}
+	  			  </if>
+  			  </where>
+	</select>
+</mapper>

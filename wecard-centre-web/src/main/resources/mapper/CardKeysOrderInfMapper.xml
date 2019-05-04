@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wecard.centre.module.biz.mapper.CardKeysOrderInfMapper">
+
+	<resultMap type="CardKeysOrderInf" id="CardKeysOrderInfMap">
+		<result column="ORDER_ID" property="orderId"/>
+		<result column="USER_ID" property="userId"/>
+		<result column="PRODUCT_CODE" property="productCode"/>
+		<result column="AMOUNT" property="amount"/>
+		<result column="PAID_AMOUNT" property="paidAmount"/>
+		<result column="TYPE" property="type"/>
+		<result column="STAT" property="stat"/>
+		<result column="NUM" property="num"/>
+		<result column="BANK_NO" property="bankNo"/>
+		<result column="DATA_STAT" property="dataStat" />
+		<result column="REMARKS" property="remarks" />
+		<result column="CREATE_USER" property="createUser" />
+		<result column="UPDATE_USER" property="updateUser" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="LOCK_VERSION" property="lockVersion" />
+	</resultMap>
+	
+	<sql id="CardKeysOrderInfColumns">
+		ORDER_ID,
+		USER_ID,
+		PRODUCT_CODE,
+		BANK_NO,
+		AMOUNT,
+		PAID_AMOUNT,
+		TYPE,
+		STAT,
+		NUM,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+
+	<sql id="CardKeysOrderInfFields">
+		#{orderId, jdbcType=VARCHAR},
+		#{userId, jdbcType=VARCHAR},
+		#{productCode, jdbcType=VARCHAR},
+		#{bankNo, jdbcType=VARCHAR},
+		#{amount, jdbcType=VARCHAR},
+		#{paidAmount, jdbcType=VARCHAR},
+		#{type, jdbcType=VARCHAR},
+		#{stat, jdbcType=VARCHAR},
+		#{num, jdbcType=VARCHAR},
+		'0',
+		#{remarks, jdbcType=VARCHAR},
+		#{createUser, jdbcType=VARCHAR},
+		#{updateUser, jdbcType=VARCHAR},
+		SYSDATE,
+		SYSDATE,
+		'0'
+	</sql>
+
+	<sql id="tableName">
+			TB_CARD_KEYS_ORDER_INF
+	</sql>
+	
+	<select id="getCardKeysOrderInfList" parameterType="CardKeysOrderInf" resultMap="CardKeysOrderInfMap">
+		SELECT 
+	  		c.ORDER_ID,
+			c.USER_ID,
+			c.PRODUCT_CODE,
+			c.BANK_NO,
+			c.AMOUNT,
+			c.PAID_AMOUNT,
+			c.TYPE,
+			c.STAT,
+			c.NUM,
+			c.DATA_STAT,
+			c.REMARKS,
+			c.CREATE_USER,
+			c.UPDATE_USER,
+			c.CREATE_TIME,
+			c.UPDATE_TIME,
+			c.LOCK_VERSION,
+	  		b.USER_NAME,
+			b.ACCOUNT_BANK,
+			b.ACCOUNT_BANK_ADDR
+		FROM TB_CARD_KEYS_ORDER_INF c INNER JOIN TB_USER_BANK_INF b ON c.BANK_NO = b.BANK_NO
+		WHERE 1=1 AND ROUND(TO_NUMBER(SYSDATE - c.CREATE_TIME) * 1440) > 2  
+		 <if test="userId !=null and userId !='' ">
+		 		AND c.USER_ID=#{userId}
+		 </if>
+		 <if test="dataStat !=null and dataStat !='' ">
+		 		AND c.DATA_STAT=#{dataStat}
+		 </if>
+		 <if test="productCode !=null and productCode !='' ">
+				AND c.PRODUCT_CODE=#{productCode}
+		 </if>
+		 <if test="bankNo !=null and bankNo !='' ">
+				AND c.BANK_NO=#{bankNo}
+		 </if>
+		 <if test="type !=null and type !='' ">
+				AND c.TYPE=#{type}
+		 </if>
+		 <if test="stat !=null and stat !='' ">
+				AND c.STAT=#{stat}
+		 </if>
+	</select>
+	
+	<select id="getOrderNumByOrderId" parameterType="CardKeysOrderInf" resultType="CardKeysOrderInf">
+		SELECT
+			PRODUCT_CODE,NUM
+		FROM 
+			<include refid="tableName" />
+		WHERE DATA_STAT = '0'
+		<if test="type !=null and type !='' ">
+			AND TYPE = #{type}
+		</if>
+		<if test="stat !=null and stat !='' ">
+			AND STAT = #{stat}
+		</if>
+			AND ORDER_ID = #{orderId}
+	</select>
+	
+	<insert id="insertCardKeysOrderInf" parameterType="CardKeysOrderInf">
+		INSERT INTO 
+			<include refid="tableName" />
+		(
+			<include refid="CardKeysOrderInfColumns" />
+		) VALUES (
+			<include refid="CardKeysOrderInfFields" />
+		)
+	</insert>
+
+	<update id="updateCardKeysOrderInf" parameterType="CardKeysOrderInf">
+		UPDATE 
+			<include refid="tableName" />
+		SET
+		<if test="userId !=null and userId !='' ">
+			USER_ID = #{userId,jdbcType=VARCHAR},
+		</if>
+		<if test="productCode !=null and productCode !='' ">
+			PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},
+		</if>
+		<if test="amount !=null and amount !='' ">
+			AMOUNT = #{amount,jdbcType=VARCHAR},
+		</if>
+		<if test="paidAmount !=null and paidAmount !='' ">
+			PAID_AMOUNT = #{paidAmount,jdbcType=VARCHAR},
+		</if>
+		<if test="type !=null and type !='' ">
+			TYPE = #{type,jdbcType=VARCHAR},
+		</if>
+		<if test="stat !=null and stat !='' ">
+			STAT = #{stat,jdbcType=VARCHAR},
+		</if>
+		<if test="num !=null and num !='' ">
+			NUM = #{num,jdbcType=VARCHAR},
+		</if>
+			UPDATE_TIME = SYSDATE,
+			LOCK_VERSION = LOCK_VERSION+1
+		WHERE ORDER_ID = #{orderId}
+	</update>
+	
+	<update id="updateCkoByLockversion" parameterType="CardKeysOrderInf">
+		UPDATE 
+			<include refid="tableName" />
+		SET
+			UPDATE_TIME = SYSDATE,
+			LOCK_VERSION = LOCK_VERSION+1
+		WHERE ORDER_ID = #{orderId} AND LOCK_VERSION = #{lockVersion}
+	</update>
+
+</mapper>

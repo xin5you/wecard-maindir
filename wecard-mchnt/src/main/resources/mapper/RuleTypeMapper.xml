@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.merchant.mapper.RuleTypeDao">
+		
+	<resultMap type="RuleType" id="RuleTypeResultMap">
+		<result column="RULE_TYPE_CODE" property="ruleTypeCode"/>
+		<result column="RULE_NAME" property="ruleName"/>
+		<result column="RULE_TYPE" property="ruleType"/>
+		<result column="TEMPLATE_CODE" property="templateCode"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="RuleTypeColumns">
+		m.RULE_TYPE_CODE,
+		m.RULE_NAME,
+		m.RULE_TYPE,
+		m.TEMPLATE_CODE,
+		m.DATA_STAT,
+		m.REMARKS,
+		m.CREATE_USER,
+		m.UPDATE_USER,
+		m.CREATE_TIME,
+		m.UPDATE_TIME,
+		m.LOCK_VERSION	
+	</sql>
+	
+	
+	<select id="getRuleTypeById" parameterType="java.lang.String" resultMap="RuleTypeResultMap">
+		SELECT 
+	  		<include refid="RuleTypeColumns" />
+		 		FROM TB_RULE_TYPE m WHERE  m.RULE_TYPE_CODE=#{ruleTypeCode}
+	</select>
+
+
+	<select id="getRuleTypeListByTempCode" parameterType="java.lang.String" resultMap="RuleTypeResultMap">
+		SELECT 
+	  		<include refid="RuleTypeColumns" />
+		 		FROM TB_RULE_TYPE m WHERE m.DATA_STAT='0' AND m.TEMPLATE_CODE=#{templateCode}
+	</select>
+</mapper>

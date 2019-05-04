@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	lang="en">
+<link rel="stylesheet" th:href="@{/diy/css/hkbServicePlatform.min.css}" />
+<head th:include="main/header::header" />
+<!-- nav 导航栏-->
+<header th:include="main/navbar::navbar"/>
+<body>
+
+<!-- 退款流程 -->
+<form id="searchForm" >
+<div class="content_body">
+
+    <div class="title_content_title">
+        <p><img th:src="@{/icon/tab_query_data_green.png}" />分销商信息</p>
+    </div>
+
+
+<!--     <div class="info_middle_body"> -->
+
+ <div class="info_content_table">
+
+
+        <!-- table 单独-->
+        <table class="table_box" border="0" cellpadding="0" cellspacing="1" rules="cols">
+            <thead>
+            <tr class="hkb_title_tr">
+                <th>分销商编号</th>
+                <th>分销商名称</th>
+                <th>ACCESS_TOCKEN</th>
+                <th>KEY</th>
+                <th>余额</th>
+            </tr>
+            </thead>
+            <tbody>
+            	<tr align="center" >
+	                <td><span th:text="${channel.channelId}"></span></td>
+	                <td><span th:text="${channel.channelName}"></span></td>
+	                <td><span th:text="${channel.channelCode}"></span></td>
+	                <td><span th:text="${channel.channelKey}"></span></td>
+	                <td><span th:text="${channel.channelReserveAmt}"></span></td>
+	            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <!-- next-->
+<!--     <div th:if="${not #lists.isEmpty(pageInfo.list)}" th:include="main/pagination::page" class="info_page"></div> -->
+
+    </div>
+
+	</form>
+
+</body>
+</html>

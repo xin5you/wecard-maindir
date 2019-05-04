@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<#include "../../common/wecardHeader.html">
+    <meta charset="UTF-8">
+    <title>卡券集市</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no, email=no">
+	<link rel="stylesheet" href="${s.base}/static/css/hkb_welfare.min.css?v=${s.version}" />
+</head>
+<body>
+	<!--知了企服-确认订单-->
+	<div class="confirm_order_all">
+	    <div class="confirm_detail">
+	        <div class="tittle">商品信息</div>
+	        <div class="purchase_line">
+	            <img src="${s.base}/static/images/welfaremart/youku.jpg">
+	            <div class="right_mod">
+	                <p><span>中国移动</span><span>100元</span><span>话费</span>充值卡</p>
+	                <div>
+	                    <p>面额：<span class="list_orange"><span>100</span>￥</span></p>
+	                    <p class="many_num">x2</p>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="pay_money">
+	            <p class="">代付金额：</p>
+	            <p>￥<span>200.00</span>元</p>
+	        </div>
+	    </div>
+	    <div class="pay_detail">
+	        <div class="tittle">支付方式</div>
+	        <label class="choose_line" for="radio-1-2">
+	            <div class="choose_icon">
+	                <img src="${s.base}/static/images/welfaremart/pay_icon.png">
+	                <p>知了企服余额</p>
+	            </div>
+	            <input type="radio" id="radio-1-2" name="radio-1-set" class="regular-radio" checked><label for="radio-1-2"></label>
+	        </label>
+	    </div>
+	    <div class="bottom_box">
+	        <a href="pay_success.html">确认支付</a>
+	    </div>
+	</div>
+	
+	<script src="${s.base}/static/js/common/fastclick.min.js?v=${s.version}"></script>
+	<script src="${s.base}/static/js/common/hkb_welfare.min.js?v=${s.version}"></script>
+	<script src="${s.base}/static/js/common/LAreaData2.min.js?v=${s.version}"></script>
+</body>
+</html>

@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.iboot.diy.api.operate.mapper.PositOprStatisticsMapper">
+
+	<sql id="PositOprStatisticsColumns">
+		POS.ID,
+		POS.SHOP_STATISTICS_OPR_ID,
+		POS.SHOP_CODE,
+		POS.SETTLE_DATE,
+		POS.CARD_PAY_AMT,
+		POS.CARD_PAY_NUM,
+		POS.QUICK_PAY_AMT,
+		POS.QUICK_PAY_NUM,
+		POS.PAY_AMT,
+		POS.STAT,
+		POS.DATA_STAT,
+		POS.REMARKS,
+		POS.CREATE_USER,
+		POS.UPDATE_USER,
+		POS.CREATE_TIME,
+		POS.UPDATE_TIME,
+		POS.LOCK_VERSION
+	</sql>
+
+	<select id="selectByPrimaryKey" parameterType="String"
+		resultType="PositOprStatistics">
+		SELECT
+		<include refid="PositOprStatisticsColumns" />
+		FROM TB_POSIT_OPR_STATISTICS
+		WHERE ID = #{id,jdbcType=VARCHAR} and
+		DATA_STAT='0'
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="String">
+		UPDATE
+		TB_POSIT_OPR_STATISTICS SET DATA_STAT='1' WHERE ID = #{id}
+	</delete>
+	<insert id="insert" parameterType="PositOprStatistics">
+		INSERT INTO
+		TB_POSIT_OPR_STATISTICS
+		(SHOP_STATISTICS_OPR_ID,
+		SHOP_CODE,
+		SETTLE_DATE,
+		CARD_PAY_AMT,
+		CARD_PAY_NUM,
+		QUICK_PAY_AMT,
+		QUICK_PAY_NUM,
+		PAY_AMT,
+		STAT,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER,
+		UPDATE_USER,
+		sysdate,
+		sysdate,
+		'0')
+		values
+		(#{shopStatisticsOprId,jdbcType=VARCHAR},
+		#{shopCode,jdbcType=VARCHAR},
+		#{settleDate,jdbcType=TIMESTAMP},
+		#{cardPayAmt,jdbcType=DECIMAL},
+		#{cardPayNum,jdbcType=DECIMAL},
+		#{quickPayAmt,jdbcType=DECIMAL},
+		#{quickPayNum,jdbcType=DECIMAL},
+		#{payAmt,jdbcType=DECIMAL},
+		#{stat,jdbcType=CHAR},
+		#{dataStat,jdbcType=CHAR},
+		#{remarks,jdbcType=VARCHAR},
+		#{createUser,jdbcType=VARCHAR},
+		#{updateUser,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{lockVersion,jdbcType=DECIMAL})
+	</insert>
+
+	<update id="updateByPrimaryKey" parameterType="PositOprStatistics">
+		update
+		TB_POSIT_OPR_STATISTICS set
+		SHOP_STATISTICS_OPR_ID=#{shopStatisticsOprId,jdbcType=VARCHAR},
+		SHOP_CODE=#{shopCode,jdbcType=VARCHAR},
+		SETTLE_DATE=#{settleDate,jdbcType=TIMESTAMP},
+		CARD_PAY_AMT=#{cardPayAmt,jdbcType=DECIMAL},
+		CARD_PAY_NUM=#{cardPayNum,jdbcType=DECIMAL},
+		QUICK_PAY_AMT=#{quickPayAmt,jdbcType=DECIMAL},
+		QUICK_PAY_NUM=#{quickPayNum,jdbcType=DECIMAL},
+		PAY_AMT=#{payAmt,jdbcType=DECIMAL},
+		DATA_STAT=#{dataStat,jdbcType=CHAR},
+		REMARKS=#{remarks,jdbcType=VARCHAR},
+		CREATE_USER=#{createUser,jdbcType=VARCHAR},
+		UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+		CREATE_TIME=#{createTime,jdbcType=TIMESTAMP},
+		UPDATE_TIME=sysdate,
+		LOCK_VERSION=LOCK_VERSION+1,
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+
+	<select id="getList" parameterType="PositOprStatistics"
+		resultType="PositOprStatistics">
+		
+		SELECT S.SHOP_NAME, PAY_AMT
+		  FROM (SELECT POS.SHOP_CODE, NVL(SUM(POS.PAY_AMT), 0) AS PAY_AMT
+		          FROM TB_POSIT_OPR_STATISTICS POS, TB_SHOP_OPR_STATISTICS SOS
+		         WHERE POS.SHOP_STATISTICS_OPR_ID = SOS.ID
+		           AND POS.DATA_STAT = '0'
+		           AND POS.STAT IN ('1', '2')
+		           AND SOS.SHOP_CODE = #{shopCode}
+		              <if test="startDate != null  and startDate != ''">
+		           AND POS.SETTLE_DATE &gt;= #{startDate}
+		              </if>
+		              <if test="endDate != null  and endDate != ''">
+		           AND POS.SETTLE_DATE &lt;= #{endDate}
+		        </if>
+		         GROUP BY POS.SHOP_CODE) T,
+		       TB_SHOP_INF S
+		 WHERE S.SHOP_CODE = T.SHOP_CODE
+		
+	</select>
+	
+	<select id="getPositOprTotalPay" parameterType="PositOprStatistics"
+		resultType="String"> 
+        SELECT SUM(SOS.REMARKS) AS TOTAL_PAY
+         FROM TB_SHOP_OPR_STATISTICS SOS
+        WHERE SOS.DATA_STAT = '0'
+          AND SOS.SHOP_CODE = #{shopCode}
+          AND SOS.STAT IN ('1', '2')
+        <if test="startDate != null  and startDate != ''">
+			AND SOS.SETTLE_DATE &gt;= #{startDate}
+		</if>
+		<if test="endDate != null  and endDate != ''">
+			AND SOS.SETTLE_DATE &lt;= #{endDate}
+		</if>
+        GROUP BY SOS.SHOP_CODE
+    </select>
+   
+
+	<select id="getShopInfByShopCode" parameterType="String"
+		resultType="String">
+		SELECT SHOP_NAME FROM TB_SHOP_INF
+		WHERE DATA_STAT='0' AND
+		SHOP_CODE = #{shopCode}
+	</select>
+
+	<select id="getMchntInfByMchntCode" parameterType="String"
+		resultType="String">
+		SELECT MCHNT_NAME FROM TB_MERCHANT_INF
+		WHERE DATA_STAT='0'
+		AND
+		MCHNT_CODE = #{mchntCode}
+	</select>
+
+
+	<select id="getShopStatisticsSet" parameterType="PositOprStatistics"
+		resultType="PositOprStatistics">
+		<!-- SELECT SOS.ID,SOS.MCHNT_STATISTICS_OPR_ID,SOS.SHOP_CODE,SS.SETTLE_DATE,SS.CARD_PAY_AMT+SS.QUICK_PAY_AMT 
+			AS PAY_AMT,NVL(SOS.REMARKS,SS.CARD_PAY_AMT+SS.QUICK_PAY_AMT) AS U_PAY_AMT, 
+			STAT FROM TB_SHOP_STATISTICS SS LEFT JOIN TB_SHOP_OPR_STATISTICS SOS ON SOS.SHOP_CODE 
+			= SS.SHOP_CODE AND SOS.SETTLE_DATE = SS.SETTLE_DATE WHERE SS.DATA_STAT='0' 
+			AND SS.SHOP_CODE = #{shopCode} <if test="stat != null and stat != ''"> AND 
+			SOS.STAT = #{stat} </if> <if test="startDate != null and startDate != ''"> 
+			AND SUBSTR(SS.SETTLE_DATE,0,6) &gt;= #{startDate} </if> <if test="endDate 
+			!= null and endDate != ''"> AND SUBSTR(SS.SETTLE_DATE,0,6) &lt;= #{endDate} 
+			</if> -->
+
+		SELECT
+		SUBSTR(SS.SETTLE_DATE,0,6) AS SETTLE_DATE,
+		SUM(SS.CARD_PAY_AMT+SS.QUICK_PAY_AMT) AS PAY_AMT,
+		SUM(NVL(SOS.REMARKS,SS.CARD_PAY_AMT+SS.QUICK_PAY_AMT)) AS U_PAY_AMT
+		FROM TB_SHOP_STATISTICS SS 
+		LEFT JOIN TB_SHOP_OPR_STATISTICS SOS 
+		ON SOS.SHOP_CODE = SS.SHOP_CODE 
+		AND SOS.SETTLE_DATE = SS.SETTLE_DATE
+		WHERE SS.DATA_STAT='0' AND SS.SHOP_CODE = #{shopCode}
+		<if test="stat != null and stat != ''">
+			AND SOS.STAT = #{stat}
+		</if>
+		<if test="startDate != null and startDate != ''">
+			AND SUBSTR(SS.SETTLE_DATE,0,6) &gt;=
+			SUBSTR(#{startDate},0,6)
+		</if>
+		<if test="endDate != null and endDate != ''">
+			AND SUBSTR(SS.SETTLE_DATE,0,6) &lt;=
+			SUBSTR(#{endDate},0,6)
+		</if>
+		GROUP BY SUBSTR(SS.SETTLE_DATE,0,6)
+		ORDER BY SETTLE_DATE DESC
+	</select>
+
+
+	<select id="getPositStatisticsSet" parameterType="PositOprStatistics"
+		resultType="PositOprStatistics">
+		SELECT
+		SOS.ID,
+		SOS.MCHNT_STATISTICS_OPR_ID,
+		SOS.SHOP_CODE,
+		SS.SETTLE_DATE,
+		SS.CARD_PAY_AMT+SS.QUICK_PAY_AMT AS PAY_AMT,
+		NVL(SOS.REMARKS,SS.CARD_PAY_AMT+SS.QUICK_PAY_AMT) AS U_PAY_AMT,
+		STAT 
+		FROM TB_SHOP_STATISTICS SS 
+		LEFT JOIN TB_SHOP_OPR_STATISTICS SOS 
+		ON SOS.SHOP_CODE = SS.SHOP_CODE 
+		AND SOS.SETTLE_DATE = SS.SETTLE_DATE 
+		WHERE SS.DATA_STAT='0' AND SS.SHOP_CODE = #{shopCode}
+		<if test="stat != null and stat != ''">
+			AND SOS.STAT = #{stat}
+		</if>
+		<if test="startDate != null and startDate != ''">
+			AND SUBSTR(SS.SETTLE_DATE,0,6) &gt;=
+			SUBSTR(#{startDate},0,6)
+		</if>
+		<if test="endDate != null and endDate != ''">
+			AND SUBSTR(SS.SETTLE_DATE,0,6) &lt;= SUBSTR(#{endDate},0,6)
+		</if>
+		ORDER BY SS.SETTLE_DATE DESC
+	</select>
+
+
+	<select id="getPositStatisticsDaySet" parameterType="PositOprStatistics"
+		resultType="PositOprStatistics">
+		SELECT S.SHOP_NAME AS SHOP_NAME,
+		POS.ID,
+		POS.SHOP_STATISTICS_OPR_ID,
+		PS.SHOP_CODE,
+		PS.SETTLE_DATE,
+		PS.PAY_AMT,
+		NVL(POS.PAY_AMT, PS.PAY_AMT) AS
+		U_PAY_AMT,
+		POS.STAT
+		FROM TB_SHOP_INF S
+		LEFT JOIN
+		TB_POSIT_STATISTICS PS
+		ON
+		S.SHOP_CODE = PS.SHOP_CODE
+		LEFT JOIN TB_POSIT_OPR_STATISTICS POS
+		ON
+		POS.SHOP_CODE = PS.SHOP_CODE AND POS.SETTLE_DATE =PS.SETTLE_DATE
+		WHERE
+		S.P_SHOP_CODE = #{shopCode}
+		AND PS.DATA_STAT = '0' AND S.DATA_STAT =
+		'0'
+		<if test="settleDate != null  and settleDate != ''">
+			AND PS.SETTLE_DATE = #{settleDate}
+		</if>
+		ORDER BY PS.SETTLE_DATE DESC
+	</select>
+	
+	<select id="getShopTotalPayById" parameterType="String"
+		resultType="String">  
+  		SELECT  SUM(PAY_AMT) FROM TB_POSIT_OPR_STATISTICS WHERE SHOP_STATISTICS_OPR_ID=#{SHOP_STATISTICS_OPR_ID}
+		GROUP BY  SHOP_STATISTICS_OPR_ID
+	</select>
+	
+	<parameterMap type="java.util.HashMap" id="positMap">
+		<parameter property="rid" jdbcType="VARCHAR" javaType="String" mode="IN" />
+		<parameter property="payamt" jdbcType="VARCHAR" javaType="String" mode="IN" />
+		<parameter property="updateuser" jdbcType="VARCHAR" javaType="String" mode="IN" />
+		<parameter property="results" jdbcType="VARCHAR" javaType="String" mode="OUT" />
+	</parameterMap>
+	<select id="updatePositProStatistics" parameterMap="positMap"
+		statementType="CALLABLE" resultType="String">
+		{CALL PROC_EDIT_POSITOPR_STATISTICS(?,?,?,?)}
+	</select>
+	
+	<parameterMap type="java.util.HashMap" id="shopMap">
+		<parameter property="pid" jdbcType="VARCHAR" javaType="String" mode="IN" />
+		<parameter property="payamt" jdbcType="VARCHAR" javaType="String" mode="IN" />
+		<parameter property="updateuser" jdbcType="VARCHAR" javaType="String" mode="IN" />
+		<parameter property="results" jdbcType="VARCHAR" javaType="String" mode="OUT" />
+	</parameterMap>
+	<select id="updateShopProStatistics" parameterMap="shopMap"
+		statementType="CALLABLE" resultType="String">
+		{CALL PROC_EDIT_SHOPOPR_STATISTICS(?,?,?,?)}
+	</select>
+	
+	<parameterMap type="java.util.HashMap" id="curMap">
+		<parameter property="mechntcode" jdbcType="VARCHAR" javaType="String" mode="IN" />
+		<parameter property="shopcode" jdbcType="VARCHAR" javaType="String" mode="IN" />
+		<parameter property="startdate" jdbcType="VARCHAR" javaType="String" mode="IN" />
+		<parameter property="enddate" jdbcType="VARCHAR" javaType="String" mode="IN" />
+		<parameter property="results" jdbcType="CURSOR" resultMap="cursorMap" mode="OUT" />
+	</parameterMap>
+	<resultMap type ="java.util.HashMap" id= "cursorMap">  
+	     <result column ="SHOP_NAME" property="shopName" />  
+	     <result column ="MEMBER_CARD_CONSUME_AMT" property="cardPayAmt"  />  
+	     <result column ="MEMBER_CARD_CONSUME_COUNT" property="cardPayNum" />  
+	     <result column ="SPEEDY_CONSUME_AMT" property="quickPayAmt"  />  
+	     <result column ="SPEEDY_CONSUME_COUNT" property="quickPayNum" />  
+	     <result column ="CONSUME_AMT" property="payAmt" />  
+	</resultMap > 
+	<select id="getPositCurStatistics2" parameterMap="curMap" statementType="CALLABLE" >
+		<![CDATA[CALL PROC_CUR_STATISTICS(?,?,?,?,?)]]>
+	</select>
+	
+	<select id="getCurLogNum" resultType="string">
+		SELECT cur_log_num FROM TB_CTRL_ST WHERE rownum &gt;= 0 AND rownum &lt;=1
+    </select>
+	
+    <select id="getPositCurStatistics" parameterType="PositOprStatistics" resultType="PositOprStatistics" >	  
+  	SELECT M.SHOP_NAME AS SHOP_NAME,
+           NVL(SUM(MEMBER_CARD_CONSUME_AMT), 0) AS cardPayAmt,
+           NVL(SUM(MEMBER_CARD_CONSUME_COUNT), 0) AS cardPayNum,
+           NVL(SUM(SPEEDY_CONSUME_AMT), 0) AS quickPayAmt,
+           NVL(SUM(SPEEDY_CONSUME_COUNT), 0) AS quickPayNum,
+           NVL(SUM(CONSUME_AMT), 0) AS payAmt
+      FROM (
+              SELECT S.SHOP_NAME,
+                   0 AS MEMBER_CARD_CONSUME_AMT,
+                   0 AS MEMBER_CARD_CONSUME_COUNT,
+                   0 AS SPEEDY_CONSUME_AMT,
+                   0 AS SPEEDY_CONSUME_COUNT,
+                   SUM(TL.TRANS_AMT) AS CONSUME_AMT
+              FROM TB_SHOP_INF S
+              LEFT JOIN TB_INTFACE_TRANS_LOG${num} IL
+                ON S.SHOP_CODE = IL.SHOP_CODE
+              LEFT JOIN TB_TRANS_LOG${num} TL
+                ON IL.INTERFACE_PRIMARY_KEY = TL.DMS_RELATED_KEY
+               AND TL.TRANS_ID = IL.TRANS_ID
+               AND TL.TRANS_ID IN ('W10','W71')
+               AND TL.RESP_CODE = '00'
+               AND TL.TRANS_ST = 1
+               AND TL.MCHNT_CODE = #{mchntCode}
+               AND TL.CREATE_TIME &gt;=   to_date(#{startDate},'yyyy-MM-dd HH24:mi:ss')
+               AND TL.CREATE_TIME &lt;=   to_date(#{endDate},'yyyy-MM-dd HH24:mi:ss')
+        		INNER JOIN TB_SHOP_INF S2 on S2.SHOP_CODE=S.Shop_Code and s2.p_shop_code=#{shopCode}
+             GROUP BY S.SHOP_NAME
+             UNION
+                SELECT S.SHOP_NAME,
+                   0 AS MEMBER_CARD_CONSUME_AMT,
+                   0 AS MEMBER_CARD_CONSUME_COUNT,
+                   SUM(TL.TRANS_AMT) AS SPEEDY_CONSUME_AMT,
+                   COUNT(TL.TRANS_ID) AS SPEEDY_CONSUME_COUNT,
+                   0 AS CONSUME_AMT
+              FROM TB_SHOP_INF S
+              LEFT JOIN TB_INTFACE_TRANS_LOG${num} IL
+                ON S.SHOP_CODE = IL.SHOP_CODE
+              LEFT JOIN TB_TRANS_LOG${num} TL
+                ON IL.INTERFACE_PRIMARY_KEY = TL.DMS_RELATED_KEY
+               AND TL.TRANS_ID = IL.TRANS_ID
+               AND TL.TRANS_ID IN ('W71')
+               AND TL.RESP_CODE = '00'
+               AND TL.TRANS_ST = 1
+               AND TL.MCHNT_CODE = #{mchntCode}
+               AND TL.CREATE_TIME &gt;=   to_date(#{startDate},'yyyy-MM-dd HH24:mi:ss')
+               AND TL.CREATE_TIME &lt;=   to_date(#{endDate},'yyyy-MM-dd HH24:mi:ss')
+        		INNER JOIN TB_SHOP_INF S2 on S2.SHOP_CODE=S.Shop_Code and s2.p_shop_code=#{shopCode}
+             GROUP BY S.SHOP_NAME
+             UNION
+                SELECT S.SHOP_NAME,
+                    SUM(TL.TRANS_AMT) AS MEMBER_CARD_CONSUME_AMT,
+                   COUNT(TL.TRANS_ID) AS MEMBER_CARD_CONSUME_COUNT,
+                   0 AS SPEEDY_CONSUME_AMT,
+                   0 AS SPEEDY_CONSUME_COUNT,
+                  0 AS CONSUME_AMT
+              FROM TB_SHOP_INF S
+              LEFT JOIN TB_INTFACE_TRANS_LOG${num} IL
+                ON S.SHOP_CODE = IL.SHOP_CODE
+              LEFT JOIN TB_TRANS_LOG${num} TL
+                ON IL.INTERFACE_PRIMARY_KEY = TL.DMS_RELATED_KEY
+               AND TL.TRANS_ID = IL.TRANS_ID
+               AND TL.TRANS_ID IN ('W10')
+               AND TL.RESP_CODE = '00'
+               AND TL.TRANS_ST = 1
+               AND TL.MCHNT_CODE =  #{mchntCode}
+               AND TL.CREATE_TIME &gt;=   to_date( #{startDate},'yyyy-MM-dd HH24:mi:ss')
+               AND TL.CREATE_TIME &lt;=   to_date( #{endDate},'yyyy-MM-dd HH24:mi:ss')
+        		INNER JOIN TB_SHOP_INF S2 on S2.SHOP_CODE=S.Shop_Code and s2.p_shop_code=#{shopCode}
+             GROUP BY S.SHOP_NAME 
+             )M
+         GROUP BY SHOP_NAME
+	</select> 
+	
+	
+	<select id="getPositOprUploadList" parameterType="PositOprStatistics"
+		resultType="PositOprUpdate">
+		SELECT S.SHOP_NAME, PAY_AMT
+		FROM (SELECT P.SHOP_CODE, NVL(SUM(P.PAY_AMT), 0) AS PAY_AMT
+		FROM TB_POSIT_OPR_STATISTICS P, TB_SHOP_OPR_STATISTICS S
+		WHERE P.DATA_STAT = '0'
+		AND P.SHOP_STATISTICS_OPR_ID = S.ID
+		AND S.STAT IN ('1','2')
+		AND S.SHOP_CODE = #{shopCode}
+		<if test="startDate != null  and startDate != '' ">
+			AND P.SETTLE_DATE &gt;= #{startDate}
+		</if>
+		<if test="endDate != null  and endDate != '' ">
+			AND P.SETTLE_DATE &lt;= #{endDate}
+		</if>
+		GROUP BY P.SHOP_CODE) T,
+		TB_SHOP_INF S
+		WHERE T.SHOP_CODE = S.SHOP_CODE
+	</select>
+
+
+</mapper>

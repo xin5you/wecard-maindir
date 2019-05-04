@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>知了企服</title>
+    <#include "../../common/wecardHeader.html">
+</head>
+<body ontouchstart>
+	    <div class="hd">
+		    <h1 class="page_title">知了企服平台</h1>
+		    <p class="page_desc">商户管理</p>
+		</div>
+		<div class="bd">
+		    <div class="weui_grids">
+	    		<#if roleType ?? && roleType="100" >
+					 <a href="${s.base}/wxclient/mchnt/shopInfList.html" class="weui_grid">
+			            <div class="weui_grid_icon">
+			                <i class="icon icon_button"></i>
+			            </div>
+			            <p class="weui_grid_label">门店管理</p>
+			        </a>
+		         </#if>
+		        <#if roleType ?? && ( roleType="100" || roleType="300" )>
+			        <a href="${s.base}/wxclient/mchnt/merchantManagerList.html" class="weui_grid">
+			            <div class="weui_grid_icon">
+			                <i class="icon icon_cell"></i>
+			            </div>
+			            <p class="weui_grid_label">员工管理</p>
+			        </a>
+		        </#if>
+		   	</div>
+		 </div>
+</body>
+</html>

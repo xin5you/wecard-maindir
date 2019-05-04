@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.margin.mapper.MerchantMarginListMapper">
+		
+	<resultMap type="MerchantMarginList" id="MerchantMarginListResultMap">
+
+		<result column="MARGIN_LIST_ID" property="marginListId"/>
+		<result column="CHASH_ID" property="chashId"/>
+		<result column="MERCHANT_ID" property="merchantId"/>
+		<result column="MORTGAGE_AMT" property="mortgageAmt"/>
+		<result column="RECHARGE_AMT" property="rechargeAmt"/>
+		<result column="MORTGAGE_FLG" property="mortgageFlg"/>
+		<result column="GET_QUOTA" property="getQuota"/>
+		<result column="ADD_MORTGAGE_AMT" property="addMortgageAmt"/>
+		<result column="RECHARGE_FACE_AMT" property="rechargeFaceAmt"/>
+		<result column="ADD_GET_QUOTA" property="addGetQuota"/>
+		<result column="APPROVE_STAT" property="approveStat"/>
+		<result column="APPLY_USER_ID" property="applyUserId"/>
+		<result column="APPLY_USER_NAME" property="applyUserName"/>
+		<result column="APPLY_TIME" property="applyTime"/>
+		<result column="APPROVE_ID" property="approveId"/>
+		<result column="APPROVE_NAME" property="approveName"/>
+		<result column="APPROVE_TIME" property="approveTime"/>
+		
+		<result column="CONFIRM_PAYMENT_ID" property="confirmPaymentId"/>
+		<result column="CONFIRM_PAYMENT_NAME" property="confirmPaymentName"/>
+		<result column="CONFIRM_PAYMENT_TIME" property="confirmPaymentTime"/>
+		
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+		<result column="MCHNT_NAME" property="mchntName"/>
+		<result column="MCHNT_CODE" property="mchntCode"/>
+	</resultMap>
+	
+	<sql id="MerchantMarginListColumns">
+		m.MARGIN_LIST_ID,
+		m.CHASH_ID,
+		m.MERCHANT_ID,
+		m.MORTGAGE_AMT,
+		m.RECHARGE_AMT,
+		m.MORTGAGE_FLG,
+		m.GET_QUOTA,
+		m.ADD_MORTGAGE_AMT,
+		m.RECHARGE_FACE_AMT,
+		m.ADD_GET_QUOTA,
+		m.APPROVE_STAT,
+		m.APPLY_USER_ID,
+		m.APPLY_USER_NAME,
+		m.APPLY_TIME,
+		m.APPROVE_ID,
+		m.APPROVE_NAME,
+		m.APPROVE_TIME,
+		m.CONFIRM_PAYMENT_ID,
+		m.CONFIRM_PAYMENT_NAME,
+		m.CONFIRM_PAYMENT_TIME,
+		m.DATA_STAT,
+		m.REMARKS,
+		m.CREATE_USER,
+		m.UPDATE_USER,
+		m.CREATE_TIME,
+		m.UPDATE_TIME,
+		m.LOCK_VERSION
+	</sql>
+	
+	<select id="getMerchantMarginListById" parameterType="java.lang.String" resultMap="MerchantMarginListResultMap">
+		SELECT 
+	  		<include refid="MerchantMarginListColumns" />
+		 FROM TB_MERCHANT_MARGIN_LIST m WHERE  m.MARGIN_LIST_ID = #{marginListId} 
+	</select>
+	
+	<select id="getMerchantMarginList" parameterType="MerchantMarginList" resultMap="MerchantMarginListResultMap">
+				SELECT 
+			  		<include refid="MerchantMarginListColumns" />
+				 FROM TB_MERCHANT_MARGIN_LIST m WHERE  m.DATA_STAT='0'
+				 
+				 <if test="merchantId !=null and merchantId !='' ">
+						AND m.MERCHANT_ID=#{merchantId}
+				 </if>
+				  <if test="chashId !=null and chashId !='' ">
+						AND m.CHASH_ID=#{chashId}
+				 </if>
+				 <if test="applyUserId !=null and applyUserId !='' ">
+						AND m.APPLY_USER_ID=#{applyUserId}
+				 </if>
+				  ORDER BY m.UPDATE_TIME DESC
+	</select>
+	
+	<insert id="insertMerchantMarginList" parameterType="MerchantMarginList">
+			<selectKey resultType="string" order="BEFORE" keyProperty="marginListId">  
+				<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getCommonId" />
+			</selectKey>
+			INSERT INTO TB_MERCHANT_MARGIN_LIST (
+			MARGIN_LIST_ID,
+			CHASH_ID,
+			MERCHANT_ID,
+			MORTGAGE_AMT,
+			GET_QUOTA,
+			RECHARGE_AMT,
+			MORTGAGE_FLG,
+			ADD_MORTGAGE_AMT,
+			RECHARGE_FACE_AMT,
+			ADD_GET_QUOTA,
+			APPROVE_STAT,
+			APPLY_USER_ID,
+			APPLY_USER_NAME,
+			APPLY_TIME,
+			APPROVE_ID,
+			APPROVE_NAME,
+			APPROVE_TIME,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			CREATE_TIME,
+			UPDATE_USER,
+			UPDATE_TIME,
+			LOCK_VERSION
+			 )  VALUES (
+				 	#{marginListId},
+					#{chashId,jdbcType=VARCHAR},
+					#{merchantId,jdbcType=VARCHAR},
+					#{mortgageAmt,jdbcType=VARCHAR},
+					#{getQuota,jdbcType=VARCHAR},
+					#{rechargeAmt,jdbcType=VARCHAR},
+					#{mortgageFlg,jdbcType=VARCHAR},
+					#{addMortgageAmt,jdbcType=VARCHAR},
+					#{rechargeFaceAmt,jdbcType=VARCHAR},
+					#{addGetQuota,jdbcType=VARCHAR},
+					#{approveStat,jdbcType=VARCHAR},
+					#{applyUserId,jdbcType=VARCHAR},
+					#{applyUserName,jdbcType=VARCHAR},
+					#{applyTime,jdbcType=VARCHAR},
+					#{approveId,jdbcType=VARCHAR},
+					#{approveName,jdbcType=VARCHAR},
+					#{approveTime,jdbcType=VARCHAR},
+					#{dataStat,jdbcType=VARCHAR},
+			 		#{remarks,jdbcType=VARCHAR},
+			 		#{createUser,jdbcType=VARCHAR},
+			 		sysdate,
+			 		#{createUser,jdbcType=VARCHAR},
+			 		sysdate,
+			 		'0') 
+		</insert>
+		<update id="updateMerchantMarginList" parameterType="MerchantMarginList">
+			UPDATE TB_MERCHANT_MARGIN_LIST SET
+					MORTGAGE_AMT=#{mortgageAmt,jdbcType=VARCHAR},
+					MORTGAGE_FLG=#{mortgageFlg,jdbcType=VARCHAR},
+					ADD_MORTGAGE_AMT=#{addMortgageAmt,jdbcType=VARCHAR},
+					RECHARGE_AMT=#{rechargeAmt,jdbcType=VARCHAR},
+					RECHARGE_FACE_AMT=#{rechargeFaceAmt,jdbcType=VARCHAR},
+					GET_QUOTA=#{getQuota,jdbcType=VARCHAR},
+					ADD_GET_QUOTA=#{addGetQuota,jdbcType=VARCHAR},
+					APPROVE_STAT=#{approveStat,jdbcType=VARCHAR},
+					APPLY_USER_ID=#{applyUserId,jdbcType=VARCHAR},
+					APPLY_USER_NAME=#{applyUserName,jdbcType=VARCHAR},
+					APPLY_TIME=#{applyTime,jdbcType=VARCHAR},
+					APPROVE_ID=#{approveId,jdbcType=VARCHAR},
+					APPROVE_NAME=#{approveName,jdbcType=VARCHAR},
+					APPROVE_TIME=#{approveTime,jdbcType=VARCHAR},
+					CONFIRM_PAYMENT_ID=#{confirmPaymentId,jdbcType=VARCHAR},
+					CONFIRM_PAYMENT_NAME=#{confirmPaymentName,jdbcType=VARCHAR},
+					CONFIRM_PAYMENT_TIME=#{confirmPaymentTime,jdbcType=VARCHAR},
+					DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+			 		REMARKS=#{remarks,jdbcType=VARCHAR},
+			 		UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+			 		UPDATE_TIME=sysdate,
+			 		LOCK_VERSION=LOCK_VERSION+1
+			 WHERE MARGIN_LIST_ID = #{marginListId} 
+	</update>
+	
+	<update id="deleteMerchantMarginList" parameterType="string">
+		UPDATE TB_MERCHANT_MARGIN_LIST SET DATA_STAT='1' WHERE APPROVE_STAT='10' AND　 MARGIN_LIST_ID = #{marginListId} 
+	</update>
+	
+	
+		<select id="getMerchantMarginApproveList" parameterType="MerchantMarginList" resultMap="MerchantMarginListResultMap">
+				SELECT 
+			  		<include refid="MerchantMarginListColumns" />
+				        ,mi.MCHNT_CODE,mi.MCHNT_NAME
+					 FROM TB_MERCHANT_MARGIN_LIST m,
+					      TB_MERCHANT_INF mi 
+					      WHERE  m.DATA_STAT='0'
+					       AND   mi.data_stat='0'
+					       AND   m.merchant_id=mi.mchnt_id
+					       AND   m.APPROVE_STAT in 
+				<foreach item="item" index="index" collection="approveStats" open="(" separator="," close=")">
+					#{item}
+				</foreach>	       
+				<if test="mortgageFlg !=null and mortgageFlg !='' ">
+						AND m.MORTGAGE_FLG=#{mortgageFlg}
+				 </if>
+				 
+				 <if test="approveStat !=null and approveStat !='' ">
+						AND m.APPROVE_STAT=#{approveStat}
+				 </if>
+				 <if test="merchantId !=null and merchantId !='' ">
+						AND m.MERCHANT_ID=#{merchantId}
+				 </if>
+				  <if test="chashId !=null and chashId !='' ">
+						AND m.CHASH_ID=#{chashId}
+				 </if>
+				 <if test="applyUserId !=null and applyUserId !='' ">
+						AND m.APPLY_USER_ID=#{applyUserId}
+				 </if>
+				  <if test="mchntName !=null and mchntName !='' ">
+						AND mi.MCHNT_NAME  LIKE '%' || #{mchntName} || '%'
+				 </if>
+				  <if test="mchntCode !=null and mchntCode !='' ">
+						AND mi.MCHNT_CODE=#{mchntCode}
+				 </if>
+				  ORDER BY m.UPDATE_TIME DESC
+	</select>
+	
+</mapper>

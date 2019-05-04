@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<#include "../../common/wecardHeader.html">
+    <meta charset="UTF-8">
+    <title>申请失败</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no, email=no">
+	<link rel="stylesheet" href="${s.base}/static/css/hkb_welfare.min.css?v=${s.version}" />
+</head>
+<body>
+	<!--知了企服-申请失败-->
+	<div class="shop_pay_gather">
+	    <div class="shop_pay_success">
+	        <!--打勾-->
+	        <!--<div class="payment_animation_right">
+	            <div class="swal2-icon swal2-success animate">
+	                <span class="line tip animate-success-tip"></span>
+	                <span class="line long animate-success-long"></span>
+	                <div class="placeholder"></div>
+	                <div class="fix"></div>
+	            </div>
+	        </div>-->
+	        <!--打叉-->
+	        <div class="payment_animation_wrong">
+	            <div class="swal2-icon swal2-error animate-error-icon">
+	                 <span class="x-mark animate-x-mark">
+	                 <span class="line left"></span>
+	                 <span class="line right"></span>
+	                 </span>
+	            </div>
+	        </div>
+	        <div class="payment_detail">
+	            <div class="operation_prompt">
+	                <p>充值申请提交失败，请稍后联系客服</p>
+	            </div>
+	        </div>
+	        <!--按钮-->
+	        <div class="payment_operation">
+	            <p class="hkb_pay_distance">
+	                <a class="pay_success_btn">好的</a>
+	            </p>
+	        </div>
+	    </div>
+	</div>
+	<input type="hidden" id="check" name="check" value="${check!}" />
+	<script src="${s.base}/static/js/common/fastclick.min.js?v=${s.version}"></script>
+	<script src="${s.base}/static/js/common/hkb_welfare.min.js?v=${s.version}"></script>
+	<script src="${s.base}/static/js/common/LAreaData2.min.js?v=${s.version}"></script>
+	
+	<script src="${s.base}/static/js/module/welfaremart/cardin/inFail.js"></script>
+	<script>
+		// 阻止浏览器后退按钮  
+		$(document).ready(function(e) {	
+			var counter = 0;
+			if (window.history && window.history.pushState) {
+				$(window).on('popstate', function () {
+					window.history.pushState('forward', null, '#');
+					window.history.forward(1);
+				});
+			}
+			window.history.pushState('forward', null, '#'); //在IE中必须得有这两行
+			window.history.forward(1);
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wecard.facade.telrecharge.mapper.TelChannelItemListMapper">
+		
+	<resultMap type="TelChannelItemList" id="TelChannelItemListResultMap">
+		<result column="ID" property="id"/>
+		<result column="PRODUCT_ID" property="productId"/>
+		<result column="CHANNEL_ID" property="channelId"/>
+		<result column="CHANNEL_RATE" property="channelRate"/>
+		<result column="RESV1" property="resv1"/>
+		<result column="RESV2" property="resv2"/>
+		<result column="RESV3" property="resv3"/>
+		<result column="RESV4" property="resv4"/>
+		<result column="RESV5" property="resv5"/>
+		<result column="RESV6" property="resv6"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="TableName">
+		TB_TEL_CHANNEL_ITEM_LIST
+	</sql>
+	
+	<sql id="ColumnResult">
+		ID,	
+		PRODUCT_ID,		
+		CHANNEL_ID,
+		CHANNEL_RATE,
+		RESV1,
+		RESV2,
+		RESV3,
+		RESV4,
+		RESV5,
+		RESV6,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER	,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+
+	<select id="getById" parameterType="java.lang.String" resultMap="TelChannelItemListResultMap">
+		SELECT 
+	  		<include refid="ColumnResult" />
+		 		     FROM 	<include refid="TableName" /> m
+		              WHERE m.data_stat='0' AND m.ID=#{id}
+	</select>
+	
+	<select id="getList" parameterType="TelChannelItemList" resultType="TelChannelItemList">
+		SELECT 
+			C.OPER_NAME,
+			C.OPER_ID,
+			M.ID,
+	  		M.CHANNEL_RATE,
+	  		CA.CHANNEL_NAME
+		FROM TB_TEL_CHANNEL_PRODUCT_INF C
+		INNER JOIN <include refid="TableName" /> M ON C.PRODUCT_ID = M.PRODUCT_ID 
+		LEFT JOIN TB_TEL_CHANNEL_INF CA ON M.CHANNEL_ID = CA.CHANNEL_ID
+		WHERE  M.DATA_STAT='0'
+		<if test="productId !=null and productId !='' ">
+			AND M.PRODUCT_ID = #{productId}
+		</if>
+		<if test="operName !=null and operName !='' ">
+			AND C.OPER_NAME LIKE '%' || #{operName} || '%'
+		</if>
+		<if test="operId !=null and operId !='' ">
+			AND C.OPER_ID = #{operId}
+		</if>
+		ORDER BY M.UPDATE_TIME DESC
+	</select>
+	
+		<insert id="insert" parameterType="TelChannelItemList">
+			 <selectKey resultType="string" order="BEFORE" keyProperty="id">  
+			<include refid="com.cn.thinkx.wecard.facade.telrecharge.mapper.SqlTelCommonMapper.getTelCommonId" />
+		</selectKey>
+			INSERT INTO <include refid="TableName" /> (
+				<include refid="ColumnResult" />
+			 )  VALUES (
+			 		#{id,jdbcType=VARCHAR},
+					#{productId,jdbcType=VARCHAR},
+					#{channelId,jdbcType=VARCHAR},
+					#{channelRate,jdbcType=VARCHAR},
+			 		#{resv1,jdbcType=VARCHAR},
+			 		#{resv2,jdbcType=VARCHAR},
+			 		#{resv3,jdbcType=VARCHAR},
+			 		#{resv4,jdbcType=VARCHAR},
+			 		#{resv5,jdbcType=VARCHAR},
+			 		#{resv6,jdbcType=VARCHAR},
+			 		#{dataStat,jdbcType=VARCHAR},
+			 		#{remarks,jdbcType=VARCHAR},
+			 		#{createUser,jdbcType=VARCHAR},
+			 		#{createUser,jdbcType=VARCHAR},
+			 		sysdate,
+			 		sysdate,
+			 		'0') 
+		</insert>
+		
+		<update id="update"  parameterType="TelChannelItemList">
+			UPDATE <include refid="TableName" /> SET
+				PRODUCT_ID=#{productId,jdbcType=VARCHAR},
+				CHANNEL_ID=#{channelId,jdbcType=VARCHAR},
+				CHANNEL_RATE=#{channelRate,jdbcType=VARCHAR},
+		 		RESV1=#{resv1,jdbcType=VARCHAR},
+		 		RESV2=#{resv2,jdbcType=VARCHAR},
+		 		RESV3=#{resv3,jdbcType=VARCHAR},
+		 		RESV4=#{resv4,jdbcType=VARCHAR},
+		 		RESV5=#{resv5,jdbcType=VARCHAR},
+		 		RESV6=#{resv6,jdbcType=VARCHAR},
+				DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+				REMARKS=#{remarks,jdbcType=VARCHAR},
+				UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+				UPDATE_TIME=sysdate,
+				LOCK_VERSION=LOCK_VERSION+1
+			 	WHERE LOCK_VERSION=#{lockVersion} AND ID = #{id} 
+	</update>
+
+	<update id="deleteById" parameterType="string">
+		UPDATE <include refid="TableName" /> SET DATA_STAT='1'  WHERE　ID = #{id} 
+	</update>
+	
+	<update id="deleteByProductId" parameterType="string">
+		UPDATE <include refid="TableName" /> SET DATA_STAT='1'  WHERE　PRODUCT_ID = #{productId} 
+	</update>
+</mapper>

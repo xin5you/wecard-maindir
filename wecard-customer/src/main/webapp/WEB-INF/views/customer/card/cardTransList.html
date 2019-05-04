@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <#include "../../common/wecardHeader.html"> 
+<!--  <script src="${s.base}/static/js/dropload/dropload.min.js?v=${s.version}"></script> -->
+ <script src="${s.base}/static/js/module/card/cardTransList.js?v=${s.version}" ></script>
+    <!--通用媒体查询-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+    <title>余额明细</title>
+</head>
+<body style="">
+<!-- 查看账单 -->
+<input type="hidden" id="innerMerchantNo" name='innerMerchantNo' value="${innerMerchantNo!}">
+<div class="hkb_refresh">
+    <span class="icon">&#x2193;</span>
+    <span>&#x4E0B;&#x62C9;&#x5237;&#x65B0;</span>
+</div>
+<div class="hkb_bill_content">
+	<div class="hkb_bill_check">
+	   
+	</div>
+	<div class="bill_check_none">
+    </div>
+</div>
+</body>
+</html>

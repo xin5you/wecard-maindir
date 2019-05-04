@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.iboot.diy.api.original.mapper.MchntStatisticsMapper">
+
+	<resultMap type="MchntStatistics" id="MchntStatisticsMap">
+		<result column="MCHNT_CODE" property="mchntCode" />
+		<result column="CARD_PAY_AMT" property="cardPayAmt" />
+		<result column="QUICK_PAY_AMT" property="quickPayAmt" />
+		<result column="OL_RECHARGE_DEN" property="olRechargeDen" />
+		<result column="OL_RECHARGE_AMT" property="olRechargeAmt" />
+		<result column="PF_RECHARGE_DEN" property="pfRechargeDen" />
+		<result column="PF_RECHARGE_AMT" property="pfRechargeAmt" />
+		<result column="PF_SUBSIDY_NUM" property="pfSubsidyNum" />
+		<result column="PF_SUBSIDY_AMT" property="pfSubsidyAmt" />
+		<result column="CARD_BAL" property="cardBal" />
+		<result column="FEE" property="fee" />
+		<result column="SETTLE_AMT" property="settleAmt" />
+	</resultMap>
+
+	<select id="getMchntStatisticsList" parameterType="MchntStatistics"
+		resultMap="MchntStatisticsMap">
+		SELECT T.MCHNT_CODE,
+		CARD_PAY_AMT,
+		QUICK_PAY_AMT,
+		OL_RECHARGE_DEN,
+		OL_RECHARGE_AMT,
+		PF_RECHARGE_DEN,
+		PF_RECHARGE_AMT,
+		PF_SUBSIDY_NUM,
+		PF_SUBSIDY_AMT,
+		CARD_BAL,
+		FEE,
+		SETTLE_AMT
+		FROM (SELECT S.MCHNT_CODE,
+		SUM(S.CARD_PAY_AMT) AS CARD_PAY_AMT,
+		SUM(S.QUICK_PAY_AMT) AS QUICK_PAY_AMT,
+		SUM(S.OL_RECHARGE_DEN) AS OL_RECHARGE_DEN,
+		SUM(S.OL_RECHARGE_AMT) AS OL_RECHARGE_AMT,
+		SUM(S.PF_RECHARGE_DEN) AS PF_RECHARGE_DEN,
+		SUM(S.PF_RECHARGE_AMT) AS PF_RECHARGE_AMT,
+		SUM(S.PF_SUBSIDY_NUM) AS PF_SUBSIDY_NUM,
+		SUM(S.PF_SUBSIDY_AMT) AS PF_SUBSIDY_AMT,
+		SUM(S.CARD_BAL) AS CARD_BAL,
+		SUM(S.FEE) AS FEE,
+		SUM(S.SETTLE_AMT) AS SETTLE_AMT
+		FROM TB_MCHNT_STATISTICS S
+		WHERE S.DATA_STAT = '0'
+		AND S.MCHNT_CODE = #{mchntCode}
+		<if test="startDate != null and startDate != '' ">
+			AND S.SETTLE_DATE &gt;= #{startDate}
+		</if>
+		<if test="endDate != null and endDate != '' ">
+			AND S.SETTLE_DATE &lt;= #{endDate}
+		</if>
+		GROUP BY S.MCHNT_CODE) T,
+		TB_MERCHANT_INF M
+		WHERE T.MCHNT_CODE = M.MCHNT_CODE
+	</select>
+
+	<select id="getShopCodeByMchntCode" parameterType="String"
+		resultType="String">
+		SELECT S.SHOP_CODE
+		FROM TB_MERCHANT_INF M, TB_SHOP_INF S
+		WHERE M.MCHNT_ID = S.MCHNT_ID
+		AND S.DATA_STAT = '0'
+		AND S.SHOP_LEVEL = '1'
+		AND S.P_SHOP_CODE
+		IS NULL
+		AND M.MCHNT_CODE = #{mchntCode}
+	</select>
+	
+	<select id="getCardBal" parameterType="MchntStatistics" resultType="String">
+	    SELECT M.CARD_BAL
+		  FROM TB_MCHNT_STATISTICS M
+		 WHERE M.SETTLE_DATE = #{endDate} 
+		   AND M.MCHNT_CODE = #{mchntCode}
+    </select>
+</mapper>

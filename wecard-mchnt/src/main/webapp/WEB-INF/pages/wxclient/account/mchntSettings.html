@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>知了企服</title>
+   	<#include "../../common/wecardHeader.html">
+	<script src="${s.base}/res/common/security.js"></script>
+	<script type="text/javascript">
+		//通过模和公钥参数获取公钥
+		var publicKey = new RSAUtils.getKeyPair("${publicKeyExponent!}", "", "${publicKeyModulus!}");
+	</script>
+
+</head>
+  <body ontouchstart>
+  <div class="container js_container" id="container">
+  <div class="page">
+        <div class="bd">
+	  		<h1 class="page_title">商户设置</h1>
+	  </div>
+	 <div class="weui_cells weui_cells_form">
+	     <form class="form-horizontal" role="form">
+	
+		      <div class="weui_cell control-group">
+		        <div class="weui_cell_hd"><label class="control-label" for="tel">手机号&nbsp;</label></div>
+		        <div class="weui_cell_bd weui_cell_primary col-sm-10">
+	       	    	 <label >${phoneNo!}</label>
+		        </div>
+		        <div class="weui_cell_ft">
+		                  <button id="sendPhoneCode" type="button"  class="weui_btn weui_btn_mini weui_btn_primary">发&nbsp;&nbsp;送</button>
+		            </div>
+		      </div>
+		      <div class="weui_cell">
+		       	    <div class="weui_cell_hd"><label class="control-label">验证码&nbsp;</label></div>
+	                <div class="weui_cell_bd weui_cell_primary col-sm-10">
+	                    <input type="tel" id="phoneCode" placeholder="请输入验证码" class="weui_input form-control" maxlength="12">
+	                </div>
+		      </div>
+		      
+		      <div class="weui_cell">
+		       	    <div class="weui_cell_hd"><label class="control-label">交易密码</label></div>
+	                <div class="weui_cell_bd weui_cell_primary col-sm-10">
+	                    <input type="password" id="password" placeholder="请输入6位交易密码" class="weui_input form-control" maxlength="6">
+	                </div>
+		      </div>
+		      
+		      <div class="weui_cell">
+		       	    <div class="weui_cell_hd"><label class="control-label">确认密码</label></div>
+	                <div class="weui_cell_bd weui_cell_primary col-sm-10">
+	                    <input type="password" id="passwordConfirm" placeholder="请确认6位交易密码" class="weui_input form-control" maxlength="6">
+	                </div>
+		      </div>
+		      <div class="weui_cells_tips bg-danger weui_toptips_visible">获取动态验证码！交易密码请设置6位数字</div>
+		      <div class="weui_btn_area">
+		        <button type="button" class="weui_btn weui_btn_primary"  id="userSetBtn">确定提交</button>
+		      </div>
+	      </form>
+	    </div>
+	</div>
+</div>
+<script type="text/html" id="tpl_msg">
+ <div class="page">
+    <div class="weui_msg">
+        <div class="weui_icon_area"><i class="weui_icon_success weui_icon_msg"></i></div>
+        <div class="weui_text_area">
+            <h2 class="weui_msg_title">设置成功</h2>
+            <p class="weui_msg_desc">恭喜您，密码重置成功</p>
+        </div>
+    </div>
+</div>
+</script>
+<script type="text/javascript" src="${s.base}/res/js/wxclient/account/mchntSettings.js"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wecard.api.module.mchnt.mapper.ShopInfMapper">
+		
+	<resultMap type="ShopInf" id="ShopInfResultMap">
+		<result column="SHOP_ID" property="shopId"/>
+		<result column="SHOP_CODE" property="shopCode"/>
+		<result column="MCHNT_ID" property="mchntId"/>
+		<result column="MCHNT_NAME" property="mchntName"/>
+		<result column="SHOP_NAME" property="shopName"/>
+		<result column="SHOP_ADDR" property="shopAddr"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="QR_CODE_URL" property="qrCodeUrl"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="ShopInfColumns">
+		m.SHOP_ID,
+		m.SHOP_CODE,
+		m.MCHNT_ID,
+		m.SHOP_NAME,
+		m.SHOP_ADDR,
+		m.DATA_STAT,
+		m.QR_CODE_URL,
+		m.REMARKS,
+		m.CREATE_USER, 
+		m.UPDATE_USER, 
+		m.CREATE_TIME, 
+		m.UPDATE_TIME, 
+		m.LOCK_VERSION
+	</sql>
+
+	
+	<select id="getShopInfByCode" parameterType="java.lang.String" resultMap="ShopInfResultMap">
+		select 
+		sm.SHOP_ID,
+		sm.SHOP_CODE,
+		sm.MCHNT_ID,
+		sm.SHOP_NAME,
+		sm.SHOP_ADDR,
+		sm.DATA_STAT,
+		sm.QR_CODE_URL,
+		sm.REMARKS,
+		sm.CREATE_USER, 
+		sm.UPDATE_USER, 
+		sm.CREATE_TIME, 
+		sm.UPDATE_TIME, 
+		sm.LOCK_VERSION,
+		tm.MCHNT_NAME  
+			FROM TB_SHOP_INF sm
+                LEFT JOIN TB_MERCHANT_INF tm  on tm.mchnt_id =sm.mchnt_id                            
+        		 WHERE sm.DATA_STAT='0' AND sm.SHOP_CODE=#{shopCode}
+	</select>
+</mapper>

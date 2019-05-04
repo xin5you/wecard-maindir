@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.thinkx.common.wecard.module.accmchnt.mapper.AccMchntTransLogMapper">
+	<sql id="AccMchntTransLogColumns">
+		ACC_PRIMARY_KEY,
+		MCHNT_PRIMARY_KEY,
+		TRANS_AMT,
+		SETTLE_DATE,
+		USER_INF,
+		MCHNT_CODE,
+		SHOP_CODE,
+		DEVICE_NO,
+		TRANS_ST,
+		RESP_CODE,
+		TRANS_ID,
+		REMARKS,
+		CREATE_USER,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME
+	</sql>
+	
+	<insert id="insertAccMchntTransLog" parameterType="AccMchntTransLog">
+		INSERT INTO TB_ACC_MCHNT_TRANS_LOG (
+			<include refid="AccMchntTransLogColumns" />
+		 )  VALUES ( 
+		 		#{accPrimaryKey,jdbcType=VARCHAR},
+		 		#{mchntPrimaryKey,jdbcType=VARCHAR},
+		 		#{transAmt,jdbcType=VARCHAR},
+		 		#{settleDate,jdbcType=VARCHAR},
+		 		#{userInf,jdbcType=VARCHAR},
+		 		#{mchntCode,jdbcType=VARCHAR},
+		 		#{shopCode,jdbcType=VARCHAR},
+		 		#{deviceNo,jdbcType=VARCHAR},  
+		 		#{transSt,jdbcType=INTEGER},
+		 		#{respCode,jdbcType=VARCHAR},
+		 		#{transId,jdbcType=VARCHAR},
+		 		#{remarks,jdbcType=VARCHAR},
+				'99999999',
+		   		'99999999',
+		 		sysdate,
+		 		sysdate
+		 	) 
+	</insert>
+	
+	<update id="updateAccMchntTransLog" parameterType="AccMchntTransLog" flushCache="true">
+		UPDATE TB_ACC_MCHNT_TRANS_LOG SET 
+			TRANS_ST = #{transSt,jdbcType=INTEGER},
+			RESP_CODE = #{respCode,jdbcType=VARCHAR},
+			UPDATE_TIME = SYSDATE 
+		WHERE ACC_PRIMARY_KEY = #{accPrimaryKey}
+	</update>
+	
+</mapper>

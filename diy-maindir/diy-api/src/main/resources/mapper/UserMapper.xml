@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.iboot.diy.api.system.mapper.UserMapper">
+
+	<sql id="UserColumns">
+		a.ID,
+		a.LOGIN_NAME,
+		a.PASSWORD,
+		a.USER_NAME,
+		a.PHONE_NO,
+		a.ISDEFAULT,
+		a.DATA_STAT,
+		a.REMARKS,
+		a.CREATE_USER,
+		a.UPDATE_USER,
+		a.CREATE_TIME,
+		a.UPDATE_TIME,
+		a.LOCK_VERSION
+	</sql>
+	
+	<select id="getList" parameterType="User" resultType="User">
+		select 
+			<include refid="UserColumns" />,
+			e.ROLE_NAME,e.SEQ 
+		from TB_WEB_DATA_AUTH c,TB_WEB_USER_DATA_AUTH b,TB_WEB_USER a, TB_WEB_USER_ROLE d, TB_WEB_ROLE e 
+    	where c.ID = b.AUTH_ID and b.USER_ID = a.ID and a.ID = d.USER_ID and d.ROLE_ID = e.ID 
+		 and a.DATA_STAT = '0' 
+		 <if test="mchntCode !=null and mchntCode !='' ">
+		 	and c.MCHNT_CODE = #{mchntCode}
+		 </if>
+		<if test="phoneNo !=null and phoneNo !='' ">
+		 	and a.PHONE_NO = #{phoneNo}
+		</if>
+		<if test="seq !=null and seq !='' ">
+		 	and e.SEQ >=  #{seq}
+		</if>
+		order by e.SEQ asc
+	</select>
+	
+	<select id="selectByPrimaryKey" parameterType="String" resultType="User">
+		select
+		<include refid="UserColumns" />
+		from TB_WEB_USER a
+		where a.ID = #{primaryKey} and a.DATA_STAT='0'
+	</select>
+	
+	<select id="getUserByUserName" parameterType="User" resultType="User">
+		 select 
+	  		<include refid="UserColumns" />
+		 from TB_WEB_USER a, TB_WEB_USER_DATA_AUTH ud, TB_WEB_DATA_AUTH d
+		 where a.ID = ud.USER_ID and ud.AUTH_ID = d.ID 
+		 and a.USER_NAME = #{userName} AND d.MCHNT_CODE = #{mchntCode} AND a.DATA_STAT = '0'
+	</select>
+	
+	<select id="getUserByPhoneNo" parameterType="String" resultType="User">
+		select 
+			<include refid="UserColumns" />,
+		c.MCHNT_CODE,c.SHOP_CODE,e.SEQ
+		from TB_WEB_USER a, TB_WEB_USER_DATA_AUTH b, TB_WEB_DATA_AUTH c,
+		TB_WEB_USER_ROLE d,TB_WEB_ROLE e
+    	where a.ID = b.USER_ID and b.AUTH_ID = c.ID and a.ID = d.USER_ID and d.ROLE_ID = e.ID
+		and a.PHONE_NO = #{phoneNo} AND a.DATA_STAT = '0'
+	</select>
+	
+	<select id="getShopListByUserId" parameterType="String" resultType="User">
+		select e.SHOP_CODE,e.SHOP_NAME 
+		from TB_WEB_USER a, TB_WEB_USER_DATA_AUTH b, TB_WEB_DATA_AUTH c, TB_MERCHANT_INF d, TB_SHOP_INF e
+		where a.ID = b.USER_ID and b.AUTH_ID = c.ID and c.MCHNT_CODE = d.MCHNT_CODE and d.MCHNT_ID = e.MCHNT_ID 
+		and a.ID = #{id} 
+		and e.SHOP_LEVEL = '1' 
+		and e.P_SHOP_CODE IS NULL
+		and e.data_stat = '0'
+	</select>
+	
+	<select id="getShopMchntCodeByUserId" parameterType="String" resultType="User">
+		select 
+			<include refid="UserColumns" />,
+		c.SHOP_CODE,c.MCHNT_CODE 
+		from TB_WEB_USER a, TB_WEB_USER_DATA_AUTH b, TB_WEB_DATA_AUTH c
+		where a.ID = b.USER_ID and b.AUTH_ID = c.id 
+		and a.ID = #{id} AND a.DATA_STAT = '0'
+	</select>
+	
+	<select id="getMchntNameByMchntCode" parameterType="String" resultType="String">
+		select a.MCHNT_NAME from TB_MERCHANT_INF a where a.MCHNT_CODE = #{mchntCode}
+	</select>
+	
+	<select id="getShopNameByShopCode" parameterType="String" resultType="String">
+		select a.SHOP_NAME from TB_SHOP_INF a where a.SHOP_CODE = #{shopCode}
+	</select>
+	
+	<delete id="deleteByPrimaryKey" parameterType="User">
+		update TB_WEB_USER SET DATA_STAT='1' WHERE ID = #{id}
+	</delete>
+
+	<insert id="insert" parameterType="User">
+	    <selectKey resultType="String" order="AFTER" keyProperty="id">  
+				<include refid="com.cn.iboot.diy.api.base.mapper.SqlCommonMapper.getSysUserId" />
+		</selectKey>
+		insert into TB_WEB_USER a (
+			a.LOGIN_NAME,
+			a.PASSWORD,
+			a.USER_NAME,
+			a.PHONE_NO,
+			a.ISDEFAULT,
+			a.DATA_STAT,
+			a.REMARKS,
+			a.CREATE_USER,
+			a.UPDATE_USER,
+			a.CREATE_TIME,
+			a.UPDATE_TIME,
+			a.LOCK_VERSION
+		) values (
+			#{loginName,jdbcType=VARCHAR},
+			#{password,jdbcType=VARCHAR},
+			#{userName,jdbcType=VARCHAR},
+			#{phoneNo,jdbcType=VARCHAR},
+			'0',
+			'0',
+			#{remarks,jdbcType=VARCHAR},
+			#{createUser,jdbcType=VARCHAR},
+			#{updateUser,jdbcType=VARCHAR},
+			sysdate,
+			sysdate,
+			0
+		)
+	</insert>
+
+	<update id="updateByPrimaryKey" parameterType="User">
+		update TB_WEB_USER a
+		<set>
+	    	a.LOGIN_NAME = #{loginName,jdbcType=VARCHAR},
+			a.PASSWORD = #{password,jdbcType=VARCHAR},
+			a.USER_NAME = #{userName,jdbcType=VARCHAR},
+			a.PHONE_NO = #{phoneNo,jdbcType=VARCHAR},
+			a.ISDEFAULT = #{isdefault,jdbcType=CHAR},
+			a.DATA_STAT = #{dataStat,jdbcType=CHAR},
+			a.REMARKS = #{remarks,jdbcType=VARCHAR},
+			a.UPDATE_USER = #{updateUser,jdbcType=VARCHAR},
+			a.UPDATE_TIME=sysdate,
+			a.LOCK_VERSION = a.LOCK_VERSION +1
+		</set>
+		where a.ID = #{id}
+	</update>
+	
+	<select id="getRoleByMchntCodeAndShopCode" parameterType="User" resultType="User">
+		select count(*) as countNumber,u.id from 
+			tb_web_user u,tb_web_user_data_auth ud,tb_web_data_auth da,tb_web_user_role ur,tb_web_role r
+		    where 1=1 and u.id = ud.user_id and ud.auth_id = da.id and
+		    u.id = ur.user_id and ur.role_id = r.id
+			and da.mchnt_code = #{mchntCode} and da.shop_code = #{shopCode} and r.id = #{roleId} and u.DATA_STAT = '0'
+			group by u.id
+	</select>
+</mapper>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.merchant.mapper.MerchantInfListMapper">
+		
+	<resultMap type="MerchantInfList" id="MerchantInfListResultMap">
+		<result column="INS_ID" property="insId"/>
+		<result column="MCHNT_ID" property="mchntId"/>
+		<result column="MCHNT_TYPE" property="mchntType"/>
+		<result column="MCHNT_NAME" property="mchntName"/>
+		<result column="MCHNT_CODE" property="mchntCode"/>
+		<result column="BUS_LICENCE_CODE" property="busLicenceCode"/>
+		<result column="NAME" property="name"/>
+		<result column="ID_CARD_NO" property="idCardNo"/>
+		<result column="PHONE_NUMBER" property="phoneNumber"/>
+		<result column="BACK_NAME" property="backName"/>
+		<result column="BACK_ACT" property="backAct"/>
+		<result column="BACK_ACT_NAME" property="backActName"/>
+		<result column="INS_SCALE" property="insScale"/>
+		<result column="BRAND_NAME" property="brandName"/>
+		<result column="INS_CODE_CARD" property="insCodeCard"/>
+		<result column="BUSINESS_LICENCE" property="businessLicence"/>
+		<result column="ID_CARD" property="idCard"/>
+		<result column="BRAND_LOGO" property="brandLogo"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="INVITE_CODE" property="inviteCode"/>
+		<result column="INVITE_CODE_STAT" property="inviteCodeStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="MerchantInfListColumns">
+		m.INS_ID,	
+		m.MCHNT_ID,
+		m.MCHNT_TYPE,
+		m.MCHNT_NAME,
+		m.MCHNT_CODE,
+		m.BUS_LICENCE_CODE,
+		m.NAME,
+		m.ID_CARD_NO,
+		m.PHONE_NUMBER,
+		m.BACK_NAME,
+		m.BACK_ACT,
+		m.BACK_ACT_NAME,
+		m.INS_SCALE,
+		m.BRAND_NAME,
+		m.INS_CODE_CARD,
+		m.BUSINESS_LICENCE,
+		m.ID_CARD,
+		m.BRAND_LOGO,
+		m.DATA_STAT,
+		m.INVITE_CODE,
+		m.INVITE_CODE_STAT,
+		m.REMARKS,
+		m.CREATE_USER,
+		m.UPDATE_USER,
+		m.CREATE_TIME,
+		m.UPDATE_TIME,
+		m.LOCK_VERSION	
+
+	</sql>
+	
+	<select id="getMerchantInfoListByMchntId" parameterType="java.lang.String" resultMap="MerchantInfListResultMap">
+		SELECT 
+	  		<include refid="MerchantInfListColumns" />
+		 FROM TB_MERCHANT_INF_LIST m WHERE  m.MCHNT_ID=#{mchntId}
+	</select>
+	
+	<insert id="insertMerchantInfoList" parameterType="MerchantInfList">
+			INSERT INTO TB_MERCHANT_INF_LIST (
+				INS_ID,	
+				MCHNT_ID,
+				MCHNT_TYPE,
+				MCHNT_NAME,
+				MCHNT_CODE,
+				BUS_LICENCE_CODE,
+				NAME,
+				ID_CARD_NO,
+				PHONE_NUMBER,
+				BACK_NAME,
+				BACK_ACT,
+				BACK_ACT_NAME,
+				INS_SCALE,
+				BRAND_NAME,
+				INS_CODE_CARD,
+				BUSINESS_LICENCE,
+				ID_CARD,
+				BRAND_LOGO,
+				DATA_STAT,
+				INVITE_CODE,
+				INVITE_CODE_STAT,
+				REMARKS,
+				CREATE_USER,
+				CREATE_TIME,
+				UPDATE_USER,
+				UPDATE_TIME,
+				LOCK_VERSION
+			 )  VALUES (
+				 	#{insId,jdbcType=VARCHAR},
+				 	#{mchntId,jdbcType=VARCHAR},
+				 	#{mchntType,jdbcType=VARCHAR},
+				 	#{mchntName,jdbcType=VARCHAR},
+				 	#{mchntCode,jdbcType=VARCHAR},
+				 	#{busLicenceCode,jdbcType=VARCHAR},
+				 	#{name,jdbcType=VARCHAR},
+				 	#{idCardNo,jdbcType=VARCHAR},
+				 	#{phoneNumber,jdbcType=VARCHAR},
+				 	#{backName,jdbcType=VARCHAR},
+				 	#{backAct,jdbcType=VARCHAR},
+				 	#{backActName,jdbcType=VARCHAR},
+				 	#{insScale,jdbcType=VARCHAR},
+				 	#{brandName,jdbcType=VARCHAR},
+					#{insCodeCard,jdbcType=VARCHAR},
+					#{businessLicence,jdbcType=VARCHAR},
+					#{idCard,jdbcType=VARCHAR},
+					#{brandLogo,jdbcType=VARCHAR},
+					#{dataStat,jdbcType=VARCHAR},
+					#{inviteCode,jdbcType=VARCHAR},
+					#{inviteCodeStat,jdbcType=VARCHAR},
+			 		#{remarks,jdbcType=VARCHAR},
+			 		#{createUser,jdbcType=VARCHAR},
+			 		sysdate,
+			 		#{createUser,jdbcType=VARCHAR},
+			 		sysdate,
+			 		'0') 
+		</insert>
+		<update id="updateMerchantInfoList" parameterType="MerchantInfList">
+			UPDATE TB_MERCHANT_INF_LIST SET
+					INS_ID=#{insId,jdbcType=VARCHAR},
+				 	MCHNT_TYPE=#{mchntType,jdbcType=VARCHAR},
+				 	MCHNT_NAME=#{mchntName,jdbcType=VARCHAR},
+				 	MCHNT_CODE=#{mchntCode,jdbcType=VARCHAR},
+				 	BUS_LICENCE_CODE=#{busLicenceCode,jdbcType=VARCHAR},
+				 	NAME=#{name,jdbcType=VARCHAR},
+				 	ID_CARD_NO=#{idCardNo,jdbcType=VARCHAR},
+				 	PHONE_NUMBER=#{phoneNumber,jdbcType=VARCHAR},
+				 	BACK_NAME=#{backName,jdbcType=VARCHAR},
+				 	BACK_ACT=#{backAct,jdbcType=VARCHAR},
+				 	BACK_ACT_NAME=#{backActName,jdbcType=VARCHAR},
+				 	INS_SCALE=#{insScale,jdbcType=VARCHAR},
+				 	BRAND_NAME=#{brandName,jdbcType=VARCHAR},
+					INS_CODE_CARD=#{insCodeCard,jdbcType=VARCHAR},
+					BUSINESS_LICENCE=#{businessLicence,jdbcType=VARCHAR},
+					ID_CARD=#{idCard,jdbcType=VARCHAR},
+					BRAND_LOGO=#{brandLogo,jdbcType=VARCHAR},
+					DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+					INVITE_CODE=#{inviteCode,jdbcType=VARCHAR},
+					INVITE_CODE_STAT=#{inviteCodeStat,jdbcType=VARCHAR},
+			 		REMARKS=#{remarks,jdbcType=VARCHAR},
+			 		UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+			 		UPDATE_TIME=sysdate,
+			 		LOCK_VERSION=LOCK_VERSION+1
+			 WHERE MCHNT_Id = #{mchntId} 
+	</update>
+	
+	
+	<select id="getMerchantInfListByCode" parameterType="java.lang.String" resultMap="MerchantInfListResultMap">
+		SELECT 
+	  		<include refid="MerchantInfListColumns" />
+		 FROM TB_MERCHANT_INF_LIST m WHERE  m.INVITE_CODE=#{id}
+	</select>
+	
+	<update id="deleteMerchantInfList" parameterType="string">
+		UPDATE TB_MERCHANT_INF_LIST SET DATA_STAT='1' WHERE　MCHNT_Id = #{mchntId} 
+	</update>
+</mapper>

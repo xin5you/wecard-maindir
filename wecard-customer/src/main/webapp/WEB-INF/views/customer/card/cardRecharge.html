@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<#include "../../common/wecardHeader.html">
+    <!--通用媒体查询-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+    <title>&#x4F1A;&#x5458;&#x5361;&#x5145;&#x503C;</title>
+</head>
+<body>
+
+<div class="hkb_title">
+    <div class="logo"><img src="${merchantInfo.brandLogo !}"></div>
+    <div>${merchantInfo.mchntName !}</div>
+</div>
+
+<div class="hkb_use_rules hkb_shadow">
+    <div class="title"><img src="${s.base}/static/images/detail_rules.png">&#x4F7F;&#x7528;&#x89C4;&#x5219;</div>
+    <div>
+        ${activeRule!}
+    </div>
+</div>
+<#if sellingCardList ??&& sellingCardList.cardList?size gt 0>
+	<#list sellingCardList.cardList as cards>
+		<a class="hkb_menbers_card hkb_alignment_center hkb_shadow" href="${s.base!}/customer/card/buyCardRecharge.html?mchntCode=${merchantInfo.mchntCode!}&productCode=${cards.productCode!}&commodityCode=${cards.commodityCode!}">
+		    <div class="card_content hkb_alignment_left">
+		        <span><img src="${sellingCardList.productImage}"></span>
+		        <div>
+		            <p>${cards.commodityName!}</p>
+		            <p>&#xFFE5;${cards.commodityPrice!}<span>&#x4F18;&#x60E0;:&#xFFE5;${cards.favorablePrice!}</span></p>
+		        </div>
+		    </div>
+		    <div class="buy_btn">
+		        <span>&#x8D2D;&#x4E70;</span>
+		    </div>
+		</a>
+	</#list>
+</#if>
+</body>
+</html>

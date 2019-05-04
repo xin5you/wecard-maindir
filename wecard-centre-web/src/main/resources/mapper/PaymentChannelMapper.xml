@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.thinkx.wecard.centre.module.biz.mapper.PaymentChannelMapper">
+
+	<sql id="PaymentChannelColumns">
+		PC.ID,
+		PC.CHANNEL_NO,
+		PC.CHANNEL_NAME,
+		PC.RATE,
+		PC.CHANNEL_TYPE,
+		PC.DESCRIPTION,
+		PC.ENABLE,
+		PC.DATA_STAT
+	</sql>
+
+	<sql id="PaymentChannelApiColumns">
+		PCI.ID as apiId,
+		PCI.CHANNEL_ID channelId,
+		PCI.NAME name,
+		PCI.URL url,
+		PCI.API_TYPE apiType,
+		PCI.DESCRIPTION apiDescription,
+		PCI.ENABLE apiEnable,
+		PCI.DATA_STAT apiDataStat
+	</sql>
+	<resultMap type="PaymentChannelVO" id="PaymentChannelInfMap">
+		<id column="ID" property="id" />
+		<result column="CHANNEL_NO" property="channelNo" />
+		<result column="CHANNEL_NAME" property="channelName" />
+		<result column="RATE" property="rate" />
+		<result column="CHANNEL_TYPE" property="channelType" />
+		<result column="DESCRIPTION" property="description" />
+		<result column="ENABLE" property="enable" />
+		<result column="DATA_STAT" property="dataStat" />
+		<collection property="apiList" ofType="PaymentChannelApiVO">
+			<id column="apiId" property="id" />
+			<result column="channelId" property="channelId" />
+			<result column="name" property="name" />
+			<result column="url" property="url" />
+			<result column="apiType" property="apiType" />
+			<result column="apiDescription" property="description" />
+			<result column="apiEnable" property="enable" />
+			<result column="apiDataStat" property="dataStat" />
+		</collection>
+	</resultMap>
+
+	<select id="getPaymentChannelList" resultMap="PaymentChannelInfMap">
+		SELECT
+		<include refid="PaymentChannelColumns" />
+		,
+		<include refid="PaymentChannelApiColumns" />
+		FROM TB_PAYMENT_CHANNELS_INF PC LEFT JOIN TB_PAYMENT_CHANNELS_API_INF
+		PCI
+		ON PC.ID = PCI.CHANNEL_ID
+		WHERE 1=1
+	 <![CDATA[
+  		AND SYSDATE-1/24 <= PC.UPDATE_TIME
+ 	 ]]>
+
+	</select>
+
+
+</mapper>

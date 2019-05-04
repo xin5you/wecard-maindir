@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wecard.facade.telrecharge.mapper.TelProviderOrderInfMapper">
+		
+	<resultMap type="TelProviderOrderInf" id="TelProviderOrderInfResultMap">
+		<result column="REG_ORDER_ID" property="regOrderId"/>
+		<result column="CHANNEL_ORDER_ID" property="channelOrderId"/>
+		<result column="REG_ORDER_AMT" property="regOrderAmt"/>
+		<result column="OPERATE_TIME" property="operateTime" />
+		<result column="PAY_STATE" property="payState"/>
+		<result column="RECHARGE_STATE" property="rechargeState"/>
+		<result column="ITEM_COST" property="itemCost"/>
+		<result column="TRANS_COST" property="transCost"/>
+		<result column="REVOKE_MESSAGE" property="revokeMessage"/>
+		<result column="BILL_ID" property="billId"/>
+		<result column="PROVIDER_ID" property="providerId"/>
+		<result column="OPER_NUM" property="operNum"/>	
+		<result column="RESV1" property="resv1"/>
+		<result column="RESV2" property="resv2"/>
+		<result column="RESV3" property="resv3"/>
+		<result column="RESV4" property="resv4"/>
+		<result column="RESV5" property="resv5"/>
+		<result column="RESV6" property="resv6"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="TableName">
+			TB_TEL_PROVIDER_ORDER_INF
+	</sql>
+	
+	<sql id="ColumnResult">
+		REG_ORDER_ID, 
+		CHANNEL_ORDER_ID,
+		REG_ORDER_AMT, 
+		OPERATE_TIME, 
+		PAY_STATE, 
+		RECHARGE_STATE, 
+		ITEM_COST, 
+		TRANS_COST,
+		REVOKE_MESSAGE, 
+		BILL_ID, 
+		PROVIDER_ID, 
+		OPER_NUM,
+		RESV1,
+		RESV2,
+		RESV3,
+		RESV4,
+		RESV5,
+		RESV6,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER	,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+
+	<select id="getById" parameterType="java.lang.String" resultMap="TelProviderOrderInfResultMap">
+		SELECT 
+	  		<include refid="ColumnResult" />
+		 		     FROM 	<include refid="TableName" /> m
+		              WHERE m.data_stat='0' AND m.Reg_Order_Id=#{regOrderId}
+	</select>
+	
+	<select id="getList" parameterType="TelProviderOrderInf" resultMap="TelProviderOrderInfResultMap">
+		SELECT 
+	  		<include refid="ColumnResult" />
+		FROM  <include refid="TableName" /> m
+		WHERE m.data_stat='0' 
+		<if test="regOrderId !=null and regOrderId !='' ">
+			AND m.REG_ORDER_ID = #{regOrderId}
+		</if>
+		<if test="channelOrderId !=null and channelOrderId !='' ">
+			AND m.CHANNEL_ORDER_ID = #{channelOrderId}
+		</if>
+		<if test="billId !=null and billId !='' ">
+			AND m.BILL_ID = #{billId}
+		</if>
+		<if test="rechargeState !=null and rechargeState !='' ">
+			AND m.RECHARGE_STATE = #{rechargeState}
+		</if>
+		ORDER BY M.UPDATE_TIME DESC
+	</select>
+	
+		<insert id="insert" parameterType="TelProviderOrderInf">
+			 <selectKey resultType="string" order="BEFORE" keyProperty="regOrderId">  
+			<include refid="com.cn.thinkx.wecard.facade.telrecharge.mapper.SqlTelCommonMapper.getTelCommonId" />
+		</selectKey>
+			INSERT INTO <include refid="TableName" /> (
+				<include refid="ColumnResult" />
+			 )  VALUES (
+					#{regOrderId,jdbcType=VARCHAR},
+					#{channelOrderId,jdbcType=VARCHAR},
+					#{regOrderAmt,jdbcType=VARCHAR},
+					#{operateTime,jdbcType=TIMESTAMP},
+					#{payState,jdbcType=VARCHAR},
+					#{rechargeState,jdbcType=VARCHAR},
+					#{itemCost,jdbcType=VARCHAR},
+					#{transCost,jdbcType=VARCHAR},
+					#{revokeMessage,jdbcType=VARCHAR},
+					#{billId,jdbcType=VARCHAR},
+					#{providerId,jdbcType=VARCHAR},
+					#{operNum,jdbcType=VARCHAR},
+			 		#{resv1,jdbcType=VARCHAR},
+			 		#{resv2,jdbcType=VARCHAR},
+			 		#{resv3,jdbcType=VARCHAR},
+			 		#{resv4,jdbcType=VARCHAR},
+			 		#{resv5,jdbcType=VARCHAR},
+			 		#{resv6,jdbcType=VARCHAR},
+			 		#{dataStat,jdbcType=VARCHAR},
+			 		#{remarks,jdbcType=VARCHAR},
+			 		#{createUser,jdbcType=VARCHAR},
+			 		#{createUser,jdbcType=VARCHAR},
+			 		sysdate,
+			 		sysdate,
+			 		'0') 
+		</insert>
+
+		<update id="update"  parameterType="TelProviderOrderInf">
+			UPDATE <include refid="TableName" /> SET
+				CHANNEL_ORDER_ID=#{channelOrderId,jdbcType=VARCHAR},
+				REG_ORDER_AMT=#{regOrderAmt,jdbcType=VARCHAR},
+				OPERATE_TIME=#{operateTime,jdbcType=TIMESTAMP},
+				PAY_STATE=#{payState,jdbcType=VARCHAR},
+				RECHARGE_STATE=#{rechargeState,jdbcType=VARCHAR},
+				ITEM_COST=#{itemCost,jdbcType=VARCHAR},
+				TRANS_COST=#{transCost,jdbcType=VARCHAR},
+				REVOKE_MESSAGE=#{revokeMessage,jdbcType=VARCHAR},
+				BILL_ID=#{billId,jdbcType=VARCHAR},
+				PROVIDER_ID=#{providerId,jdbcType=VARCHAR},
+				OPER_NUM=#{operNum,jdbcType=VARCHAR},	
+		 		RESV1=#{resv1,jdbcType=VARCHAR},
+		 		RESV2=#{resv2,jdbcType=VARCHAR},
+		 		RESV3=#{resv3,jdbcType=VARCHAR},
+		 		RESV4=#{resv4,jdbcType=VARCHAR},
+		 		RESV5=#{resv5,jdbcType=VARCHAR},
+		 		RESV6=#{resv6,jdbcType=VARCHAR},
+				DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+				REMARKS=#{remarks,jdbcType=VARCHAR},
+				UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+				UPDATE_TIME=sysdate,
+				LOCK_VERSION=LOCK_VERSION+1
+			 	WHERE LOCK_VERSION=#{lockVersion} AND REG_ORDER_ID = #{regOrderId} 
+	</update>
+	
+		<update id="deleteById" parameterType="string">
+			UPDATE <include refid="TableName" /> SET DATA_STAT='1'  WHERE　REG_ORDER_ID = #{regOrderId} 
+		</update>
+		
+	<select id="getTelOrderInfByChannelOrderId" parameterType="java.lang.String" resultMap="TelProviderOrderInfResultMap">
+		SELECT 
+	  		<include refid="ColumnResult" />
+		 		     FROM 	<include refid="TableName" /> m
+		              WHERE m.data_stat='0' AND CHANNEL_ORDER_ID=#{channelOrderId}
+	</select>
+	
+		
+	<select id="getListByTimer" parameterType="TelProviderOrderInf" resultMap="TelProviderOrderInfResultMap">
+		SELECT 
+	  		<include refid="ColumnResult" />
+		FROM  <include refid="TableName" /> m
+		WHERE m.data_stat='0' 
+		<if test="rechargeState !=null and rechargeState !='' ">
+			AND m.RECHARGE_STATE = #{rechargeState}
+		</if>
+		AND sysdate - 1/(60*24) >m.UPDATE_TIME  And m.UPDATE_TIME > sysdate - 10/(60*24)
+		ORDER BY m.UPDATE_TIME DESC
+	</select>
+</mapper>

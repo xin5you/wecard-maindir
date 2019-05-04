@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.common.wecard.module.eshop.mapper.MchntEshopInfMapper">
+
+	<sql id="MchntEshopInfColumns">
+		M.ESHOP_ID,
+		M.ESHOP_NAME,
+		M.MCHNT_CODE,
+		M.SHOP_CODE,
+		M.ESHOP_URL,
+		M.DATA_STAT,
+		M.ESHOP_LOGO,
+		M.BG_URL,
+		M.CHANNEL_CODE,
+		M.REMARKS,
+		M.CREATE_USER,
+		M.UPDATE_USER,
+		M.CREATE_TIME,
+		M.UPDATE_TIME,
+		M.LOCK_VERSION
+	</sql>
+		
+	
+	<select id="getMchntEshopInfById" parameterType="java.lang.String"  resultType="MchntEshopInf">
+		SELECT 
+		<include refid="MchntEshopInfColumns" /> 
+		,ME.MCHNT_NAME,S.SHOP_NAME 
+		FROM TB_MCHNT_ESHOP_INF M INNER JOIN 
+		TB_MERCHANT_INF ME ON M.MCHNT_CODE = ME.MCHNT_CODE 
+		INNER JOIN TB_SHOP_INF S ON M.SHOP_CODE = S.SHOP_CODE 
+		WHERE M.DATA_STAT = '0'
+   			AND ME.DATA_STAT = '0'
+   			AND S.DATA_STAT = '0' 
+   			AND ESHOP_ID = #{eShopId}
+	</select>
+	
+	<select id="getMchntEshopInfByMchntCode" parameterType="java.lang.String"  resultType="MchntEshopInf">
+		SELECT 
+		<include refid="MchntEshopInfColumns" /> 
+		FROM TB_MCHNT_ESHOP_INF M 
+		WHERE M.DATA_STAT = '0' AND MCHNT_CODE = #{mchntCode}
+	</select>
+	
+	<select id="getMchntEshopInfList"  parameterType="MchntEshopInf"  resultType="MchntEshopInf">
+		SELECT 
+		 <include refid="MchntEshopInfColumns" /> 
+		 ,ME.MCHNT_NAME ,S.SHOP_NAME 
+		FROM TB_MCHNT_ESHOP_INF M INNER JOIN 
+		TB_MERCHANT_INF ME ON M.MCHNT_CODE = ME.MCHNT_CODE 
+		INNER JOIN TB_SHOP_INF S ON M.SHOP_CODE = S.SHOP_CODE 
+		 WHERE M.DATA_STAT = '0'
+   			AND ME.DATA_STAT = '0'
+   			AND S.DATA_STAT = '0' 
+   			<if test="mchntCodes !=null and mchntCodes != '' ">
+	             AND M.MCHNT_CODE in 
+	               <foreach collection="mchntCodes"  index="index"  item="item"  open="("  separator=","  close=")">  
+			         #{item}  
+			        </foreach>  
+             </if>
+	</select>
+	
+	
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cn.thinkx.pub.mapper.PublicDao">
+
+	<select id="getPrimaryKey" parameterType="java.util.Map" statementType="CALLABLE">
+		<![CDATA[
+			{ call PROC_WX_GET_PRIMARY_KEY(#{id, jdbcType=VARCHAR, mode=OUT}) }
+		]]>
+	</select>
+	
+	<select id="getDetailBizInfo" parameterType="DetailBizInfo" resultType="DetailBizInfo">
+		SELECT  
+			INS_CODE,
+			MCHNT_NAME,
+			MCHNT_CODE,
+			SHOP_ID,
+			SHOP_NAME,
+			SHOP_CODE,
+			MANGER_ID,
+			QR_CODE_URL,
+			MANGER_NAME
+		FROM VIEW_INS_MCHNT_SHOP_MANAGER 
+		WHERE rownum &gt;=0 AND rownum &lt;=1
+		<if test="mangerName != null and mangerName != '' ">
+			AND MANGER_NAME=#{mangerName}
+		</if>
+		<if test="mchntCode != null and mchntCode != '' ">
+			AND MCHNT_CODE=#{mchntCode}
+		</if>
+		<if test="shopCode != null and shopCode != '' ">
+			AND SHOP_CODE=#{shopCode}
+		</if>
+	</select>
+
+</mapper>

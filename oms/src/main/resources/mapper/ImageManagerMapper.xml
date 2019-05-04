@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.common.mapper.ImageManagerMapper">
+		
+	<resultMap type="ImageManager" id="ImageManagerResultMap">
+		<result column="IMAGE_ID" property="imageId"/>
+		<result column="APPLICATION" property="application"/>
+		<result column="APPLICATION_ID" property="applicationId"/>
+		<result column="APPLICATION_TYPE" property="applicationType"/>
+		<result column="IMAGE_SIZE" property="imageSize"/>
+		<result column="IMAGE_URL" property="imageUrl"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="ImageManagerColumns">
+	   IMAGE_ID,
+       APPLICATION,
+       APPLICATION_ID,
+       APPLICATION_TYPE,
+       IMAGE_SIZE,
+       IMAGE_URL,
+       DATA_STAT,
+       REMARKS,
+       CREATE_USER,
+       UPDATE_USER,
+       CREATE_TIME,
+       UPDATE_TIME,
+       LOCK_VERSION
+	</sql>
+
+	<select id="getImageManagerById" parameterType="java.lang.String" resultMap="ImageManagerResultMap">
+		SELECT 
+	  		<include refid="ImageManagerColumns" />
+	  			FROM TB_IMAGE_MANAGER m 
+         		WHERE  m.IMAGE_ID=#{Id}
+         	
+	</select>
+	
+	<insert id="insertImageManager" parameterType="ImageManager" flushCache="true">
+		 <selectKey resultType="string" order="BEFORE" keyProperty="imageId">  
+			<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getCommonId" />
+		</selectKey>
+		INSERT INTO TB_IMAGE_MANAGER (
+		   IMAGE_ID,
+	       APPLICATION,
+	       APPLICATION_ID,
+	       APPLICATION_TYPE,
+	       IMAGE_SIZE,
+	       IMAGE_URL,
+	       DATA_STAT,
+	       REMARKS,
+	       CREATE_USER,
+	       UPDATE_USER,
+	       CREATE_TIME,
+	       UPDATE_TIME,
+	       LOCK_VERSION
+		 )  VALUES ( 
+		 		#{imageId},
+		 		#{application,jdbcType=VARCHAR},
+		 		#{applicationId,jdbcType=VARCHAR},
+		 		#{applicationType,jdbcType=VARCHAR},
+		 		#{imageSize,jdbcType=VARCHAR},
+		 		#{imageUrl,jdbcType=VARCHAR},
+		 		#{dataStat,jdbcType=VARCHAR},
+		 		#{remarks,jdbcType=VARCHAR},
+		 		#{createUser,jdbcType=VARCHAR},
+		 		#{updateUser,jdbcType=VARCHAR},
+		 		sysdate,
+		 		sysdate,
+		 		'0') 
+	</insert>
+	
+	<update id="updateImageManager" parameterType="ImageManager">
+		UPDATE TB_IMAGE_MANAGER
+		<set>
+				APPLICATION=#{application,jdbcType=VARCHAR},
+		 		APPLICATION_ID=#{applicationId,jdbcType=VARCHAR},
+		 		APPLICATION_TYPE=#{applicationType,jdbcType=VARCHAR},
+		 		IMAGE_SIZE=#{imageSize,jdbcType=VARCHAR},
+		 		IMAGE_URL=#{imageUrl,jdbcType=VARCHAR},
+		 		DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+		 		REMARKS=#{remarks,jdbcType=VARCHAR},
+		 		UPDATE_DATE=sysdate
+		</set>
+			WHERE IMAGE_ID=#{imageId}
+	</update>
+
+	<delete id="deleteImageManager" parameterType="java.lang.String" >
+		 	DELETE TB_IMAGE_MANAGER m WHERE  m.IMAGE_ID=#{id}
+	</delete>
+	
+	<select id="getImageManagerList" parameterType="ImageManager" resultMap="ImageManagerResultMap">
+		SELECT 
+	  		<include refid="ImageManagerColumns" />
+	  			FROM TB_IMAGE_MANAGER m 
+         		WHERE  m.APPLICATION_ID=#{applicationId}
+         		<if test="applicationType !=null and applicationType !='' ">
+					AND APPLICATION_TYPE=#{applicationType}
+				</if>
+				 <if test="application !=null and application !='' ">
+						AND APPLICATION=#{application}
+				</if>
+	</select>
+	
+	<delete id="deleteImageManagerByType" parameterType="ImageManager" >
+		 	DELETE TB_IMAGE_MANAGER m WHERE  m.APPLICATION_ID=#{applicationId}
+		 	<if test="applicationType !=null and applicationType !='' ">
+					AND APPLICATION_TYPE=#{applicationType}
+			</if>
+			 <if test="application !=null and application !='' ">
+					AND APPLICATION=#{application}
+			</if>
+	</delete>
+
+</mapper>

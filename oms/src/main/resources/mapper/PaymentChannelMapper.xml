@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.thinkx.oms.module.channel.mapper.PaymentChannelMapper">
+	
+	<sql id = "PaymentChannelColumns">
+		P.ID,
+		P.CHANNEL_NO,
+		P.CHANNEL_NAME,
+		P.RATE,
+		P.CHANNEL_TYPE,
+		P.DESCRIPTION,
+		P.ENABLE,
+		P.REMARKS,
+		P.DATA_STAT,
+		P.CREATE_USER,
+		P.UPDATE_USER,
+		P.CREATE_TIME,
+		P.UPDATE_TIME,
+		P.LOCK_VERSION
+	</sql>
+	
+	<insert id="insertPaymentChannel" parameterType="PaymentChannel">
+		<selectKey resultType="string" order="BEFORE" keyProperty="id">  
+				<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getCommonId" />
+		</selectKey>
+		INSERT INTO TB_PAYMENT_CHANNELS_INF(
+			ID,
+			CHANNEL_NO,
+			CHANNEL_NAME,
+			RATE,
+			CHANNEL_TYPE,
+			DESCRIPTION,
+			ENABLE,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			UPDATE_USER,
+			CREATE_TIME,
+			UPDATE_TIME,
+			LOCK_VERSION
+		) values (
+			#{id},
+			#{channelNo,jdbcType=VARCHAR},
+			#{channelName,jdbcType=VARCHAR},
+			#{rate,jdbcType=VARCHAR},
+			#{channelType,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{enable,jdbcType=VARCHAR},
+			'0',
+			#{remarks,jdbcType=VARCHAR},
+			#{createUser,jdbcType=VARCHAR},
+			#{updateUser,jdbcType=VARCHAR},
+			sysdate,
+			sysdate,
+			0
+		)
+	</insert>
+	
+	<update id="updatePaymentChannelById" parameterType="PaymentChannel">
+		UPDATE TB_PAYMENT_CHANNELS_INF
+		<set>
+			CHANNEL_NAME=#{channelName,jdbcType=VARCHAR},
+			RATE =#{rate,jdbcType=VARCHAR},
+			CHANNEL_TYPE =#{channelType,jdbcType=VARCHAR},
+			DESCRIPTION =#{description,jdbcType=VARCHAR},
+			ENABLE =#{enable,jdbcType=VARCHAR},
+			REMARKS  =#{remarks,jdbcType=VARCHAR},
+			UPDATE_USER =#{updateUser,jdbcType=VARCHAR},
+			UPDATE_TIME  =sysdate,
+			LOCK_VERSION =LOCK_VERSION+1
+		</set>
+			WHERE ID=#{id}
+	</update>
+
+	<update id="deletePaymentChannelById" parameterType="String">
+		UPDATE TB_PAYMENT_CHANNELS_INF T SET DATA_STAT='1',UPDATE_TIME  =sysdate WHERE　T.ID=#{id}
+	</update>
+	
+	<select id="getPaymentChannelsList" resultType="PaymentChannel" parameterType="PaymentChannel">
+		SELECT 
+			<include refid="PaymentChannelColumns" /> 
+		FROM TB_PAYMENT_CHANNELS_INF P WHERE 1=1 
+		<if test="channelName !=null and channelName !='' ">
+		 	AND P.CHANNEL_NAME LIKE '%' || #{channelName} || '%'
+		</if>
+		<if test="enable !=null and enable !='' ">
+		 	AND P.ENABLE = #{enable}
+		</if>
+		AND P.DATA_STAT = '0' 
+		ORDER BY P.CHANNEL_NO ASC
+	</select>
+	
+	<select id = "getPaymentChannelsById" parameterType="String" resultType="PaymentChannel"> 
+		SELECT 
+			<include refid="PaymentChannelColumns" /> 
+		FROM TB_PAYMENT_CHANNELS_INF P WHERE 1=1 AND P.DATA_STAT = '0' AND ID=#{id}
+	</select>
+	
+	<update id="updatePaymentChannelUpdateTime" parameterType="String">
+		UPDATE TB_PAYMENT_CHANNELS_INF T SET UPDATE_TIME  =sysdate WHERE　T.ID=#{id}
+	</update>
+	
+	<select id = "getPaymentChannelsByChannelNo" parameterType="String" resultType="Integer"> 
+		select count(*) as channelNoCount 
+		from tb_payment_channels_inf p 
+		where p.channel_no = #{channelNo}
+		and p.data_stat = '0'
+	</select>
+</mapper>

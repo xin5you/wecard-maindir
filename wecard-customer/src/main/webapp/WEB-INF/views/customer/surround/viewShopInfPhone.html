@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+ <#include "../../common/wecardHeader.html"> 
+ 
+    <!--通用媒体查询-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+
+
+
+    <title>&#x8054;&#x7CFB;&#x5BA2;&#x670D;</title>
+</head>
+<body>
+
+<!-- 客服电话 -->
+
+<div class="hkb_title">
+    <div class="logo"><img src="${shopInf.brandLogo!}"></div>
+    <div>${shopInf.mchntName!}(${shopInf.shopName!})</div>
+</div>
+
+<!-- 客服电话 -->
+
+
+<div class="hkb_number">
+<#if phoneNums ??&& phoneNums ?size gt 0>
+    <#list phoneNums as tel>
+	    <a class="number_section hkb_alignment_center" href="tel:${tel}">
+	        <div class="number_section_text">${tel}</div>
+	        <div class="number_section_icon"><img src="${s.base}/static/images/phone.png"> </div>
+	    </a>
+	</#list>
+</#if>
+</div>
+
+</body>
+</html>

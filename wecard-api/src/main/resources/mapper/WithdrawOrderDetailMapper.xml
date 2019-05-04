@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wecard.api.module.withdraw.mapper.WithdrawOrderDetailMapper">
+
+	<sql id="WithdrawOrderDetailColumns">
+		DETAIL_ID,
+		ORDER_ID,
+		SERIAL_NO,
+		RECEIVER_NAME,
+		RECEIVER_CARD_NO,
+		RECEIVER_TYPE,
+		BANK_TYPE,
+		BANK_NAME,
+		BANK_CODE,
+		PAYEE_BANK_LINES_NO,
+		BANK_PROVINCE,
+		BANK_CITY,
+		DMS_SERIAL_NO,
+		AMOUNT,
+		FEE,
+		RESP_CODE,
+		RESP_MSG,
+		PAY_TIME,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+
+	<sql id="WithdrawOrderDetailFields">
+		#{detailId, jdbcType=VARCHAR},
+		#{orderId, jdbcType=VARCHAR},
+		#{serialNo, jdbcType=VARCHAR},
+		#{receiverName, jdbcType=VARCHAR},
+		#{receiverCardNo, jdbcType=VARCHAR},
+		#{receiverType, jdbcType=VARCHAR},
+		#{bankType, jdbcType=VARCHAR},
+		#{bankName, jdbcType=VARCHAR},
+		#{bankCode, jdbcType=VARCHAR},
+		#{payeeBankLinesNo, jdbcType=VARCHAR},
+		#{bankProvince, jdbcType=VARCHAR},
+		#{bankCity, jdbcType=VARCHAR},
+		#{dmsSerialNo, jdbcType=VARCHAR},
+		#{amount, jdbcType=INTEGER},
+		#{fee, jdbcType=INTEGER},
+		#{respCode, jdbcType=VARCHAR},
+		#{respMsg, jdbcType=VARCHAR},
+		to_date(#{payTime},'yyyy-mm-dd hh24:mi:ss'),
+		'0',
+		#{remarks, jdbcType=VARCHAR},
+		#{createUser, jdbcType=VARCHAR},
+		#{updateUser, jdbcType=VARCHAR},
+		SYSDATE,
+		SYSDATE,
+		'0'
+	</sql>
+
+	<sql id="tableName">
+			TB_WITHDRAW_ORDER_DETAIL
+	</sql>
+	
+	<select id="getPrimaryKey" parameterType="java.util.Map" statementType="CALLABLE">
+		<![CDATA[
+			{ CALL PROC_TB_WITHDRAW_ORDER_DETAIL(#{id, jdbcType=VARCHAR, mode=OUT}) }
+		]]>
+	</select>
+	
+	<select id="getCountBySerialNo" parameterType="String" resultType="Integer">
+		SELECT
+			COUNT(*)
+		FROM 
+			<include refid="tableName" />
+		WHERE DATA_STAT = '0'
+			AND SERIAL_NO = #{serialNo}
+	</select>
+	
+	<insert id="insertWithdrawOrderDetail" parameterType="WithdrawOrderDetail">
+		INSERT INTO 
+			<include refid="tableName" />
+		(
+			<include refid="WithdrawOrderDetailColumns" />
+		) VALUES (
+			<include refid="WithdrawOrderDetailFields" />
+		)
+	</insert>
+
+	<update id="updateWithdrawOrderDetail" parameterType="WithdrawOrderDetail">
+		UPDATE 
+			<include refid="tableName" />
+		SET
+		<if test="orderId !=null and orderId !='' ">
+			ORDER_ID = #{orderId,jdbcType=VARCHAR},
+		</if>
+		<if test="serialNo !=null and serialNo !='' ">
+			SERIAL_NO = #{serialNo,jdbcType=VARCHAR},
+		</if>
+		<if test="receiverName !=null and receiverName !='' ">
+			RECEIVER_NAME = #{receiverName,jdbcType=VARCHAR},
+		</if>
+		<if test="receiverCardNo !=null and receiverCardNo !='' ">
+			RECEIVER_CARD_NO = #{paidAmount,jdbcType=VARCHAR},
+		</if>
+		<if test="receiverType !=null and receiverType !='' ">
+			RECEIVER_TYPE = #{receiverType,jdbcType=VARCHAR},
+		</if>
+		<if test="bankType !=null and bankType !='' ">
+			BANK_TYPE = #{bankType,jdbcType=VARCHAR},
+		</if>
+		<if test="bankName !=null and bankName !='' ">
+			BANK_NAME = #{bankName,jdbcType=VARCHAR},
+		</if>
+		<if test="bankCode !=null and bankCode !='' ">
+			BANK_CODE = #{bankCode,jdbcType=VARCHAR},
+		</if>
+		<if test="payeeBankLinesNo !=null and payeeBankLinesNo !='' ">
+			PAYEE_BANK_LINES_NO = #{payeeBankLinesNo,jdbcType=VARCHAR},
+		</if>
+		<if test="bankProvince !=null and bankProvince !='' ">
+			BANK_PROVINCE = #{bankProvince,jdbcType=VARCHAR},
+		</if>
+		<if test="bankCity !=null and bankCity !='' ">
+			BANK_CITY = #{bankCity,jdbcType=VARCHAR},
+		</if>
+		<if test="dmsSerialNo !=null and dmsSerialNo !='' ">
+			DMS_SERIAL_NO = #{dmsSerialNo,jdbcType=VARCHAR},
+		</if>
+		<if test="amount !=null and amount !='' ">
+			AMOUNT = #{amount,jdbcType=INTEGER},
+		</if>
+		<if test="fee !=null and fee !='' ">
+			FEE = #{fee,jdbcType=INTEGER},
+		</if>
+		<if test="respCode !=null and respCode !='' ">
+			RESP_CODE = #{respCode,jdbcType=VARCHAR},
+		</if>
+		<if test="respMsg !=null and respMsg !='' ">
+			RESP_MSG = #{respMsg,jdbcType=VARCHAR},
+		</if>
+		<if test="payTime !=null and payTime !='' ">
+			PAY_TIME = to_date(#{payTime},'yyyy-mm-dd hh24:mi:ss'),
+		</if>
+			UPDATE_TIME = SYSDATE,
+			LOCK_VERSION = LOCK_VERSION+1
+		WHERE DETAIL_ID = #{detailId}
+	</update>
+
+</mapper>

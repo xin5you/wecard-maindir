@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.thinkx.oms.module.enterpriseorder.mapper.BatchInvoiceOrderMapper">
+
+	<select id="getBatchOrderByOrderId" parameterType="string" resultType="BatchInvoiceOrder">
+		SELECT O.ORDER_ID,
+		(SELECT SUM(L.AMOUNT)
+              FROM TB_BATCH_ORDER_LIST L
+             WHERE L.DATA_STAT = '0' And L.ORDER_STAT = '00'
+               AND L.ORDER_ID = O.ORDER_ID) AS INVOICE_AMT,
+		M.MCHNT_CODE,
+        M.MCHNT_NAME
+		FROM TB_BATCH_ORDER O LEFT JOIN TB_REL_INS_PRODUCT R
+        ON O.PRODUCT_CODE = R.PRODUCT_CODE
+        LEFT JOIN TB_MERCHANT_INF M
+        ON R.INS_ID = M.INS_ID
+	    WHERE O.DATA_STAT = '0'  AND O.ORDER_ID= #{orderId}
+	</select>
+	
+	<insert id="insertBatchInvoiceOrder" parameterType="BatchInvoiceOrder">
+	    <selectKey resultType="string" order="BEFORE" keyProperty="id">  
+				<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getBatchInvoiceOrderid" />
+		</selectKey>
+		insert into TB_BATCH_INVOICE_ORDER(
+			ID,
+			ORDER_ID,
+			INVOICE_USER_NAME,
+			INVOICE_MOBILE,
+			INVOICE_AMT,
+			INVOICE_TYPE,
+			MCHNT_CODE,
+			SHOP_CODE,
+			INVOICE_INFO,
+			INVOICE_STAT,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			UPDATE_USER,
+			CREATE_TIME,
+			UPDATE_TIME,
+			LOCK_VERSION
+		) values (
+			#{id},
+			#{orderId,jdbcType=VARCHAR},
+			#{invoiceUserName,jdbcType=VARCHAR},
+			#{invoiceMobile,jdbcType=VARCHAR},
+			#{invoiceAmt,jdbcType=VARCHAR},
+			#{invoiceType,jdbcType=VARCHAR},
+			#{mchntCode,jdbcType=VARCHAR},
+			#{shopCode,jdbcType=VARCHAR},
+			#{invoiceInfo,jdbcType=VARCHAR},
+			#{invoiceStat,jdbcType=VARCHAR},
+			'0',
+			#{remarks,jdbcType=VARCHAR},
+			#{createUser,jdbcType=VARCHAR},
+			#{updateUser,jdbcType=VARCHAR},
+			sysdate,
+			sysdate,
+			0
+		)
+	</insert>
+	
+	<select id="getBatchInvoiceOrderByOrderId" parameterType="string" resultType="BatchInvoiceOrder">
+		select 
+			IO.ORDER_ID,
+			IO.INVOICE_USER_NAME,
+			IO.INVOICE_MOBILE,
+			IO.INVOICE_AMT,
+			IO.INVOICE_TYPE,
+			IO.MCHNT_CODE,
+			IO.SHOP_CODE,
+			IO.INVOICE_INFO,
+			IO.INVOICE_STAT,
+			IO.DATA_STAT,
+			IO.REMARKS,
+			IO.CREATE_USER,
+			IO.UPDATE_USER,
+			IO.CREATE_TIME,
+			IO.UPDATE_TIME,
+			IO.LOCK_VERSION,
+			M.MCHNT_NAME,
+			S.SHOP_NAME
+		from TB_BATCH_INVOICE_ORDER IO LEFT JOIN TB_MERCHANT_INF M
+	    ON IO.MCHNT_CODE = M.MCHNT_CODE
+	    LEFT JOIN TB_SHOP_INF S
+	    ON IO.SHOP_CODE = S.SHOP_CODE
+		where ORDER_ID=#{orderId}
+	</select>
+	
+	<delete id="deleteByPrimaryKey" parameterType="BatchInvoiceOrder">
+		update TB_BATCH_INVOICE_ORDER SET DATA_STAT='1' WHERE ID = #{id}
+	</delete>
+	
+	<select id="getBatchInvoiceCountByOrderId" parameterType="string" resultType="int">
+		SELECT COUNT(O.ORDER_ID)  
+		FROM TB_BATCH_INVOICE_ORDER O WHERE O.ORDER_ID= #{orderId}
+	</select>
+</mapper>

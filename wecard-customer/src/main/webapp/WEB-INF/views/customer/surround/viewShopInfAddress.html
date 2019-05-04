@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<#include "../../common/wecardHeader.html"> 
+ <script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
+ 
+    <!--通用媒体查询-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+
+
+
+    <title>&#x5730;&#x56FE;</title>
+</head>
+<body>
+
+<!-- 查看地址 -->
+
+<div class="hkb_address_location">
+
+
+    <div class="hkb_address">
+
+    <div class="address_images">
+         <img src="${shopInf.brandLogo!}">
+   </div>
+    <div class="address_star">
+        <div class="address_text">${shopInf.mchntName!}(${shopInf.shopName!})</div>
+        <div class="star">
+            <!-- 全星星 star_on;半星星 star_half;吴星星 star_off-->
+            <#if shopInf ??&& shopInf.stars?size gt 0>
+       		<#list shopInf.stars as star>
+       			<#if star == '1'>
+	            	<span class="star_on"></span>
+	            </#if>
+		        <#if star == '0'>
+	            	<span class="star_off"></span>
+	            </#if>
+		        <#if star != '0' && star != '1'>
+	            	<span class="star_half"></span>
+	            </#if>
+	        </#list>
+        </#if>
+        </div>
+        <div class="address_life">${shopInf.industryType!}</div>
+    </div>
+     </div>
+   <div class="address_location" id="container_map" tabindex="0"></div>
+</div>
+
+
+<script type="text/javascript">
+$(function(){
+	var viewMchntShopMng = {
+			initMap:function() {
+				try{
+				 	var center = new qq.maps.LatLng('${shopInf.latitude}','${shopInf.longitude}');
+				    var map = new qq.maps.Map(document.getElementById('container_map'),{
+				        center: center,
+				        zoom: 14
+				    });
+				    //创建标记
+				    var marker = new qq.maps.Marker({
+				        position: center,
+				        map: map
+				    });
+				    //添加到提示窗
+				    var info = new qq.maps.InfoWindow({
+				        map: map
+				    });
+//					    //获取标记的点击事件
+				    qq.maps.event.addListener(marker, 'click', function() {
+				        info.open(); 
+				        info.setContent('<div style="text-align:center;white-space:nowrap;'+
+				        'margin:10px;">${shopInf.mchntName!}(${shopInf.shopName!})</div>');
+				        info.setPosition(center); 
+				    });
+				}catch(err){
+			    	
+				}
+			}
+	}
+	viewMchntShopMng.initMap();
+});
+</script>
+</body>
+</html>

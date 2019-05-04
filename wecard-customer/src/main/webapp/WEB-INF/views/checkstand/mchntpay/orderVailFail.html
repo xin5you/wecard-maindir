@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1" />
+		<meta content="telephone=no" name="format-detection" />
+		<title>知了企服</title>
+		<link rel="stylesheet" href="${s.base}/res/css/huikabao.common.min.css">
+		<link rel="stylesheet" href="${s.base}/res/css/huikabao.mui.css">
+		<#include "../../common/wecardHeader.html">
+		<script src="${s.base}/res/common/jweixin-1.0.0.js"></script>
+		<script src="${s.base}/static/js/module/mchntpay/orderVailFail.js?v=${s.version}"></script>
+	</head>
+	<body id="error_500">
+		<div class="hkb_fail_animation">
+			<!--失败动画-->
+			<div class="fail_animation_wrong">
+				<div class="swal2-icon swal2-error animate-error-icon">
+					<span class="x-mark animate-x-mark"> <span class="line left"></span>
+						<span class="line right"></span>
+					</span>
+				</div>
+			</div>
+			<div class="hkb_text_fail">&#x64CD;&#x4F5C;&#x5931;&#x8D25;</div>
+			<!--消费账单-->
+			<div class="hkb_fail_text_bill">
+				<div class="hkb_fail_bill">
+					<span class="fail_bill_text">原因&#xFF1A;</span> <span class="fail_bill_text">${txnResp.info !}</span>
+				</div>
+			</div>
+			<!--关闭-->
+			<div class="hkb_button_fail">
+				<a class="main_btn" href="#"><span>&#x5173;&#x95ED;</span> </a>
+			</div>
+		</div>
+		<script>
+		// 阻止浏览器后退按钮  
+		$(document).ready(function(e) {	
+			var counter = 0;
+			if (window.history && window.history.pushState) {
+				$(window).on('popstate', function () {
+					window.history.pushState('forward', null, '#');
+					window.history.forward(1);
+				});
+			}
+			window.history.pushState('forward', null, '#'); //在IE中必须得有这两行
+			window.history.forward(1);
+		});
+		</script>
+	</body>
+</html>

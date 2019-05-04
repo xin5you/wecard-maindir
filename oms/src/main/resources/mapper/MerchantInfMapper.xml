@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.merchant.mapper.MerchantInfMapper">
+		
+	<resultMap type="MerchantInf" id="MerchantInfResultMap">
+		<result column="MCHNT_ID" property="mchntId"/>
+		<result column="INS_ID" property="insId"/>
+		<result column="MCHNT_CODE" property="mchntCode"/>
+		<result column="MCHNT_NAME" property="mchntName"/>
+		<result column="MCHNT_TYPE" property="mchntType"/>
+		<result column="ACCOUNT_STAT" property="accountStat"/>
+		<result column="INDUSTRY_TYPE1" property="industryType1"/>
+		<result column="INDUSTRY_TYPE2" property="industryType2"/>
+		<result column="INDUSTRY_TYPE3" property="industryType3"/>
+		<result column="SOLD_COUNT" property="soldCount"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+		<result column="INDUSTRY_NAME1" property="industryName1"/>
+
+	</resultMap>
+	
+	<sql id="MerchantInfColumns">
+		m.MCHNT_ID,
+		m.INS_ID,
+		m.MCHNT_CODE,
+		m.MCHNT_NAME,
+		m.MCHNT_TYPE,
+		m.ACCOUNT_STAT,
+		m.INDUSTRY_TYPE1,
+		m.INDUSTRY_TYPE2,
+		m.INDUSTRY_TYPE3,
+		m.SOLD_COUNT,
+		m.DATA_STAT,
+		m.REMARKS,
+		m.CREATE_USER,
+		m.CREATE_TIME,
+		m.UPDATE_USER,
+		m.UPDATE_TIME,
+		m.LOCK_VERSION	
+	</sql>
+	
+	<select id="getMerchantInfById" parameterType="java.lang.String" resultMap="MerchantInfResultMap">
+		SELECT 
+	  		<include refid="MerchantInfColumns" />
+			FROM TB_MERCHANT_INF m 
+				WHERE 
+				  m.MCHNT_ID=#{mchntId}
+	</select>
+	
+	<select id="getMerchantInfByMchntCode" parameterType="java.lang.String" resultType="MerchantInf">
+	   SELECT 
+            <include refid="MerchantInfColumns" />
+            FROM TB_MERCHANT_INF M WHERE M.MCHNT_CODE = #{mchntCode}
+	</select>
+
+	<insert id="insertMerchantInf" parameterType="MerchantInf">
+			 <selectKey resultType="string" order="BEFORE" keyProperty="mchntId">  
+			<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getCommonId" />
+		</selectKey>
+			INSERT INTO TB_MERCHANT_INF (
+				MCHNT_ID,
+				INS_ID,
+				MCHNT_CODE,
+				MCHNT_NAME,
+				MCHNT_TYPE,
+				ACCOUNT_STAT,
+				INDUSTRY_TYPE1,
+				INDUSTRY_TYPE2,
+				INDUSTRY_TYPE3,
+				SOLD_COUNT,
+				DATA_STAT,
+				REMARKS,
+				CREATE_USER,
+				CREATE_TIME,
+				UPDATE_USER,
+				UPDATE_TIME,
+				LOCK_VERSION
+			 )  VALUES (
+			 		#{mchntId,jdbcType=VARCHAR},
+			 		#{insId,jdbcType=VARCHAR},
+			 		#{mchntCode,jdbcType=VARCHAR},
+			 		#{mchntName,jdbcType=VARCHAR},
+			 		#{mchntType,jdbcType=VARCHAR},
+			 		#{accountStat,jdbcType=VARCHAR},
+			 		#{industryType1,jdbcType=VARCHAR},
+			 		#{industryType2,jdbcType=VARCHAR},
+			 		#{industryType3,jdbcType=VARCHAR},
+			 		#{soldCount,jdbcType=VARCHAR},
+			 		#{dataStat,jdbcType=VARCHAR},
+			 		'ACC_ITF',
+			 		#{createUser,jdbcType=VARCHAR},
+			 		sysdate,
+			 		#{createUser,jdbcType=VARCHAR},
+			 		sysdate,
+			 		'0') 
+		</insert>
+
+	
+	<select id="getMerchantInfList" parameterType="MerchantInf" resultMap="MerchantInfResultMap">
+		SELECT 
+	  		<include refid="MerchantInfColumns" />,
+	     c1.industry_name as INDUSTRY_NAME1
+		 FROM TB_MERCHANT_INF m
+		 LEFT JOIN TB_INDUSTRY_CLASSIFICATION c1 ON c1.ID=m.INDUSTRY_TYPE1
+  		 WHERE m.DATA_STAT='0'
+		 <if test="mchntCode !=null and mchntCode !='' ">
+				AND m.MCHNT_CODE=#{mchntCode}
+		 </if>
+		 <if test="mchntName !=null and mchntName !='' ">
+		 		AND m.MCHNT_NAME LIKE '%' || #{mchntName} || '%'
+		 </if>
+		  <if test="accountStat !=null and accountStat !='' ">
+		 		AND m.ACCOUNT_STAT=#{accountStat}
+		 </if>
+		 <if test="dataStat !=null and dataStat !='' ">
+				AND m.DATA_STAT=#{dataStat}
+		 </if>
+		 <if test="mchntType !=null and mchntType !='' ">
+				AND m.MCHNT_TYPE=#{mchntType}
+		 </if>
+		  ORDER BY UPDATE_TIME DESC
+	</select>
+	
+	<update id="updateMerchantInf" parameterType="MerchantInf">
+			UPDATE TB_MERCHANT_INF SET
+				INS_ID=#{insId,jdbcType=VARCHAR},
+		 		MCHNT_CODE=#{mchntCode,jdbcType=VARCHAR},
+		 		MCHNT_NAME=#{mchntName,jdbcType=VARCHAR},
+		 		MCHNT_TYPE=#{mchntType,jdbcType=VARCHAR},
+		 		INDUSTRY_TYPE1=#{industryType1,jdbcType=VARCHAR},
+		 		INDUSTRY_TYPE2=#{industryType2,jdbcType=VARCHAR},
+		 		INDUSTRY_TYPE3=#{industryType3,jdbcType=VARCHAR},
+		 		SOLD_COUNT=#{soldCount,jdbcType=VARCHAR},
+				DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+				REMARKS=#{remarks,jdbcType=VARCHAR},
+				UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+				UPDATE_TIME=sysdate,
+				LOCK_VERSION=LOCK_VERSION+1
+			 WHERE MCHNT_Id = #{mchntId} 
+	</update>
+
+	<update id="deleteMerchantInf" parameterType="string">
+		UPDATE TB_MERCHANT_INF SET DATA_STAT='1' WHERE　MCHNT_Id = #{mchntId} 
+	</update>
+	
+	<select id="getMchntProList" resultType="MerchantInf">
+		SELECT 
+			mi.MCHNT_ID, mi.MCHNT_CODE, mi.MCHNT_NAME, p.PRODUCT_CODE  
+		FROM TB_MERCHANT_INF mi 
+		INNER JOIN TB_REL_INS_PRODUCT rip ON mi.ins_id=rip.ins_id
+    	LEFT JOIN TB_PRODUCT p ON rip.product_code=p.product_code
+		WHERE　mi.DATA_STAT='0' AND mi.REMARKS='ACC_ITF' AND rip.DATA_STAT='0' AND p.DATA_STAT='0' AND p.product_code IS NOT NULL
+		ORDER BY mi.UPDATE_TIME DESC
+	</select>
+	
+	<select id="getMerchantInfListBySelect" resultMap="MerchantInfResultMap">
+		SELECT 
+		
+		 MCHNT_ID,MCHNT_CODE,MCHNT_NAME FROM TB_MERCHANT_INF  WHERE　DATA_STAT='0' AND REMARKS = 'ACC_ITF'
+		
+		   ORDER BY UPDATE_TIME DESC
+	</select>
+</mapper>

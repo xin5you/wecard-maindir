@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!--通用媒体查询-->
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+	    <title>收银台</title>
+		<#include "../common/wecardHeader.html">
+		<script src="${s.base}/static/js/module/jfpay/payConfirm.js?v=${s.version}"></script>
+		<script src="${s.base}/static/js/common/security.js?v=${s.version}"></script>
+		<script src="${s.base}/static/js/common/hbb.util.common.js?v=${s.version}"></script>
+		<script src="${s.base}/static/js/common/jweixin-1.0.0.js?v=${s.version}"></script>
+		<script type="text/javascript">
+			var key = new RSAUtils.getKeyPair('${publicKeyExponent!}', '', '${publicKeyModulus!}');
+		</script>
+	</head>
+	<body>
+		<input id="merchantCode" name="merchantCode" type="hidden" value="${detail.mchntCode!}" />
+		<input id="mchntName" name="mchntName" type="hidden" value="${detail.mchntName!}" />
+		<input id="shopCode" name="shopCode" type="hidden" value="${detail.shopCode!}" />
+		<input id="shopName" name="shopName" type="hidden" value="${detail.shopName!}" />
+		<input id="insCode" name="insCode" type="hidden" value="${detail.insCode!}" />
+		<input id="payAmount" name="payAmount" type="hidden" value="${payAmount}" />
+		<input id="JFUserId" name = "JFUserId" type="hidden" value="${JFUserId!}" />
+		<input id="HKBUserId" name = "HKBUserId" type="hidden" value="${HKBUserId!}" />
+		<!-- 确认买单 -->
+		<div class="hkb_confirm_seller">
+		    <!-- 店铺信息-->
+		    <div class="hkb_confirm">
+		        <div class="confirm_seller">
+		            <img src="${brandLogo !}" />
+		        </div>
+		        <div class="confirm_text">${detail.mchntName} ( ${detail.shopName} )</div>
+		    </div>
+		    <!-- 付款金额 -->
+		    <div class="hkb_confirm_money">
+	            <div class="confirm_money_title">支付金额</div>
+	            <div class="confirm_money_text">${payAmount}</div>
+		    </div>
+		</div>
+		<div class="confirm_bill">
+		    <!-- 福利账户支付 -->
+		    <div class="confirm_card_pay">
+		        <label class="pay_mode hkb_alignment_center" id = "card_pay">
+		            <div class="hkb_alignment_middle">
+		                <div class="confirm_card_seller">
+		                    <img src="${s.base}/static/images/jfpay/icon_pay_benefit.png" />
+		                </div>
+		                <div class="confirm_card_text">知了企服余额</div>
+		            </div>
+		            <input type="checkbox" class="confirm_choose" name="payType" value="JFBENEFIT_PAY" checked="checked" />
+		        </label>
+<!-- 		        <label class="card_contain" > -->
+<!-- 		            <div class="card_confirm_text">福利余额 ${userMchntAccBal! }元</div> -->
+<!-- 		        </label> -->
+		    </div>
+		    <!-- 薪资账户支付 -->
+		    <div class="confirm_card_pay">
+		        <label class="pay_mode hkb_alignment_center" id = "card_pay">
+		            <div class="hkb_alignment_middle">
+		                <div class="confirm_card_seller">
+		                    <img src="${s.base}/static/images/jfpay/icon_pay_salary.png" />
+		                </div>
+		                <div class="confirm_card_text">薪资账户</div>
+		            </div>
+		            <input type="checkbox" class="confirm_choose" name="payType" value="JFSALARY_PAY" />
+		        </label>
+<!-- 		        <label class="card_contain" > -->
+<!-- 		            <div class="card_confirm_text">薪资余额 ${userMchntAccBal! }元</div> -->
+<!-- 		        </label> -->
+		    </div>
+		    
+		</div>
+		<!-- 下一步-->
+		<div class="confirm_next" id="confirm_next">
+		    <a ><span>确认买单</span></a>
+		</div>
+		<!--支付弹出框-->
+		<div class="pay_pasd_box">
+		    <div class="box_main">
+		        <div class="title">
+		            <span>请输入支付密码</span>
+		            <span class="pay_close" id="payPWClose"></span>
+		        </div>
+		        <div class="money_num">
+		            <span>&#xFFE5;</span><span>${payAmount! }</span>
+		        </div>
+		        <div class="pasd_show">
+		            <div class="pasd_box" id="pasdBox">
+		            	<span></span>
+		            	<span></span>
+		            	<span></span>
+		            	<span></span>
+		            	<span></span>
+		            	<span></span>
+		            </div>
+		            <div class="num_box" id="numBox"></div>
+		            <input class="pasd_input" id="pasd_input" value="" />
+		        </div>
+		    </div>
+		    <div class="box_gray"></div>
+		</div>
+		<script>
+		addEventListener('load',function(){
+	    	//选择支付方式
+	    	confirmChoose.inputChoose();
+			//点击显示密码
+			//document.getElementById('confirm_next').addEventListener('click', passWordBox.passWordBoxShow, false);
+			//关闭密码
+	        document.getElementById('payPWClose').addEventListener('click', passWordBox.passWordBoxHide, false);
+		});
+		</script>
+	</body>
+</html>

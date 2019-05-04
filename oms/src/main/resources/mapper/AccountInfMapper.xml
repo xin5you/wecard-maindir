@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.customer.mapper.AccountInfMapper">
+
+	<update id="updateAccountInf" parameterType="AccountInf">
+		UPDATE TB_ACCOUNT_INF
+	      SET MAX_TXN_AMT2 = #{maxTxnAmt2}, 
+	      MAX_DAY_TXN_AMT2 = #{maxDayTxnAmt2}
+          LOCK_VERSION     = LOCK_VERSION + 1
+	    WHERE ACCOUNT_NO = #{accountNo}
+	</update>
+		
+</mapper>

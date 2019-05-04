@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/mvc 
+	http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+	
+	<!--刷新CardKeysRetrievingJob begin -->
+	<bean id="doRefreshCardKeysRetrievingJob" class="com.cn.thinkx.wecard.centre.module.quartz.CardKeysRetrievingJob"></bean>
+
+	<bean id="doCardKeysRetrieving" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass" value="com.cn.thinkx.wecard.centre.module.quartz.JobDetailBean" />
+		<property name="durability" value="true" />
+		<property name="description" value="刷新 account配置" />
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="targetObject" value="doRefreshCardKeysRetrievingJob" />
+				<entry key="targetMethod" value="doCardKeysRecovery" />
+			</map>
+		</property>
+	</bean>
+   
+	<!--触发的时间  每次相隔5分钟 执行 -->
+	<bean id="doCardKeysRetrievingTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="doCardKeysRetrieving" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0/1 * * * ?</value>
+		</property>
+	</bean>
+	<!--刷新CardKeysRetrievingJob end -->
+	
+	<!--刷新accessToken begin -->
+	<bean id="doAccessTokenBizJob" class="com.cn.thinkx.wecard.centre.module.quartz.AccessTokenBizJob"></bean>
+	
+	<bean id="doAccessTokenBizTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">  
+	    <property name="jobClass" value="com.cn.thinkx.wecard.centre.module.quartz.JobDetailBean" />  
+	    <property name="durability" value="true" />
+	    <property name="description" value="刷新accessToken" />
+	    <property name="jobDataAsMap">  
+	           <map>
+	               <entry key="targetObject" value="doAccessTokenBizJob" />  
+	               <entry key="targetMethod" value="doRefreshAccessToken" />  
+	           </map>
+	    </property>
+   </bean>
+  
+	<!--触发的时间  每次相隔10分钟 执行 -->
+	<bean id="doAccessTokenBizTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="doAccessTokenBizTask" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0/10 * * * ?</value>
+		</property>
+	</bean>
+	<!--刷新accessToken end -->
+	
+	
+	
+	<!--刷新jsToken begin -->
+	<bean id="doJsTokenBizJob" class="com.cn.thinkx.wecard.centre.module.quartz.JsTokenBizJob"></bean>
+	<bean id="doJsTokenBizTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">  
+	    <property name="jobClass" value="com.cn.thinkx.wecard.centre.module.quartz.JobDetailBean" />  
+	    <property name="durability" value="true" />
+	    <property name="description" value="刷新jsToken" />
+	    <property name="jobDataAsMap">  
+	           <map>
+	               <entry key="targetObject" value="doJsTokenBizJob" />  
+	               <entry key="targetMethod" value="doRefreshJsToken" />  
+	           </map>
+	    </property>
+   </bean>
+  
+	<!--触发的时间  每次相隔10分钟 执行 -->
+	<bean id="doJsTokenBizTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="doJsTokenBizTask" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0/10 * * * ?</value>
+		</property>
+	</bean>
+	<!--刷新accessToken end -->
+	
+	
+	<!--刷新ChannelSecurityInf begin -->
+	<bean id="doChannelSecurityInftBizJob" class="com.cn.thinkx.wecard.centre.module.quartz.ChannelSecurityInfBizJob"></bean>
+	
+	<bean id="doChannelSecurityInftBizTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">  
+	    <property name="jobClass" value="com.cn.thinkx.wecard.centre.module.quartz.JobDetailBean" />  
+	    <property name="durability" value="true" />
+	    <property name="description" value="刷新 account配置" />
+	    <property name="jobDataAsMap">
+	           <map>
+	               <entry key="targetObject" value="doChannelSecurityInftBizJob" />  
+	               <entry key="targetMethod" value="doRefreshChannelInf" />  
+	           </map>
+	    </property>
+   </bean>
+  
+	<!--触发的时间  每次相隔5分钟 执行 -->
+	<bean id="doChannelSecurityInfBizTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="doChannelSecurityInftBizTask" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0/5 * * * ?</value>
+		</property>
+	</bean>
+	<!--刷新ChannelSecurityInf end -->
+	
+	<!--刷新BaseDict begin -->
+	<bean id="doBaseDictBizJob" class="com.cn.thinkx.wecard.centre.module.quartz.BaseDictBizJob"></bean>
+	
+	<bean id="doBaseDictBizTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">  
+	    <property name="jobClass" value="com.cn.thinkx.wecard.centre.module.quartz.JobDetailBean" />  
+	    <property name="durability" value="true" />
+	    <property name="description" value="刷新 account配置" />
+	    <property name="jobDataAsMap">
+	           <map>
+	               <entry key="targetObject" value="doBaseDictBizJob" />  
+	               <entry key="targetMethod" value="doRefreshBaseDictKV" />
+	           </map>
+	    </property>
+   </bean>
+   
+	<!--    	触发的时间  每次相隔5分钟 执行 -->
+	<bean id="doBaseDictBizTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="doBaseDictBizTask" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0/5 * * * ?</value>
+		</property>
+	</bean>
+	<!--刷新BaseDict end -->
+	
+  	<!--刷新ScanBoxDeviceInf begin -->
+	<bean id="doScanBoxDeviceInfJob" class="com.cn.thinkx.wecard.centre.module.quartz.ScanBoxDeviceInfJob"></bean>
+	
+	<bean id="doScanBoxDeviceInf" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">  
+	    <property name="jobClass" value="com.cn.thinkx.wecard.centre.module.quartz.JobDetailBean" />  
+	    <property name="durability" value="true" />
+	    <property name="description" value="刷新 account配置" />
+	    <property name="jobDataAsMap">
+	           <map>
+	               <entry key="targetObject" value="doScanBoxDeviceInfJob" />  
+	               <entry key="targetMethod" value="doRefreshScanBoxDeviceInf" />
+	           </map>
+	    </property>
+   </bean>
+   
+	<!--    	触发的时间  每次相隔5分钟 执行 -->
+	<bean id="doScanBoxDeviceInfTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="doScanBoxDeviceInf" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0/5 * * * ?</value>
+		</property>
+	</bean>
+	<!--刷新ScanBoxDeviceInfJob end -->
+  
+  	<!--刷新ShopInfJob begin -->
+	<bean id="doRefreshShopInfJob" class="com.cn.thinkx.wecard.centre.module.quartz.ShopInfJob"></bean>
+	
+	<bean id="doShopInf" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">  
+	    <property name="jobClass" value="com.cn.thinkx.wecard.centre.module.quartz.JobDetailBean" />  
+	    <property name="durability" value="true" />
+	    <property name="description" value="刷新 account配置" />
+	    <property name="jobDataAsMap">
+	           <map>
+	               <entry key="targetObject" value="doRefreshShopInfJob" />  
+	               <entry key="targetMethod" value="doRefreshShopInf" />
+	           </map>
+	    </property>
+   </bean>
+   
+	<!--    	触发的时间  每次相隔30分钟 执行 -->
+	<bean id="doShopInfTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="doShopInf" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0/30 * * * ?</value>
+		</property>
+	</bean>
+	<!--刷新ShopInfJob end -->
+	
+	<!--刷新PaymentChannelJob begin -->
+	<bean id="doRefreshPaymentChannelJob" class="com.cn.thinkx.wecard.centre.module.quartz.PaymentChannelJob"></bean>
+	
+	<bean id="doPaymentChannel" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">  
+	    <property name="jobClass" value="com.cn.thinkx.wecard.centre.module.quartz.JobDetailBean" />  
+	    <property name="durability" value="true" />
+	    <property name="description" value="刷新 account配置" />
+	    <property name="jobDataAsMap">
+	           <map>
+	               <entry key="targetObject" value="doRefreshPaymentChannelJob" />  
+	               <entry key="targetMethod" value="doRefreshPaymentChannel" />
+	           </map>
+	    </property>
+   </bean>
+   
+	<!--    	触发的时间  每次相隔5分钟 执行 -->
+	<bean id="doPaymentChannelTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="doPaymentChannel" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0/5 * * * ?</value>
+		</property>
+	</bean>
+	<!--刷新PaymentChannelJob end -->
+	
+	
+	<!--刷新TelePhoneRechargeJob begin -->
+	<bean id="doTelePhoneRechargeJob" class="com.cn.thinkx.wecard.centre.module.quartz.TelePhoneRechargeBizJob"></bean>
+	
+	<bean id="doRefreshRecharge" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">  
+	    <property name="jobClass" value="com.cn.thinkx.wecard.centre.module.quartz.JobDetailBean" />  
+	    <property name="durability" value="true" />
+	    <property name="description" value="话费充值状态查询" />
+	    <property name="jobDataAsMap">
+	           <map>
+	               <entry key="targetObject" value="doTelePhoneRechargeJob" />  
+	               <entry key="targetMethod" value="doRefreshRechargeState" />
+	           </map>
+	    </property>
+   </bean>
+   
+	<!--    	触发的时间  每次相隔3分钟 执行 -->
+	<bean id="doTelePhoneRechargeTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="doRefreshRecharge" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0/3 * * * ?</value>
+		</property>
+	</bean>
+	<!--刷新PaymentChannelJob end -->
+	
+  
+	<!-- 以下是Quartz定时调度配制-->  
+	<bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
+	    <property name="configLocation" value="classpath:conf/quartz.properties" />  
+	    <property name="dataSource" ref="dataSource" />
+	    <property name="applicationContextSchedulerContextKey" value="applicationContext" />
+	    <!--可选，QuartzScheduler 启动时更新己存在的Job，这样就不用每次修改targetObject后删除qrtz_job_details表对应记录了 -->  
+	    <property name="overwriteExistingJobs" value="true" />
+	    <!-- 设置自动启动 -->  
+	    <property name="autoStartup" value="true" />   
+	    <property name="startupDelay" value="5"/>  
+	    <property name="triggers">
+	        <list>  
+	        	<ref bean="doAccessTokenBizTrigger"/>
+	            <ref bean="doJsTokenBizTrigger"/>
+	            <ref bean="doChannelSecurityInfBizTrigger"/>
+				<ref bean="doBaseDictBizTrigger"/>
+				<ref bean="doScanBoxDeviceInfTrigger"/>
+				<ref bean="doShopInfTrigger"/>
+				<ref bean="doPaymentChannelTrigger"/>
+				<ref bean="doCardKeysRetrievingTrigger"/>
+				<ref bean="doTelePhoneRechargeTrigger"/>
+	        </list>  
+	    </property>  
+	</bean>  
+</beans>
+

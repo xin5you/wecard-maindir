@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<#include "../../common/wecardHeader.html">
+    <meta charset="UTF-8">
+    <title>卡券转让</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no, email=no">
+	<link rel="stylesheet" href="${s.base}/static/css/hkb_welfare.min.css?v=${s.version}" />
+</head>
+<body>
+<!--知了企服-额度转让-->
+	<input id="productCode" name="productCode" type="hidden" value="${ckpt.productCode!}" />
+	<input id="amount" name="amount" type="hidden" value="${ckpt.amount!}"/>
+	<input id="bankNumber" name="bankNumber" type="hidden" />
+	<input id="mobile" name="mobile" type="hidden" value="${mobile!}" />
+	<input id="appearNum" name="appearNum" type="hidden" value="${appearNum!}" />
+	<div class="resell_plate">
+		<div class="waring_tips">
+		    <img src="${s.base}/static/images/welfaremart/tips.png">
+		    <p>每月可转让次数3次（还剩${appearNum!}次）</p>
+		</div>
+		<div class="resell_none"></div>
+		<div class="resell_show_box">
+		    <div class="card_bag_left">
+		        <div class="bag_left_up">
+		        	<span>￥</span>
+		        	<span>${ckpt.orgAmount!}</span>
+		        </div>
+		        <div class="bag_left_down" id="productName">${ckpt.productType!}</div>
+		    </div>
+		    <div class="card_bag_right">
+		        <p class="car_up_font">${ckpt.productName!}</p>
+			    <p class="card_down_font">可转让张数: 
+			    	<span id="num" name="num">${ckpt.num!}</span>
+			    </p>
+		    </div>
+		</div>
+		<div class="in_text">
+		    <div class="left_line">
+		        <p class="tittle_name">转让张数</p>
+		        <input id="resellNum" name="resellNum" type="number" pattern="[0-9]*" class="out_name different_input" value="1" onkeyup="this.value=this.value.replace(/\D/g,'')" maxlength="4" />
+		    </div>
+		    <div class="right_line">
+		        <p class="tittle_name">转让额度(${ckpt.productUnit!})</p>
+		        <p class="out_name gray_font" id="unusedAmount">${ckpt.amount!}</p>
+		    </div>
+		</div>
+		<div class="in_text">
+		    <div class="left_line">
+		        <p class="tittle_name">折扣(%)</p>
+		        <p class="out_name gray_font">99%</p>
+		    </div>
+		    <div class="right_line">
+		        <p class="tittle_name">预计收入(${ckpt.productUnit!})</p>
+		        <p class="out_name" id="gainAmount" name="gainAmount">${ckpt.gainAmount!}</p>
+		    </div>
+		</div>
+		<a class="in_text choose_banker" id="bank_select" onclick="bankDragUp.run()"><span id="checkBankNo">选择银行卡</span></a>
+		<div class="phone_code grey_button">
+		    <input id="phoneCode" name="phoneCode" type="tel" pattern="[0-9]*" class="left_code input_code" placeholder="请输入验证码" maxlength="6" onkeyup="this.value=this.value.replace(/\D/g,'')" />
+		    <div class="number_place">
+		    	<input class="right_code_box" type="button" value="获取验证码" id="sendPhoneCode" onclick="settime(this)" disabled="disabled" />
+		    </div>
+		</div>
+		<!--<div id="IframeVip" class="IframeVip" style="display: none">
+		    <iframe src="../vip/add_card.html" scrolling="auto" id="mainIframeVip" class="mainIframeVip" name="mainIframeVip"></iframe>
+		</div>-->
+		<!--银行列表上拉框-->
+		<div class="frame_drag_up frame_bank">
+		    <div class="frame-main">
+		        <div class="weui_actionsheet_menu">
+		            <!--弹出菜单-->
+		            <div class="weui_order">
+		                <div class="weui_title">
+		                    <div>
+		                        <div>&#xA0;</div>
+		                        <div>&#x9009;&#x62E9;&#x94F6;&#x884C;&#x5361;</div>
+		                        <div><img src="${s.base}/static/images/welfaremart/vip/icon-vip-jt.png"></div>
+		                    </div>
+		                </div>
+		                <div style="max-height:241px; overflow:auto;">
+		                    <!--银行卡1-->
+		                    <#if userBankList ??&& userBankList?size gt 0>
+								<#list userBankList as userBank>
+				                    <div class="weui_bank_imf">
+				                        <div onclick="bankDragUp.stop()" class="checkBank" data="${userBank.bankNo!}">
+				                            <div>
+				                                <div class="zz">
+				                                    <!-- <div><img src="../../images/vip/icon-bank-1.png" class="bank_logo"></div> -->
+				                                    <div>
+				                                        <div class="bank_name">${userBank.bankName!}</div>
+				                                        <div>
+						                                	<span class="card_firstnum card_number bankNum">${userBank.bankNum!}</span>
+						                                    <p class="vip_name">${userBank.userName!}</p>
+					                                	</div>
+				                                    </div>
+				                                    <input name="bankNo" class="bankNo" type="hidden" value="${userBank.bankNo!}"/>
+				                                </div>
+				                            </div>
+				                            <!--已选择的银行卡-->
+				                            <#if userBank.isdefault == '0'><div id="div" class="weui_choose">&#x5DF2;&#x9009;</div></#if>
+				                        </div>
+				                    </div>
+				            	</#list>
+				   			</#if>        
+		                    <!--银行卡结束-->
+		                </div>
+		                <!--新卡-->
+		                <a id="addBank" href="${s.base}/welfareMart/toWelfareAddBank.html?check=2&productCode=${ckpt.productCode!}&num=${ckpt.num!}">
+		                    <div class="weui_add_card" id="weui_add_card">
+		                        <div>
+		                            <div>&#x4F7F;&#x7528;&#x65B0;&#x5361;</div>
+		                            <div><img src="${s.base}/static/images/welfaremart/vip/icon_arrow.png"></div>
+		                        </div>
+		                    </div>
+		                </a>
+		            </div>
+		            <!--弹出菜单结束-->
+		        </div>
+		    </div>
+		    <div class="weui_mask_transition mask_drag"></div>
+		</div>
+	</div>
+	<!--底部按钮-->
+	<div>
+	    <div class="resell_bottom_box">
+	        <a id="resellCommit">转让</a>
+	    </div>
+	    <div class="resell_bottom_plate"></div>
+	</div>
+	
+	<!--预加载效果-->
+	<div class="loading_page">
+	    <div class="show_loading">
+	        <main>
+	            <div class="loader">
+	                <div class="loader-inner line-scale">
+	                    <div></div>
+	                    <div></div>
+	                    <div></div>
+	                    <div></div>
+	                    <div></div>
+	                </div>
+	            </div>
+	        </main>
+	        <p>提交中</p>
+	    </div>
+	</div>
+
+	<script src="${s.base}/static/js/common/fastclick.min.js?v=${s.version}"></script>
+	<script src="${s.base}/static/js/common/hkb_welfare.min.js?v=${s.version}"></script>
+	<script src="${s.base}/static/js/common/LAreaData2.min.js?v=${s.version}"></script>
+	<script src="${s.base}/static/js/module/welfaremart/resell/resell.js"></script>
+	<script>
+	    //获取验证码
+	    var codeTime=60; //先声明一个变量为60s时间
+	    function settime(obj) { //调用函数参数的方法
+	    	if($("#div").hasClass('weui_choose')){
+		        if (codeTime == 0) {  //如果变量等于0，也就是时间为0时
+		            obj.removeAttribute("disabled");  //按钮可点击
+		            obj.value="获取验证码";  //按钮文字为“获取验证码”
+		            codeTime = 60;  //时间为60s
+		            document.getElementsByClassName('phone_code')[0].className = 'phone_code';  //按钮颜色变灰色
+		            return;
+		        } else {  //反之
+		            obj.setAttribute("disabled", true);  //按钮不可点击
+		            obj.value="重新获取(" + codeTime + "s)";  //按钮文字为“重新获取”
+		            codeTime--;  //时间60s递减
+		            document.getElementsByClassName('phone_code')[0].className = 'phone_code grey_button';  //按钮颜色变橙色
+		        }
+		        setTimeout(function() {
+		            settime(obj)  //参数每一秒执行一次
+		        },1000)
+	    	}
+	    }
+	  	//银行列表上拉框
+	    var bankDragUp=new jfFrameDrag.dragEleshow({
+	        "targetButton":"bank_select",//点击的目标元素。ID选择器
+	        "targetDragName":"frame_bank",//出现的目标元素，calss选择器
+	        "hideButton":"weui_title"//关闭按钮，class选择器
+	    });
+	  	//弹出框
+	  	function myDialog() {
+		    var personalHold=document.getElementsByClassName('gray_check_buy')[0];
+		    personalHold.addEventListener('click',function () {
+		        jfShowTips.dialogShow({
+		            "mainText": "转让金额不能超过五万",
+		            "minText": "  ",
+		            "hasCheck": false,
+		            "hasCancel": true,
+		            "checkFn": function () {
+		            	document.getElementsByClassName('gray_check_buy')[2].className='weui_mask_transition mask_drag';
+		            	jfShowTips.dialogRemove();//弹出框消失
+		            }
+		        })
+		    },false)
+	  	}
+	    //删除银行卡
+	    /* $('div.weui_cross').on("click", function (e) {
+	        var thislist = $(this).parents('.weui_bank_imf');
+	        var e=event||window.event;
+	        jfShowTips.dialogShow({
+	            "mainText": "确认删除尾号为8070的银行卡？",
+	            "minText": " ",
+	            "checkFn": function () {
+	                thislist.addClass('payment_list_hide');
+	                jfShowTips.dialogRemove();//弹出框消失
+	                setTimeout(function () {
+	                    thislist.css("display", "none");
+	                }, 300);
+	            }
+	        });
+	        e.stopPropagation();
+	        e.preventDefault()
+	    }) */
+	    /*选择新的银行卡*/
+	  /*  var vipIframeShow=new jfFrameFly.FlyShow({
+	        "showButton":"weui_add_card",//点击会出现侧拉页面的按钮，ID选择器
+	        "hideButton":"btn_save",//关闭的按钮,ID选择器
+	        "flyEleArea":"IframeVip",//侧拉飞入的元素class选择器
+	        "hasIframe":true,//存在IFrame
+	        "iframeName":"mainIframeVip",//iframe的class选择器，保持IFrame的name属性与calss值一样
+	        "InitEleArea":"vipMain"//初始页面，class选择器
+	    });
+	    jfCustomerService.init(
+	        {//用户信息
+	            name: '阿陈',// 名字
+	            address: '西伯利亚',// 地址
+	            email: '1313@qq.com',// 邮箱
+	            age: '16',// 年龄
+	            tel: '110',// 电话
+	            comment: '很帅',// 备注
+	            gender: '男',// 性别
+	            qq: '1234567',// QQ
+	            weibo: '',// 微博
+	            weixin: '',// 微信
+	            '公司名称': '上海淘略数据有限公司',
+	            '公司编号': '123ksuhdaf891274',
+	            '员工编号': '1234567890123456'
+	        },
+	        //指定客服
+	        'b040d96757bf55ea302f9fbfb0ecd062'
+	    );
+	*/
+	</script>
+</body>
+</html>

@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.thinkx.biz.translog.mapper.IntfaceTransLogMapper">
+	
+	<select id="getPrimaryKey" parameterType="java.util.Map" statementType="CALLABLE">
+		<![CDATA[
+			{ call PROC_TB_INTFACE_TRANS_LOG(#{id, jdbcType=VARCHAR, mode=OUT}) }
+		]]>
+	</select>
+	
+	<sql id="InterfaceTransLogColumns">
+		   interface_primary_key,
+		   settle_date,
+		   org_interface_primary_key,
+		   dms_related_key,
+		   org_dms_related_key,
+		   trans_id,
+		   trans_st,
+		   ins_code,
+		   mchnt_code,
+		   shop_code,
+		   resp_code,
+		   pri_acct_no,
+		   card_no,
+		   user_inf_user_name,
+		   product_code,
+		   trans_amt,
+		   upload_amt,
+		   trans_curr_cd,
+		   trans_chnl,
+		   trans_fee,
+		   trans_fee_type,
+		   tfr_in_acct_no,
+		   tfr_out_acct_no,
+		   additional_info,
+		   remarks,
+		   create_user,
+		   update_user,
+		   create_time,
+		   update_time
+	</sql>
+	<sql id="TransLogColumns">
+		txn_primary_key,
+		settle_date,
+		org_txn_primary_key,
+		dms_related_key,
+		org_dms_related_key,
+		trans_id,
+		trans_st,
+		term_code,
+		shop_code,
+		mchnt_code,
+		ins_code,
+		resp_code,
+		pri_acct_no,
+		card_no,
+		user_name,
+		product_code,
+		trans_amt,
+		org_trans_amt,
+		trans_curr_cd,
+		card_attr,
+		trans_chnl,
+		trans_fee,
+		trans_fee_type,
+		tfr_in_acct_no,
+		tfr_out_acct_no,
+		additional_info,
+		remarks,
+		create_time,
+		update_time
+	</sql>
+	
+	<sql id="AccountLogColumns">
+		ACT_PRIMARY_KEY,
+		SETTLE_DATE,
+		TXN_PRIMARY_KEY,
+		INS_CODE,
+		ACCOUNT_NO,
+		BAT_NO,
+		TXN_DATE,
+		TXN_TIME,
+		TRANS_ID,
+		TRANS_CHNL,
+		TXN_REAL_AMT,
+		TXN_REAL_AMT_TYPE,
+		TXN_AMT,
+		TXN_FEE,
+		ACC_TYPE,
+		ACC_TOTAL_BAL,
+		ACC_VALID_BAL,
+		CANCEL_FLAG,
+		REVSAL_FLAG,
+		RETURN_FLAG,
+		RETURN_AMT,
+		ADJUST_FLAG,
+		ADJUST_AMT,
+		ERR_NO,
+		ORG_ACT_PRIMARY_KEY,
+		ORG_TXN_PRIMARY_KEY,
+		ORG_BAT_NO,
+		RESP_CODE,
+		REMARK,
+		CREATE_USER,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME
+	</sql>
+	
+    <insert id="insertIntfaceTransLog" parameterType="IntfaceTransLog" flushCache="true">
+		INSERT INTO TB_INTFACE_TRANS_LOG${tableNum}
+		  (interface_primary_key,
+		   settle_date,
+		   org_interface_primary_key,
+		   dms_related_key,
+		   org_dms_related_key,
+		   trans_id,
+		   trans_st,
+		   ins_code,
+		   mchnt_code,
+		   shop_code,
+		   resp_code,
+		   pri_acct_no,
+		   card_no,
+		   user_inf_user_name,
+		   product_code,
+		   trans_amt,
+		   upload_amt,
+		   trans_curr_cd,
+		   trans_chnl,
+		   trans_fee,
+		   trans_fee_type,
+		   tfr_in_acct_no,
+		   tfr_out_acct_no,
+		   additional_info,
+		   term_code,
+		   remarks,
+		   create_user,
+		   update_user,
+		   create_time,
+		   update_time)
+		VALUES
+		  (#{interfacePrimaryKey,jdbcType=VARCHAR},
+		   #{settleDate,jdbcType=VARCHAR},
+		   #{orgInterfacePrimaryKey,jdbcType=VARCHAR},
+		   #{dmsRelatedKey,jdbcType=VARCHAR},
+		   #{orgDmsRelatedKey,jdbcType=VARCHAR},
+		   #{transId,jdbcType=VARCHAR},
+		   #{transSt,jdbcType=INTEGER},
+		   #{insCode,jdbcType=VARCHAR},
+		   #{mchntCode,jdbcType=VARCHAR},
+		   #{shopCode,jdbcType=VARCHAR},
+		   #{respCode,jdbcType=VARCHAR},
+		   #{priAcctNo,jdbcType=VARCHAR},
+		   #{cardNo,jdbcType=VARCHAR},
+		   #{userInfUserName,jdbcType=VARCHAR},
+		   #{productCode,jdbcType=VARCHAR},
+		   #{transAmt,jdbcType=VARCHAR},
+		   #{uploadAmt,jdbcType=VARCHAR},
+		   #{transCurrCd,jdbcType=VARCHAR},
+		   #{transChnl,jdbcType=VARCHAR},
+		   #{transFee,jdbcType=VARCHAR},
+		   #{transFeeType,jdbcType=VARCHAR},
+		   #{tfrInAcctNo,jdbcType=VARCHAR},
+		   #{tfrOutAccNo,jdbcType=VARCHAR},
+		   #{additionalInfo,jdbcType=VARCHAR},
+		   #{termCode,jdbcType=VARCHAR},
+		   #{remarks,jdbcType=VARCHAR},
+		   '99999999',
+		   '99999999',
+		   sysdate,
+		   sysdate)
+    </insert>
+    
+    <update id="updateIntfaceTransLog" parameterType="IntfaceTransLog" flushCache="true">
+		UPDATE TB_INTFACE_TRANS_LOG${tableNum} 
+		<trim prefix="SET" suffixOverrides=",">
+			trans_st = #{transSt,jdbcType=INTEGER}, 
+			resp_code = #{respCode,jdbcType=VARCHAR}, 
+			update_time = SYSDATE,
+			<if test="orgInterfacePrimaryKey != null and orgInterfacePrimaryKey != ''">org_interface_primary_key=#{orgInterfacePrimaryKey,jdbcType=VARCHAR},</if>
+			<if test="dmsRelatedKey != null and dmsRelatedKey != ''">dms_related_key=#{dmsRelatedKey,jdbcType=VARCHAR},</if>
+			<if test="orgDmsRelatedKey != null and orgDmsRelatedKey != ''">org_dms_related_key=#{orgDmsRelatedKey,jdbcType=VARCHAR},</if>
+			<if test="additionalInfo != null and additionalInfo != ''">additional_info=#{additionalInfo,jdbcType=VARCHAR},</if>
+		</trim>
+		WHERE interface_primary_key = #{interfacePrimaryKey,jdbcType=VARCHAR} 
+	</update>
+	
+    <update id="updateIntfaceHisTransLog" parameterType="IntfaceTransLog" flushCache="true">
+		UPDATE TB_INTFACE_TRANS_LOG_HIS 
+		<trim prefix="SET" suffixOverrides=","> 
+			TRANS_ST = #{transSt,jdbcType=INTEGER}, 
+			RESP_CODE = #{respCode,jdbcType=VARCHAR}, 
+			UPDATE_TIME = SYSDATE,
+			<if test="orgInterfacePrimaryKey != null and orgInterfacePrimaryKey != ''">org_interface_primary_key=#{orgInterfacePrimaryKey,jdbcType=VARCHAR},</if>
+			<if test="dmsRelatedKey != null and dmsRelatedKey != ''">dms_related_key=#{dmsRelatedKey,jdbcType=VARCHAR},</if>
+			<if test="orgDmsRelatedKey != null and orgDmsRelatedKey != ''">org_dms_related_key=#{orgDmsRelatedKey,jdbcType=VARCHAR},</if>
+			<if test="additionalInfo != null and additionalInfo != ''">additional_info=#{additionalInfo,jdbcType=VARCHAR},</if>
+		</trim>
+		WHERE INTERFACE_PRIMARY_KEY = #{interfacePrimaryKey,jdbcType=VARCHAR} 
+	</update>
+	
+	<select id="getIntfaceTransLogByRelatedKey"  resultType="IntfaceTransLog">
+		SELECT 
+			<include refid="InterfaceTransLogColumns" /> 
+			FROM (
+				SELECT 
+				 <include refid="InterfaceTransLogColumns"/>
+				 FROM TB_INTFACE_TRANS_LOG${tableNum}  WHERE DMS_RELATED_KEY=#{relatedKey} ORDER BY INTERFACE_PRIMARY_KEY ASC
+			)  WHERE ROWNUM=1
+	</select>
+	
+	<select id="getIntfaceTransLog" resultType="IntfaceTransLog">
+		SELECT <include refid="InterfaceTransLogColumns"/>
+		 FROM TB_INTFACE_TRANS_LOG${tableNum}  
+		 WHERE DMS_RELATED_KEY=#{relatedKey} AND MCHNT_CODE=#{mchntCode} AND ROWNUM=1
+	</select>
+	
+	<select id="getIntfaceTransLogByLogId" resultType="IntfaceTransLog">
+		SELECT 
+			<include refid="InterfaceTransLogColumns"/>
+		FROM TB_INTFACE_TRANS_LOG${tableNum}  
+		WHERE INTERFACE_PRIMARY_KEY=#{logId}
+	</select>
+	
+	<select id="getIntfaceTransLogHisBylogId" resultType="IntfaceTransLog">
+		SELECT 
+			<include refid="InterfaceTransLogColumns"/>
+		FROM TB_INTFACE_TRANS_LOG_HIS  
+		WHERE INTERFACE_PRIMARY_KEY=#{logId}
+	</select>
+	
+	<update id="updateIntfaceTransLogRespCode"  flushCache="true">
+		UPDATE TB_INTFACE_TRANS_LOG${tableNum} 
+		SET trans_st =1, resp_code = #{respCode,jdbcType=VARCHAR}, update_user='99999999',update_time = SYSDATE 
+		WHERE DMS_RELATED_KEY = #{relatedKey,jdbcType=VARCHAR} 
+	</update>
+	
+	<update id="updateOriITFLogRespCode"  flushCache="true">
+		UPDATE TB_INTFACE_TRANS_LOG${tableNum} 
+		SET trans_st=3, update_user='99999999', update_time=SYSDATE 
+		WHERE DMS_RELATED_KEY=#{oriDmsRelatedKey,jdbcType=VARCHAR} 
+	</update>
+			
+	<select id="getTransLogByRelatedKey" resultType="TransLog">
+		SELECT 
+			<include refid="TransLogColumns" /> 
+			FROM (
+					SELECT 
+			 		<include refid="TransLogColumns" /> 
+			 		FROM TB_TRANS_LOG${tableNum} WHERE DMS_RELATED_KEY=#{relatedKey} ORDER BY TXN_PRIMARY_KEY ASC
+		 		)  WHERE ROWNUM=1
+	</select>
+	
+	<update id="updateTransLogRespCode"  flushCache="true">
+		UPDATE TB_TRANS_LOG${tableNum} 
+		SET trans_st =1, resp_code = #{respCode,jdbcType=VARCHAR},update_user='99999999' ,update_time = SYSDATE 
+		WHERE DMS_RELATED_KEY = #{relatedKey,jdbcType=VARCHAR} 
+	</update>
+	
+	<update id="updateOriTransLog" flushCache="true">
+		UPDATE TB_TRANS_LOG${tableNum} 
+		SET trans_st=3, update_user='99999999', update_time=SYSDATE 
+		WHERE DMS_RELATED_KEY=#{oriDmsRelatedKey,jdbcType=VARCHAR} 
+	</update>
+	
+	<select id="getAccountLogByRelatedKey" resultType="AccountLog">
+		SELECT 
+			<include refid="AccountLogColumns" /> 
+			FROM (
+					SELECT 
+			 			<include refid="AccountLogColumns" />
+			 				FROM TB_ACCOUNT_LOG${tableNum} WHERE TXN_PRIMARY_KEY=#{relatedKey} ORDER BY ACT_PRIMARY_KEY ASC
+			 )  WHERE ROWNUM=1
+	</select>
+	
+	<select id="getIntfaceTransLogHisByOrgDmsRelatedKey" resultType="IntfaceTransLog">
+		SELECT <include refid="InterfaceTransLogColumns"/>
+		 FROM TB_INTFACE_TRANS_LOG_HIS
+		 WHERE ORG_DMS_RELATED_KEY=#{orgDmsRelatedKey} AND ROWNUM=1
+	</select>
+	
+	<select id="getIntfaceTransLogByOrgDmsRelatedKey" resultType="IntfaceTransLog">
+		SELECT <include refid="InterfaceTransLogColumns"/>
+		 FROM TB_INTFACE_TRANS_LOG${tableNum}
+		 WHERE ORG_DMS_RELATED_KEY=#{orgDmsRelatedKey} AND ROWNUM=1
+	</select>
+	
+	<select id="getIntfaceTransLogByDmsRelatedKey" resultType="IntfaceTransLog">
+		SELECT <include refid="InterfaceTransLogColumns"/>
+		 FROM TB_INTFACE_TRANS_LOG${tableNum}
+		 WHERE DMS_RELATED_KEY=#{dmsRelatedKey} AND ROWNUM=1
+	</select>
+	
+	<select id="getIntfaceTransLogHisByDmsRelatedKey"  resultType="IntfaceTransLog">
+		SELECT 
+			<include refid="InterfaceTransLogColumns"/>
+		FROM TB_INTFACE_TRANS_LOG_HIS  
+		WHERE DMS_RELATED_KEY=#{dmsRelatedKey} AND ROWNUM=1
+	</select>
+</mapper>

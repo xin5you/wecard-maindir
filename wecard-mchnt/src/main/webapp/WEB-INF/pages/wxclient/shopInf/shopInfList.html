@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>知了企服</title>
+    <#include "../../common/wecardHeader.html">
+</head>
+<body ontouchstart>
+ <div class="page">	
+		<div class="hd">
+		    <h1 class="page_title">门店管理</h1>
+		</div>
+		<div class="bd">
+		    <div class="weui_panel weui_panel_access">
+		        <div class="weui_panel_hd"><a href="${s.base}/wxclient/mchnt/shopInfManager.html?flag=0" class="weui_btn weui_btn_primary" href="javascript:;">新增门店</a></div>
+		        <div class="weui_panel_bd">
+		        	<#if shopInfList??&&shopInfList?size gt 0>
+		        		<#list shopInfList as shopInf>
+				            <div class="weui_media_box weui_media_text" >
+				                <h4 class="weui_media_title"><a href="${s.base}/wxclient/mchnt/shopInfManager.html?flag=1&shopInfId=${shopInf.shopId!}">${shopInf.shopName!}</a></h4>
+				                <p class="weui_media_desc">${shopInf.shopAddr!}</p>
+				            </div>
+			            </#list>
+		      		</#if>
+		        </div>
+		    </div>
+		</div>
+	</div>
+</body>
+</html>

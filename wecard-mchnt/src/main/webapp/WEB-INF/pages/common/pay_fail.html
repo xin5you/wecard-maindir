@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1" />
+		<meta content="telephone=no" name="format-detection" />
+		<title>知了企服用户平台-支付结果</title>
+		<link rel="stylesheet" href="${s.base}/res/css/common.min.css">
+		<script src="${s.base}/res/jqueryui/js/jquery-2.1.4.js"></script>
+		<script src="${s.base}/res/common/hkb.common.min.js"></script>
+		<script src="${s.base}/res/jweixin-1.0.0.js"></script>
+		<script type="text/javascript">
+			$(function () {	
+				$('.hkb_btn').bind("click", function(){
+		        	wx.closeWindow();
+		        });
+			})
+		</script>
+	</head>
+	<body>
+		<div class="payment_page">
+			<div class="icon_hkb icon_fail">
+				<div class="icon_line line_fail"></div>
+			</div>
+			<div class="font_hkb font_fail">支付失败</div>
+			<#if errorInfo??>
+				<div class="content_hkb">
+					<!-- <div>联华超市 凯旋路店</div> -->
+					<#if transAmt??>
+						<div>支付金额：<span>${transAmt!}</span>元</div>
+					</#if>
+					<div>原因：<span style="color: red;">${errorInfo!}</span></div>
+				</div>
+			</#if>
+		</div>
+		<a href="#" class="btn_area">
+			<div id="c_btn" class="hkb_btn btn_color">关 闭</div>
+		</a>
+	</body>
+</html>

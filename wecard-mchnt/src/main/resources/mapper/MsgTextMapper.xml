@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wxcms.mapper.MsgTextDao">
+
+	<select id="listForPage" parameterType="MsgText" resultType="MsgText">
+		SELECT * FROM t_wx_merchant_msg_text t , t_wx_merchant_msg_base b WHERE t.base_id = b.id ORDER BY t.ID
+	</select>
+
+	<select id="getById" parameterType="java.lang.String" resultType="MsgText">
+		SELECT * FROM t_wx_merchant_msg_text WHERE ID = #{id}
+	</select>
+	
+	<select id="getRandomMsg" parameterType="java.lang.String" resultType="MsgText">
+		SELECT t.* from t_wx_merchant_msg_text t , t_wx_merchant_msg_base b
+		WHERE b.inputCode = #{inputCode} and t.base_id = b.id AND rownum &lt;=1
+		ORDER BY dbms_random.value() 
+	</select>
+	
+	<select id="getRandomMsg2" resultType="MsgText">
+		SELECT t.* from t_wx_merchant_msg_text t , t_wx_merchant_msg_base b
+		WHERE t.base_id = b.id AND rownum &lt;=1
+		ORDER BY dbms_random.value()
+	</select>
+
+	<insert id="add" parameterType="MsgText" flushCache="true">
+		INSERT INTO t_wx_merchant_msg_text ( CONTENT,BASE_ID)  VALUES ( #{content},#{baseId} ) 
+	</insert>
+
+	<update id="update" parameterType="MsgText" flushCache="true">
+		UPDATE t_wx_merchant_msg_text SET CONTENT = #{content} WHERE ID = #{id} 
+	</update>
+
+	<delete id="delete" parameterType="MsgText" >
+		DELETE FROM t_wx_merchant_msg_text WHERE ID = #{id}
+	</delete>
+
+</mapper>

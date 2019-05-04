@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.iboot.diy.api.original.mapper.PositStatisticsMapper">
+
+		<resultMap type="PositStatistics" id="PositStatisticsMap">
+			<result column="SHOP_NAME" property="shopName"/>
+			<result column="SHOP_CODE" property="shopCode"/>
+			<result column="CARD_PAY_AMT" property="cardPayAmt"/>
+			<result column="CARD_PAY_NUM" property="cardPayNum"/>
+			<result column="QUICK_PAY_AMT" property="quickPayAmt"/>
+			<result column="QUICK_PAY_NUM" property="quickPayNum"/>
+			<result column="PAY_AMT" property="payAmt"/>
+		</resultMap>
+
+	<select id="getPositStatisticsList" parameterType="PositStatistics" resultMap="PositStatisticsMap">
+		SELECT S.SHOP_NAME,
+		       T.SHOP_CODE,
+		       CARD_PAY_AMT,
+		       CARD_PAY_NUM,
+		       QUICK_PAY_AMT,
+		       QUICK_PAY_NUM,
+		       PAY_AMT
+		  FROM (SELECT P.SHOP_CODE,
+		               SUM(P.CARD_PAY_AMT) AS CARD_PAY_AMT,
+		               SUM(P.CARD_PAY_NUM) AS CARD_PAY_NUM,
+		               SUM(P.QUICK_PAY_AMT) AS QUICK_PAY_AMT,
+		               SUM(P.QUICK_PAY_NUM) AS QUICK_PAY_NUM,
+		               SUM(P.PAY_AMT) AS PAY_AMT
+		          FROM TB_POSIT_STATISTICS P, TB_SHOP_STATISTICS ST
+		         WHERE P.DATA_STAT = '0'
+		           AND P.SHOP_STATISTICS_ID = ST.ID
+		           AND ST.SHOP_CODE = #{shCode}
+				<if test="startDate != null and startDate != '' ">
+					AND P.SETTLE_DATE &gt;= #{startDate}
+				</if>
+				<if test="endDate != null and endDate != '' ">
+					AND P.SETTLE_DATE &lt;= #{endDate}
+				</if>
+		         GROUP BY P.SHOP_CODE) T,
+		       TB_SHOP_INF S
+		 WHERE S.SHOP_CODE = T.SHOP_CODE
+	</select>
+	
+	
+	<select id="getPositDetailList" parameterType="PositDetail" resultType="PositStatistics">
+			SELECT P.CARD_PAY_AMT,
+		                   P.CARD_PAY_NUM,
+		                   P.QUICK_PAY_AMT,
+		                   P.QUICK_PAY_NUM,
+		                   P.PAY_AMT,
+		                   P.SETTLE_DATE
+		  FROM TB_POSIT_STATISTICS P
+		 WHERE P.SHOP_CODE = #{positCode}
+		    AND P.SETTLE_DATE &gt;= #{startDate} 
+		    AND P.SETTLE_DATE &lt;= #{endDate}
+		 ORDER BY P.SETTLE_DATE DESC
+	</select>
+	
+	<select id="getPositDetailUploadList" parameterType="PositDetail" resultType="PositDetailUpload">
+			 SELECT 
+			   P.SETTLE_DATE,
+			   P.CARD_PAY_AMT,
+               P.CARD_PAY_NUM,
+               P.QUICK_PAY_AMT,
+               P.QUICK_PAY_NUM,
+               P.PAY_AMT
+		  FROM TB_POSIT_STATISTICS P
+		 WHERE P.SHOP_CODE = #{positCode}
+		    AND P.SETTLE_DATE &gt;= #{startDate} 
+		    AND P.SETTLE_DATE &lt;= #{endDate}
+		 ORDER BY P.SETTLE_DATE DESC
+	</select>
+	
+	<select id="getPositStatisticsUploadList" parameterType="PositStatistics" resultType="PositStatisticsUpload">
+			SELECT S.SHOP_NAME,
+		       CARD_PAY_AMT,
+		       CARD_PAY_NUM,
+		       QUICK_PAY_AMT,
+		       QUICK_PAY_NUM,
+		       PAY_AMT
+		  FROM (SELECT P.SHOP_CODE,
+		               SUM(P.CARD_PAY_AMT) AS CARD_PAY_AMT,
+		               SUM(P.CARD_PAY_NUM) AS CARD_PAY_NUM,
+		               SUM(P.QUICK_PAY_AMT) AS QUICK_PAY_AMT,
+		               SUM(P.QUICK_PAY_NUM) AS QUICK_PAY_NUM,
+		               SUM(P.PAY_AMT) AS PAY_AMT
+		          FROM TB_POSIT_STATISTICS P, TB_SHOP_STATISTICS ST
+		         WHERE P.DATA_STAT = '0'
+		           AND P.SHOP_STATISTICS_ID = ST.ID
+		           AND ST.SHOP_CODE = #{shCode}
+				<if test="startDate != null and startDate != '' ">
+					AND P.SETTLE_DATE &gt;= #{startDate}
+				</if>
+				<if test="endDate != null and endDate != '' ">
+					AND P.SETTLE_DATE &lt;= #{endDate}
+				</if>
+		         GROUP BY P.SHOP_CODE) T,
+		       TB_SHOP_INF S
+		 WHERE T.SHOP_CODE = S.SHOP_CODE
+	</select>
+	
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+		<setting name="logImpl" value="SLF4J" />
+<!-- 		<setting name="logImpl" value="STDOUT_LOGGING" /> -->
+	</settings>
+	<typeAliases>
+		<typeAlias type="com.cn.thinkx.beans.CtrlSystem" alias="CtrlSystem" />
+		<typeAlias type="com.cn.thinkx.biz.core.model.ImageManager" alias="ImageManager" />
+		
+		<typeAlias type="com.cn.thinkx.biz.translog.model.IntfaceTransLog" alias="IntfaceTransLog" />
+		<typeAlias type="com.cn.thinkx.biz.translog.model.TransLog" alias="TransLog" />
+		<typeAlias type="com.cn.thinkx.biz.translog.model.AccountLog" alias="AccountLog" />
+		
+		<typeAlias type="com.cn.thinkx.biz.user.model.UserInf" alias="UserInf" />
+		<typeAlias type="com.cn.thinkx.biz.user.model.PersonInf" alias="PersonInf" />
+		<typeAlias type="com.cn.thinkx.biz.user.model.UserMerchantAcct" alias="UserMerchantAcct" />
+		<typeAlias type="com.cn.thinkx.biz.user.model.CustomerAccount" alias="CustomerAccount" />
+		<typeAlias type="com.cn.thinkx.biz.user.model.ChannelUserInf" alias="ChannelUserInf" />
+		
+		<typeAlias type="com.cn.thinkx.biz.mchnt.model.MchtCommodities" alias="MchtCommodities" />
+		<typeAlias type="com.cn.thinkx.biz.mchnt.model.ShopInf" alias="ShopInf" />
+		<typeAlias type="com.cn.thinkx.biz.mchnt.model.ShopDetailInf" alias="ShopDetailInf" />
+		<typeAlias type="com.cn.thinkx.biz.mchnt.model.ShopListInf" alias="ShopListInf" />
+		<typeAlias type="com.cn.thinkx.biz.mchnt.model.MerchantManager" alias="MerchantManager" />
+		<typeAlias type="com.cn.thinkx.biz.mchnt.model.CardTransInf" alias="CardTransInf" />
+		<typeAlias type="com.cn.thinkx.biz.mchnt.model.MerchantInf" alias="MerchantInf" />
+
+		<typeAlias type="com.cn.thinkx.biz.salesactivity.model.SalesActivityList" alias="SalesActivityList" />
+		<typeAlias type="com.cn.thinkx.biz.salesactivity.model.SalesActivityDetail" alias="SalesActivityDetail" />
+		<typeAlias type="com.cn.thinkx.biz.salesactivity.model.SalesActivity" alias="SalesActivity" />
+		<typeAlias type="com.cn.thinkx.biz.drools.model.TransRule" alias="TransRule" />
+		
+	</typeAliases>
+
+	<mappers>
+	</mappers>
+</configuration>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.merchant.mapper.CardBalDao">
+
+	<resultMap type="CardBal"  id="CardBalResultMap">
+		<result column="CARDSUMNUM" property="cardSumNum"/>
+		<result column="CARDSUMBAL" property="cardSumBal"/>
+	</resultMap>
+
+	<select id="getCardBalByInsCodeAndProductCode" parameterType="CardBal" resultMap="CardBalResultMap">
+	
+	select 
+	nvl(sum(card_num),0) as cardSumNum, 
+	nvl(sum(card_bal),0) as cardSumBal 
+     from tb_card_bal
+    where ins_code = #{cb.insCode} 
+      and product_code = #{cb.productCode} 
+      and settle_date = #{cb.selectDate}
+      
+	</select>
+
+</mapper>

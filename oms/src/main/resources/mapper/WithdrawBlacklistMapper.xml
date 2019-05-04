@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.withdrawBlacklist.mapper.BatchOpenWBMapper">
+
+	<sql id="WithdrawBlacklistColumns">
+		ID,
+		USER_ID,
+		USER_NAME,
+		USER_PHONE,
+		OPEN_ID,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+
+	<sql id="tableName">
+			TB_WITHDRAW_BLACKLIST_INF
+	</sql>
+	
+	<select id="getWithdrawBlacklist" parameterType="WithdrawBlacklist" resultType="WithdrawBlacklist">
+		SELECT 
+	  		<include refid="WithdrawBlacklistColumns" />
+		FROM 
+			<include refid="tableName" />
+		WHERE 1=1 and DATA_STAT = '0'
+		<if test="userName !=null and userName !='' ">
+			AND USER_NAME = #{userName,jdbcType=VARCHAR}
+		</if>
+		<if test="userPhone !=null and userPhone !='' ">
+			AND USER_PHONE = #{userPhone,jdbcType=VARCHAR}
+		</if>
+		<if test="startTime != null and startTime != ''">
+			AND CREATE_TIME &gt;= to_date(#{startTime}, 'YYYY-MM-DD HH24:MI:SS')
+		</if>
+		<if test="endTime != null  and endTime != ''">
+			AND CREATE_TIME &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+		</if>
+		 ORDER BY UPDATE_TIME DESC
+	</select>
+	
+	<select id="getWithdrawBlacklistByUserPhone" parameterType="String" resultType="WithdrawBlacklist">
+		SELECT 
+	  		<include refid="WithdrawBlacklistColumns" />
+		FROM 
+			<include refid="tableName" />
+		WHERE 1=1 and DATA_STAT = '0' and USER_PHONE = #{userPhone}
+	</select>
+	
+	
+	<insert id="insertWithdrawBlacklist" parameterType = "WithdrawBlacklist">	
+		<selectKey resultType="string" order="BEFORE" keyProperty="id">  
+				<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getWithdrawBlacklistId" />
+		</selectKey>	
+		insert into <include refid="tableName" />
+		(
+			<include refid="WithdrawBlacklistColumns" />
+		) values (
+			#{id},
+			#{userId,jdbcType=VARCHAR},
+			#{userName,jdbcType=VARCHAR},
+			#{userPhone,jdbcType=VARCHAR},
+			#{openId,jdbcType=VARCHAR},
+			'0',
+			#{remarks, jdbcType=VARCHAR},
+			#{createUser, jdbcType=VARCHAR},
+			#{updateUser, jdbcType=VARCHAR},
+			SYSDATE,
+			SYSDATE,
+			'0'
+		)
+	</insert>
+	
+	
+	<update id="updateWithdrawBlacklist" parameterType="WithdrawBlacklist">
+		UPDATE 
+			<include refid="tableName" />
+		SET
+		<if test="userId !=null and userId !='' ">
+			USER_ID = #{userId,jdbcType=VARCHAR},
+		</if>
+		<if test="userName !=null and userName !='' ">
+			USER_NAME = #{userName,jdbcType=VARCHAR},
+		</if>
+		<if test="userPhone !=null and userPhone !='' ">
+			USER_PHONE = #{userPhone,jdbcType=VARCHAR},
+		</if>
+		<if test="openId !=null and openId !='' ">
+			OPEN_ID = #{openId,jdbcType=VARCHAR},
+		</if>
+			UPDATE_TIME = sysdate,
+			LOCK_VERSION = LOCK_VERSION+1
+		WHERE ID = #{id}
+	</update>
+	
+	<update id="deleteWithdrawBlacklistById" parameterType="String">
+		UPDATE <include refid="tableName" /> SET DATA_STAT = 1,UPDATE_TIME = sysdate WHERE ID = #{id}
+	</update>
+
+</mapper>

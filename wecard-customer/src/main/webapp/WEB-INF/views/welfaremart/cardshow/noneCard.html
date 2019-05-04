@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<#include "../../common/wecardHeader.html">
+    <meta charset="UTF-8">
+    <title>我的卡券</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no, email=no">
+	<link rel="stylesheet" href="${s.base}/static/css/hkb_welfare.min.css?v=${s.version}" />
+</head>
+<body>
+	<!--知了企服-我的卡包-->
+	<div class="none_card_plate">
+	    <div class="none_card_img">
+	        <img src="${s.base}/static/images/welfaremart/icon_none_card.png">
+	    </div>
+	</div>
+	<p class="none_card_tips">您还没有卡券，卡券可通过<a href="${s.base}/welfareMart/toWelfareMartHomePage.html" class="change_html">兑换</a>获得</p>
+	
+	<div>
+		<div class="card_bag_bottom"></div>
+		<div class="transaction_details_box">
+			<a href="${s.base}/welfareMart/toCardBagTransDetails.html">交易明细</a>
+		</div>
+	</div>
+	
+	<script src="${s.base}/static/js/common/fastclick.min.js?v=${s.version}"></script>
+	<script src="${s.base}/static/js/common/hkb_welfare.min.js?v=${s.version}"></script>
+</body>
+</html>

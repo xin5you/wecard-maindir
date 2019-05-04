@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.merchant.mapper.MerchantManagerDao">
+		
+	<resultMap type="MerchantManager" id="MerchantManagerResultMap">
+		<result column="MANGER_ID" property="mangerId"/>
+		<result column="MANGER_NAME" property="mangerName"/>
+		<result column="MCHNT_ID" property="mchntId"/>
+		<result column="MCHNT_CODE" property="mchntCode"/>
+		<result column="MCHNT_NAME" property="mchntName"/>
+		<result column="INS_ID" property="insId"/>
+		<result column="INS_CODE" property="insCode"/>
+		<result column="SHOP_ID" property="shopId"/>
+		<result column="SHOP_CODE" property="shopCode"/>
+		<result column="SHOP_NAME" property="shopName"/>
+		<result column="ROLE_TYPE" property="roleType"/>
+		<result column="ROLE_NAME" property="roleName"/>
+		<result column="CASH_PASSWD" property="cashPasswd"/>
+		<result column="NAME" property="name"/>
+		<result column="PHONE_NUMBER" property="phoneNumber"/>
+		<result column="nickname" property="nickname"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="MerchantManagerColumns">
+		m.MANGER_ID,
+		m.MANGER_NAME,
+		m.MCHNT_ID,
+		m.SHOP_ID,
+		m.ROLE_TYPE,
+		m.NAME,
+		m.PHONE_NUMBER,
+		m.DATA_STAT,
+		m.REMARKS,
+		m.CREATE_USER, 
+		m.UPDATE_USER, 
+		m.CREATE_TIME, 
+		m.UPDATE_TIME, 
+		m.LOCK_VERSION
+	</sql>
+	
+	<insert id="insertMerchantManager" parameterType="MerchantManager">
+		INSERT INTO TB_MERCHANT_MANAGER (
+			MANGER_NAME,
+			MCHNT_ID,
+			SHOP_ID,
+			ROLE_TYPE,
+			CASH_PASSWD,
+			NAME,
+			PHONE_NUMBER,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER, 
+			CREATE_TIME, 
+			LOCK_VERSION
+			)	VALUES	( 
+		 		#{mangerName},
+		 		#{mchntId},
+		 		#{shopId,jdbcType=VARCHAR},
+		 		#{roleType,jdbcType=VARCHAR},
+		 		#{cashPasswd,jdbcType=VARCHAR},
+		 		#{name,jdbcType=VARCHAR},
+		 		#{phoneNumber,jdbcType=VARCHAR},
+		 		#{dataStat,jdbcType=VARCHAR},
+		 		#{remarks,jdbcType=VARCHAR},
+		 		#{createUser,jdbcType=VARCHAR},
+		 		sysdate,
+		 		'0') 
+	</insert>
+	
+	<select id="getMerchantManagerById" parameterType="java.lang.String" resultMap="MerchantManagerResultMap">
+		SELECT 
+	  		<include refid="MerchantManagerColumns" />
+	  		    ,
+		    mf.nickname
+		 		FROM TB_MERCHANT_MANAGER m
+		      	LEFT JOIN TB_WX_MERCHANT_FANS mf ON  mf.OPENID=m.MANGER_NAME
+		      	WHERE  m.DATA_STAT='0'
+				AND m.MANGER_ID=#{mId}
+	</select>
+	
+	<select id="getMerchantManagerByOpenId" parameterType="java.lang.String" resultMap="MerchantManagerResultMap">
+		SELECT 
+	  		<include refid="MerchantManagerColumns" />
+		 FROM TB_MERCHANT_MANAGER  m WHERE rownum=1 AND DATA_STAT='0' AND m.MANGER_NAME=#{openId}
+	</select>
+	
+	<select id="getMerchantInsInfByOpenId" parameterType="java.lang.String" resultMap="MerchantManagerResultMap">
+		SELECT 
+	  		<include refid="MerchantManagerColumns" />
+	  		,ii.INS_CODE,ii.INS_ID,mi.MCHNT_CODE,mi.MCHNT_NAME,si.SHOP_CODE,si.SHOP_NAME
+	 		  FROM TB_MERCHANT_MANAGER m
+		       LEFT JOIN TB_MERCHANT_INF  mi on mi.MCHNT_ID = m.MCHNT_ID
+		       LEFT JOIN TB_INS_INF    	  ii on ii.ins_id=mi.ins_id
+		       LEFT JOIN TB_SHOP_INF      si on si.shop_id=m.shop_id
+				WHERE 
+					m.DATA_STAT='0'
+					AND MI.DATA_STAT='0'
+					AND II.DATA_STAT='0'
+					AND m.MANGER_NAME=#{openId}
+	</select>
+	
+	<select id="getMerchantRoleTypeById" parameterType="java.lang.String" resultMap="MerchantManagerResultMap">
+	
+			SELECT 
+  				m.MANGER_ID,
+				m.MANGER_NAME,
+				m.MCHNT_ID,
+				m.SHOP_ID,
+				m.ROLE_TYPE,
+				m.NAME,
+				m.PHONE_NUMBER
+	 			FROM TB_MERCHANT_MANAGER m WHERE m.MANGER_ID=#{openId}
+	</select>
+	
+	<select id="getMerchantManagerList" parameterType="MerchantManager" resultMap="MerchantManagerResultMap">
+			SELECT M.MANGER_ID,
+			       M.MANGER_NAME,
+			       mf.NICKNAME,
+			       M.MCHNT_ID,
+			       M.ROLE_TYPE,
+			       R.ROLE_NAME,
+			       M.SHOP_ID
+			  FROM TB_MERCHANT_MANAGER M
+			  		LEFT JOIN TB_WX_MERCHANT_FANS mf on mf.openid = m.MANGER_NAME
+           			LEFT JOIN TB_WX_ROLE  R ON R.ROLE_TYPE=M.ROLE_TYPE AND R.DATA_STAT='0'
+		       WHERE 
+		         M.ROLE_TYPE !='100'
+		         AND M.DATA_STAT='0' 
+				AND M.MCHNT_ID=#{mchntId}
+		</select>
+
+
+	 <update id="updateMerchantManager" parameterType="MerchantManager">
+			UPDATE TB_MERCHANT_MANAGER SET
+				MANGER_NAME=#{mangerName,jdbcType=VARCHAR},
+				ROLE_TYPE=#{roleType,jdbcType=VARCHAR},
+				NAME=#{name,jdbcType=VARCHAR},
+				DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+				PHONE_NUMBER=#{phoneNumber,jdbcType=VARCHAR},
+				UPDATE_TIME=sysdate
+			 WHERE MANGER_ID = #{mangerId} 
+	</update>
+	
+	<select id="getMchntManagerTmpByPhoneNumber" parameterType="java.lang.String" resultMap="MerchantManagerResultMap">
+		SELECT 
+	  		<include refid="MerchantManagerColumns" />
+		 		FROM TB_MERCHANT_MANAGER_TMP m
+		      	WHERE  m.DATA_STAT='0'
+				AND m.PHONE_NUMBER=#{phoneNumber}
+	</select>
+	
+	<select id="getMchntManagerByPhoneNumber" parameterType="java.lang.String" resultMap="MerchantManagerResultMap">
+		SELECT 
+	  		<include refid="MerchantManagerColumns" />
+		 		FROM TB_MERCHANT_MANAGER m
+		      	WHERE  m.DATA_STAT='0'
+				AND m.PHONE_NUMBER=#{phoneNumber}
+	</select>
+	
+	 <update id="deleteMchntManagerTmpById" parameterType="java.lang.String">
+	 		UPDATE TB_MERCHANT_MANAGER_TMP SET DATA_STAT='1' WHERE MANGER_ID=#{managerId}
+	 </update>
+	 
+	 <select id="getMerchantManagerByRoleType"  resultMap="MerchantManagerResultMap">
+			SELECT m.*,mi.MCHNT_NAME,s.SHOP_NAME FROM 
+				TB_MERCHANT_MANAGER m,
+                TB_MERCHANT_INF mi ,
+                TB_SHOP_INF s
+                WHERE 
+                       m.DATA_STAT='0'
+                   AND mi.DATA_STAT='0'
+                   AND s.DATA_STAT='0'
+                   AND m.MCHNT_ID=MI.MCHNT_ID
+                   AND m.SHOP_ID=S.SHOP_ID
+                   AND s.MCHNT_ID=MI.MCHNT_ID
+                   AND m.ROLE_TYPE LIKE '%' || #{roleType} || '%' 
+                   AND s.SHOP_CODE=#{shopCode}
+                   AND mi.MCHNT_CODE=#{mchntCode}
+             
+		</select>
+</mapper>

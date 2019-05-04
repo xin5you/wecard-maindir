@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.thinkx.common.wecard.module.trans.mapper.WxTransOrderMapper">
+
+	<resultMap type="WxTransOrder" id="WxTransOrderResultMap">
+		<result column="ORDER_KEY" property="orderKey"/>
+		<result column="ORG_ORDER_KEY" property="orgOrderKey"/>
+		<result column="DMS_RELATED_KEY" property="dmsRelatedKey"/>
+		<result column="ORG_DMS_RELATED_KEY" property="orgDmsRelatedKey"/>
+		<result column="INS_CODE" property="insCode"/>
+		<result column="MCHNT_CODE" property="mchntCode"/>
+		<result column="SHOP_CODE" property="shopCode"/>
+		<result column="SPONSOR" property="sponsor"/>
+		<result column="USER_ID" property="userId"/>
+		<result column="PRI_ACCT_NO" property="priAcctNo"/>
+		<result column="CARD_NO" property="cardNo"/>
+		<result column="USER_INF_USER_NAME" property="userInfUserName"/>
+		<result column="PRODUCT_CODE" property="productCode"/>
+		<result column="TRANS_CURR_CD" property="transCurrCd"/>
+		<result column="TRANS_CHNL" property="transChnl"/>
+		<result column="ORDER_STAT" property="orderStat"/>
+		<result column="ORDER_AMT" property="orderAmt"/>
+		<result column="TRANS_FEE" property="transFee"/>
+		<result column="TRANS_FEE_TYPE" property="transFeeType"/>
+		<result column="TFR_IN_ACCT_NO" property="tfrInAcctNo"/>
+		<result column="TFR_OUT_ACCT_NO" property="tfrOutAcctNo"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+		<association property="orderDetail" javaType="WxTransOrderDetail" column="ORDER_KEY" select="getWxTransOrdeDetailByOrderId"></association>
+	</resultMap>
+	
+	<resultMap type="WxTransOrderDetail" id="WxTransOrderDetailResultMap">
+		<result column="ORDER_LIST_ID" property="orderListId"/>
+		<result column="ORDER_KEY" property="orderKey"/>
+		<result column="SETTLE_DATE" property="settleDate"/>
+		<result column="TXN_FLOW_NO" property="txnFlowNo"/>
+		<result column="ORG_TXN_FLOW_NO" property="orgTxnFlowNo"/>
+		<result column="TRANS_ID" property="transId"/>
+		<result column="TRANS_ST" property="transSt"/>
+		<result column="COMMODITY_NAME" property="commodityName"/>
+		<result column="COMMODITY_NUM" property="commodityNum"/>
+		<result column="TRANS_AMT" property="transAmt"/>
+		<result column="UPLOAD_AMT" property="uploadAmt"/>
+		<result column="RESP_CODE" property="respCode"/>
+		<result column="ORDER_RESP_STAT" property="orderRespStat"/>
+		<result column="SIGN_TYPE" property="signType"/>
+		<result column="NOTIFY_TYPE" property="notifyType"/>
+		<result column="NOTIFY_URL" property="notifyUrl"/>
+		<result column="REDIRECT_TYPE" property="redirectType"/>
+		<result column="REDIRECT_URL" property="redirectUrl"/>
+		<result column="ADDITIONAL_INFO" property="additionalInfo"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="WxTransOrderColumns">
+		m.ORDER_KEY,
+		m.ORG_ORDER_KEY,
+		m.DMS_RELATED_KEY,
+		m.ORG_DMS_RELATED_KEY,
+		m.INS_CODE,
+		m.MCHNT_CODE,
+		m.SHOP_CODE,
+		m.SPONSOR,
+		m.USER_ID,
+		m.PRI_ACCT_NO,
+		m.CARD_NO,
+		m.USER_INF_USER_NAME,
+		m.PRODUCT_CODE,
+		m.TRANS_CURR_CD,
+		m.TRANS_CHNL,
+		m.ORDER_AMT,
+		m.ORDER_STAT,
+		m.TRANS_FEE,
+		m.TRANS_FEE_TYPE,
+		m.TFR_IN_ACCT_NO,
+		m.TFR_OUT_ACCT_NO,
+		m.DATA_STAT,
+		m.REMARKS,
+		m.CREATE_USER,
+		m.UPDATE_USER,
+		m.CREATE_TIME,
+		m.UPDATE_TIME,
+		m.LOCK_VERSION
+	</sql>
+	
+	
+	<sql id="WxTransOrderDetailColumns">
+		d.ORDER_LIST_ID,
+		d.ORDER_KEY,	
+		d.SETTLE_DATE,
+		d.TXN_FLOW_NO,	
+		d.ORG_TXN_FLOW_NO,	
+		d.TRANS_ID,
+		d.TRANS_ST,
+		d.COMMODITY_NAME,
+		d.COMMODITY_NUM,
+		d.TRANS_AMT,
+		d.UPLOAD_AMT,
+		d.RESP_CODE,
+		d.ORDER_RESP_STAT,
+		d.SIGN_TYPE,
+		d.NOTIFY_TYPE,
+		d.NOTIFY_URL,
+		d.REDIRECT_TYPE,
+		d.REDIRECT_URL,
+		d.ADDITIONAL_INFO,
+		d.DATA_STAT,
+		d.REMARKS,
+		d.CREATE_USER,
+		d.UPDATE_USER,
+		d.CREATE_TIME,
+		d.UPDATE_TIME,
+		d.LOCK_VERSION
+	</sql>
+	
+	<select id="getWxTransOrdeByOrderKey" parameterType="String" resultMap="WxTransOrderResultMap">
+		SELECT 
+	       <include refid="WxTransOrderColumns" />
+			FROM TB_WX_TRANS_ORDER m
+			WHERE m.ORDER_KEY = #{orderKey,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getWxTransOrdeByWxTransOrder" parameterType="WxTransOrder" resultMap="WxTransOrderResultMap">
+		SELECT 
+	       <include refid="WxTransOrderColumns" />
+			FROM TB_WX_TRANS_ORDER m 
+			WHERE 1=1
+			<if test="dmsRelatedKey !=null and dmsRelatedKey !='' ">
+				AND m.DMS_RELATED_KEY = #{dmsRelatedKey,jdbcType=VARCHAR}
+			</if>
+			<if test="transChnl !=null and transChnl !='' ">
+				AND m.TRANS_CHNL = #{transChnl,jdbcType=VARCHAR}
+			</if>
+			<if test="orgOrderKey !=null and transChnl !='' ">
+				AND m.ORG_ORDER_KEY IS NULL
+			</if>
+			<if test="dataStat !=null and dataStat !='' ">
+				AND m.DATA_STAT = #{dataStat,jdbcType=VARCHAR}
+			</if>
+	</select>
+	
+	<select id="getWxTransOrdeByTxnFlowNo" parameterType="String" resultMap="WxTransOrderResultMap">
+		SELECT 
+	       <include refid="WxTransOrderColumns" />
+			FROM TB_WX_TRANS_ORDER m 
+			WHERE 1=1
+			<if test="orderId !=null and orderId !='' ">
+				AND m.DMS_RELATED_KEY = #{orderId,jdbcType=VARCHAR}
+			</if>
+			<if test="channelCode !=null and channelCode !='' ">
+				AND m.TRANS_CHNL = #{channelCode,jdbcType=VARCHAR}
+			</if>
+			<if test="txnFlowNo !=null and txnFlowNo !='' ">
+				AND m.TXN_FLOW_NO = #{txnFlowNo,jdbcType=VARCHAR}
+			</if>
+	</select>
+	
+	<insert id="insertWxTransOrder" parameterType="WxTransOrder">
+		INSERT INTO TB_WX_TRANS_ORDER
+		  (
+			ORDER_KEY,
+			ORG_ORDER_KEY,
+			DMS_RELATED_KEY,
+			ORG_DMS_RELATED_KEY,
+			INS_CODE,
+			MCHNT_CODE,
+			SHOP_CODE,
+			SPONSOR,
+			USER_ID,
+			PRI_ACCT_NO,
+			CARD_NO,
+			USER_INF_USER_NAME,
+			PRODUCT_CODE,
+			TRANS_CURR_CD,
+			TRANS_CHNL,
+			ORDER_STAT,
+			ORDER_AMT,
+			TRANS_FEE,
+			TRANS_FEE_TYPE,
+			TFR_IN_ACCT_NO,
+			TFR_OUT_ACCT_NO,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			UPDATE_USER,
+			CREATE_TIME,
+			UPDATE_TIME,
+			LOCK_VERSION
+		  )
+		VALUES
+		  (
+		  	#{orderKey,jdbcType=VARCHAR},
+			#{orgOrderKey,jdbcType=VARCHAR},
+			#{dmsRelatedKey,jdbcType=VARCHAR},
+			#{orgDmsRelatedKey,jdbcType=VARCHAR},
+			#{insCode,jdbcType=VARCHAR},
+			#{mchntCode,jdbcType=VARCHAR},
+			#{shopCode,jdbcType=VARCHAR},
+			#{sponsor,jdbcType=VARCHAR},
+			#{userId,jdbcType=VARCHAR},
+			#{priAcctNo,jdbcType=VARCHAR},
+			#{cardNo,jdbcType=VARCHAR},
+			#{userInfUserName,jdbcType=VARCHAR},
+			#{productCode,jdbcType=VARCHAR},
+			#{transCurrCd,jdbcType=VARCHAR},
+			#{transChnl,jdbcType=VARCHAR},
+			#{orderStat,jdbcType=VARCHAR},
+			#{orderAmt,jdbcType=VARCHAR},
+			#{transFee,jdbcType=VARCHAR},
+			#{transFeeType,jdbcType=VARCHAR},
+			#{tfrInAcctNo,jdbcType=VARCHAR},
+			#{tfrOutAcctNo,jdbcType=VARCHAR},
+			#{dataStat,jdbcType=VARCHAR},
+			#{remarks,jdbcType=VARCHAR},
+		    '99999999',
+		    '99999999',
+		    SYSDATE,
+		    SYSDATE,
+		    0)
+    </insert>
+    
+    <update id="updateWxTransOrder" parameterType="WxTransOrder">
+		UPDATE TB_WX_TRANS_ORDER  SET
+			<if test="orderStat !=null and orderStat !='' ">
+				ORDER_STAT = #{orderStat,jdbcType=VARCHAR},
+			</if>
+			UPDATE_TIME = SYSDATE,
+			LOCK_VERSION=LOCK_VERSION+1
+			WHERE ORDER_KEY = #{orderKey} 
+	</update>
+	
+	
+	<select id="getWxTransOrdeDetailById" parameterType="String" resultMap="WxTransOrderDetailResultMap">
+		SELECT 
+	       <include refid="WxTransOrderDetailColumns" /> 
+			FROM TB_WX_TRANS_ORDER_DETAIL d
+			WHERE d.ORDER_LIST_ID = #{orderListId,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getWxTransOrdeDetailByOrderId" parameterType="String" resultMap="WxTransOrderDetailResultMap">
+		SELECT 
+	       <include refid="WxTransOrderDetailColumns" /> 
+			FROM TB_WX_TRANS_ORDER_DETAIL d
+			WHERE d.ORDER_KEY = #{orderId,jdbcType=VARCHAR}
+			and d.DATA_STAT = '0'
+	</select>
+	
+	<insert id="insertWxTransOrderDetail" parameterType="WxTransOrderDetail">
+		INSERT INTO TB_WX_TRANS_ORDER_DETAIL
+		  (
+			ORDER_LIST_ID,
+			ORDER_KEY,
+			TRANS_ID,
+			TRANS_ST,
+			COMMODITY_NAME,
+			COMMODITY_NUM,
+			TRANS_AMT,
+			UPLOAD_AMT,
+			RESP_CODE,
+			SIGN_TYPE,
+			NOTIFY_TYPE,
+			NOTIFY_URL,
+			REDIRECT_TYPE,
+			REDIRECT_URL,
+			ORDER_RESP_STAT,
+			ADDITIONAL_INFO,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			UPDATE_USER,
+			CREATE_TIME,
+			UPDATE_TIME,
+			LOCK_VERSION
+		  )
+		VALUES
+		  (
+		    #{orderListId,jdbcType=VARCHAR},
+			#{orderKey,jdbcType=VARCHAR},
+			#{transId,jdbcType=VARCHAR},
+			#{transSt,jdbcType=VARCHAR},
+			#{commodityName,jdbcType=VARCHAR},
+			#{commodityNum,jdbcType=VARCHAR},
+			#{transAmt,jdbcType=VARCHAR},
+			#{uploadAmt,jdbcType=VARCHAR},
+			#{respCode,jdbcType=VARCHAR},
+			#{signType,jdbcType=VARCHAR},
+			#{notifyType,jdbcType=VARCHAR},
+			#{notifyUrl,jdbcType=VARCHAR},
+			#{redirectType,jdbcType=VARCHAR},
+			#{redirectUrl,jdbcType=VARCHAR},
+			#{orderRespStat,jdbcType=VARCHAR},
+			#{additionalInfo,jdbcType=VARCHAR},
+			#{dataStat,jdbcType=VARCHAR},
+			#{remarks,jdbcType=VARCHAR},
+		    '99999999',
+		    '99999999',
+		    SYSDATE,
+		    SYSDATE,
+		    0)
+    </insert>
+    
+    <update id="updateWxTransOrderDetail" parameterType="WxTransOrderDetail">
+		UPDATE TB_WX_TRANS_ORDER_DETAIL  SET
+
+			<if test="transSt !=null and transSt !='' ">
+				TRANS_ST = #{transSt,jdbcType=INTEGER},
+			</if>
+			
+			<if test="transId !=null and transId !='' ">
+				TRANS_ID = #{transId,jdbcType=VARCHAR},
+			</if>
+			
+			<if test="txnFlowNo !=null and txnFlowNo !='' ">
+				TXN_FLOW_NO = #{txnFlowNo,jdbcType=VARCHAR},
+			</if>
+			
+			<if test="orgTxnFlowNo !=null and orgTxnFlowNo !='' ">
+				ORG_TXN_FLOW_NO = #{orgTxnFlowNo,jdbcType=VARCHAR},
+			</if>
+			
+			<if test="respCode !=null and respCode !='' ">
+				RESP_CODE=#{respCode,jdbcType=VARCHAR},
+			</if>
+			
+			<if test="orderRespStat !=null and orderRespStat !='' ">
+				ORDER_RESP_STAT = #{orderRespStat,jdbcType=VARCHAR},
+			</if>
+			UPDATE_TIME = SYSDATE,
+			LOCK_VERSION=LOCK_VERSION+1
+			WHERE ORDER_LIST_ID = #{orderListId} 
+	</update>
+</mapper>

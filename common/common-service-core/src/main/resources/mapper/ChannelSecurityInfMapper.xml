@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.common.service.module.channel.mapper.ChannelSecurityInfMapper">
+
+	<sql id="ChannelSecurityInfColumns">
+		CHANNEL_CODE,
+		CHANNEL_NAME,
+		CHANNEL_KEY,
+		BEGIN_TIME,
+		END_TIME,
+		DATA_STAT
+	</sql>
+	
+	<select id="getAllChannelSecurityInf" resultType="ChannelSecurityInf">
+		SELECT 
+		<include refid="ChannelSecurityInfColumns" />
+		 FROM TB_CHANNEL_SECURITY_INF WHERE  DATA_STAT='0'
+	</select>
+	
+	<select id="getChannelSecurityInfById" resultType="ChannelSecurityInf">
+	SELECT 
+		<include refid="ChannelSecurityInfColumns" />
+		 FROM TB_CHANNEL_SECURITY_INF 
+		 where  DATA_STAT='0' AND CHANNEL_CODE = ${channelCode}
+    </select>
+	
+	<!--  -->
+	<insert id="insertChannelSecurityInf" parameterType="ChannelSecurityInf">
+		INSERT INTO TB_CHANNEL_SECURITY_INF(
+			CHANNEL_CODE,
+			CHANNEL_NAME,
+			CHANNEL_KEY,
+			BEGIN_TIME,
+			END_TIME,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			UPDATE_USER,
+			CREATE_TIME,
+			UPDATE_TIME,
+			LOCK_VERSION
+		) VALUES(
+			#{channelCode,jdbcType=VARCHAR},
+			#{channelName,jdbcType=VARCHAR},
+			#{channelKey,jdbcType=VARCHAR},
+			#{beginTime,jdbcType=DATE},
+			#{endTime,jdbcType=DATE},
+			#{dataStat,jdbcType=VARCHAR},
+			#{remarks,jdbcType=VARCHAR},
+			#{createUser,jdbcType=VARCHAR},
+			#{updateUser,jdbcType=VARCHAR},
+			sysdate,
+			sysdate,
+			'0'
+		)
+	</insert>
+	
+	<update id="updateChannelSecurityInf" parameterType="ChannelSecurityInf">
+		UPDATE TB_CHANNEL_SECURITY_INF SET 
+			CHANNEL_NAME=#{channelName,jdbcType=VARCHAR},
+			CHANNEL_KEY=#{channelKey,jdbcType=VARCHAR},
+			BEGIN_TIME=#{beginTime,jdbcType=DATE},
+			END_TIME=#{endTime,jdbcType=DATE},
+			DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+			REMARKS=#{remarks,jdbcType=VARCHAR},
+			CREATE_USER=#{createUser,jdbcType=VARCHAR},
+			UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+			CREATE_TIME=sysdate,
+			UPDATE_TIME=sysdate,
+			LOCK_VERSION=LOCK_VERSION+1 
+		WHERE CHANNEL_CODE = #{channelCode,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="deleteChannelSecurityInf">
+		UPDATE TB_CHANNEL_SECURITY_INF SET DATA_STAT='1' WHERE CHANNEL_CODE = #{channelCode}
+	</update>
+	
+</mapper>

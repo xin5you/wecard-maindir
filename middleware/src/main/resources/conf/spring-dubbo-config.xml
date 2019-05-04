@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">   
+    
+	<!-- 服务提供者应用名称 -->
+	<dubbo:application name="dubbo_middleware" />
+	<!-- 服务提供者协议 -->
+	<dubbo:protocol name="dubbo" accepts="1000"/>
+	
+	<!-- 服务提供者缺省值配置 -->
+	<dubbo:provider id="middleware_txn" filter="authorityFilter" timeout="2000" delay="-1" />
+	  
+	<dubbo:registry  address="${wecard.dubbo.registry.address}"/>
+	
+	<import resource="classpath:/conf/spring-dubbo-service.xml" />
+</beans>

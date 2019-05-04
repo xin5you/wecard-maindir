@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.common.wecard.module.ecomorder.mapper.OrderInfMapper">
+	
+	<sql id="orderInfColumns">
+		 o.ID,
+		 o.CHANNEL,
+		 o.USER_ID, 
+		 o.ROUTER_ORDER_NO,
+		 o.MERCHANT_NO,
+		 o.SHOP_NO,
+		 o.COMMODITY_NAME,
+		 o.COMMODITY_NUM,
+		 o.TXN_AMOUNT,
+		 o.ORDER_TYPE,
+		 o.NOTIFY_URL,
+		 o.REDIRECT_URL,
+		 o.TXN_FLOW_NO,
+		 o.ORG_ID,
+		 o.RESV1,
+		 o.RESV2,
+		 o.RESV3,
+		 o.RESV4,
+		 o.RESV5,
+		 o.RESV6,
+		 o.DATA_STAT,
+		 o.REMARKS,
+		 o.CREATE_USER,
+		 o.CREATE_TIME,
+		 o.UPDATE_USER,
+		 o.UPDATE_TIME,
+		 o.LOCK_VERSION
+	</sql>
+	
+	<sql id="orderInfFields">
+		#{id, jdbcType=VARCHAR},
+		#{channel, jdbcType=VARCHAR},
+		#{userId, jdbcType=VARCHAR},
+		#{routerOrderNo, jdbcType=VARCHAR},
+		#{merchantNo, jdbcType=VARCHAR},
+		#{shopNo, jdbcType=VARCHAR},
+		#{commodityName, jdbcType=VARCHAR},
+		#{commodityNum, jdbcType=VARCHAR},
+		#{txnAmount, jdbcType=VARCHAR},
+		#{orderType, jdbcType=VARCHAR},
+		#{notifyUrl, jdbcType=VARCHAR},
+		#{redirectUrl, jdbcType=VARCHAR},
+		#{txnFlowNo, jdbcType=VARCHAR},
+		#{orgId, jdbcType=VARCHAR},
+		#{resv1, jdbcType=VARCHAR},
+		#{resv2, jdbcType=VARCHAR},
+		#{resv3, jdbcType=VARCHAR},
+		#{resv4, jdbcType=VARCHAR},
+		#{resv5, jdbcType=VARCHAR},
+		#{resv6, jdbcType=VARCHAR},
+		'0',
+		#{remarks, jdbcType=VARCHAR},
+		#{createUser, jdbcType=VARCHAR},
+		#{updateUser, jdbcType=VARCHAR},
+		SYSDATE,
+		SYSDATE,
+		'0'
+	</sql>
+	
+	<sql id="tableName">
+			TB_ECOM_ORDER_INF o
+	</sql>
+	
+	<select id="getOrderInfById" parameterType="java.lang.String" resultType="OrderInf">
+		SELECT 
+	  		<include refid="orderInfColumns" />
+		 FROM
+		 	<include refid="tableName" />
+  		 WHERE o.DATA_STAT = '0' 
+  		 	AND o.ID = #{id}
+	</select>	
+</mapper>

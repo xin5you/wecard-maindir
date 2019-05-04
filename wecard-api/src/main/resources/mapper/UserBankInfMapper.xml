@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wecard.api.module.welfaremart.mapper.UserBankInfMapper">
+
+	<sql id="UserBankInfColumns">
+		BANK_NO,
+		USER_ID,
+		USER_NAME,
+		BANK_TYPE,
+		ACCOUNT_BANK,
+		ACCOUNT_BRANCH,
+		ACCOUNT_BANK_ADDR,
+		ISDEFAULT,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+
+	<sql id="UserBankInfFields">
+		#{bankNo, jdbcType=VARCHAR},
+		#{userId, jdbcType=VARCHAR},
+		#{userName, jdbcType=VARCHAR},
+		#{bankType, jdbcType=VARCHAR},
+		#{accountBank, jdbcType=VARCHAR},
+		#{accountBranch, jdbcType=VARCHAR},
+		#{accountBankAddr, jdbcType=VARCHAR},
+		#{isdefault, jdbcType=VARCHAR},
+		'0',
+		#{remarks, jdbcType=VARCHAR},
+		#{createUser, jdbcType=VARCHAR},
+		#{updateUser, jdbcType=VARCHAR},
+		SYSDATE,
+		SYSDATE,
+		'0'
+	</sql>
+	
+	<sql id="tableName">
+			TB_USER_BANK_INF
+	</sql>
+
+	<select id="getUserBankInfList" parameterType="UserBankInf" resultType="UserBankInf">
+		SELECT
+			<include refid="UserBankInfColumns" />
+		FROM 
+			<include refid="tableName" />
+		WHERE DATA_STAT = '0'
+		ORDER BY CREATE_TIME DESC
+	</select>
+	
+	<select id="getUserBankInfByBankNo" parameterType="java.lang.String" resultType="UserBankInf">
+		SELECT
+			<include refid="UserBankInfColumns" />
+		FROM 
+			<include refid="tableName" />
+		WHERE DATA_STAT = '0'
+			AND BANK_NO = #{bankNo}
+	</select>
+	
+	<select id="getUserBankInfByUserId" parameterType="java.lang.String" resultType="UserBankInf">
+		SELECT
+			<include refid="UserBankInfColumns" />
+		FROM 
+			<include refid="tableName" />
+		WHERE DATA_STAT = '0'
+			AND USER_ID = #{userId}
+			ORDER BY CREATE_TIME DESC
+	</select>
+	
+	<select id="getUserBankInf" parameterType="UserBankInf" resultType="UserBankInf">
+		SELECT
+			<include refid="UserBankInfColumns" />
+		FROM 
+			<include refid="tableName" />
+		WHERE DATA_STAT = '0'
+			AND BANK_NO = #{bankNo}
+			AND USER_ID = #{userId}
+	</select>
+	
+	<insert id="insertUserBankInf" parameterType="UserBankInf">
+		INSERT INTO 
+			<include refid="tableName" />
+		(
+			<include refid="UserBankInfColumns" />
+		) VALUES (
+			<include refid="UserBankInfFields" />
+		)
+	</insert>
+
+	<update id="updateUserBankInf" parameterType="UserBankInf">
+		UPDATE 
+			<include refid="tableName" />
+		SET
+			<if test="userName !=null and userName !='' ">
+				USER_NAME = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="bankType !=null and bankType !='' ">
+				BANK_TYPE = #{bankType,jdbcType=VARCHAR},
+			</if>
+			<if test="accountBank !=null and accountBank !='' ">
+				ACCOUNT_BANK = #{accountBank,jdbcType=VARCHAR},
+			</if>
+			<if test="accountBranch !=null and accountBranch !='' ">
+				ACCOUNT_BRANCH = #{accountBranch,jdbcType=VARCHAR},
+			</if>
+			<if test="accountBankAddr !=null and accountBankAddr !='' ">
+				ACCOUNT_BANK_ADDR = #{accountBankAddr,jdbcType=VARCHAR},
+			</if>
+			<if test="isdefault !=null and isdefault !='' ">
+				ISDEFAULT = #{isdefault,jdbcType=VARCHAR},
+			</if>
+			UPDATE_TIME = sysdate,
+			LOCK_VERSION = LOCK_VERSION+1
+		WHERE BANK_NO = #{bankNo}
+	</update>
+	
+	<update id="deleteUserBankInf" parameterType="java.lang.String">
+		UPDATE 
+			<include refid="tableName" /> 
+		SET DATA_STAT='1' WHERE　BANK_NO = #{bankNo} 
+	</update>
+
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">   
+    
+	<!-- 服务提供者应用名称 -->
+	<dubbo:application name="dubbo_wecard_service_telrecharge" />
+	
+	<!-- 服务提供者协议 -->
+	<dubbo:protocol name="dubbo"  port="28890" />
+	
+	<!-- 服务提供者缺省值配置 -->
+	<dubbo:provider timeout="10000" threadpool="fixed"  threads="100"  accepts="1000" />
+
+	<dubbo:registry  address="${wecard.dubbo.registry.address}"/>
+	
+	<import resource="classpath:/conf/spring-dubbo-service.xml" />
+</beans>

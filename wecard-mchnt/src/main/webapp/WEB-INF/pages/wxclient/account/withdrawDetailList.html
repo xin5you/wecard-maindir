@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>知了企服</title>
+    <#include "../../common/wecardHeader.html">
+</head>
+<body ontouchstart>
+    <div class="container js_container" id="container"></div>
+    <div class="page">
+		<div class="hd">
+		    <h1 class="page_title">提现记录</h1>
+		</div>
+
+		<div class="weui_toptips weui_warn js_tooltips"></div>
+		<div class="bd">
+		    <div class="weui_panel weui_panel_access">
+		        <div class="weui_panel_bd">
+			        <div class="block-content-content">
+			        <div class="weui_panel_hd">现在共已经提现 #{transAmtCount!}元</div>
+			        <form id="queryPageForm" action="${s.base}/wxclient/account/withdrawDetaillist.html">
+			        <input type="hidden" id="settleDate" value="${ts.settleDate!}">
+						<table class="fm-table">
+							<thead>
+								<tr >
+									<td>金额</td>
+									<td>时间</td>
+								</tr>
+							</thead>
+						
+						<#if pagination??&&pagination.items?size gt 0>
+						<tbody>
+							<#list pagination.items as row>
+						
+								<tr class="even-tr">
+									<td width="30%">
+										￥${row.transAmt!}
+									</td>
+									<td>${row.createTime?string("yyyy-MM-dd HH:mm:ss")}</td>
+								</tr>
+							</#list>
+							</tbody>
+							
+						</#if>
+						</table>
+						 <#include "../../common/pagination.html">
+						</form>
+					</div>
+		    	</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

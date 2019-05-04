@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1"/>
+		<meta content="telephone=no" name="format-detection"/>
+	    <title>知了企服商户平台-收银台</title>
+	    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+		<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+		<META HTTP-EQUIV="Expires" CONTENT="0"> 
+	    <link rel="stylesheet" href="${s.base}/res/css/common.min.css">
+	    <link rel="stylesheet" href="${s.base}/res/weui/weui.css" />
+	    <script src="${s.base}/res/jqueryui/js/jquery-2.1.4.js"></script>
+	    <script src="${s.base}/res/jqueryui/js/jquery-weui.js"></script>
+	    <script src="${s.base}/res/jweixin-1.0.0.js"></script>
+	    <script src="${s.base}/res/reconnecting-websocket.js"></script>
+	    <script src="${s.base}/res/js/wxclient/cashier/scanCode.js"></script>
+	    <script src="${s.base}/res/common/hkb.common.min.js"></script>
+	    <script type="text/javascript">
+			var CONETXT_PATH = '${s.base}';
+			var wsUrl = '${wsUrl}';
+		</script>
+	</head>
+	<body>
+		<input id="openid" type="hidden" value="${detail.mangerName!} "/>
+		<input id="merchantCode" type="hidden" value="${detail.mchntCode!}" />
+		<input id="mchntName" type="hidden" value="${detail.mchntName!}" />
+		<input id="shopCode" type="hidden" value="${detail.shopCode!}" />
+		<input id="shopName" type="hidden" value="${detail.shopName!}" />
+		<input id="insCode" type="hidden" value="${detail.insCode!}" />
+		<input id="cOpenid" type="hidden" />
+		<input id="wxPrimaryKey" type="hidden" />
+		<input id="hsm_param" type="hidden" />
+		<div class="payment_submission">
+			<div class="business_list">
+				<div class="business_name"></div>
+				<div>${detail.mchntName!}</div>
+			</div>
+			<div class="transaction_amount textarea_shadow">
+				<div>门店：<span style="color: #3491e8;font-weight: bold;">${detail.shopName!}</span></div>
+				<div class="amount">
+					<input type="number" id="money_page" placeholder="消费金额" class="input_amount" oninput="if(value.length>7)value=value.slice(0,7)" >
+				</div>
+			</div>
+			<div style="color: red;text-align: center;"><span id="alert_info"></span></div>
+		</div>
+		<!--按钮-->
+		<a href="#" class="btn_area">
+			<div id="scanCodeBtn" class="hkb_btn btn_color">确 定</div>
+		</a>
+	</body>
+</html>

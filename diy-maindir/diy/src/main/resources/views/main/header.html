@@ -1,0 +1,42 @@
+<head th:fragment="header">
+	<title>知了企服商戶自助管理平台</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	
+	<meta name="renderer" content="webkit" />
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1" />
+	<meta name="format-detection" content="telephone=no, email=no" />
+	
+	<!-- css -->
+	<link th:href="@{/diy/css/hkbServicePlatform.min.css}" rel="stylesheet" />
+<!-- 	<link th:href="@{/diy/css/jedate.min.css}" rel="stylesheet" /> -->
+	<!-- ico -->
+	<link th:href="@{/images/favicon.ico}" type="image/x-icon" rel="shortcut icon" />
+	
+	<!-- jquery -->
+	<script th:src="@{/jquery/jquery-1.11.2.min.js}"></script>
+	<script th:src="@{/jquery/jquery-migrate.min.js}"></script>
+	<script th:src="@{/jquery/jquery.form.js}"></script>
+	<script th:src="@{/jquery/jquery.min.js}"></script>
+	
+	<!-- validation -->
+<!-- 	<script th:src="@{/validation/jquery.validate.min.js}"></script> -->
+<!-- 	<script th:src="@{/validation/additional-methods.js}"></script> -->
+<!-- 	<script th:src="@{/validation/localization/messages_cn.js}"></script> -->
+	<script th:src="@{/jquery/jquery.md5.js}"></script>
+	
+	<!-- page -->
+	<script th:src="@{/diy/js/page/pagination.js}"></script>
+	
+	<script th:src="@{/diy/js/common.js}"></script>
+	<script th:src="@{/diy/js/helper.js}"></script>
+	
+	<script th:src="@{/diy/js/hkbServicePlatform.min.js}"></script>
+<!-- 	<script th:src="@{/diy/js/jquery.jedate.min.js}"></script> -->
+	<script th:src="@{/diy/WdatePicker.js}"></script>
+	<script>
+		$(document).ready(function() {
+			setTimeout('$("html").removeClass("js")',1000);
+		});
+		addEventListener('load',function(){});
+	</script>
+</head>

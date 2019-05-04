@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cn.thinkx.oms.module.diy.mapper.DiyResourceMapper">
+
+	<resultMap type="DiyResource" id="DiyResourceltMap">
+		<result column="ID" property="id"/>
+		<result column="DESCRIPTION" property="description"/>
+		<result column="ICON" property="icon"/>
+		<result column="RESOURCE_NAME" property="resourceName"/>
+		<result column="RESOURCE_TYPE" property="resourceType"/>
+		<result column="KEY" property="key"/>
+		<result column="SEQ" property="seq"/>
+		<result column="URL" property="url"/>
+		<result column="PID" property="pid"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+
+	<sql id="DiyResourceColumns">
+		 ID,
+		 DESCRIPTION,
+		 ICON, 
+		 RESOURCE_NAME,
+		 RESOURCE_TYPE, 
+		 KEY,
+		 SEQ, 
+		 URL,
+		 PID,
+		 DATA_STAT,
+		 REMARKS,
+		 CREATE_USER,
+		 UPDATE_USER,
+		 CREATE_TIME,
+		 UPDATE_TIME,
+		 LOCK_VERSION
+	</sql>
+	
+	<select id="getDiyResourceById" resultType="String" resultMap="DiyResourceltMap">
+		SELECT
+		<include refid="DiyResourceColumns" />
+		
+		FROM TB_DIY_WEB_RESOURCE WHERE ID=#{resourceId} and DATA_STAT = '0'
+	</select>
+	
+	 <select id="getDiyResourceByKey" resultType="String" resultMap="DiyResourceltMap">
+		SELECT
+		<include refid="DiyResourceColumns" />
+		
+		FROM TB_DIY_WEB_RESOURCE WHERE key=#{key}
+	</select>
+	
+	<insert id="insertDiyResource" parameterType="DiyResource" useGeneratedKeys="true" keyProperty="id">
+	   	<selectKey resultType="String" order="AFTER" keyProperty="id">  
+			<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getDiyResourceId" />
+		</selectKey>
+		insert into TB_DIY_WEB_RESOURCE(
+			 DESCRIPTION, 
+			 ICON, 
+			 RESOURCE_NAME, 
+			 RESOURCE_TYPE, 
+			 KEY,
+			 SEQ, 
+			 URL,
+			 PID,
+			 DATA_STAT,
+		     REMARKS,
+		     CREATE_USER,
+		     UPDATE_USER,
+		     CREATE_TIME,
+			 UPDATE_TIME,
+			 LOCK_VERSION
+		  )values (
+		  	#{description,jdbcType=VARCHAR},
+		  	#{icon,jdbcType=VARCHAR},
+		  	#{resourceName,jdbcType=VARCHAR},
+		  	#{resourceType,jdbcType=VARCHAR},
+		  	#{key,jdbcType=VARCHAR},
+		  	#{seq,jdbcType=VARCHAR},
+		  	#{url,jdbcType=VARCHAR},
+		  	#{pid,jdbcType=VARCHAR},
+		  	#{dataStat,jdbcType=VARCHAR},
+		  	#{remarks,jdbcType=VARCHAR},
+		  	#{createUser,jdbcType=VARCHAR},
+		  	#{updateUser,jdbcType=VARCHAR},
+		  	sysdate,
+		  	sysdate,
+		  	'0'
+		  	)
+	</insert>
+	
+	 <update id="updateDiyResource" parameterType="DiyResource">
+	 	UPDATE TB_DIY_WEB_RESOURCE
+		<set>
+			DESCRIPTION=#{description,jdbcType=VARCHAR},
+			ICON=#{icon,jdbcType=VARCHAR},
+			RESOURCE_NAME=#{resourceName,jdbcType=VARCHAR},
+			RESOURCE_TYPE=#{resourceType,jdbcType=VARCHAR},
+			KEY=#{key,jdbcType=VARCHAR},
+			SEQ=#{seq,jdbcType=VARCHAR},
+			URL=#{url,jdbcType=VARCHAR},
+			PID=#{pid,jdbcType=VARCHAR},
+			DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+			UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+			UPDATE_TIME=sysdate,
+			LOCK_VERSION=LOCK_VERSION+1
+		</set>
+			WHERE id=#{id}
+	 </update>
+	 
+	<delete id="deleteDiyResource" parameterType="String" >
+		 update TB_DIY_WEB_RESOURCE SET DATA_STAT='1' WHERE ID=#{id}
+	</delete>
+	
+	<delete id="deleteDiyRoleResourceByResId" parameterType="String" >
+		 update TB_DIY_WEB_ROLE_RESOURCE SET DATA_STAT='1' WHERE  RESOURCE_ID=#{id}
+	</delete>
+	
+	<select id="getDiyResourceList" resultType="DiyResource" resultMap="DiyResourceltMap">
+		SELECT
+		<include refid="DiyResourceColumns" />
+		
+		FROM TB_DIY_WEB_RESOURCE WHERE 1=1 and DATA_STAT = '0'
+		
+		<if test="resourceType !=null and resourceType !='' ">
+			AND RESOURCE_TYPE=#{resourceType}
+		</if>
+		
+		START WITH pid = 0 CONNECT BY PRIOR ID = pid ORDER siblings BY SEQ
+	</select>
+	
+	<!-- 根据角色Id获取该用户的权限-->
+	<select id="getDiyRoleResourceByRoleId" parameterType="String" resultMap="DiyResourceltMap">
+		SELECT 
+		<include refid="DiyResourceColumns" />
+		FROM TB_DIY_WEB_RESOURCE WHERE DATA_STAT='0' AND id in(
+		SELECT RESOURCE_ID FROM
+		TB_DIY_WEB_ROLE_RESOURCE WHERE DATA_STAT='0' AND ROLE_ID = #{roleId})
+	</select>
+	
+	<!-- 根据用户Id获取该用户的权限-->
+<!-- 	<select id="getUserResourceByUserId" parameterType="String" resultMap="DiyResourceltMap"> -->
+<!-- 		SELECT  -->
+<!-- 		<include refid="DiyResourceColumns" /> -->
+<!-- 		FROM TB_DIY_WEB_RESOURCE WHERE  DATA_STAT='0' AND id in( -->
+<!-- 		SELECT RESOURCE_ID FROM -->
+<!-- 		TB_DIY_WEB_ROLE_RESOURCE WHERE role_id in( -->
+<!-- 		SELECT ROLE_ID FROM TB_DIY_WEB_USER_ROLE -->
+<!-- 		WHERE USER_ID=#{userid})) -->
+<!-- 	</select> -->
+
+</mapper>

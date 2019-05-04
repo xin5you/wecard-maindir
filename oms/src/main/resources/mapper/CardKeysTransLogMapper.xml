@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.cardkeys.mapper.CardKeysTransLogMapper">
+
+	<sql id="CardKeysTransLogColumns">
+		l.TXN_PRIMARY_KEY,
+		l.ORDER_ID,
+		l.TRANS_ID,
+		l.CARD_KEY,
+		l.PRODUCT_CODE,
+		l.USER_NAME,
+		l.TFR_IN_ACCT_NO,
+		l.TFR_OUT_ACCT_NO,
+		l.TRANS_AMT,
+		l.ORG_TRANS_AMT,
+		l.TRANS_FEE,
+		l.TRANS_FEE_TYPE,
+		l.TRANS_RESULT,
+		l.ADDITIONAL_INFO,
+		l.DATA_STAT,
+		l.REMARKS,
+		l.CREATE_USER,
+		l.UPDATE_USER,
+		l.CREATE_TIME,
+		l.UPDATE_TIME,
+		l.LOCK_VERSION
+	</sql>
+
+	<sql id="CardKeysTransLogFields">
+		#{txnPrimaryKey, jdbcType=VARCHAR},
+		#{orderId, jdbcType=VARCHAR},
+		#{transId, jdbcType=VARCHAR},
+		#{cardKey, jdbcType=VARCHAR},
+		#{productCode, jdbcType=VARCHAR},
+		#{userName, jdbcType=VARCHAR},
+		#{tfrInAcctNo, jdbcType=VARCHAR},
+		#{tfrOutAcctNo, jdbcType=VARCHAR},
+		#{transAmt, jdbcType=VARCHAR},
+		#{orgTransAmt, jdbcType=VARCHAR},
+		#{transFee, jdbcType=VARCHAR},
+		#{transFeeType, jdbcType=VARCHAR},
+		#{transResult, jdbcType=VARCHAR},
+		#{additionalInfo, jdbcType=VARCHAR},
+		'0',
+		#{remarks, jdbcType=VARCHAR},
+		#{createUser, jdbcType=VARCHAR},
+		#{updateUser, jdbcType=VARCHAR},
+		SYSDATE,
+		SYSDATE,
+		'0'
+	</sql>
+
+	<sql id="tableName">
+			TB_CARD_KEYS_TRANS_LOG l
+	</sql>
+	
+	<select id="getCardKeysTransLogByTransLog" parameterType="CardKeysTransLog" resultType="CardKeysTransLog">
+		SELECT 
+			<include refid="CardKeysTransLogColumns" />,
+			 p.PRODUCT_NAME,
+			 s.PERSONAL_NAME
+		FROM TB_CARD_KEYS_PRODUCT p 
+			INNER JOIN TB_CARD_KEYS_TRANS_LOG l ON p.PRODUCT_CODE = l.PRODUCT_CODE
+			LEFT JOIN TB_PERSON_INF s ON l.TFR_OUT_ACCT_NO = s.USER_ID
+		WHERE 1=1 
+		<if test="dataStat !=null and dataStat !='' ">
+			AND l.DATA_STAT = #{dataStat}
+		</if>
+		<if test="orderId !=null and orderId !='' ">
+			AND l.ORDER_ID = #{orderId}
+		</if>
+		ORDER BY l.CREATE_TIME DESC
+	</select>
+	
+	<update id="updateCardKeysTransLog" parameterType="CardKeysTransLog">
+		UPDATE 
+			<include refid="tableName" />
+		SET
+		<if test="tfrInAcctNo !=null and tfrInAcctNo !='' ">
+			TFR_IN_ACCT_NO = #{tfrInAcctNo,jdbcType=VARCHAR},
+		</if>
+		<if test="tfrOutAcctNo !=null and tfrOutAcctNo !='' ">
+			TFR_OUT_ACCT_NO = #{tfrOutAcctNo,jdbcType=VARCHAR},
+		</if>
+		<if test="transAmt !=null and transAmt !='' ">
+			TRANS_AMT = #{transAmt,jdbcType=VARCHAR},
+		</if>
+		<if test="orgTransAmt !=null and orgTransAmt !='' ">
+			ORG_TRANS_AMT = #{orgTransAmt,jdbcType=VARCHAR},
+		</if>
+		<if test="transFee !=null and transFee !='' ">
+			TRANS_FEE = #{transFee,jdbcType=VARCHAR},
+		</if>
+		<if test="transFeeType !=null and transFeeType !='' ">
+			TRANS_FEE_TYPE = #{transFeeType,jdbcType=VARCHAR},
+		</if>
+		<if test="transResult !=null and transResult !='' ">
+			TRANS_RESULT = #{transResult,jdbcType=VARCHAR},
+		</if>
+		<if test="additionalInfo !=null and additionalInfo !='' ">
+			ADDITIONAL_INFO = #{additionalInfo,jdbcType=VARCHAR},
+		</if>
+		<if test="dataStat !=null and dataStat !='' ">
+			DATA_STAT = #{dataStat,jdbcType=VARCHAR},
+		</if>
+			UPDATE_TIME = sysdate,
+			LOCK_VERSION = LOCK_VERSION+1
+		WHERE 
+			TXN_PRIMARY_KEY = #{txnPrimaryKey,jdbcType=VARCHAR}
+	</update>
+	
+</mapper>

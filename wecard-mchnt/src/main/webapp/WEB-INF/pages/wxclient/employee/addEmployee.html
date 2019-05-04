@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>知了企服</title>
+   	<#include "../../common/wecardHeader.html">
+</head>
+<body ontouchstart>
+<div class="container js_container" id="container">
+ <div class="page">
+	<div class="hd">
+        <h1 class="page_title">员工管理</h1>
+    </div>
+   	<div class="bd">
+   		<div class="weui_toptips weui_warn js_tooltips"></div>
+        <div class="weui_cells weui_cells_form">
+       	    <div class="weui_cell weui_cell_select weui_select_after">
+	            <div class="weui_cell_hd">
+	                <label for="" class="weui_label">员工角色</label>
+	            </div>
+	            <div class="weui_cell_bd weui_cell_primary">
+	                <select class="weui_select" id="roleType" name="roleType">
+	                	<#if roleType ?? && roleType="100" >
+		                    <option value="200">商户财务</option>
+		                    <option value="300">商户店长</option>
+	                 	</#if>
+	                    <option value="400">商户收银员</option>
+	                    <option value="500">商户服务员</option>
+	                </select>
+	            </div>
+	        </div>
+            <div class="weui_cell">
+                <div class="weui_cell_hd"><label class="weui_label">员工备注</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+ 					<input type="text" id="name" class="weui_input form-control" />
+                </div>
+            </div>
+
+  			<div class="weui_cell weui_cell_select weui_select_after">
+                <div class="weui_cell_hd"><label class="weui_label">选择门店</label></div>
+                <div class="weui_cell_bd weui_cell_primary">
+	                <select class="weui_select" name="shopId" id="shopId">
+	                <#if shopInfList??&&shopInfList?size gt 0>
+	                	<#list shopInfList as shopInf>
+		                    <option value="${shopInf.shopId!}">${shopInf.shopName!}</option>
+	                    </#list>
+	                 </#if>
+	                </select>
+	            </div>
+            </div>
+		
+        </div>
+        <div class="weui_cells_tips bg-danger weui_toptips_visible">
+        		注:为门店添加员工角色后，点击“下一步”，发通知给微信好友</br>
+        		为了安全，请点击 右上角【发送给朋友】指定个人完成员工角色分配						
+        </div>
+        <div class="weui_btn_area">
+            <button id="addOnMenuShareAppMessage" type="button" class="weui_btn weui_btn_primary">下一步</button>
+        </div>
+	 </div>
+	</div>
+</div>
+<script type="text/html" id="tpl_success_msg">
+    <div class="weui_msg">
+        <div class="weui_icon_area"><i class="weui_icon_success weui_icon_msg"></i></div>
+        <div class="weui_text_area">
+            <h2 class="weui_msg_title">分享成功</h2>
+            <p class="weui_msg_desc">恭喜您，当前门店角色分配成功</p>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/html" id="tpl_error_msg">
+    <div class="weui_msg">
+        <div class="weui_icon_area"><i class="weui_icon_msg weui_icon_warn"></i></div>
+        <div class="weui_text_area">
+            <h2 class="weui_msg_title">分享失败</h2>
+            <p class="weui_msg_desc">操作失败，当前门店角色分配失败</p>
+        </div>
+    </div>
+</script>
+
+<script src="${s.base}/res/jweixin-1.0.0.js"></script>
+<script type="text/javascript" src="${s.base}/res/js/wxclient/employee/addEmployee.js"></script>
+</body>
+</html>

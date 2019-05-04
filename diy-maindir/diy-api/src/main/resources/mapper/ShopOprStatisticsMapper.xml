@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.iboot.diy.api.operate.mapper.ShopOprStatisticsMapper">
+	<sql id="ShopOprStatisticsColumns">
+		ID, MCHNT_STATISTICS_OPR_ID, SHOP_CODE, CARD_PAY_AMT,
+		CARD_PAY_NUM,
+		QUICK_PAY_AMT,
+		QUICK_PAY_NUM, OL_RECHARGE_AMT,
+		OL_RECHARGE_DEN, PF_RECHARGE_AMT, PF_RECHARGE_DEN,
+		PF_SUBSIDY_NUM,
+		PF_SUBSIDY_AMT, CARD_BAL, FEE, SETTLE_AMT,
+		SETTLE_DATE, DATA_STAT,STAT
+		REMARKS, CREATE_USER, UPDATE_USER, CREATE_TIME, UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+	<select id="selectByPrimaryKey" resultType="ShopOprStatistics"
+		parameterType="java.lang.String">
+		select
+		<include refid="ShopOprStatisticsColumns" />
+		from TB_SHOP_OPR_STATISTICS
+		where ID = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		TB_SHOP_OPR_STATISTICS
+		where ID = #{id,jdbcType=VARCHAR}
+	</delete>
+
+	<update id="updateByPrimaryKeySelective" parameterType="ShopOprStatistics">
+		update TB_SHOP_OPR_STATISTICS
+		<set>
+			<if test="mchntStatisticsOprId != null">
+				MCHNT_STATISTICS_OPR_ID =
+				#{mchntStatisticsOprId,jdbcType=VARCHAR},
+			</if>
+			<if test="shopCode != null">
+				SHOP_CODE = #{shopCode,jdbcType=VARCHAR},
+			</if>
+			<if test="cardPayAmt != null">
+				CARD_PAY_AMT = #{cardPayAmt,jdbcType=DECIMAL},
+			</if>
+			<if test="cardPayNum != null">
+				CARD_PAY_NUM = #{cardPayNum,jdbcType=DECIMAL},
+			</if>
+			<if test="quickPayAmt != null">
+				QUICK_PAY_AMT = #{quickPayAmt,jdbcType=DECIMAL},
+			</if>
+			<if test="quickPayNum != null">
+				QUICK_PAY_NUM = #{quickPayNum,jdbcType=DECIMAL},
+			</if>
+			<if test="olRechargeAmt != null">
+				OL_RECHARGE_AMT = #{olRechargeAmt,jdbcType=DECIMAL},
+			</if>
+			<if test="olRechargeDen != null">
+				OL_RECHARGE_DEN = #{olRechargeDen,jdbcType=DECIMAL},
+			</if>
+			<if test="pfRechargeAmt != null">
+				PF_RECHARGE_AMT = #{pfRechargeAmt,jdbcType=DECIMAL},
+			</if>
+			<if test="pfRechargeDen != null">
+				PF_RECHARGE_DEN = #{pfRechargeDen,jdbcType=DECIMAL},
+			</if>
+			<if test="pfSubsidyNum != null">
+				PF_SUBSIDY_NUM = #{pfSubsidyNum,jdbcType=DECIMAL},
+			</if>
+			<if test="pfSubsidyAmt != null">
+				PF_SUBSIDY_AMT = #{pfSubsidyAmt,jdbcType=DECIMAL},
+			</if>
+			<if test="cardBal != null">
+				CARD_BAL = #{cardBal,jdbcType=DECIMAL},
+			</if>
+			<if test="fee != null">
+				FEE = #{fee,jdbcType=DECIMAL},
+			</if>
+			<if test="settleAmt != null">
+				SETTLE_AMT = #{settleAmt,jdbcType=DECIMAL},
+			</if>
+			<if test="settleDate != null">
+				SETTLE_DATE = #{settleDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="dataStat != null">
+				DATA_STAT = #{dataStat,jdbcType=CHAR},
+			</if>
+			<if test="stat != null">
+				STAT = #{stat,jdbcType=CHAR},
+			</if>
+			<if test="remarks != null">
+				REMARKS = #{remarks,jdbcType=VARCHAR},
+			</if>
+			<if test="createUser != null">
+				CREATE_USER = #{createUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updateUser != null">
+				UPDATE_USER = #{updateUser,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="lockVersion != null">
+				LOCK_VERSION = #{lockVersion,jdbcType=DECIMAL},
+			</if>
+		</set>
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+
+
+	<parameterMap type="java.util.HashMap" id="fileMap">
+		<parameter property="sid" jdbcType="VARCHAR" javaType="String" mode="IN" />
+		<parameter property="name" jdbcType="VARCHAR" javaType="String" mode="IN" />
+		<parameter property="result" jdbcType="VARCHAR" javaType="String" mode="OUT" />
+	</parameterMap>
+	<select id="filedShopProStatistics" parameterMap="fileMap" statementType="CALLABLE"  resultType="String">
+		<![CDATA[ 
+			{ CALL PROC_FILING(?,?,?)}
+		]]>
+	</select>
+
+</mapper>

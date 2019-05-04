@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">   
+
+    
+	<!-- 实现类 -->				
+	<bean id="wxDroolsExcutor" class="com.cn.thinkx.dubbo.facadeImpl.drools.impl.WxDroolsExcutorImpl" />		
+	<bean id="java2TxnBusinessFacade" class="com.cn.thinkx.dubbo.facadeImpl.txn.impl.Java2TxnBusinessFacadeImpl" />		
+	<bean id="hkbTxnFacade" class="com.cn.thinkx.dubbo.facadeImpl.txn.impl.HKBTxnFacadeImpl" />
+	
+	<!-- 要暴露的服务接口 -->
+	<dubbo:service interface="com.cn.thinkx.service.drools.WxDroolsExcutor" ref="wxDroolsExcutor" cluster="failfast">
+		<dubbo:method name="getRechargeDiscount" timeout="60000" retries="0"/>
+	</dubbo:service>
+	<dubbo:service interface="com.cn.thinkx.service.txn.Java2TxnBusinessFacade" ref="java2TxnBusinessFacade" cluster="failfast">
+		<dubbo:method name="merchantAccountOpeningITF" timeout="10000" retries="0"/>
+		<dubbo:method name="customerAccountOpeningITF" timeout="10000" retries="0"/>
+		<dubbo:method name="customerPasswordResetITF" timeout="3000" retries="3" />
+		<dubbo:method name="rechargeTransactionITF" timeout="5000" retries="0" />
+		<dubbo:method name="consumeTransactionITF" timeout="3000" retries="0" />
+		<dubbo:method name="merchantWithdrawITF" timeout="5000" retries="0" />
+		<dubbo:method name="consumeRefundITF" timeout="10000" retries="0" />
+		<dubbo:method name="transRefundITF" timeout="10000" retries="0" />
+		<dubbo:method name="transExceptionQueryITF" timeout="10000" retries="2"/>
+		<dubbo:method name="quickConsumeTransactionITF" timeout="3000" retries="0" />
+	</dubbo:service>
+	<dubbo:service interface="com.cn.thinkx.facade.service.HKBTxnFacade" ref="hkbTxnFacade" cluster="failfast">
+		<dubbo:method name="customerAccountOpeningITF" timeout="5000" retries="0"/>
+		<dubbo:method name="customerCardOpeningITF" timeout="10000" retries="0"/>
+		<dubbo:method name="customerAccountQueryITF" timeout="5000" retries="2"/>
+		<dubbo:method name="rechargeTransactionITF" timeout="5000" retries="0"/>
+		<dubbo:method name="cardBalanceQueryITF" timeout="5000" retries="2"/>
+		<dubbo:method name="hkbConsumeTransactionITF" timeout="5000" retries="0"/>
+		<dubbo:method name="quickPaymentTransactionITF" timeout="5000" retries="0"/>
+		<dubbo:method name="shopListQueryITF" timeout="5000" retries="2"/>
+		<dubbo:method name="shopInfoQueryITF" timeout="5000" retries="2"/>
+		<dubbo:method name="mchtSellingCardListQueryITF" timeout="5000" retries="2"/>
+		<dubbo:method name="cardTransDetailQueryITF" timeout="5000" retries="2"/>
+		<dubbo:method name="customerAccListQueryITF" timeout="5000" retries="2"/>
+		<dubbo:method name="getShopInfoQueryITF" timeout="5000" retries="2"/>
+	</dubbo:service>
+	<dubbo:service interface="com.cn.thinkx.facade.service.IntegrationPayFacade" ref="integrationPayFacade" cluster="failfast">
+		<dubbo:method name="payMentTransactionITF" timeout="3000" retries="3"/>
+		<dubbo:method name="refundTransactionITF" timeout="5000" retries="3"/>
+		<dubbo:method name="queryTransactionITF" timeout="10000" retries="3"/>
+	</dubbo:service>
+
+</beans>

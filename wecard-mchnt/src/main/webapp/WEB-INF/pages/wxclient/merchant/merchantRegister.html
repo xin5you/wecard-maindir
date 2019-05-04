@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>知了企服</title>
+	<#include "../../common/wecardHeader.html">
+</head>
+<body ontouchstart>
+<div class="container js_container" id="container">
+<div class="page">
+	<div class="hd">
+        <h1 class="page_title">业务介绍注册</h1>
+    </div>
+	 <div class="weui_cells weui_cells_form">
+	     <form class="form-horizontal" role="form">
+	     	  <div class="weui_cell control-group">
+		       	    <div class="weui_cell_hd"><label class="control-label">邀请码</label></div>
+	                <div class="weui_cell_bd weui_cell_primary col-sm-10">
+	                    <input type="text" id="inviteCode_page" placeholder="请输入邀请码" class="weui_input form-control">
+	                </div>
+		      </div>
+		      <div class="weui_cell control-group">
+		        <div class="weui_cell_hd"><label class="control-label" for="tel">手机号</label></div>
+		        <div class="weui_cell_bd weui_cell_primary col-sm-10">
+		         	 <input type="tel" id='phoneNumber_page' placeholder="请输入手机号" class="weui_input form-control input-large"  >
+		        </div>
+		       	<div class="weui_cell_ft">
+	                  <button id="sendPhoneCode" type="button"  class="weui_btn weui_btn_mini weui_btn_primary">发送</button>
+	            </div>
+		      </div>
+		      <div class="weui_cell">
+		       	    <div class="weui_cell_hd"><label class="control-label">验证码</label></div>
+	                <div class="weui_cell_bd weui_cell_primary col-sm-10">
+	                    <input type="tel" id="phoneCode_page" placeholder="请输入验证码" class="weui_input form-control" maxlength="12">
+	                </div>
+		      </div>
+		      
+ 			 <div id="weui_cells_tips" class="weui_cells_tips bg-danger weui_toptips_visible"></div>
+ 			 
+		      <div class="weui_btn_area">
+		        <button type="button" class="weui_btn weui_btn_primary"  id="mchantRegBtn">确定</button>
+		      </div>
+	      </form>
+	    </div>
+	</div>
+</div>
+<script type="text/html" id="tpl_msg">
+<div class="page">
+    <div class="weui_msg">
+        <div class="weui_icon_area"><i class="weui_icon_success weui_icon_msg"></i></div>
+        <div class="weui_text_area">
+            <h2 class="weui_msg_title">操作成功</h2>
+            <p class="weui_msg_desc">恭喜您，商户注册成功</p>
+        </div>
+    </div>
+</div>
+</script>
+<script src="${s.base}/res/js/wxclient/merchant/merchantRegister.js"></script>
+</body>
+</html>

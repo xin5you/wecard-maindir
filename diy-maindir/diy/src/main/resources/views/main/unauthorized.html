@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head th:include="main/header::header"/>
+	
+	<body class="error_page">
+		<div class="error_box">
+			<h1>您没有该访问权限</h1>
+			<p></p>
+			<p>
+				点击<a th:href="@{/main}" style="color: red;">首 页</a>返回首页
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				在
+				<input type="text" readonly="true" value="5" id="times" style="width: 8px; color: red; border: 0px;"/>
+				秒后自动跳转到首页
+			</p>
+		</div>
+	</body>
+	<script type="text/javascript">
+		 $(document).ready(function() { 
+	     	function fun(count) { 
+	        	window.setTimeout(function(){ 
+	            	count--; 
+	                if(count > 0) { 
+	                	$('#times').val(count); 
+	                    fun(count); 
+	                } else { 
+	                	location.href = Helper.getRootPath() + "/main"; 
+	                } 
+				}, 1000); 
+			} 
+	        fun(5); 
+	     }); 
+	 </script>
+	
+</html>

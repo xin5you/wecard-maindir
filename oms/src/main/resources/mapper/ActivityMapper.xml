@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.active.mapper.ActivityMapper">
+		
+	<insert id="insertMerchantActiveInf" parameterType="MerchantActiveInf">
+		<selectKey resultType="string" order="BEFORE" keyProperty="activeId">  
+			<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getCommonId" />
+		</selectKey>
+		INSERT INTO TB_MERCHANT_ACTIVE_INF (
+			ACTIVE_ID,
+			MERCHANT_ID,
+			ACTIVE_NAME,
+			ACTIVE_STAT,
+			START_TIME,
+			END_TIME,
+			ACTIVE_EXPLAIN,
+			ACTIVE_RULE,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			UPDATE_USER,
+			CREATE_TIME,
+			UPDATE_TIME,
+			LOCK_VERSION		
+		 )  VALUES (
+			#{activeId},
+	 		#{merchantId, jdbcType=VARCHAR},
+	 		#{activeName, jdbcType=VARCHAR},
+	 		#{activeStat, jdbcType=VARCHAR},
+			to_date(#{startTime, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'),
+			to_date(#{endTime, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'),
+			#{activeExplain, jdbcType=VARCHAR},
+			#{activeRule, jdbcType=VARCHAR},
+	 		#{dataStat, jdbcType=VARCHAR},
+	 		#{remarks, jdbcType=VARCHAR},
+	 		#{createUser, jdbcType=VARCHAR},
+	 		#{createUser, jdbcType=VARCHAR},
+	 		sysdate,
+	 		sysdate,
+	 		'0') 
+	</insert>
+	
+	<insert id="insertActiveList" parameterType="ActiveList">
+		<selectKey resultType="string" order="BEFORE" keyProperty="activeListId">  
+			<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getCommonId" />
+		</selectKey>
+		INSERT INTO TB_ACTIVE_LIST (
+			ACTIVE_LIST_ID,
+			ACTIVE_ID,
+			COMMODITY_ID,
+			SELLING_PRICE,
+			STOCK,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			UPDATE_USER,
+			CREATE_TIME,
+			UPDATE_TIME,
+			LOCK_VERSION		
+		 )  VALUES (
+			#{activeListId},
+	 		#{activeId, jdbcType=VARCHAR},
+	 		#{commodityId, jdbcType=VARCHAR},
+	 		#{sellingPrice, jdbcType=VARCHAR},
+			#{stock, jdbcType=INTEGER},
+	 		#{dataStat, jdbcType=VARCHAR},
+	 		#{remarks, jdbcType=VARCHAR},
+	 		#{createUser, jdbcType=VARCHAR},
+	 		#{createUser, jdbcType=VARCHAR},
+	 		sysdate,
+	 		sysdate,
+	 		'0') 
+	</insert>
+	
+	<select id="getMerchantActiveInfById" parameterType="String" resultType="MerchantActiveInf">
+		SELECT 
+	  		m.ACTIVE_ID,
+			m.MERCHANT_ID,
+			m.ACTIVE_NAME,
+			m.ACTIVE_STAT,
+			TO_CHAR(m.START_TIME,'YYYY-MM-DD HH24:MI:SS') START_TIME,
+      		TO_CHAR(m.END_TIME,'YYYY-MM-DD HH24:MI:SS') END_TIME,
+			m.ACTIVE_EXPLAIN,
+			m.ACTIVE_RULE,
+			m.DATA_STAT,
+  			c.MCHNT_NAME,
+  			c.MCHNT_CODE
+		FROM TB_MERCHANT_ACTIVE_INF m 
+		INNER JOIN TB_MERCHANT_INF c ON m.MERCHANT_ID = c.MCHNT_ID
+	    WHERE m.ACTIVE_ID = #{id} AND m.DATA_STAT = '0' AND c.DATA_STAT = '0'
+	</select>
+	
+	<select id="getActiveListById" parameterType="String" resultType="ActiveList">
+		SELECT 
+	  		ACTIVE_LIST_ID,
+			ACTIVE_ID,
+			COMMODITY_ID,
+			SELLING_PRICE,
+			STOCK,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			UPDATE_USER,
+  			CREATE_TIME,
+  			UPDATE_TIME,
+  			LOCK_VERSION
+		FROM TB_ACTIVE_LIST 
+	    WHERE ACTIVE_LIST_ID = #{id} AND DATA_STAT = '0'
+	</select>
+	
+	<select id="getCommoListByActiveId" parameterType="String" resultType="CommodityInf">
+		SELECT 
+			m.MERCHANT_ID,
+			c.COMMODITY_ID,
+			c.COMMODITY_NAME,
+			c.COMMODITY_FACEVALUE,
+			c.COMMODITY_COST,
+			a.ACTIVE_LIST_ID,
+			a.SELLING_PRICE,
+			a.STOCK 
+		FROM TB_MERCHANT_ACTIVE_INF m
+		INNER JOIN TB_ACTIVE_LIST a ON m.ACTIVE_ID = a.ACTIVE_ID
+		INNER JOIN TB_COMMODITY_INF c on a.COMMODITY_ID=c.COMMODITY_ID
+		WHERE m.DATA_STAT = '0'
+		   AND a.DATA_STAT = '0'
+		   AND c.DATA_STAT = '1'
+		   AND m.ACTIVE_ID = #{id}
+		ORDER BY c.COMMODITY_FACEVALUE
+	</select>
+	
+	<select id="getMerchantActiveInfList" parameterType="MerchantActiveInf" resultType="MerchantActiveInf">
+		SELECT 
+	  		m.ACTIVE_ID,
+			m.MERCHANT_ID,
+			m.ACTIVE_NAME,
+			m.ACTIVE_STAT,
+			TO_CHAR(m.START_TIME,'YYYY-MM-DD HH24:MI:SS') START_TIME,
+      		TO_CHAR(m.END_TIME,'YYYY-MM-DD HH24:MI:SS') END_TIME,
+			m.ACTIVE_EXPLAIN,
+			m.ACTIVE_RULE,
+  			c.MCHNT_NAME,
+  			c.MCHNT_CODE
+		FROM TB_MERCHANT_ACTIVE_INF m 
+		INNER JOIN TB_MERCHANT_INF c ON m.MERCHANT_ID = c.MCHNT_ID
+	    WHERE m.DATA_STAT = '0' AND c.DATA_STAT = '0'
+	    	<if test="activeId != null and activeId != '' ">
+	 		  	AND m.ACTIVE_ID=#{activeId}
+		 	</if>
+		 	<if test="activeName != null and activeName != '' ">
+ 			  	AND m.ACTIVE_NAME LIKE '%' || #{activeName} || '%'
+		 	</if>
+		 	<if test="mchntCode != null and mchntCode != '' ">
+	 		  	AND c.MCHNT_CODE=#{mchntCode}
+		 	</if>
+		 	<if test="mchntName != null and mchntName != '' ">
+ 			  	AND c.MCHNT_NAME LIKE '%' || #{mchntName} || '%'
+		 	</if>
+		  	<if test="activeStat != null and activeStat != '' ">
+			  	AND m.ACTIVE_STAT=#{activeStat}
+		 	</if>
+		 	<if test="startTime != null and startTime != ''">
+                AND START_TIME &gt;= to_date(#{startTime}, 'YYYY-MM-DD HH24:MI:SS')
+            </if>
+            <if test="endTime != null  and endTime != ''">
+                AND END_TIME &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+            </if>
+		 ORDER BY m.UPDATE_TIME DESC
+	</select>
+	
+	<update id="updateMerchantActiveInf" parameterType="MerchantActiveInf">
+		UPDATE TB_MERCHANT_ACTIVE_INF SET
+			MERCHANT_ID=#{merchantId, jdbcType=VARCHAR},
+			ACTIVE_NAME=#{activeName, jdbcType=VARCHAR},
+			ACTIVE_STAT=#{activeStat, jdbcType=VARCHAR},
+			START_TIME=to_date(#{startTime, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'),
+			END_TIME=to_date(#{endTime, jdbcType=VARCHAR}, 'YYYY-MM-DD HH24:MI:SS'),
+			ACTIVE_EXPLAIN=#{activeExplain, jdbcType=VARCHAR},
+			ACTIVE_RULE=#{activeRule, jdbcType=VARCHAR},
+	 		UPDATE_USER=#{updateUser, jdbcType=VARCHAR},
+	 		UPDATE_TIME=sysdate,
+	 		LOCK_VERSION=LOCK_VERSION+1
+		WHERE ACTIVE_ID = #{activeId} AND DATA_STAT = '0'
+	</update>
+	
+	<update id="updateActiveList" parameterType="ActiveList">
+		UPDATE TB_ACTIVE_LIST SET
+			<if test="commodityId != null  and commodityId != ''">
+                COMMODITY_ID=#{commodityId, jdbcType=VARCHAR},
+            </if>
+			SELLING_PRICE=#{sellingPrice, jdbcType=VARCHAR},
+			STOCK=#{stock, jdbcType=INTEGER},
+	 		UPDATE_USER=#{updateUser, jdbcType=VARCHAR},
+	 		UPDATE_TIME=sysdate,
+	 		LOCK_VERSION=LOCK_VERSION+1
+		WHERE ACTIVE_LIST_ID = #{activeListId} AND DATA_STAT = '0'
+	</update>
+	
+	<update id="deleteMerchantActiveInf" parameterType="MerchantActiveInf">
+		UPDATE TB_MERCHANT_ACTIVE_INF SET 
+			DATA_STAT='1',
+			UPDATE_USER=#{updateUser, jdbcType=VARCHAR},
+	 		UPDATE_TIME=sysdate,
+	 		LOCK_VERSION=LOCK_VERSION+1 
+		WHERE ACTIVE_ID = #{activeId} 
+	</update>
+	
+	<update id="deleteActiveList" parameterType="ActiveList">
+		UPDATE TB_ACTIVE_LIST SET 
+			DATA_STAT='1',
+			UPDATE_USER=#{updateUser, jdbcType=VARCHAR},
+	 		UPDATE_TIME=sysdate,
+	 		LOCK_VERSION=LOCK_VERSION+1 
+		WHERE ACTIVE_LIST_ID = #{activeListId} 
+	</update>
+	
+</mapper>

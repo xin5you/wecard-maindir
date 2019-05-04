@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.thinkx.oms.module.diy.mapper.DiyRoleMapper">
+	
+	<resultMap type="DiyRole" id="DiyRoleResultMap">
+		<result column="ID" property="id"/>
+		<result column="ROLE_NAME" property="roleName"/>
+		<result column="DESCRIPTION" property="description"/>
+		<result column="SEQ" property="seq"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="DiyRoleColumns">
+		 ID,
+		 ROLE_NAME,
+		 DESCRIPTION,
+		 SEQ,
+		 DATA_STAT,
+		 REMARKS,
+		 CREATE_USER,
+		 UPDATE_USER,
+		 CREATE_TIME,
+		 UPDATE_TIME,
+		 LOCK_VERSION
+	</sql>
+	
+	<select id="getDiyRoleById" parameterType="String" resultMap="DiyRoleResultMap">
+		SELECT
+		<include refid="DiyRoleColumns" />
+		FROM TB_DIY_WEB_ROLE WHERE ID=#{Id} and data_stat = '0'
+	</select>
+	
+	<insert id="insertDiyRole" parameterType="DiyRole" useGeneratedKeys="true" keyProperty="id">
+	   	<selectKey resultType="string" order="AFTER" keyProperty="id">  
+				<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getDiyRoleId" />
+		</selectKey>
+		INSERT INTO TB_DIY_WEB_ROLE(
+			ROLE_NAME,
+			DESCRIPTION,
+			SEQ,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			UPDATE_USER,
+			CREATE_TIME,
+			UPDATE_TIME,
+			LOCK_VERSION
+		)VALUES (
+			#{roleName,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{seq,jdbcType=VARCHAR},
+			#{dataStat,jdbcType=VARCHAR},
+			#{remarks,jdbcType=VARCHAR},
+			#{createUser,jdbcType=VARCHAR},
+			#{updateUser,jdbcType=VARCHAR},
+			sysdate,
+			sysdate,
+			'0'
+		)
+	</insert>
+	
+	<select id="getDiyRoleList" parameterType="DiyRole" resultMap="DiyRoleResultMap">
+		SELECT
+			<include refid="DiyRoleColumns"/>
+			FROM TB_DIY_WEB_ROLE DIYROLE 
+			where DIYROLE.DATA_STAT = '0'
+			ORDER BY DIYROLE.seq asc
+	</select>
+	
+	<delete id="deleteDiyRoleById" parameterType="String">
+		update TB_DIY_WEB_ROLE  SET DATA_STAT='1' WHERE ID=#{id}
+	</delete>
+	
+	<update id="updateDiyRole" parameterType="DiyRole">
+		UPDATE TB_DIY_WEB_ROLE
+		<set>
+			ROLE_NAME=#{roleName,jdbcType=VARCHAR},
+			DESCRIPTION=#{description,jdbcType=VARCHAR},
+			SEQ=#{seq,jdbcType=VARCHAR},
+			DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+			UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+			UPDATE_TIME=sysdate,
+			LOCK_VERSION = LOCK_VERSION +1
+		</set>
+		WHERE ID=#{id}
+	</update>
+	
+	<select id="getDiyUserRoleByUserId" parameterType="String" resultMap="DiyRoleResultMap">
+		select
+		<include refid="DiyRoleColumns" />
+		from TB_DIY_WEB_ROLE where DATA_STAT = '0' and id in (SELECT ROLE_ID FROM TB_DIY_WEB_USER_ROLE
+		WHERE DATA_STAT = '0' and USER_ID=#{id}) 
+	</select>
+	
+	<delete id="deleteDiyUserRoleByRoleId" parameterType="String">
+		update TB_DIY_WEB_USER_ROLE SET DATA_STAT='1' where role_id=#{roleId}
+	</delete>
+	
+	<delete id="deleteDiyRoleResourceByRoleId" parameterType="String">
+		update TB_DIY_WEB_ROLE_RESOURCE SET DATA_STAT='1' where role_id=#{roleId}
+	</delete>
+	
+		<!-- 增加角色资源 -->
+	<insert id="saveDiyRoleResource" parameterType="DiyRoleResource">
+		insert into TB_DIY_WEB_ROLE_RESOURCE(
+			ROLE_ID,
+			RESOURCE_ID,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			UPDATE_USER,
+			CREATE_TIME,
+			UPDATE_TIME,
+			LOCK_VERSION
+			) values (
+			#{roleId},
+			#{resourceId},
+			#{dataStat,jdbcType=VARCHAR},
+			#{remarks,jdbcType=VARCHAR},
+			#{createUser,jdbcType=VARCHAR},
+			#{updateUser,jdbcType=VARCHAR},
+			sysdate,
+			sysdate,
+			'0'
+			)
+	</insert>
+</mapper>

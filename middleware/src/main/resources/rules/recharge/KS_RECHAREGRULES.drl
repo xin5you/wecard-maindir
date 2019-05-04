@@ -1,0 +1,18 @@
+package com.cn.thinkx.consume
+
+import com.cn.thinkx.dubbo.facadeImpl.drools.valid.RuleUtil;
+import com.cn.thinkx.pms.base.utils.DroolsConstants;
+
+//充值送
+rule "recharge_give_subtract"
+	lock-on-active true
+	 salience 99
+	 when
+	 	//充值送
+	 	  $m:TransRDroolsTransRuleypeCode==DroolsConstants.RuleTypeEnum.RULETYPE_1000.getCode(),
+	 			    inMoney>=ruleFactor,inMoney:inMoney, p1:ruleParam); 
+	 then
+	 	 $m.setInMoney(RuleUtil.addUtil(inMoney,p1));
+	 	 update($m);
+end
+

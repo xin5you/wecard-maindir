@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.iboot.diy.api.system.mapper.DataAuthMapper">
+
+	<sql id="DataAuthColumns">
+		d.ID,
+		d.MCHNT_CODE, 
+		d.SHOP_CODE, 
+		d.CASECADE, 
+		d.DATA_STAT, 
+		d.REMARKS, 
+		d.CREATE_USER,
+		d.UPDATE_USER,
+		d.CREATE_TIME, 
+		d.UPDATE_TIME, 
+		d.LOCK_VERSION
+	</sql>
+	
+	<select id="selectDataAuthByUserId" parameterType="String" resultType="DataAuth">
+		select
+			<include refid="DataAuthColumns" />
+		from TB_WEB_DATA_AUTH d left join TB_WEB_USER_DATA_AUTH ud on d.ID = ud.AUTH_ID 
+		left join TB_WEB_USER u on ud.USER_ID = u.ID
+		where u.ID=#{id} and  u.DATA_STAT='0'
+	</select>
+	
+	<select id="getMchntCodeByShopCode" parameterType="String" resultType="String">
+		select  a.MCHNT_CODE from TB_MERCHANT_INF a, TB_SHOP_INF b 
+		where a.MCHNT_ID = b.MCHNT_ID 
+		and b.SHOP_CODE = #{shopCode}
+	</select>
+	
+	<delete id="deleteByPrimaryKey" parameterType="String">
+		update TB_WEB_DATA_AUTH SET DATA_STAT='1' where ID = #{id}
+	</delete>
+	
+	<insert id="insert" parameterType="DataAuth">
+		<selectKey resultType="String" order="AFTER" keyProperty="id">  
+				<include refid="com.cn.iboot.diy.api.base.mapper.SqlCommonMapper.getSysDataAuthId" />
+		</selectKey>
+		insert into TB_WEB_DATA_AUTH (
+			MCHNT_CODE, 
+			SHOP_CODE,
+			CASECADE, 
+			DATA_STAT, 
+			REMARKS,
+			CREATE_USER, 
+			UPDATE_USER, 
+			CREATE_TIME,
+			UPDATE_TIME, 
+			LOCK_VERSION
+		) values (
+			#{mchntCode,jdbcType=VARCHAR},
+			#{shopCode,jdbcType=VARCHAR},
+			#{casecade,jdbcType=DECIMAL}, 
+			'0', 
+			#{remarks,jdbcType=VARCHAR},
+			#{createUser,jdbcType=VARCHAR}, 
+			#{updateUser,jdbcType=VARCHAR},
+			sysdate,
+			sysdate, 
+			0
+		)
+	</insert>
+	
+	<update id="updateByPrimaryKey" parameterType="DataAuth">
+		update TB_WEB_DATA_AUTH
+		<set>
+			MCHNT_CODE = #{mchntCode,jdbcType=VARCHAR},
+			SHOP_CODE = #{shopCode,jdbcType=VARCHAR},
+			CASECADE = #{casecade,jdbcType=DECIMAL},
+			REMARKS = #{remarks,jdbcType=VARCHAR},
+			UPDATE_USER = #{updateUser,jdbcType=VARCHAR},
+			UPDATE_TIME = sysdate,
+			LOCK_VERSION = LOCK_VERSION +1
+		</set>
+		where ID = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

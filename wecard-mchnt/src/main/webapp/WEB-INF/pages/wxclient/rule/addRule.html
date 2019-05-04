@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>知了企服</title>
+	<#include "../../common/wecardHeader.html">
+	<script type="text/javascript">
+   		var ruleTypeCode = '${ruleTypeCode}';
+	</script>
+</head>
+  <body ontouchstart>
+  <div class="page">
+     <div class="hd">
+       	<h1 class="page_title">商户优惠策略</h1>
+   	</div>
+	 <div class="weui_cells weui_cells_form" id="weuiCellsForm"></div>
+  	   <script type="text/html" id="tpl_10001000">		
+			 <div class="weui_cell">
+		       	    <div class="weui_cell_hd"><label class="control-label">充值策略</label></div>
+	                <div class="weui_cell_bd weui_cell_primary col-sm-10">
+	                     <select class="weui_select form-control" id="ruleTypeCode" name="ruleTypeCode">
+							 <#if ruleTypeList??&&ruleTypeList?size gt 0>
+	                			<#list ruleTypeList as row>
+		                    		<option value="${row.ruleTypeCode!}" <#if row.ruleTypeCode=='10001000'>selected="true"</#if>>${row.ruleName!}</option>
+	                    		</#list>
+	                 		</#if>
+		                 </select>
+	                </div>
+		      </div>
+		      <div class="weui_cell">
+		       	    <div class="weui_cell_hd"><label class="control-label">充值额度</label></div>
+	                <div class="weui_cell_bd weui_cell_primary col-sm-10">
+	                    <input type="text" id="factor1" placeholder="请输入充值额度" class="weui_input form-control">
+	                </div>
+		      </div>
+		      
+		      <div class="weui_cell">
+		       	    <div class="weui_cell_hd"><label class="control-label">赠送额度</label></div>
+	                <div class="weui_cell_bd weui_cell_primary col-sm-10">
+	                    <input type="text" id="param1" placeholder="请输入赠送额度" class="weui_input form-control" >
+	                </div>
+		      </div>
+		   </script>
+
+		    <script type="text/html" id="tpl_10002000">
+			 <div class="weui_cell">
+				    <div class="weui_cell_hd"><label class="control-label">充值策略</label></div>
+	                <div class="weui_cell_bd weui_cell_primary col-sm-10">
+	                    <select class="weui_select form-control" id="ruleTypeCode" name="ruleTypeCode">
+		                    <#if ruleTypeList??&&ruleTypeList?size gt 0>
+	                			<#list ruleTypeList as row>
+		                    		<option value="${row.ruleTypeCode!}" <#if row.ruleTypeCode=='10002000'>selected="true"</#if> >${row.ruleName!}</option>
+	                    		</#list>
+	                 		</#if>
+		                 </select>
+	                </div>
+				</div>
+				<div class="weui_cell">
+		       	    <div class="weui_cell_hd"><label class="control-label">充值额度</label></div>
+	                <div class="weui_cell_bd weui_cell_primary col-sm-10">
+	                    <input type="text" id="factor1" placeholder="请输入充值额度" class="weui_input form-control">
+	                </div>
+		      </div>
+		      <div class="weui_cell">
+		       	    <div class="weui_cell_hd"><label class="control-label">折扣值&nbsp;</label></div>
+	                <div class="weui_cell_bd weui_cell_primary col-sm-10">
+	                    <input type="text" id="param1" placeholder="请输入折扣值" class="weui_input form-control" >
+	                </div>
+		      </div>
+		      <div class="weui_cells_tips bg-danger weui_toptips_visible">折扣值例如8折 请输入0.8; 例如88折，请输入0.88</div>
+			</script>
+			
+			<script type="text/html" id="tpl_20003000">
+			 <div class="weui_cell">
+		       	    <div class="weui_cell_hd"><label class="control-label">消费策略</label></div>
+	                <div class="weui_cell_bd weui_cell_primary col-sm-10">
+	                     <select class="weui_select form-control" id="ruleTypeCode" name="ruleTypeCode">
+		                    <#if ruleTypeList??&&ruleTypeList?size gt 0>
+	                			<#list ruleTypeList as row>
+		                    		<option value="${row.ruleTypeCode!}" <#if row.ruleTypeCode=='20003000'>selected="true"</#if> >${row.ruleName!}</option>
+	                    		</#list>
+	                 		</#if>
+		                 </select>
+	                </div>
+		      </div>
+		      		
+		      <div class="weui_cell">
+		       	    <div class="weui_cell_hd"><label class="control-label">消费额度</label></div>
+	                <div class="weui_cell_bd weui_cell_primary col-sm-10">
+	                    <input type="text" id="factor1" placeholder="请输入消费额度" class="weui_input form-control">
+	                </div>
+		      </div>
+		      
+		      <div class="weui_cell">
+		       	    <div class="weui_cell_hd"><label class="control-label">赠送额度</label></div>
+	                <div class="weui_cell_bd weui_cell_primary col-sm-10">
+	                    <input type="text" id="param1" placeholder="请输入赠送额度" class="weui_input form-control" >
+	                </div>
+		      </div>
+		</script>
+			
+			<script type="text/html" id="tpl_20004000">
+					 <div class="weui_cell">
+		       	    <div class="weui_cell_hd"><label class="control-label">消费策略</label></div>
+	                <div class="weui_cell_bd weui_cell_primary col-sm-10">
+	                    <select class="weui_select form-control" id="ruleTypeCode" name="ruleTypeCode">
+		                    <#if ruleTypeList??&&ruleTypeList?size gt 0>
+	                			<#list ruleTypeList as row>
+		                    		<option value="${row.ruleTypeCode!}" <#if row.ruleTypeCode=='20004000'>selected="true"</#if> >${row.ruleName!}</option>
+	                    		</#list>
+	                 		</#if>
+		                 </select>
+	                </div>
+		      </div>
+		      		
+		      <div class="weui_cell">
+		       	    <div class="weui_cell_hd"><label class="control-label">消费额度</label></div>
+	                <div class="weui_cell_bd weui_cell_primary col-sm-10">
+	                    <input type="text" id="factor1" placeholder="请输入消费额度" class="weui_input form-control">
+	                </div>
+		      </div>
+		      
+		      <div class="weui_cell">
+		       	    <div class="weui_cell_hd"><label class="control-label">折扣值&nbsp;</label></div>
+	                <div class="weui_cell_bd weui_cell_primary col-sm-10">
+	                    <input type="text" id="param1" placeholder="请输入折扣值" class="weui_input form-control" >
+	                </div>
+		      </div>
+		      <div class="weui_cells_tips bg-danger weui_toptips_visible">折扣值例如8折 请输入0.8; 例如88折，请输入0.88</div>
+			</script>
+			<script type="text/html" id="tpl_success_msg">
+				    <div class="weui_msg">
+				        <div class="weui_icon_area"><i class="weui_icon_success weui_icon_msg"></i></div>
+				        <div class="weui_text_area">
+				            <h2 class="weui_msg_title">操作成功</h2>
+				            <p class="weui_msg_desc">操作成功</p>
+				        </div>
+					</div>
+		    </script>
+	    	 <div class="weui_cells weui_cells_form" id="cellsFormBtn">
+	    	  
+	    	  <div class="weui_cell">
+		       	    <div class="weui_cell_hd"><label class="control-label">活动描述</label></div>
+	                <div class="weui_cell_bd weui_cell_primary col-sm-10">
+	                    <input type="text" id="transRuleDesp" placeholder="请输入活动描述" class="weui_input form-control" maxlength="42">
+	                </div>
+		      </div>
+	          <div class="weui_cell">
+		       	    <div class="weui_cell_hd"><label class="control-label">有效期&nbsp;</label></div>
+	                <div class="weui_cell_bd weui_cell_primary col-sm-5">
+	                    <input type="text" id="bTime"  class="weui_input form-control"  readonly="true" >
+	                </div>
+	                ~
+	                <div class="weui_cell_bd weui_cell_primary col-sm-5">
+	                    <input type="text" id="eTime"  class="weui_input form-control"  readonly="true" >
+	                </div>
+		      </div>
+		
+		      <div class="weui_cell">
+		       	    <div class="weui_cell_hd"><label class="control-label">启用状态</label></div>
+	                <div class="weui_cell_bd weui_cell_primary col-sm-10">
+	                    <input type="text" id="dataStat" value="启用" class="weui_input form-control" readonly="true" >
+	                </div>
+		      </div>
+		      <div class="weui_btn_area">
+		        <button  id="submitBtn" type="button" class="weui_btn weui_btn_primary" >确定</button>
+		      </div>
+		   </div>
+	 </div>
+
+
+
+
+<script type="text/javascript" src="${s.base}/res/js/wxclient/rule/addRule.js"></script>
+<script type="text/javascript">
+$("#dataStat").select({
+	input:'启用',
+    items: [
+      {
+        title: "启用",
+        value: "0"
+      },
+      {
+          title: "禁用",
+          value: "1"
+      }
+    ]
+  });
+$("#bTime").calendar();
+$("#eTime").calendar();
+</script>
+</body>
+</html>

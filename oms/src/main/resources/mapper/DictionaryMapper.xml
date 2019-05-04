@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cn.thinkx.oms.module.sys.mapper.DictionaryMapper">
+	
+	<resultMap type="Dictionary" id="DictionaryltMap">
+		<result column="ID" property="id"/>
+		<result column="CODE" property="code"/>
+		<result column="ISDEFAULT" property="isdefault"/>
+		<result column="SEQ" property="seq"/>
+		<result column="NAME" property="name"/>
+		<result column="STATE" property="state"/>
+		<result column="PID" property="pid"/>
+		<result column="TYPE" property="type"/>
+		<result column="VALUE" property="value"/>
+	</resultMap>
+
+	<sql id="DictionaryColumns">
+		 ID, 
+		 CODE, 
+		 ISDEFAULT, 
+		 SEQ, 
+		 STATE, 
+		 NAME, 
+		 PID, 
+		 TYPE, 
+		 VALUE 	
+	</sql>
+	
+	<select id="getDictionaryById" resultType="String" resultMap="DictionaryltMap">
+		SELECT
+		<include refid="DictionaryColumns" />
+		
+		FROM TB_WEB_DICTIONARY WHERE ID=#{id}
+	</select>
+	
+		<select id="getDictionaryByCode" resultType="String" resultMap="DictionaryltMap">
+		SELECT
+		<include refid="DictionaryColumns" />
+		
+		FROM TB_WEB_DICTIONARY WHERE code=#{code}
+	</select>
+	
+	<insert id="insertDictionary" parameterType="Dictionary" useGeneratedKeys="false" keyProperty="id">
+	   <selectKey resultType="java.lang.String" order="BEFORE" keyProperty="id">  
+			<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getSysDictionaryId" />
+		</selectKey>
+		insert into TB_WEB_DICTIONARY(
+			 ID, 
+			 CODE, 
+			 ISDEFAULT, 
+			 SEQ, 
+			 STATE, 
+			 NAME, 
+			 PID, 
+			 TYPE, 
+			 VALUE 
+		  )values (
+		  	#{id},
+		  	#{code,jdbcType=VARCHAR},
+		  	#{isdefault,jdbcType=VARCHAR},
+		  	#{seq,jdbcType=VARCHAR},
+		  	#{state,jdbcType=VARCHAR},
+		  	#{name,jdbcType=VARCHAR},
+		  	#{pid,jdbcType=VARCHAR},
+		  	#{type,jdbcType=VARCHAR},
+		  	#{value,jdbcType=VARCHAR}
+		  )
+	</insert>
+	
+	 <update id="updateDictionary" parameterType="Dictionary">
+		 UPDATE TB_WEB_DICTIONARY
+			<set>
+				code=#{code,jdbcType=VARCHAR},
+			  	isdefault=#{isdefault,jdbcType=VARCHAR},
+			  	seq=#{seq,jdbcType=VARCHAR},
+			  	state=#{state,jdbcType=VARCHAR},
+			  	name=#{name,jdbcType=VARCHAR},
+			  	pid=#{pid,jdbcType=VARCHAR},
+			  	type=#{type,jdbcType=VARCHAR},
+			  	value=#{value,jdbcType=VARCHAR}
+			</set>
+			WHERE id=#{id}
+	 </update>
+	 
+	<delete id="deleteDictionary" parameterType="java.lang.String" >
+		 DELETE TB_WEB_Dictionary m WHERE  m.ID=#{id}
+	</delete>
+	
+
+	<select id="getDictionaryList" resultType="Dictionary" resultMap="DictionaryltMap">
+		SELECT
+		<include refid="DictionaryColumns" />
+		
+		FROM TB_WEB_DICTIONARY WHERE 1=1
+		
+		<if test="type !=null and type !='' ">
+			AND type=#{type}
+		</if>
+		START WITH pid = 0 CONNECT BY PRIOR ID = pid ORDER siblings BY SEQ
+	</select>
+	
+	<select id="getDictionaryListByPCode" resultType="java.lang.String" resultMap="DictionaryltMap">
+	 SELECT
+		<include refid="DictionaryColumns" />
+		FROM TB_WEB_DICTIONARY WHERE  pid =
+	 	(select id  FROM TB_WEB_DICTIONARY WHERE  code=#{code})
+	 	 AND STATE='0'
+		 ORDER  BY SEQ
+	</select>
+
+</mapper>

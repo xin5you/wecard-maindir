@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.phoneRecharge.mapper.PhoneRechargeMapper">
+
+	<sql id="phoneRechargeColumns">
+		PRO.R_ID,
+		PRO.SUPPLIER_ORDER_NO,
+		PRO.CHANNEL_ORDER_NO,
+		PRO.SUPPLIER,
+		PRO.USER_ID,
+		PRO.PHONE,
+		PRO.TELEPHONE_FACE,
+		PRO.TRANS_AMT,
+		PRO.DISCOUNTS_AMT,
+		PRO.SUPPLIER_AMT,
+		PRO.FLUX_FACE,
+		PRO.GOODS_NO,
+		PRO.TRANS_STAT,
+		PRO.ORDER_TYPE,
+		PRO.REQ_CHANNEL,
+		PRO.NOTIFY_URL,
+		PRO.ATTACH,
+		PRO.RESV1,
+		PRO.RESV2,
+		PRO.RESV3,
+		PRO.RESV4,
+		PRO.RESV5,
+		PRO.RESV6,
+		PRO.DATA_STAT,
+		PRO.REMARKS,
+		PRO.CREATE_USER,
+		PRO.CREATE_TIME,
+		PRO.UPDATE_USER,
+		PRO.UPDATE_TIME,
+		PRO.LOCK_VERSION
+	</sql>
+	
+	<select id="getPhoneRechargeList" parameterType="PhoneRechargeOrder" resultType="PhoneRechargeOrder">
+		SELECT 
+			<include refid="phoneRechargeColumns" />,
+			P.PERSONAL_NAME,
+			P.MOBILE_PHONE_NO
+		FROM TB_PHONE_RECHARGE_ORDER PRO LEFT JOIN TB_PERSON_INF P 
+		ON PRO.USER_ID = P.USER_ID
+		WHERE 1=1
+		<if test="rId !=null and rId !='' ">
+			AND PRO.R_ID = #{rId}
+		</if>
+		<if test="supplierOrderNo !=null and supplierOrderNo !='' ">
+			AND PRO.SUPPLIER_ORDER_NO = #{supplierOrderNo}
+		</if>
+		<if test="channelOrderNo !=null and channelOrderNo !='' ">
+			AND PRO.CHANNEL_ORDER_NO = #{channelOrderNo}
+		</if>
+		<if test="supplier !=null and supplier !='' ">
+			AND PRO.SUPPLIER = #{supplier}
+		</if>
+		<if test="phone !=null and phone !='' ">
+			AND PRO.PHONE = #{phone}
+		</if>
+		<if test="transStat !=null and transStat !='' ">
+			AND PRO.TRANS_STAT = #{transStat}
+		</if>
+		<if test="orderType !=null and orderType !='' ">
+			AND PRO.ORDER_TYPE = #{orderType}
+		</if>
+		<if test="reqChannel !=null and reqChannel !='' ">
+			AND PRO.REQ_CHANNEL = #{reqChannel}
+		</if>
+		<if test="personalName !=null and personalName !='' ">
+			AND P.PERSONAL_NAME LIKE '%' || #{personalName} || '%'
+		</if>
+		<if test="mobilePhoneNo !=null and mobilePhoneNo !='' ">
+			AND P.MOBILE_PHONE_NO = #{mobilePhoneNo}
+		</if>
+		<if test="startTime != null and startTime != ''">
+			and PRO.CREATE_TIME &gt;= to_date(#{startTime}, 'YYYY-MM-DD HH24:MI:SS')
+		</if>
+		<if test="endTime != null  and endTime != ''">
+			and PRO.CREATE_TIME &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+		</if>
+		ORDER BY PRO.CREATE_TIME DESC
+		
+	</select>
+	
+	<select id="getPhoneRechargeListUpload" parameterType="PhoneRechargeOrder" resultType="PhoneRechargeOrderUpload">
+		SELECT 
+			PRO.R_ID,
+			PRO.SUPPLIER_ORDER_NO,
+			PRO.CHANNEL_ORDER_NO,
+			P.PERSONAL_NAME,
+			P.MOBILE_PHONE_NO,
+			PRO.SUPPLIER,
+			PRO.PHONE,
+			PRO.TELEPHONE_FACE,
+			PRO.TRANS_AMT,
+			PRO.DISCOUNTS_AMT,
+			PRO.SUPPLIER_AMT,
+			PRO.FLUX_FACE,
+			PRO.GOODS_NO,
+			PRO.TRANS_STAT,
+			PRO.ORDER_TYPE,
+			PRO.REQ_CHANNEL,
+			PRO.CREATE_TIME
+		FROM TB_PHONE_RECHARGE_ORDER PRO LEFT JOIN TB_PERSON_INF P 
+		ON PRO.USER_ID = P.USER_ID
+		WHERE 1=1
+		<if test="rId !=null and rId !='' ">
+			AND PRO.R_ID = #{rId}
+		</if>
+		<if test="supplierOrderNo !=null and supplierOrderNo !='' ">
+			AND PRO.SUPPLIER_ORDER_NO = #{supplierOrderNo}
+		</if>
+		<if test="channelOrderNo !=null and channelOrderNo !='' ">
+			AND PRO.CHANNEL_ORDER_NO = #{channelOrderNo}
+		</if>
+		<if test="supplier !=null and supplier !='' ">
+			AND PRO.SUPPLIER = #{supplier}
+		</if>
+		<if test="phone !=null and phone !='' ">
+			AND PRO.PHONE = #{phone}
+		</if>
+		<if test="transStat !=null and transStat !='' ">
+			AND PRO.TRANS_STAT = #{transStat}
+		</if>
+		<if test="orderType !=null and orderType !='' ">
+			AND PRO.ORDER_TYPE = #{orderType}
+		</if>
+		<if test="reqChannel !=null and reqChannel !='' ">
+			AND PRO.REQ_CHANNEL = #{reqChannel}
+		</if>
+		<if test="personalName !=null and personalName !='' ">
+			AND P.PERSONAL_NAME LIKE '%' || #{personalName} || '%'
+		</if>
+		<if test="mobilePhoneNo !=null and mobilePhoneNo !='' ">
+			AND P.MOBILE_PHONE_NO = #{mobilePhoneNo}
+		</if>
+		<if test="startTime != null and startTime != ''">
+			and PRO.CREATE_TIME &gt;= to_date(#{startTime}, 'YYYY-MM-DD HH24:MI:SS')
+		</if>
+		<if test="endTime != null  and endTime != ''">
+			and PRO.CREATE_TIME &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+		</if>
+		ORDER BY PRO.CREATE_TIME DESC
+		
+	</select>
+	
+	<select id="getPhoneRechargeByRid" parameterType="String" resultType="PhoneRechargeOrder">
+		SELECT 
+			<include refid="phoneRechargeColumns" />
+		FROM TB_PHONE_RECHARGE_ORDER PRO WHERE PRO.R_ID = #{primaryKey}
+	</select>
+	
+	<update id="updatePhoneRechargeOrder" parameterType="PhoneRechargeOrder">
+		UPDATE TB_PHONE_RECHARGE_ORDER SET 
+		<if test="supplierOrderNo != null and supplierOrderNo != '' ">
+       		SUPPLIER_ORDER_NO = #{supplierOrderNo,jdbcType=VARCHAR},
+        </if>
+        <if test="channelOrderNo != null and channelOrderNo != '' ">
+	       CHANNEL_ORDER_NO = #{channelOrderNo,jdbcType=VARCHAR},
+	    </if>
+	    <if test="transStat != null and transStat != '' ">
+	       TRANS_STAT = #{transStat,jdbcType=VARCHAR},
+	    </if>
+	    <if test="dataStat != null and dataStat != '' ">
+	       DATA_STAT = #{dataStat,jdbcType=VARCHAR},
+	    </if>  
+	       UPDATE_TIME = sysdate,
+	       LOCK_VERSION = LOCK_VERSION+1
+	       WHERE R_ID = #{rId}
+	</update>
+	
+	
+</mapper>

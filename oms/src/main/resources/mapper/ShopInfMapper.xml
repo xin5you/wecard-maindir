@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.merchant.mapper.ShopInfMapper">
+
+	<resultMap type="ShopInf" id="ShopInfResultMap">
+		<result column="SHOP_ID" property="shopId" />
+		<result column="SHOP_CODE" property="shopCode" />
+		<result column="MCHNT_ID" property="mchntId" />
+		<result column="SHOP_NAME" property="shopName" />
+		<result column="SHOP_ADDR" property="shopAddr" />
+		<result column="QR_CODE_URL" property="qrCodeUrl" />
+		<result column="SHOP_TYPE" property="shopType" />
+		<result column="SELL_CARD_FLAG" property="sellCardFlag" />
+		<result column="SHOP_LEVEL" property="shopLevel" />
+		<result column="P_SHOP_CODE" property="pShopCode" />
+
+		<result column="COUNTRY" property="country" />
+		<result column="PROVINCE" property="province" />
+		<result column="CITY" property="city" />
+		<result column="DISTRICT" property="district" />
+		<result column="STREET" property="street" />
+		<result column="LONGITUDE" property="longitude" />
+		<result column="LATITUDE" property="latitude" />
+		<result column="GEOHASH" property="geohash" />
+		<result column="TELEPHONE" property="telephone" />
+		<result column="EVALUATE" property="evaluate" />
+		<result column="BUSINESS_HOURS" property="businessHours" />
+		<result column="DATA_STAT" property="dataStat" />
+		<result column="REMARKS" property="remarks" />
+		<result column="CREATE_USER" property="createUser" />
+		<result column="UPDATE_USER" property="updateUser" />
+		<result column="CREATE_TIME" property="createTime" />
+		<result column="UPDATE_TIME" property="updateTime" />
+		<result column="LOCK_VERSION" property="lockVersion" />
+		<result column="MCHNT_NAME" property="mchntName" />
+		<result column="MCHNT_CODE" property="mchntCode" />
+	</resultMap>
+
+	<sql id="ShopInfColumns">
+		M.SHOP_ID,
+       M.SHOP_CODE,
+       M.MCHNT_ID,
+       M.SHOP_NAME,
+       M.SHOP_ADDR,
+       M.QR_CODE_URL,
+       M.SHOP_TYPE,
+       M.SELL_CARD_FLAG,
+       M.SHOP_LEVEL,
+       M.P_SHOP_CODE,
+       M.COUNTRY,
+       M.PROVINCE,
+       M.CITY,
+       M.DISTRICT,
+       M.STREET,
+       M.LONGITUDE,
+       M.LATITUDE,
+       M.GEOHASH,
+       M.TELEPHONE,
+       M.EVALUATE,
+       M.BUSINESS_HOURS,
+       M.DATA_STAT,
+       M.REMARKS,
+       M.CREATE_USER,
+       M.UPDATE_USER,
+       M.CREATE_TIME,
+       M.UPDATE_TIME,
+       M.LOCK_VERSION
+	</sql>
+
+	<insert id="insertShopInf" parameterType="ShopInf">
+		<selectKey resultType="string" order="BEFORE" keyProperty="shopId">
+			<include
+				refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getCommonId" />
+		</selectKey>
+		INSERT INTO TB_SHOP_INF (
+		SHOP_ID,
+		SHOP_CODE,
+		MCHNT_ID,
+		SHOP_NAME,
+		SHOP_ADDR,
+		QR_CODE_URL,
+		SHOP_TYPE,
+		SELL_CARD_FLAG,
+		P_SHOP_CODE,
+		SHOP_LEVEL,
+		COUNTRY,
+		PROVINCE,
+		CITY,
+		DISTRICT,
+		STREET,
+		LONGITUDE,
+		LATITUDE,
+		GEOHASH,
+		TELEPHONE,
+		EVALUATE,
+		BUSINESS_HOURS,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION
+		) VALUES (
+		#{shopId},
+		#{shopCode,jdbcType=VARCHAR},
+		#{mchntId},
+		#{shopName},
+		#{shopAddr},
+		#{qrCodeUrl,jdbcType=VARCHAR},
+		#{shopType,jdbcType=VARCHAR},
+		#{sellCardFlag,jdbcType=VARCHAR},
+		#{pShopCode,jdbcType=VARCHAR},
+		#{shopLevel,jdbcType=VARCHAR},
+		#{country,jdbcType=VARCHAR},
+		#{province,jdbcType=VARCHAR},
+		#{city,jdbcType=VARCHAR},
+		#{district,jdbcType=VARCHAR},
+		#{street,jdbcType=VARCHAR},
+		#{longitude,jdbcType=VARCHAR},
+		#{latitude,jdbcType=VARCHAR},
+		#{geohash,jdbcType=VARCHAR},
+		#{telephone,jdbcType=VARCHAR},
+		#{evaluate,jdbcType=VARCHAR},
+		#{businessHours,jdbcType=VARCHAR},
+		#{dataStat,jdbcType=VARCHAR},
+		#{remarks,jdbcType=VARCHAR},
+		#{createUser,jdbcType=VARCHAR},
+		#{createUser,jdbcType=VARCHAR},
+		sysdate,
+		sysdate,
+		'0')
+	</insert>
+
+	<select id="getShopInfById" parameterType="java.lang.String"
+		resultMap="ShopInfResultMap">
+		SELECT
+		<include refid="ShopInfColumns" />
+		FROM TB_SHOP_INF m WHERE m.SHOP_ID=#{shopId}
+	</select>
+
+	<select id="getShopInfList" parameterType="ShopInf" resultMap="ShopInfResultMap">
+		SELECT
+		<include refid="ShopInfColumns" />
+		,
+		C.MCHNT_NAME,
+       C.MCHNT_CODE
+  FROM TB_SHOP_INF M, TB_MERCHANT_INF C
+ WHERE M.MCHNT_ID = C.MCHNT_ID
+   AND M.DATA_STAT = '0'
+   AND C.DATA_STAT = '0'
+		<if test="mchntName !=null and mchntName !='' ">
+			AND C.MCHNT_NAME LIKE '%' || #{mchntName} || '%'
+		</if>
+		<if test="mchntCode !=null and mchntCode !='' ">
+			AND C.MCHNT_CODE=#{mchntCode}
+		</if>
+		<if test="mchntId !=null and mchntId !='' ">
+			AND M.MCHNT_ID=#{mchntId}
+		</if>
+		<if test="shopName !=null and shopName !='' ">
+			AND M.SHOP_NAME LIKE '%' || #{shopName} || '%'
+		</if>
+		<if test="shopCode !=null and shopCode !='' ">
+			AND m.SHOP_CODE=#{shopCode}
+		</if>
+		<if test="shopId !=null and shopId !='' ">
+			AND m.SHOP_ID=#{shopId}
+		</if>
+
+		ORDER BY UPDATE_TIME DESC
+	</select>
+
+	<update id="updateShopInf" parameterType="ShopInf">
+		UPDATE TB_SHOP_INF SET
+		MCHNT_ID=#{mchntId,jdbcType=VARCHAR},
+		SHOP_NAME=#{shopName,jdbcType=VARCHAR},
+		SHOP_ADDR=#{shopAddr,jdbcType=VARCHAR},
+		QR_CODE_URL=#{qrCodeUrl,jdbcType=VARCHAR},
+		SHOP_TYPE=#{shopType,jdbcType=VARCHAR},
+		SELL_CARD_FLAG=#{sellCardFlag,jdbcType=VARCHAR},
+		SHOP_LEVEL=#{shopLevel,jdbcType=VARCHAR},
+		P_SHOP_CODE = #{pShopCode,jdbcType=VARCHAR},
+		COUNTRY=#{country,jdbcType=VARCHAR},
+		PROVINCE=#{province,jdbcType=VARCHAR},
+		CITY=#{city,jdbcType=VARCHAR},
+		DISTRICT=#{district,jdbcType=VARCHAR},
+		STREET=#{street,jdbcType=VARCHAR},
+		LONGITUDE=#{longitude,jdbcType=VARCHAR},
+		LATITUDE=#{latitude,jdbcType=VARCHAR},
+		GEOHASH=#{geohash,jdbcType=VARCHAR},
+		TELEPHONE=#{telephone,jdbcType=VARCHAR},
+		EVALUATE=#{evaluate,jdbcType=VARCHAR},
+		BUSINESS_HOURS=#{businessHours,jdbcType=VARCHAR},
+		DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+		REMARKS=#{remarks,jdbcType=VARCHAR},
+		UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+		UPDATE_TIME=sysdate,
+		LOCK_VERSION=LOCK_VERSION+1
+		WHERE SHOP_ID = #{shopId}
+	</update>
+
+	<update id="deleteShopInf" parameterType="string">
+		UPDATE TB_SHOP_INF SET DATA_STAT='1' WHERE SHOP_ID = #{shopId}
+	</update>
+
+	<update id="deleteShopInfByMchntId" parameterType="string">
+		UPDATE TB_SHOP_INF SET DATA_STAT='1' WHERE MCHNT_ID = #{mchntId}
+	</update>
+	
+    <select id="getShopInfByCode" parameterType="java.lang.String"
+		resultMap="ShopInfResultMap">
+		SELECT
+		<include refid="ShopInfColumns" />
+		FROM TB_SHOP_INF m WHERE m.DATA_STAT='0' AND m.SHOP_CODE=#{pShopCode}
+	</select>
+	
+	<select id="getShopInfListFirstLevel"  parameterType="java.lang.String" resultMap="ShopInfResultMap">
+		SELECT
+		<include refid="ShopInfColumns" />
+		FROM TB_SHOP_INF m WHERE m.DATA_STAT='0' AND m.SHOP_LEVEL = 1 
+		<if test="_parameter !=null and _parameter !='' ">
+			AND m.MCHNT_ID=#{_parameter}
+		</if>
+			ORDER BY UPDATE_TIME DESC
+	</select>
+	
+	<select id="getShopInfListByPShopCode"  parameterType="java.lang.String" resultMap="ShopInfResultMap">
+		SELECT
+		<include refid="ShopInfColumns" />
+			FROM TB_SHOP_INF m WHERE m.DATA_STAT='0' AND m.P_SHOP_CODE = #{shopCode}
+	</select>
+
+
+<select id="getShopInfListByMchntCode" parameterType="String" resultMap="ShopInfResultMap">
+			SELECT
+			<include refid="ShopInfColumns" />
+			,
+			C.MCHNT_NAME,
+	       C.MCHNT_CODE
+			  FROM TB_SHOP_INF M, TB_MERCHANT_INF C
+			 WHERE M.MCHNT_ID = C.MCHNT_ID
+			   AND M.DATA_STAT = '0'
+			   AND C.DATA_STAT = '0'
+			   AND M.SHOP_LEVEL = '1'
+			   AND M.P_SHOP_CODE IS NULL
+			   AND C.MCHNT_CODE=#{mchntCode}
+	</select>
+</mapper>

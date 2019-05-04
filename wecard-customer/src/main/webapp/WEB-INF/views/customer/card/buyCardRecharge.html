@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!--通用媒体查询-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+<title>购卡充值</title>
+    <#include "../../common/wecardHeader.html">
+    <script type="text/javascript" src="${s.base}/static/js/module/card/buyCardRecharge.js?v=${s.version}"></script>
+</head>
+<body style="">
+<input id="mchntCode" type="hidden" value="${merchantInfo.mchntCode!}"/>
+<input id="commodityCode" type="hidden" value="${cardCommodity.commodityCode!}"/>
+
+<!-- 卡包支付 -->
+
+<!-- 确认买单 -->
+
+<div class="hkb_confirm_seller">
+    <!-- 店铺信息-->
+    <div class="hkb_confirm">
+        <div class="confirm_seller">
+            <img src="${merchantInfo.brandLogo}">
+        </div>
+        <div class="confirm_text">${merchantInfo.mchntName !}</div>
+    </div>
+    <!-- 付款金额 -->
+    <div class="hkb_confirm_money">
+        <div class="confirm_money_title">支付金额（元）</div>
+        <div class="confirm_money_text">${cardCommodity.commodityPrice !}</div>
+    </div>
+    <!-- 购买信息-->
+    <div class="hkb_imf">
+        <p>&#x5546;&#x54C1;&#x4FE1;&#x606F;</p>
+        <div class="hkb_alignment_center">
+            <div>${cardCommodity.commodityName !}</div>
+            <div>x1</div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<!--支付方式-->
+<div class="hkb_pay_icon">
+    <img src="${s.base}/static/images/xin.png">
+    <span>支付方式</span>
+</div>
+
+
+<div class="confirm_bill">
+
+    <div class="pay_box">
+        <!-- 微信支付-->
+        <label class="pay_mode hkb_alignment_center">
+            <div class="confirm_mode_seller ">
+                <img src="${s.base}/static/images/wechat.png">
+                <span class="confirm_text">微信支付</span>
+            </div>
+            <input type="checkbox" class="confirm_choose" value="wechatPay" name = "payType" checked>
+        </label>
+    </div>
+</div>
+<!-- 下一步-->
+<div class="confirm_next"  >
+    <a class="href=&quot;" id="confirmPayBtn" name="submit" href="#"><span>确认支付</span></a>
+</div>
+<script>addEventListener('load',function(){
+    //选择支付方式
+    confirmChoose.inputChoose();
+
+})
+</script>
+</body>
+</html>

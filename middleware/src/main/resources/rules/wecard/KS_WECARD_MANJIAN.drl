@@ -1,0 +1,19 @@
+// package的名字是随意的，不必必须对应物理路径
+//跟java的package的概念不同，这里只是逻辑上的一种区分
+//同样的package下定义的function和query等可以直接使用。
+package discount
+
+no-loop
+
+import com.cn.thinkx.biz.drools.model.PaymentInfo;
+
+rule buy_X_get_Y_reduction // 满减优惠活动
+	lock-on-active true
+	salience 99
+    when
+        $o : PaymentInfo( inMoney>=condition, x:inMoney, y:discount);
+    then
+         $o.setOutMoney(x - y);
+         update($o);
+end
+

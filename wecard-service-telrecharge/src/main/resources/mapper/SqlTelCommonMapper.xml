@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wecard.facade.telrecharge.mapper.SqlTelCommonMapper">
+		
+	<sql id="getTelCommonId">
+     			select to_char(sysdate, 'YYYYMMDDHHMISS') || to_char(ismngdb.SEQ_TB_TEL_COMMON_ORDER_INF.nextval, 'fm00000000') as id from dual
+	</sql>
+</mapper>

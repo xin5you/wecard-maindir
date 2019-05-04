@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.thinkx.oms.module.merchant.mapper.TransLogMapper">
+
+	<sql id="TransLogColumns">
+		tl.TXN_PRIMARY_KEY,
+		tl.SETTLE_DATE,
+		tl.ORG_TXN_PRIMARY_KEY,
+		tl.DMS_RELATED_KEY,
+		tl.ORG_DMS_RELATED_KEY,
+		tl.TRANS_ID,
+		tl.TRANS_ST,
+		tl.TERM_CODE,
+		tl.SHOP_CODE,
+		tl.MCHNT_CODE,
+		tl.INS_CODE,
+		tl.RESP_CODE,
+		tl.PRI_ACCT_NO,
+		tl.CARD_NO,
+		tl.USER_NAME,
+		tl.PRODUCT_CODE,
+		tl.TRANS_AMT,
+		tl.ORG_TRANS_AMT,
+		tl.TRANS_CURR_CD,
+		tl.CARD_ATTR,
+		tl.TRANS_CHNL,
+		tl.TRANS_FEE,
+		tl.TRANS_FEE_TYPE,
+		tl.TFR_IN_ACCT_NO,
+		tl.TFR_OUT_ACCT_NO,
+		tl.ADDITIONAL_INFO,
+		tl.REMARKS,
+		tl.CREATE_TIME,
+		tl.UPDATE_TIME
+	</sql>
+
+	<select id="getTransLogCurByMchntCode" parameterType="TransInf" resultType="TransLog">
+		SELECT 
+			<include refid="TransLogColumns" />,
+			il.DMS_RELATED_KEY AS REFERENCE_NO,
+			il.CREATE_TIME AS TRANS_TIME,
+			m.MCHNT_NAME,
+			s.SHOP_NAME,
+			p.PERSONAL_NAME AS PERSON_NAME
+		FROM TB_TRANS_LOG${tableNum} tl
+		INNER JOIN TB_INTFACE_TRANS_LOG${tableNum} il ON il.INTERFACE_PRIMARY_KEY=tl.DMS_RELATED_KEY AND tl.TRANS_ID=il.TRANS_ID
+		LEFT JOIN TB_MERCHANT_INF m ON tl.MCHNT_CODE=m.MCHNT_CODE
+       	LEFT JOIN TB_SHOP_INF s ON tl.SHOP_CODE=s.SHOP_CODE
+        LEFT JOIN Tb_Account_Inf ai on ai.ACCOUNT_NO = tl.pri_acct_no
+        LEFT JOIN TB_USER_INF u ON  u.USER_ID=ai.USER_ID
+        LEFT JOIN TB_PERSON_INF p ON p.PERSONAL_ID = ai.PERSONAL_ID
+		WHERE 1=1 
+		<if test="accHkbMchntNo !=null and accHkbMchntNo !='' ">
+			AND (tl.MCHNT_CODE IS NULL or tl.MCHNT_CODE  != #{accHkbMchntNo})
+		</if>
+		<if test="mchntName !=null and mchntName !='' ">
+			AND m.MCHNT_NAME LIKE '%' || #{mchntName} || '%'
+		</if>
+		<if test="mchntCode !=null and mchntCode !='' ">
+			AND tl.MCHNT_CODE=#{mchntCode}
+		</if>
+		<if test="shopName !=null and shopName !='' ">
+			AND s.SHOP_NAME LIKE '%' || #{shopName} || '%'
+		</if>
+		<if test="userName !=null and userName !='' ">
+			AND p.PERSONAL_NAME LIKE '%' || #{userName} || '%'
+		</if>
+		<if test="shopCode !=null and shopCode !='' ">
+			AND tl.SHOP_CODE=#{shopCode}
+		</if>
+		
+		<if test="channelCode !=null and channelCode != '' ">
+			and  tl.TRANS_CHNL in 
+			<foreach collection="channelCode"  index="index" item="item"  open="(" separator="," close=")" >
+				${item}
+			</foreach>
+		</if>
+		
+		<if test="transType !=null and transType !='' ">
+			AND tl.TRANS_ID=#{transType}
+		</if>
+		<if test="startTime != null and startTime != ''">
+            AND il.CREATE_TIME &gt;= to_date(#{startTime}, 'YYYY-MM-DD HH24:MI:SS')
+        </if>
+        <if test="endTime != null  and endTime != ''">
+           	AND il.CREATE_TIME &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+        </if>
+		ORDER BY TRANS_TIME DESC
+	</select>
+	
+	<select id="getTransLogHisByMchntCode" parameterType="TransInf" resultType="TransLog">
+		SELECT 
+			<include refid="TransLogColumns" />,
+			il.DMS_RELATED_KEY AS REFERENCE_NO,
+			il.CREATE_TIME AS TRANS_TIME,
+			m.MCHNT_NAME,
+			s.SHOP_NAME,
+			p.PERSONAL_NAME AS PERSON_NAME
+		FROM TB_TRANS_LOG_HIS tl
+				INNER JOIN TB_INTFACE_TRANS_LOG_HIS il ON il.INTERFACE_PRIMARY_KEY = tl.DMS_RELATED_KEY  AND tl.TRANS_ID =il.TRANS_ID
+                  LEFT JOIN TB_MERCHANT_INF m ON tl.MCHNT_CODE = m.MCHNT_CODE
+                  LEFT JOIN TB_SHOP_INF s ON tl.SHOP_CODE = s.SHOP_CODE
+                  LEFT JOIN Tb_Account_Inf ai on ai.ACCOUNT_NO = tl.pri_acct_no
+                  LEFT JOIN TB_USER_INF u ON  u.USER_ID=ai.USER_ID
+                  LEFT JOIN TB_PERSON_INF p ON p.PERSONAL_ID = ai.PERSONAL_ID
+		WHERE 1=1 
+		<if test="accHkbMchntNo !=null and accHkbMchntNo !='' ">
+			AND (tl.MCHNT_CODE IS NULL or tl.MCHNT_CODE  != #{accHkbMchntNo})
+		</if>
+		<if test="mchntName !=null and mchntName !='' ">
+			AND m.MCHNT_NAME LIKE '%' || #{mchntName} || '%'
+		</if>
+		<if test="mchntCode !=null and mchntCode !='' ">
+			AND tl.MCHNT_CODE=#{mchntCode}
+		</if>
+		<if test="shopName !=null and shopName !='' ">
+			AND s.SHOP_NAME LIKE '%' || #{shopName} || '%'
+		</if>
+		<if test="userName !=null and userName !='' ">
+			AND p.PERSONAL_NAME LIKE '%' || #{userName} || '%'
+		</if>
+		<if test="shopCode !=null and shopCode !='' ">
+			AND tl.SHOP_CODE=#{shopCode}
+		</if>
+		
+		<if test="channelCode !=null and channelCode != '' ">
+			and  tl.TRANS_CHNL in 
+			<foreach collection="channelCode"  index="index" item="item"  open="(" separator="," close=")" >
+				${item}
+			</foreach>
+		</if>
+		
+		<if test="transType !=null and transType !='' ">
+			AND tl.TRANS_ID=#{transType}
+		</if>
+		<if test="startTime != null and startTime != ''">
+            AND il.CREATE_TIME &gt;= to_date(#{startTime}, 'YYYY-MM-DD HH24:MI:SS')
+        </if>
+        <if test="endTime != null  and endTime != ''">
+           	AND il.CREATE_TIME &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+        </if>
+		ORDER BY TRANS_TIME DESC
+	</select>
+	
+	<select id="getCurLogNum" resultType="string">
+		SELECT cur_log_num FROM TB_CTRL_ST WHERE rownum &gt;= 0 AND rownum &lt;=1
+    </select>
+
+	<select id="getTransLogUploadCurByMchntCode" parameterType="TransInf" resultType="TransLogUpload">
+		SELECT 
+			tl.DMS_RELATED_KEY,
+			tl.SETTLE_DATE,
+			tl.TRANS_ID,
+			tl.RESP_CODE,
+			tl.PRI_ACCT_NO,
+			tl.CARD_NO,
+			tl.TRANS_AMT,
+			tl.TRANS_CHNL,
+			il.DMS_RELATED_KEY AS REFERENCE_NO,
+			il.CREATE_TIME AS TRANS_TIME,
+			m.MCHNT_NAME,
+			s.SHOP_NAME,
+			p.PERSONAL_NAME AS PERSON_NAME
+		FROM TB_TRANS_LOG${tableNum} tl
+		INNER JOIN TB_INTFACE_TRANS_LOG${tableNum} il ON il.INTERFACE_PRIMARY_KEY=tl.DMS_RELATED_KEY AND tl.TRANS_ID=il.TRANS_ID
+		LEFT JOIN TB_MERCHANT_INF m ON tl.MCHNT_CODE=m.MCHNT_CODE
+       	LEFT JOIN TB_SHOP_INF s ON tl.SHOP_CODE=s.SHOP_CODE
+        LEFT JOIN Tb_Account_Inf ai on ai.ACCOUNT_NO = tl.pri_acct_no
+        LEFT JOIN TB_USER_INF u ON  u.USER_ID=ai.USER_ID
+        LEFT JOIN TB_PERSON_INF p ON p.PERSONAL_ID = ai.PERSONAL_ID
+		WHERE 1=1 
+		<if test="accHkbMchntNo !=null and accHkbMchntNo !='' ">
+			AND (tl.MCHNT_CODE IS NULL or tl.MCHNT_CODE  != #{accHkbMchntNo})
+		</if>
+		<if test="mchntName !=null and mchntName !='' ">
+			AND m.MCHNT_NAME LIKE '%' || #{mchntName} || '%'
+		</if>
+		<if test="mchntCode !=null and mchntCode !='' ">
+			AND tl.MCHNT_CODE=#{mchntCode}
+		</if>
+		<if test="shopName !=null and shopName !='' ">
+			AND s.SHOP_NAME LIKE '%' || #{shopName} || '%'
+		</if>
+		<if test="userName !=null and userName !='' ">
+			AND p.PERSONAL_NAME LIKE '%' || #{userName} || '%'
+		</if>
+		<if test="shopCode !=null and shopCode !='' ">
+			AND tl.SHOP_CODE=#{shopCode}
+		</if>
+		
+		<if test="channelCode !=null and channelCode != '' ">
+			and  tl.TRANS_CHNL in 
+			<foreach collection="channelCode"  index="index" item="item"  open="(" separator="," close=")" >
+				${item}
+			</foreach>
+		</if>
+		
+		<if test="transType !=null and transType !='' ">
+			AND tl.TRANS_ID=#{transType}
+		</if>
+		<if test="startTime != null and startTime != ''">
+            AND il.CREATE_TIME &gt;= to_date(#{startTime}, 'YYYY-MM-DD HH24:MI:SS')
+        </if>
+        <if test="endTime != null  and endTime != ''">
+           	AND il.CREATE_TIME &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+        </if>
+		ORDER BY TRANS_TIME DESC
+	</select>
+	
+	<select id="getTransLogUploadHisByMchntCode" parameterType="TransInf" resultType="TransLogUpload">
+		SELECT 
+			tl.DMS_RELATED_KEY,
+			tl.SETTLE_DATE,
+			tl.TRANS_ID,
+			tl.RESP_CODE,
+			tl.PRI_ACCT_NO,
+			tl.CARD_NO,
+			tl.TRANS_AMT,
+			tl.TRANS_CHNL,
+			il.DMS_RELATED_KEY AS REFERENCE_NO,
+			il.CREATE_TIME AS TRANS_TIME,
+			m.MCHNT_NAME,
+			s.SHOP_NAME,
+			p.PERSONAL_NAME AS PERSON_NAME
+		FROM TB_TRANS_LOG_HIS tl
+				INNER JOIN TB_INTFACE_TRANS_LOG_HIS il ON il.INTERFACE_PRIMARY_KEY = tl.DMS_RELATED_KEY  AND tl.TRANS_ID =il.TRANS_ID
+                  LEFT JOIN TB_MERCHANT_INF m ON tl.MCHNT_CODE = m.MCHNT_CODE
+                  LEFT JOIN TB_SHOP_INF s ON tl.SHOP_CODE = s.SHOP_CODE
+                  LEFT JOIN Tb_Account_Inf ai on ai.ACCOUNT_NO = tl.pri_acct_no
+                  LEFT JOIN TB_USER_INF u ON  u.USER_ID=ai.USER_ID
+                  LEFT JOIN TB_PERSON_INF p ON p.PERSONAL_ID = ai.PERSONAL_ID
+		WHERE 1=1 
+		<if test="accHkbMchntNo !=null and accHkbMchntNo !='' ">
+			AND (tl.MCHNT_CODE IS NULL or tl.MCHNT_CODE  != #{accHkbMchntNo})
+		</if>
+		<if test="mchntName !=null and mchntName !='' ">
+			AND m.MCHNT_NAME LIKE '%' || #{mchntName} || '%'
+		</if>
+		<if test="mchntCode !=null and mchntCode !='' ">
+			AND tl.MCHNT_CODE=#{mchntCode}
+		</if>
+		<if test="shopName !=null and shopName !='' ">
+			AND s.SHOP_NAME LIKE '%' || #{shopName} || '%'
+		</if>
+		<if test="userName !=null and userName !='' ">
+			AND p.PERSONAL_NAME LIKE '%' || #{userName} || '%'
+		</if>
+		<if test="shopCode !=null and shopCode !='' ">
+			AND tl.SHOP_CODE=#{shopCode}
+		</if>
+		
+		<if test="channelCode !=null and channelCode != '' ">
+			and  tl.TRANS_CHNL in 
+			<foreach collection="channelCode"  index="index" item="item"  open="(" separator="," close=")" >
+				${item}
+			</foreach>
+		</if>
+		
+		<if test="transType !=null and transType !='' ">
+			AND tl.TRANS_ID=#{transType}
+		</if>
+		<if test="startTime != null and startTime != ''">
+            AND il.CREATE_TIME &gt;= to_date(#{startTime}, 'YYYY-MM-DD HH24:MI:SS')
+        </if>
+        <if test="endTime != null  and endTime != ''">
+           	AND il.CREATE_TIME &lt;= to_date(#{endTime}, 'YYYY-MM-DD HH24:MI:SS')
+        </if>
+		ORDER BY TRANS_TIME DESC
+	</select>
+</mapper>

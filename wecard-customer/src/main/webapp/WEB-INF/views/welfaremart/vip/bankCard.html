@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<#include "../../common/wecardHeader.html">
+    <meta charset="UTF-8">
+    <title>我的银行卡</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no, email=no">
+	<link rel="stylesheet" href="${s.base}/static/css/hkb_welfare.min.css?v=${s.version}" />
+</head>
+<body>
+	<!--知了企服-我的卡包-->
+	<div class="card_bag_list">
+	    <!--卡列表-->
+	    <#if userBankList ??&& userBankList?size gt 0>
+			<#list userBankList as userBank>
+			    <div class="bank_card_main">
+			        <div class="bank_card_plate">
+			            <div class="bank_card_list">
+                			<div class="bank_name_plate">
+                    			<p>${userBank.bankName!}</p>
+                    			<p>${userBank.bankTypeName!}</p>
+                    			<p><span>**** **** **** </span><span>${userBank.bankNum!}</span></p>
+                			</div>
+                			<div class="bank_icon_img">
+                    			<img src="${userBank.logo}">
+                			</div>
+			            </div>
+			        </div>
+			        <div class="bank_card_btn">
+			            <button bankNo="${userBank.bankNo!}" class="delete_all">删除</button>
+			            <button bankNo="${userBank.bankNo!}" class="hide_btn">设为默认</button>
+			        </div>
+			        <#if userBank.isdefault == '0'>
+			        	<!--默认标签-->
+        				<div class="bank_default_img"></div>
+			        </#if>
+			    </div>
+	    	</#list>
+		</#if>
+	</div>
+	<div>
+		<div class="add_card_plate">
+		    <a class="add_bank_card">+ 添加</a>
+		</div>
+		<div class="add_card_empty"></div>
+	</div>
+	
+	<script src="${s.base}/static/js/common/fastclick.min.js"></script>
+	<script src="${s.base}/static/js/common/hkb_welfare.min.js"></script>
+	<script src="${s.base}/static/js/module/welfaremart/vip/bankCard.js"></script>
+	<script>
+		bankCard.actionCard();
+	    
+	    var hideDelete=document.getElementsByClassName('hide_btn'); //设为默认
+	    var hideHeihgt=document.getElementsByClassName('delete_all'); //删除
+	    //点击删除隐藏，以及弹出弹框
+	    for (var i=0;i<hideDelete.length;i++) {
+	        hideHeihgt[i].addEventListener('click',function () {
+	        	var bankNo = $(this).attr('bankNo');
+	            var hideShow=this.parentNode.parentNode;
+	            hideShow.className = 'bank_card_main';
+	            jfShowTips.dialogShow({
+	                "mainText": "确认删除该银行卡？",
+	                "minText": "  ",
+	                "hasCheck": false,
+	                "hasCancel": true,
+	                "checkFn": function () {
+	                    //jfShowTips.dialogRemove();//弹出框消失
+	                    $.ajax({
+							url : CONETXT_PATH + '/welfareMart/isWithdrawBlacklistInf.html',
+							type : 'post',
+							dataType : "json",
+							data : {},
+							success : function(data) {
+								if (data) {
+									$.ajax({
+				        				url : CONETXT_PATH + '/welfareMart/deleteBankCard.html',
+				        				type : 'post',
+				        				dataType : "json",
+				        				data : {
+				        					bankNo : bankNo
+				        				},
+				        				success : function(data) {
+				        					jfShowTips.dialogRemove();
+				        					if (data) {
+				        						location.href = CONETXT_PATH + '/welfareMart/toBankCardList.html';
+				        					} else {
+				        						jfShowTips.toastShow({'text' : '网络异常，请稍后再试'});
+				        					}
+				        				}
+				        			});
+								} else {
+									jfShowTips.toastShow({'text' : '对不起，您暂时无法操作'});
+									return false;
+								}
+							},
+							error : function () {
+								jfShowTips.toastShow({'text' : '对不起，您暂时无法操作'});
+								return false;
+							}
+						});
+	                }
+	            })
+	        },false)
+	    }
+	    //点击设为默认隐藏，以及弹出弹框
+	    for (var i=0;i<hideDelete.length;i++) {
+	        hideDelete[i].addEventListener('click',function () {
+	        	var bankNo = $(this).attr('bankNo');
+	            var hideShow=this.parentNode.parentNode;
+	            hideShow.className = 'bank_card_main';
+	            jfShowTips.dialogShow({
+	                "mainText": "确认设置该卡为默认？",
+	                "minText": "  ",
+	                "hasCheck": false,
+	                "hasCancel": true,
+	                "checkFn": function () {
+	                	//jfShowTips.dialogRemove();//弹出框消失
+	                	$.ajax({
+							url : CONETXT_PATH + '/welfareMart/isWithdrawBlacklistInf.html',
+							type : 'post',
+							dataType : "json",
+							data : {},
+							success : function(data) {
+								if (data) {
+									$.ajax({
+				        				url : CONETXT_PATH + '/welfareMart/isDefaultBankCard.html',
+				        				type : 'post',
+				        				dataType : "json",
+				        				data : {
+				        					bankNo : bankNo
+				        				},
+				        				success : function(data) {
+				        					jfShowTips.dialogRemove();
+				        					if (data) {
+				        						location.href = CONETXT_PATH + '/welfareMart/toBankCardList.html';
+				        					} else {
+				        						jfShowTips.toastShow({'text' : '网络异常，请稍后再试'});
+				        					}
+				        				}
+				        			});
+								} else {
+									jfShowTips.toastShow({'text' : '对不起，您暂时无法操作'});
+									return false;
+								}
+							},
+							error : function () {
+								jfShowTips.toastShow({'text' : '对不起，您暂时无法操作'});
+								return false;
+							}
+						});
+	                }
+	            })
+	        },false)
+	    }
+	    //点击删除，删除当前银行卡
+	   //var deltetCard=document.getElementsByClassName('delete_all');
+	    //for (var i=0;i<deltetCard.length;i++) {
+	        //deltetCard[i].addEventListener('click',function () {
+	            //var noneCard=this.parentNode.parentNode;
+	            //console.log(noneCard)
+	            //document.getElementsByClassName('card_bag_list')[0].removeChild(noneCard);
+	        //},false)
+	    //}
+	</script>
+</body>
+</html>

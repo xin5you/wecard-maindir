@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<#include "../../common/wecardHeader.html">
+    <meta charset="UTF-8">
+    <title>交易明细</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no, email=no">
+	<link rel="stylesheet" href="${s.base}/static/css/hkb_welfare.min.css?v=${s.version}" />
+</head>
+<body>
+	<!--知了企服-明细列表-->
+	<div>
+		<#if orderList ??&& orderList?size gt 0>
+			<#list orderList as order>
+			    <div class="transaction_details_plate">
+			        <p>
+			        	<span>${order.productName!}</span>
+			        	<span>${order.num!}张</span>
+			        </p>
+			        <p>
+				        <span>订单号: ${order.orderId!}</span>
+			        </p>
+			        <p>
+				        <span>${order.createTime?string("yyyy-MM-dd HH:mm:ss")}</span>
+				        <span>${order.stat!}</span>
+			        </p>
+			    </div>
+			</#list>
+	    </#if>
+	    <!-- <div class="transaction_details_plate">
+	        <p><span>三网通话费100元</span><span>10张</span></p>
+	        <p><span>订单号</span><span>789098</span></p>
+	        <p><span>2018-06-18 16:56:59</span><span class="orange_deep_font">油卡兑换</span></p>
+	    </div>
+	    <div class="transaction_details_plate">
+	        <p><span>三网通话费100元</span><span>10张</span></p>
+	        <p><span>订单号</span><span>123789</span></p>
+	        <p><span>2018-06-18 16:56:59</span><span class="blue_font">话费卡兑换</span></p>
+	    </div> -->
+	</div>
+
+	<!--预加载效果-->
+	<div class="loading_page">
+	    <div class="show_loading">
+	        <main>
+	            <div class="loader">
+	                <div class="loader-inner line-scale">
+	                    <div></div>
+	                    <div></div>
+	                    <div></div>
+	                    <div></div>
+	                    <div></div>
+	                </div>
+	            </div>
+	        </main>
+	        <p>提交中</p>
+	    </div>
+	</div>
+	
+	<script src="${s.base}/static/js/common/fastclick.min.js?v=${s.version}"></script>
+	<script src="${s.base}/static/js/common/hkb_welfare.min.js?v=${s.version}"></script>
+	<script>
+		/* jfShowTips.loadingShow({
+			'text' : '加载中',
+			'thisNode':loadInnerHtml.node.loading,//loading动画
+			'thisClass':'small'//loading动画为'small'
+		});
+		window.onload=function(){
+	 		jfShowTips.loadingRemove();
+	 	} */
+		//显示加载中
+		loadingChange.showLoading();
+	 	//隐藏加载中
+	 	window.onload=function(){
+	 		loadingChange.hideLoading();
+		}
+	    //加载中组件js
+	    /* document.addEventListener('DOMContentLoaded', function () {
+	        document.querySelector('main').className += 'loaded';
+	        setTimeout(function () {
+	            document.getElementsByClassName('show_loading')[0].style.display = 'none';
+	        },2000)
+    	}); */
+	</script>
+</body>
+</html>

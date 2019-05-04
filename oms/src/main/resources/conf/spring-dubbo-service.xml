@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">     
+	
+	<!-- 服务消费者应用名称 -->
+	<dubbo:application name="dubbo_oms" />
+	<!-- 服务消费者缺省值配置 -->
+	<dubbo:consumer check="false" timeout="2000" />
+	<!-- 使用zookeeper注册中心暴露服务地址 -->
+	<dubbo:registry  address="${wecard.dubbo.registry.address}"/>
+	
+	<!-- 要引用的服务 -->
+	<dubbo:reference id="wxDroolsExcutor" interface="com.cn.thinkx.service.drools.WxDroolsExcutor" cluster="failfast">
+		<dubbo:method name="getRechargeDiscount" timeout="60000" retries="0"/>
+	</dubbo:reference>
+	
+	<dubbo:reference id="java2TxnBusinessFacade" interface="com.cn.thinkx.service.txn.Java2TxnBusinessFacade" cluster="failfast">
+		<dubbo:method name="merchantAccountOpeningITF" timeout="10000" retries="0"/>
+		<dubbo:method name="customerAccountOpeningITF" timeout="10000" retries="0"/>
+		<dubbo:method name="customerPasswordResetITF" timeout="3000" retries="3" />
+		<dubbo:method name="rechargeTransactionITF" timeout="5000" retries="0" />
+		<dubbo:method name="consumeTransactionITF" timeout="3000" retries="0" mock="true" />
+		<dubbo:method name="merchantWithdrawITF" timeout="5000" retries="0"/>
+		<dubbo:method name="consumeRefundITF" timeout="10000" retries="0" mock="true" />
+		<dubbo:method name="transExceptionQueryITF" timeout="10000" retries="2"/>
+		<dubbo:method name="quickConsumeTransactionITF" timeout="3000" retries="0"  mock="true"/>
+		
+	</dubbo:reference>
+	
+	<dubbo:reference id="hkbTxnFacade" interface="com.cn.thinkx.facade.service.HKBTxnFacade" cluster="failfast">
+		<dubbo:method name="customerAccountOpeningITF" timeout="10000" retries="0"/>
+		<dubbo:method name="customerCardOpeningITF" timeout="10000" retries="0"/>
+		<dubbo:method name="customerAccountQueryITF" timeout="20000" retries="2"/>
+		<dubbo:method name="rechargeTransactionITF" timeout="10000" retries="0" mock="true" />
+		<dubbo:method name="cardBalanceQueryITF" timeout="20000" retries="2"/>
+		<dubbo:method name="hkbConsumeTransactionITF" timeout="10000" retries="0"/>
+		<dubbo:method name="quickPaymentTransactionITF" timeout="10000" retries="0" mock="true" />
+		<dubbo:method name="shopListQueryITF" timeout="50000" retries="2"/>
+		<dubbo:method name="shopInfoQueryITF" timeout="20000" retries="2"/>
+		<dubbo:method name="mchtSellingCardListQueryITF" timeout="30000" retries="2"/>
+		<dubbo:method name="cardTransDetailQueryITF" timeout="30000" retries="2"/>
+		<dubbo:method name="customerAccListQueryITF" timeout="30000" retries="0"/>
+		<dubbo:method name="merchantInfoQueryITF" timeout="30000" retries="2"/>
+		<dubbo:method name="transExceptionQueryITF" timeout="30000" retries="2"/>
+		<dubbo:method name="getShopInfoQueryITF" timeout="5000" retries="2"/>
+	</dubbo:reference>
+	
+	<dubbo:reference id="integrationPayFacade" interface="com.cn.thinkx.facade.service.IntegrationPayFacade" cluster="failfast">
+		<dubbo:method name="refundTransactionITF" timeout="5000" retries="3"/>
+	</dubbo:reference>
+	
+	
+	<!-- 分销商 -->
+	<dubbo:reference id="telChannelInfFacade" interface="com.cn.thinkx.wecard.facade.telrecharge.service.TelChannelInfFacade" cluster="failfast">
+		<dubbo:method name="saveTelChannelInf" timeout="5000" retries="0"/>
+		<dubbo:method name="updateTelChannelInf" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelChannelInfById" timeout="5000" retries="3"/>
+		<dubbo:method name="deleteTelChannelInfById" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelChannelInfList" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelChannelInfPage" timeout="5000" retries="3"/>
+	</dubbo:reference>
+	
+	<!-- 分销商备付金 -->
+	<dubbo:reference id="telChannelReserveDetailFacade" interface="com.cn.thinkx.wecard.facade.telrecharge.service.TelChannelReserveDetailFacade" cluster="failfast">
+		<dubbo:method name="saveTelChannelReserveDetail" timeout="5000" retries="0"/>
+		<dubbo:method name="updateTelChannelReserveDetail" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelChannelReserveDetailById" timeout="5000" retries="3"/>
+		<dubbo:method name="deleteTelChannelReserveDetailById" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelChannelReserveDetailList" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelChannelReserveDetailPage" timeout="5000" retries="3"/>
+		<dubbo:method name="updateTelChannelInfReserve" timeout="5000" retries="3"/>
+	</dubbo:reference>
+	
+	<!-- 地区维护 -->
+	<dubbo:reference id="telChannelAreaInfFacade" interface="com.cn.thinkx.wecard.facade.telrecharge.service.TelChannelAreaInfFacade" cluster="failfast">
+		<dubbo:method name="saveTelChannelAreaInf" timeout="10000" retries="0"/>
+		<dubbo:method name="updateTelChannelAreaInf" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelAreaInfById" timeout="10000" retries="3"/>
+		<dubbo:method name="deleteTelChannelAreaInfById" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelAreaInfList" timeout="10000" retries="3"/>
+	</dubbo:reference>
+	
+	<!-- 费率 -->
+	<dubbo:reference id="telChannelItemListFacade" interface="com.cn.thinkx.wecard.facade.telrecharge.service.TelChannelItemListFacade" cluster="failfast">
+		<dubbo:method name="saveTelChannelItemList" timeout="10000" retries="0"/>
+		<dubbo:method name="updateTelChannelItemList" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelItemListById" timeout="10000" retries="3"/>
+		<dubbo:method name="deleteTelChannelItemListById" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelItemList" timeout="10000" retries="3"/>
+	</dubbo:reference>
+	
+	<!-- 分销商订单 -->
+	<dubbo:reference id="telChannelOrderInfFacade" interface="com.cn.thinkx.wecard.facade.telrecharge.service.TelChannelOrderInfFacade" cluster="failfast">
+		<dubbo:method name="saveTelChannelOrderInf" timeout="5000" retries="0"/>
+		<dubbo:method name="updateTelChannelOrderInf" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelChannelOrderInfById" timeout="5000" retries="3"/>
+		<dubbo:method name="deleteTelChannelOrderInfById" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelChannelOrderInfList" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelChannelOrderInfPage" timeout="5000" retries="3"/>
+	</dubbo:reference>
+	
+	<!-- 产品 -->
+	<dubbo:reference id="telChannelProductInfFacade" interface="com.cn.thinkx.wecard.facade.telrecharge.service.TelChannelProductInfFacade" cluster="failfast">
+		<dubbo:method name="saveTelChannelProductInf" timeout="5000" retries="0"/>
+		<dubbo:method name="updateTelChannelProductInf" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelChannelProductInfById" timeout="5000" retries="3"/>
+		<dubbo:method name="deleteTelChannelProductInfById" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelChannelProductInfList" timeout="5000" retries="3"/>
+		<dubbo:method name="getChannelProductByItemId" timeout="5000" retries="3"/>
+		<dubbo:method name="getChannelProductListByChannelId" timeout="5000" retries="3"/>
+	</dubbo:reference>
+	
+	<!-- 供应商 -->
+	<dubbo:reference id="telProviderInfFacade" interface="com.cn.thinkx.wecard.facade.telrecharge.service.TelProviderInfFacade" cluster="failfast">
+		<dubbo:method name="saveTelProviderInf" timeout="5000" retries="0"/>
+		<dubbo:method name="updateTelProviderInf" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelProviderInfById" timeout="5000" retries="3"/>
+		<dubbo:method name="deleteTelProviderInfById" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelProviderInfList" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelProviderInfPage" timeout="5000" retries="3"/>
+	</dubbo:reference>
+	
+	<!-- 供应商订单 -->
+	<dubbo:reference id="telProviderOrderInfFacade" interface="com.cn.thinkx.wecard.facade.telrecharge.service.TelProviderOrderInfFacade" cluster="failfast">
+		<dubbo:method name="saveTelProviderOrderInf" timeout="5000" retries="0"/>
+		<dubbo:method name="updateTelProviderOrderInf" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelProviderOrderInfById" timeout="5000" retries="3"/>
+		<dubbo:method name="deleteTelProviderOrderInfById" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelProviderOrderInfList" timeout="5000" retries="3"/>
+		<dubbo:method name="getTelProviderOrderInfPage" timeout="5000" retries="3"/>
+	</dubbo:reference>
+
+</beans>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!--通用媒体查询-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+<title>附近优惠·购卡</title>
+    <#include "../../common/wecardHeader.html">
+    <script type="text/javascript" src="${s.base}/static/js/module/surround/surroundPreferentialList.js?v=${s.version}"></script>
+</head>
+<body>
+
+
+<div class="nearby_nav">
+    <div class="tab_nav"></div>
+    <div class="nav_contain">
+        <div id="allTab">全部</span></div>
+        <div class="tab" id="bestSales">销量最好</div>
+        <div class="tab" id="bestEvaluate">评价最好</div>
+    </div>
+</div>
+
+<div class="hkb_refresh">
+    <span class="icon">&#x2193;</span>
+    <span>&#x4E0B;&#x62C9;&#x5237;&#x65B0;</span>
+</div>
+
+<div class="nearby_list">
+    <!-- 列表 -->
+    <div class="nearby_list_content">
+           <!-- list-->
+	</div>
+	<!-- 没有更多-->
+    <div class="nearby_end">
+<!--     	<span>&#x6CA1;&#x6709;&#x66F4;&#x591A;&#x4E86;</span> -->
+	</div>
+</div>
+
+    <div class="hkb_drop_down">
+	    <div class="sort_list">
+	        <div class="sort_choose" industryType=''>全部</div>
+	        <div industryType="1">美食</div>
+	        <div industryType="2">休闲娱乐</div>
+	        <div industryType="3">生活服务</div>
+	        <div industryType="4">运输票务</div>
+	        <div industryType="5">电影票</div>
+	        <div industryType="6">旅游</div>
+	        <div industryType="7">酒店</div>
+	        <div industryType="8">购物</div>
+	        <div industryType="9">虚拟</div>
+	        <div industryType="10">网络传媒</div>
+	    </div>
+	    <div class="drop_down_bg"></div>
+	</div>
+
+
+
+
+<script>addEventListener('load',function(){
+    document.getElementsByClassName('nav_contain')[0].addEventListener('click',function () {
+        nearBy.clickTab('sort_select',this)
+    },false);
+    //下拉框
+    dropDownList.hkbDropDown();
+    //销量&评价切换
+    nearBy.otherTabRemove();
+    //下拉分类页选择
+   document.getElementsByClassName('sort_list')[0].addEventListener('click',function (e) {
+       nearBy.clickTab('sort_choose',this)//选择类目
+       dropDownList.dropListRemove();//点击分类收起弹框
+   },false);
+   
+    
+})
+</script>
+</body>
+</html>

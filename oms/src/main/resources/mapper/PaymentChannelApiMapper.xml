@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.thinkx.oms.module.channel.mapper.PaymentChannelApiMapper">
+	
+	<sql id = "PaymentChannelApiColumns">
+		P.ID,
+		P.CHANNEL_ID,
+		P.NAME,
+		P.URL,
+		P.API_TYPE,
+		P.DESCRIPTION,
+		P.ENABLE,
+		P.DATA_STAT,
+		P.REMARKS,
+		P.CREATE_USER,
+		P.UPDATE_USER,
+		P.CREATE_TIME,
+		P.UPDATE_TIME,
+		P.LOCK_VERSION
+	</sql>
+	
+	<insert id="insertPaymentChannelApi" parameterType="PaymentChannelApi">
+		<selectKey resultType="string" order="BEFORE" keyProperty="id">  
+				<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getCommonId" />
+		</selectKey>
+		INSERT INTO TB_PAYMENT_CHANNELS_API_INF(
+			ID,
+			CHANNEL_ID,
+			NAME,
+			URL,
+			API_TYPE,
+			DESCRIPTION,
+			ENABLE,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			UPDATE_USER,
+			CREATE_TIME,
+			UPDATE_TIME,
+			LOCK_VERSION
+		) values (
+			#{id},
+			#{channelId,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{url,jdbcType=VARCHAR},
+			#{apiType,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{enable,jdbcType=VARCHAR},
+			'0',
+			#{remarks,jdbcType=VARCHAR},
+			#{createUser,jdbcType=VARCHAR},
+			#{updateUser,jdbcType=VARCHAR},
+			sysdate,
+			sysdate,
+			0
+		)
+	</insert>
+	
+	<update id="updatePaymentChannelApiById" parameterType="PaymentChannelApi">
+		UPDATE TB_PAYMENT_CHANNELS_API_INF
+		<set>
+			NAME =#{name,jdbcType=VARCHAR},
+			URL =#{url,jdbcType=VARCHAR},
+			API_TYPE =#{apiType,jdbcType=VARCHAR},
+			DESCRIPTION =#{description,jdbcType=VARCHAR},
+			ENABLE =#{enable,jdbcType=VARCHAR},
+			REMARKS  =#{remarks,jdbcType=VARCHAR},
+			UPDATE_USER =#{updateUser,jdbcType=VARCHAR},
+			UPDATE_TIME  =sysdate,
+			LOCK_VERSION =LOCK_VERSION+1
+		</set>
+			WHERE ID=#{id}
+	</update>
+
+	<update id="deletePaymentChannelApiById" parameterType="String">
+		UPDATE TB_PAYMENT_CHANNELS_API_INF T SET T.DATA_STAT='1',UPDATE_TIME  =sysdate WHERE　T.ID=#{id}
+	</update>
+	
+	<update id="deletePaymentChannelApiByChannelId" parameterType="String">
+		UPDATE TB_PAYMENT_CHANNELS_API_INF T SET T.DATA_STAT='1',UPDATE_TIME  =sysdate WHERE　T.CHANNEL_ID=#{channelId}
+	</update>
+	
+	<select id="getPaymentChannelsApisList" resultType="PaymentChannelApi" parameterType="PaymentChannelApi">
+		SELECT 
+			<include refid="PaymentChannelApiColumns" /> ,PCI.CHANNEL_NAME
+		FROM TB_PAYMENT_CHANNELS_API_INF P  LEFT JOIN TB_PAYMENT_CHANNELS_INF PCI ON P.CHANNEL_ID = PCI.ID
+		WHERE 1=1 
+		AND P.CHANNEL_ID = #{channelId}
+		<if test="name !=null and name !='' ">
+		 	AND P.NAME LIKE '%' || #{name} || '%'
+		</if>
+		<if test="apiType !=null and apiType !='' ">
+		 	 AND P.api_type = #{apiType}
+		</if>
+		AND P.DATA_STAT = '0' 
+		ORDER BY P.UPDATE_TIME DESC
+	</select>
+	
+	<select id = "getPaymentChannelsApiById" parameterType="String" resultType="PaymentChannelApi"> 
+		SELECT 
+			<include refid="PaymentChannelApiColumns" /> 
+		FROM TB_PAYMENT_CHANNELS_API_INF P WHERE 1=1 AND P.DATA_STAT = '0' AND ID=#{id}
+	</select>
+</mapper>

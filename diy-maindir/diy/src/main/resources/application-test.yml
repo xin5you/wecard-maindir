@@ -1,0 +1,35 @@
+server:
+  port: 11301
+  address: 192.168.1.201
+  contextPath: /diy
+redis: 
+  pool: 
+    data: 
+      session: 
+        host: 192.168.110.2:7111,192.168.110.3:7112,192.168.110.4:7113
+spring:
+  dubbo:
+    registry:
+      address: zookeeper://192.168.1.101:12801?backup=192.168.1.201:12802,192.168.1.202:12803
+      port: 12880
+    application:
+      name: dubbo_diy
+    protocol:
+      name: dubbo
+    scan: com.cn.iboot.diy
+  datasource:
+    jndi-name: JDBC
+  thymeleaf: 
+    prefix: classpath:/views/
+    #content-type: text/html
+    #suffix: .html
+    #mode: HTML5
+    #encoding: UTF-8
+    # set to false for hot refresh
+    #cache: false
+myBatis:
+  mapperLocations: classpath:mapper/*.xml
+  configLocations: classpath:conf/mybatis-config.xml
+  #typeAliasesPackage: com.cn.iboot.diy.test.domain
+logging:
+  config: classpath:conf/logback-diy.xml

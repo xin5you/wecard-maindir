@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace = "com.cn.thinkx.wecard.centre.module.biz.mapper.ShopInfMapper">
+	<select id = "getShopInfList" resultType = "ShopInfVO">
+		SELECT S.SHOP_ID,S.SHOP_CODE,S.SHOP_NAME,S.MCHNT_ID,M.MCHNT_NAME,INS.INS_NAME,
+		S.COUNTRY,S.PROVINCE,S.CITY,S.DISTRICT,S.STREET,S.LONGITUDE,S.LATITUDE,S.GEOHASH,S.SHOP_ADDR,
+		S.TELEPHONE,S.EVALUATE,S.BUSINESS_HOURS,S.DATA_STAT,S.QR_CODE_URL,S.SELL_CARD_FLAG,S.SHOP_TYPE,S.REMARKS,
+		S.CREATE_USER,S.UPDATE_USER,S.CREATE_TIME,S.UPDATE_TIME,S.LOCK_VERSION
+		FROM TB_SHOP_INF S LEFT JOIN TB_MERCHANT_INF M
+		ON S.MCHNT_ID = M.MCHNT_ID LEFT JOIN TB_INS_INF INS
+		ON M.INS_ID = INS.INS_ID
+		WHERE S.DATA_STAT = 0
+ 	 <![CDATA[
+   		AND SYSDATE-1/24 <= S.UPDATE_TIME
+ 	 ]]> 
+	</select>
+</mapper>

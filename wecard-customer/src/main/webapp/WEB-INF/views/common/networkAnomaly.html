@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+    <meta content="telephone=no" name="format-detection">
+    <title>&#x5609;&#x798F;&#x5E73;&#x53F0;</title>
+	<link rel="stylesheet" href="${s.base}/res/css/huikabao.mui.css">
+	<#include "../common/wecardHeader.html">
+	<script src="${s.base}/res/common/jweixin-1.0.0.js"></script>
+	<script type="text/javascript">
+		$(function () {	
+			$('.closeWindow').bind("click", function(){
+	        	wx.closeWindow();
+	        });
+		})
+	</script>
+</head>
+<body id="net_anomaly">
+<div class="net_anomaly">
+    <!--图片-->
+    <div class="net_pic">
+        <div class="bg_net"></div>
+        <div class="moon"></div>
+        <div class="wifi"></div>
+        <div class="wifi_move_big"></div>
+        <div class="wifi_move_small"></div>
+        <div class="ufo"></div>
+        <div class="light"></div>
+        <div class="mountain_tower"></div>
+    </div>
+    <!--提示性文字-->
+    <div class="tip_net">&#x62B1;&#x6B49;&#x7F51;&#x7EDC;&#x4E0D;&#x7ED9;&#x529B;&#x4E86;&#xFF0C;&#x8BF7;&#x60A8;&#x91CD;&#x65B0;&#x52A0;&#x8F7D;..</div>
+    <!--返回首页-->
+    <div class="weui_btn_area">
+        <div class="weui_btn weui_btn_plain_primary btn_blue closeWindow">&#x91CD;&#x65B0;&#x52A0;&#x8F7D;</div>
+    </div>
+</div>
+
+</body>
+</html>

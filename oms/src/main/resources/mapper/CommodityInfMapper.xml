@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.active.mapper.CommodityInfMapper">
+		
+	<sql id="CommodityInfColumns">
+		COMMODITY_ID,
+		MERCHANT_ID,
+		PRODUCT_CODE,
+		COMMODITY_NAME,
+		COMMODITY_FACEVALUE,
+		COMMODITY_COST,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION				
+	</sql>
+	
+	<insert id="insertCommodityInf" parameterType="CommodityInf">
+		<selectKey resultType="string" order="BEFORE" keyProperty="commodityId">  
+			<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getCommonId" />
+		</selectKey>
+		INSERT INTO TB_COMMODITY_INF (
+			<include refid="CommodityInfColumns" />
+		 )  VALUES (
+				#{commodityId},
+		 		#{merchantId, jdbcType=VARCHAR},
+		 		#{productCode, jdbcType=VARCHAR},
+		 		#{commodityName, jdbcType=VARCHAR},
+				#{commodityFacevalue, jdbcType=VARCHAR},
+				#{commodityCost, jdbcType=VARCHAR},
+		 		#{dataStat, jdbcType=VARCHAR},
+		 		#{remarks, jdbcType=VARCHAR},
+		 		#{createUser, jdbcType=VARCHAR},
+		 		#{createUser, jdbcType=VARCHAR},
+		 		sysdate,
+		 		sysdate,
+		 		'0') 
+	</insert>
+	
+	<select id="getCommodityInfById" parameterType="String" resultType="CommodityInf">
+		SELECT 
+	  		m.COMMODITY_ID,
+			m.MERCHANT_ID,
+			m.PRODUCT_CODE,
+			m.COMMODITY_NAME,
+			m.COMMODITY_FACEVALUE,
+			m.COMMODITY_COST,
+			m.DATA_STAT,
+  			c.MCHNT_NAME,
+  			c.MCHNT_CODE
+		FROM TB_COMMODITY_INF m 
+		INNER JOIN TB_MERCHANT_INF c ON m.MERCHANT_ID = c.MCHNT_ID
+	    WHERE m.COMMODITY_ID = #{commId} AND m.DATA_STAT = '1' 
+	    								 AND c.DATA_STAT = '0'
+	</select>
+	
+	<select id="getCommoListByMchntId" parameterType="String" resultType="CommodityInf">
+		SELECT 
+			<include refid="CommodityInfColumns" />
+		FROM TB_COMMODITY_INF 
+		 WHERE MERCHANT_ID = #{id} AND DATA_STAT = '1'
+	</select>
+	
+	<select id="getCommodityInfList" parameterType="CommodityInf" resultType="CommodityInf">
+		SELECT 
+	  		m.COMMODITY_ID,
+			m.MERCHANT_ID,
+			m.PRODUCT_CODE,
+			m.COMMODITY_NAME,
+			m.COMMODITY_FACEVALUE,
+			m.COMMODITY_COST,
+			m.DATA_STAT,
+  			c.MCHNT_NAME,
+  			c.MCHNT_CODE
+		FROM TB_COMMODITY_INF m 
+		INNER JOIN TB_MERCHANT_INF c ON m.MERCHANT_ID = c.MCHNT_ID
+	    WHERE m.DATA_STAT = '1' AND c.DATA_STAT = '0'
+	    	<if test="commodityId !=null and commodityId !='' ">
+	 		  	AND m.COMMODITY_ID=#{commodityId}
+		 	</if>
+		 	<if test="mchntName !=null and mchntName !='' ">
+ 			  	AND c.MCHNT_NAME LIKE '%' || #{mchntName} || '%'
+		 	</if>
+		 	<if test="mchntCode !=null and mchntCode !='' ">
+	 		  	AND c.MCHNT_CODE=#{mchntCode}
+		 	</if>
+		 	<if test="merchantId !=null and merchantId !='' ">
+	 		  	AND m.MERCHANT_ID = #{merchantId}
+		 	</if>
+		  	<if test="commodityName !=null and commodityName !='' ">
+			  	AND m.COMMODITY_NAME LIKE '%' || #{commodityName} || '%'
+		 	</if>
+		  	<if test="commodityFacevalue !=null and commodityFacevalue !='' ">
+			  	AND m.COMMODITY_FACEVALUE=#{commodityFacevalue}
+		 	</if>
+		 ORDER BY m.UPDATE_TIME DESC
+	</select>
+	
+	<update id="updateCommodityInf" parameterType="CommodityInf">
+		UPDATE TB_COMMODITY_INF SET
+			COMMODITY_NAME=#{commodityName},
+			DATA_STAT=#{dataStat},
+	 		UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+	 		UPDATE_TIME=sysdate,
+	 		LOCK_VERSION=LOCK_VERSION+1
+		WHERE COMMODITY_ID = #{commodityId} 
+	</update>
+	
+	<update id="deleteCommodityInf" parameterType="string">
+		UPDATE TB_COMMODITY_INF SET DATA_STAT='0' WHERE COMMODITY_ID = #{commId} 
+	</update>
+	
+</mapper>

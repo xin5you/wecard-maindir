@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.iboot.diy.api.system.mapper.UserDataAuthMapper">
+
+	<sql id="UserDataAuthColumns">
+		AUTH_ID,
+		USER_ID,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+	
+	<select id="getUserDataAuthByUserId" parameterType="String" resultType="UserDataAuth">
+		select
+		<include refid="UserDataAuthColumns" />
+		from TB_WEB_USER_DATA_AUTH
+		where USER_ID = #{userId} and DATA_STAT='0'
+	</select>
+	
+	<delete id="deleteUserDataAuthByAuthId" parameterType="String">
+    	 update TB_WEB_USER_DATA_AUTH SET DATA_STAT='1' where AUTH_ID = #{authId}
+    </delete>
+
+	<insert id="insert" parameterType="UserDataAuth">
+		insert into TB_WEB_USER_DATA_AUTH (
+			AUTH_ID, 
+			USER_ID, 
+			DATA_STAT,
+			REMARKS, 
+			CREATE_USER, 
+			UPDATE_USER,
+			CREATE_TIME, 
+			UPDATE_TIME, 
+			LOCK_VERSION
+		) values (
+			#{authId,jdbcType=VARCHAR}, 
+			#{userId,jdbcType=VARCHAR},
+			'0',
+			#{remarks,jdbcType=VARCHAR}, 
+			#{createUser,jdbcType=VARCHAR}, 
+			#{updateUser,jdbcType=VARCHAR},
+			sysdate, 
+			sysdate,
+			0
+		)
+	</insert>
+	
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.common.wecard.module.account.mapper.AccountMenuGroupDao">
+
+	
+	<sql id="AccountMenuGroupColumns">
+		id, 
+		name,
+		enable, 
+		createtime
+	</sql>
+	
+	<select id="list" parameterType="AccountMenuGroup" resultType="AccountMenuGroup">
+		SELECT 
+		<include refid="AccountMenuGroupColumns" />
+		 FROM t_wxcms_account_menu_group ORDER BY ID
+	</select>
+
+	<select id="getTotalItemsCount" parameterType="AccountMenuGroup" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM t_wxcms_account_menu_group
+	</select>
+
+	<select id="paginationEntity" resultType="AccountMenuGroup">
+		SELECT 
+		<include refid="AccountMenuGroupColumns" />
+		 FROM t_wxcms_account_menu_group 
+		WHERE rownum &gt;= #{param2.start,jdbcType=INTEGER} AND rownum &lt;=#{param2.pageSize,jdbcType=INTEGER}
+		ORDER BY ID 
+	</select>
+
+	<select id="getById" parameterType="java.lang.String" resultType="AccountMenuGroup">
+		SELECT 
+		<include refid="AccountMenuGroupColumns" />
+		 FROM t_wxcms_account_menu_group WHERE ID = #{id}
+	</select>
+
+	<insert id="add" parameterType="AccountMenuGroup" flushCache="true">
+		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+            select SEQ_T_WXCMS_MSG_BASE.NEXTVAL from dual
+        </selectKey>
+		INSERT INTO t_wxcms_account_menu_group ( ID,NAME,ENABLE,CREATETIME ) VALUES ( 
+			#{id},
+			#{name, jdbcType=VARCHAR},
+			#{enable, jdbcType=INTEGER},
+			sysdate) 
+	</insert>
+	
+	<update id="updateMenuGroupDisable" flushCache="true">
+			UPDATE t_wxcms_account_menu_group SET ENABLE = 0
+	</update>
+	
+	<update id="updateMenuGroupEnable" parameterType="java.lang.String" flushCache="true">
+		UPDATE t_wxcms_account_menu_group SET ENABLE = 1 WHERE ID = #{id}
+	</update>
+
+	<update id="update" parameterType="AccountMenuGroup" flushCache="true">
+		UPDATE t_wxcms_account_menu_group SET NAME = #{name},ENABLE = #{enable},CREATETIME = #{createtime} WHERE ID = #{id} 
+	</update>
+
+	<delete id="deleteAllMenu" parameterType="AccountMenuGroup" >
+		DELETE FROM t_wxcms_account_menu WHERE GID = #{id}
+	</delete>
+
+	<delete id="delete" parameterType="AccountMenuGroup" >
+		DELETE FROM t_wxcms_account_menu_group WHERE ID = #{id}
+	</delete>
+	
+	<select id="getMembersGroupsId" resultType="AccountMenuGroup">
+		SELECT 
+		<include refid="AccountMenuGroupColumns" />
+		 FROM t_wxcms_account_menu_group 
+		WHERE rownum = 1
+		AND id not in (0,1,2)
+		ORDER by CREATETIME desc
+	</select>
+</mapper>

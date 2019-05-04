@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.sys.mapper.UserMapper">
+		
+	<resultMap type="User" id="UserResultMap">
+		<result column="ID" property="id"/>
+		<result column="AGE" property="age"/>
+		<result column="ISDEFAULT" property="isdefault"/>
+		<result column="LOGINNAME" property="loginname"/>
+		<result column="NAME" property="name"/>
+		<result column="PASSWORD" property="password"/>
+		<result column="SEX" property="sex"/>
+		<result column="STATE" property="state"/>
+		<result column="USERTYPE" property="usertype"/>
+		<result column="ORGANIZATION_ID" property="organizationId"/>
+		<result column="CREATEDATETIME" property="createdatetime"/>
+		<result column="LOCKVERSION" property="lockVersion"/>
+		<result column="ORGANIZATION_NAME" property="organizationName"/>
+	</resultMap>
+	
+	<sql id="UserColumns">
+		m.ID,
+		m.AGE,
+		m.CREATEDATETIME,
+		m.ISDEFAULT,
+		m.LOGINNAME,
+		m.NAME,
+		m.PASSWORD,
+		m.SEX,
+		m.STATE,
+		m.USERTYPE,
+		m.ORGANIZATION_ID,
+		m.LOCKVERSION
+	</sql>
+	
+	<select id="getUserById" parameterType="java.lang.String" resultMap="UserResultMap">
+		SELECT 
+	  		<include refid="UserColumns" />
+		 		FROM TB_WEB_USER m WHERE  m.ID=#{id}
+	</select>
+	
+	<insert id="insertUser" parameterType="User" useGeneratedKeys="false" keyProperty="id">
+	   <selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="id">  
+			<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getSysUserId" />
+		</selectKey>
+		INSERT INTO TB_WEB_USER (
+			ID,
+			AGE,
+			ISDEFAULT,
+			LOGINNAME,
+			NAME,
+			PASSWORD,
+			SEX,
+			STATE,
+			USERTYPE,
+			ORGANIZATION_ID,
+			CREATEDATETIME,
+			LOCKVERSION
+		 )  VALUES ( 
+		 		#{id},
+		 		#{age,jdbcType=VARCHAR},
+		 		#{isdefault,jdbcType=VARCHAR},
+		 		#{loginname,jdbcType=VARCHAR},
+		 		#{name,jdbcType=VARCHAR},
+		 		#{password,jdbcType=VARCHAR},
+		 		#{sex,jdbcType=VARCHAR},
+		 		#{state,jdbcType=VARCHAR},
+		 		#{usertype,jdbcType=VARCHAR},
+		 		#{organizationId,jdbcType=VARCHAR},
+		 		sysdate,
+		 		'0') 
+	</insert>
+	
+	<update id="updateUser" parameterType="User">
+		UPDATE TB_WEB_USER
+		<set>
+			AGE=#{age,jdbcType=VARCHAR},
+			ISDEFAULT=#{isdefault,jdbcType=VARCHAR},
+			LOGINNAME=#{loginname,jdbcType=VARCHAR},
+			NAME=#{name,jdbcType=VARCHAR},
+			PASSWORD=#{password,jdbcType=VARCHAR},
+			SEX=#{sex,jdbcType=VARCHAR},
+			STATE=#{state,jdbcType=VARCHAR},
+			USERTYPE=#{usertype,jdbcType=VARCHAR},
+			ORGANIZATION_ID=#{organizationId,jdbcType=VARCHAR}
+		</set>
+			WHERE id=#{id}
+	</update>
+
+	<delete id="deleteUser" parameterType="java.lang.String" >
+		 DELETE TB_WEB_USER m WHERE  m.ID=#{id}
+	</delete>
+	
+	<select id="getUserByLoginName" parameterType="java.lang.String" resultMap="UserResultMap">
+		SELECT 
+	  		<include refid="UserColumns" />
+		 FROM TB_WEB_USER m WHERE   m.LOGINNAME=#{loginname}
+	</select>
+	
+	<select id="getUserList" parameterType="User" resultMap="UserResultMap">
+		SELECT 
+	  		<include refid="UserColumns" />, 
+	  			o.NAME as ORGANIZATION_NAME 
+	  			FROM TB_WEB_USER m
+         			LEFT JOIN TB_WEB_ORGANIZATION o on o.ID=m.ORGANIZATION_ID
+         			WHERE  m.state='0'
+         			<if test="name !=null and name !='' ">
+					 		AND m.NAME LIKE '%' || #{name} || '%'
+					</if>
+					<if test="loginname !=null and loginname !='' ">
+					 		AND m.LOGINNAME LIKE '%' || #{loginname} || '%'
+					</if>
+	</select>
+	
+	<!-- 增加角用户角色 -->
+	<insert id="saveUserRole" parameterType="UserRole">
+		insert into TB_WEB_USER_ROLE(user_id,role_id) values (#{userId},#{roleId})
+	</insert>
+	
+	<delete id="deleteUserRoleByUserId" parameterType="java.lang.String">
+		delete from TB_WEB_USER_ROLE where user_id=#{userId}
+	</delete>
+</mapper>

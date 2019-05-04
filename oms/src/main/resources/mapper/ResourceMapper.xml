@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cn.thinkx.oms.module.sys.mapper.ResourceMapper">
+
+	
+	<resultMap type="Resource" id="ResourceltMap">
+		<result column="ID" property="id"/>
+		<result column="CREATEDATETIME" property="createdatetime"/>
+		<result column="DESCRIPTION" property="description"/>
+		<result column="ICON" property="icon"/>
+		<result column="NAME" property="name"/>
+		<result column="RESOURCETYPE" property="resourcetype"/>
+		<result column="SEQ" property="seq"/>
+		<result column="STATE" property="state"/>
+		<result column="URL" property="url"/>
+		<result column="KEY" property="key"/>
+		<result column="PID" property="pid"/>
+	</resultMap>
+
+	<sql id="ResourceColumns">
+		 ID,
+		 CREATEDATETIME,
+		 DESCRIPTION, 
+		 ICON, 
+		 NAME,
+		 RESOURCETYPE, 
+		 SEQ, 
+		 STATE, 
+		 URL,
+		 KEY,
+		 PID 		
+	</sql>
+	
+	<select id="getResourceById" resultType="String" resultMap="ResourceltMap">
+		SELECT
+		<include refid="ResourceColumns" />
+		
+		FROM TB_WEB_RESOURCE WHERE ID=#{resourceId}
+	</select>
+	
+	 <select id="getResourceByKey" resultType="String" resultMap="ResourceltMap">
+		SELECT
+		<include refid="ResourceColumns" />
+		
+		FROM TB_WEB_RESOURCE WHERE key=#{key}
+	</select>
+	
+	<insert id="insertResource" parameterType="Resource" useGeneratedKeys="false" keyProperty="id">
+	   <selectKey resultType="java.lang.String" order="BEFORE" keyProperty="id">  
+			<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getSysResourceId" />
+		</selectKey>
+		insert into TB_WEB_RESOURCE(
+			 ID,
+			 DESCRIPTION, 
+			 ICON, 
+			 NAME, 
+			 RESOURCETYPE, 
+			 SEQ, 
+			 STATE, 
+			 URL,
+			 KEY,
+			 PID,
+		     CREATEDATETIME
+		  )values (
+		  	#{id},
+		  	#{description,jdbcType=VARCHAR},
+		  	#{icon,jdbcType=VARCHAR},
+		  	#{name,jdbcType=VARCHAR},
+		  	#{resourcetype,jdbcType=VARCHAR},
+		  	#{seq,jdbcType=VARCHAR},
+		  	#{state,jdbcType=VARCHAR},
+		  	#{url,jdbcType=VARCHAR},
+		  	#{key,jdbcType=VARCHAR},
+		  	#{pid,jdbcType=VARCHAR},
+		  	sysdate)
+	</insert>
+	
+	 <update id="updateResource" parameterType="Resource">
+	 UPDATE TB_WEB_RESOURCE
+		<set>
+			DESCRIPTION=#{description,jdbcType=VARCHAR},
+			ICON=#{icon,jdbcType=VARCHAR},
+			NAME=#{name,jdbcType=VARCHAR},
+			RESOURCETYPE=#{resourcetype,jdbcType=VARCHAR},
+			SEQ=#{seq,jdbcType=VARCHAR},
+			STATE=#{state,jdbcType=VARCHAR},
+			URL=#{url,jdbcType=VARCHAR},
+			KEY=#{key,jdbcType=VARCHAR},
+			PID=#{pid,jdbcType=VARCHAR}
+		</set>
+			WHERE id=#{id}
+	 </update>
+	 
+	<delete id="deleteResource" parameterType="java.lang.String" >
+		 DELETE TB_WEB_RESOURCE m WHERE  m.ID=#{id}
+	</delete>
+	
+	<delete id="deleteRoleResourceByResId" parameterType="java.lang.String" >
+		 DELETE TB_WEB_ROLE_RESOURCE m WHERE  m.RESOURCE_ID=#{id}
+	</delete>
+	
+	<select id="getResourceList" resultType="Resource" resultMap="ResourceltMap">
+		SELECT
+		<include refid="ResourceColumns" />
+		
+		FROM TB_WEB_RESOURCE WHERE 1=1
+		
+		<if test="resourcetype !=null and resourcetype !='' ">
+			AND resourcetype=#{resourcetype}
+		</if>
+		
+		START WITH pid = 0 CONNECT BY PRIOR ID = pid ORDER siblings BY SEQ
+	</select>
+	
+	<!-- 根据rId获取该用户的权限-->
+	<select id="getRoleResourceByRoleId" parameterType="String" resultMap="ResourceltMap">
+		SELECT 
+		<include refid="ResourceColumns" />
+		FROM TB_WEB_RESOURCE WHERE STATE='0' AND id in(
+		SELECT RESOURCE_ID FROM
+		TB_WEB_ROLE_RESOURCE WHERE ROLE_ID = #{roleId})
+	</select>
+	
+	<!-- 根据用户Id获取该用户的权限-->
+	<select id="getUserResourceByUserId" parameterType="String" resultMap="ResourceltMap">
+		SELECT 
+		<include refid="ResourceColumns" />
+		FROM TB_WEB_RESOURCE WHERE  STATE='0' AND id in(
+		SELECT RESOURCE_ID FROM
+		TB_WEB_ROLE_RESOURCE WHERE role_id in(
+		SELECT role_id FROM tb_web_user_role
+		WHERE user_id=#{userid}))
+	</select>
+
+</mapper>

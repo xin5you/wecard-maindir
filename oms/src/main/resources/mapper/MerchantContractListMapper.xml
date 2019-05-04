@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.merchant.mapper.MerchantContractListMapper">
+	
+	<resultMap type="MerchantContractList" id="MerchantContractListResultMap">
+    	<result column="CONTRACT_DETAIL_ID"   property="contractDetailId"/>
+		<result column="MCHNT_CONTRACT_ID"    property="mchntContractId"/>
+		<result column="CONTRACT_TYPE"        property="contractType"/>
+		<result column="PRODUCT_CODE"         property="productCode"/>
+		<result column="CONTRACT_RATE"        property="contractRate"/>
+		<result column="DATA_STAT"            property="dataStat"/>
+		<result column="CONTRACT_START_DATE"  property="contractStartDate"/>
+		<result column="CONTRACT_END_DATE"    property="contractEndDate"/>
+		<result column="REMARKS"              property="remarks"/>
+		<result column="CREATE_USER"          property="createUser"/>
+		<result column="UPDATE_USER"          property="updateUser"/>
+		<result column="CREATE_TIME"          property="createTime"/>
+		<result column="UPDATE_TIME"          property="updateTime"/>
+		<result column="LOCK_VERSION"         property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="MerchantContractListColumns">
+		t.CONTRACT_DETAIL_ID, 
+		t.MCHNT_CONTRACT_ID,          
+		t.CONTRACT_TYPE,        
+		t.PRODUCT_CODE,       
+		t.CONTRACT_RATE,      
+		t.DATA_STAT,
+		t.CONTRACT_START_DATE, 
+		t.CONTRACT_END_DATE,         
+		t.REMARKS,
+		t.CREATE_USER,
+		t.UPDATE_USER,
+		t.CREATE_TIME,
+		t.UPDATE_TIME,
+		t.LOCK_VERSION
+	</sql>
+	
+	<select id="getMerchantContractListById" parameterType="java.lang.String" resultMap="MerchantContractListResultMap">
+		SELECT 
+	  		<include refid="MerchantContractListColumns" />
+		 FROM TB_MERCHANT_CONTRACT_LIST t WHERE  t.CONTRACT_DETAIL_ID=#{contractDetailId}
+	</select>
+	
+	<select id="getMerchantContractListByMerchantContractId" parameterType="java.lang.String" resultMap="MerchantContractListResultMap">
+		SELECT 
+	  		<include refid="MerchantContractListColumns" />
+		 FROM TB_MERCHANT_CONTRACT_LIST t WHERE  t.MCHNT_CONTRACT_ID=#{mchntContractId}
+	</select>
+	
+	<insert id="insertMerchantContractList" parameterType="MerchantContractList" useGeneratedKeys="false" keyProperty="contractDetailId">
+		INSERT INTO TB_MERCHANT_CONTRACT_LIST (
+				CONTRACT_DETAIL_ID, 
+				MCHNT_CONTRACT_ID,          
+				CONTRACT_TYPE,        
+				PRODUCT_CODE,       
+				CONTRACT_RATE,      
+				DATA_STAT,
+				CONTRACT_START_DATE, 
+				CONTRACT_END_DATE,         
+				REMARKS,
+				CREATE_USER,
+				UPDATE_USER,
+				CREATE_TIME,
+				UPDATE_TIME,
+				LOCK_VERSION
+		 )  VALUES ( 
+				#{contractDetailId,jdbcType=VARCHAR},
+				#{mchntContractId,jdbcType=VARCHAR},
+				#{contractType,jdbcType=VARCHAR},
+				#{productCode,jdbcType=VARCHAR},
+				#{contractRate,jdbcType=VARCHAR},
+				#{dataStat,jdbcType=VARCHAR},
+				#{contractStartDate,jdbcType=VARCHAR},
+				#{contractEndDate,jdbcType=VARCHAR},
+				#{remarks,jdbcType=VARCHAR},
+				#{createUser,jdbcType=VARCHAR},
+				#{updateUser,jdbcType=VARCHAR},
+				sysdate,
+				sysdate,
+				'0') 
+	</insert>
+	
+	<update id="updateMerchantContractList" parameterType="MerchantContractList">
+		UPDATE TB_MERCHANT_CONTRACT_LIST
+		<set>
+			MCHNT_CONTRACT_ID   =#{mchntContractId,jdbcType=VARCHAR},
+			CONTRACT_TYPE       =#{contractType,jdbcType=VARCHAR},
+			PRODUCT_CODE        =#{productCode,jdbcType=VARCHAR},
+			CONTRACT_RATE       =#{contractRate,jdbcType=VARCHAR},
+			DATA_STAT           =#{dataStat,jdbcType=VARCHAR},
+			CONTRACT_START_DATE =#{contractStartDate,jdbcType=VARCHAR},
+			CONTRACT_END_DATE   =#{contractEndDate,jdbcType=VARCHAR},
+			REMARKS             =#{remarks,jdbcType=VARCHAR},
+			UPDATE_USER         =#{updateUser,jdbcType=VARCHAR},
+			UPDATE_TIME         =sysdate,
+			LOCK_VERSION        =LOCK_VERSION+1
+		</set>
+			WHERE t.CONTRACT_DETAIL_ID=#{contractDetailId}
+	</update>
+
+	<delete id="deleteMerchantContractList" parameterType="java.lang.String" >
+		 UPDATE TB_MERCHANT_CONTRACT_LIST SET DATA_STAT='1' WHERE　t.CONTRACT_DETAIL_ID=#{contractDetailId}
+	</delete>
+</mapper>

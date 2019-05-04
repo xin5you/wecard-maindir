@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.iboot.diy.api.trans.mapper.TransMapper">
+		
+		<sql id ="TransLogColumns">
+		 TL.TXN_PRIMARY_KEY,
+	       TL.SETTLE_DATE,
+	       TL.ORG_TXN_PRIMARY_KEY,
+	       TL.DMS_RELATED_KEY,
+	       TL.ORG_DMS_RELATED_KEY,
+	       TL.TRANS_ID,
+	       TL.TRANS_ST,
+	       TL.TERM_CODE,
+	       TL.SHOP_CODE,
+	       TL.MCHNT_CODE,
+	       TL.INS_CODE,
+	       TL.RESP_CODE,
+	       TL.PRI_ACCT_NO,
+	       TL.CARD_NO,
+	       TL.USER_NAME,
+	       TL.PRODUCT_CODE,
+	       TL.TRANS_AMT,
+	       TL.ORG_TRANS_AMT,
+	       TL.TRANS_CURR_CD,
+	       TL.CARD_ATTR,
+	       TL.TRANS_CHNL,
+	       TL.TRANS_FEE,
+	       TL.TRANS_FEE_TYPE,
+	       TL.TFR_IN_ACCT_NO,
+	       TL.TFR_OUT_ACCT_NO,
+	       TL.ADDITIONAL_INFO,
+	       TL.REMARKS,
+	       TL.CREATE_TIME,
+	       TL.UPDATE_TIME,
+		</sql>
+
+<!-- 	<resultMap type ="TransLog" id="transQueryResultMap">   -->
+<!-- 	     <result column ="TXN_PRIMARY_KEY" property="txnPrimaryKey" />   -->
+<!-- 	     <result column ="SETTLE_DATE" property="settleDate"  />   -->
+<!-- 	     <result column ="ORG_TXN_PRIMARY_KEY" property="orgTxnPrimaryKey" />   -->
+<!-- 	     <result column ="DMS_RELATED_KEY" property="dmsRelatedKey"  />   -->
+<!-- 	     <result column ="ORG_DMS_RELATED_KEY" property="orgDmsRelatedKey" />   -->
+<!-- 	     <result column ="TRANS_ID" property="transId" />   -->
+<!-- 	     <result column ="TRANS_ST" property="transSt" />   -->
+<!-- 	     <result column ="TERM_CODE" property="termCode"  />   -->
+<!-- 	     <result column ="SHOP_CODE" property="shopCode" />   -->
+<!-- 	     <result column ="MCHNT_CODE" property="mchntCode"  />   -->
+<!-- 	     <result column ="INS_CODE" property="insCode" />   -->
+<!-- 	     <result column ="RESP_CODE" property="respCode" />  -->
+<!-- 	     <result column ="PRI_ACCT_NO" property="priAcctNo" />   -->
+<!-- 	     <result column ="CARD_NO" property="cardNo"  />   -->
+<!-- 	     <result column ="USER_NAME" property="userName" />   -->
+<!-- 	     <result column ="PRODUCT_CODE" property="productCode"  />   -->
+<!-- 	     <result column ="TRANS_AMT" property="transAmt" />   -->
+<!-- 	     <result column ="ORG_TRANS_AMT" property="orgTransAmt" />  -->
+<!-- 	     <result column ="TRANS_CURR_CD" property="transCurrCd" />   -->
+<!-- 	     <result column ="CARD_ATTR" property="cardAttr"  />   -->
+<!-- 	     <result column ="TRANS_CHNL" property="transChnl" />   -->
+<!-- 	     <result column ="TRANS_FEE" property="transFee"  />   -->
+<!-- 	     <result column ="TRANS_FEE_TYPE" property="transFeeType" />   -->
+<!-- 	     <result column ="TFR_IN_ACCT_NO" property="tfrInAcctNo" />  -->
+<!-- 	     <result column ="TFR_OUT_ACCT_NO" property="tfrOutAcctNo" />   -->
+<!-- 	     <result column ="ADDITIONAL_INFO" property="additionalInfo"  />   -->
+<!-- 	     <result column ="REMARKS" property="remarks" />   -->
+<!-- 	     <result column ="CREATE_TIME" property="createTime"  />   -->
+<!-- 	     <result column ="UPDATE_TIME" property="updateTime" />   -->
+<!-- 	     <result column ="REFERENCE_NO" property="referenceNo" />  -->
+<!-- 	     <result column ="TRANS_TIME" property="transTime" />   -->
+<!-- 	     <result column ="MCHNT_NAME" property="mchntName"  />   -->
+<!-- 	     <result column ="SHOP_NAME" property="shopName" />   -->
+<!-- 	     <result column ="PERSON_NAME" property="personName"  />   -->
+<!-- 	     <result column ="INVOICE_STAT" property="invoiceStat" />   -->
+<!-- 	</resultMap >  -->
+
+<!-- 	<parameterMap type="java.util.HashMap" id="transQueryMap"> -->
+<!-- 		<parameter property="mchntCode" jdbcType="VARCHAR" javaType="String" mode="IN" /> -->
+<!-- 		<parameter property="shopCode" jdbcType="VARCHAR" javaType="String" mode="IN" /> -->
+<!-- 		<parameter property="positCode" jdbcType="VARCHAR" javaType="String" mode="IN" /> -->
+<!-- 		<parameter property="positName" jdbcType="VARCHAR" javaType="String" mode="IN" /> -->
+<!-- 		<parameter property="personName" jdbcType="VARCHAR" javaType="String" mode="IN" /> -->
+<!-- 		<parameter property="transType" jdbcType="VARCHAR" javaType="String" mode="IN" /> -->
+<!-- 		<parameter property="invoiceStat" jdbcType="VARCHAR" javaType="String" mode="IN" /> -->
+<!-- 		<parameter property="orgDmsRelatedKey" jdbcType="VARCHAR" javaType="String" mode="IN" /> -->
+<!-- 		<parameter property="startDate" jdbcType="VARCHAR" javaType="String" mode="IN" /> -->
+<!-- 		<parameter property="endDate" jdbcType="VARCHAR" javaType="String" mode="IN" /> -->
+<!-- 		<parameter property="results" jdbcType="CURSOR" resultMap="transQueryResultMap" mode="OUT" /> -->
+<!-- 	</parameterMap> -->
+	
+<!-- 	<select id="getTransLogCur" parameterMap="transQueryMap" statementType="CALLABLE" resultType="java.util.List"> -->
+<!-- 		{CALL PROC_CUR_TRANS(?,?,?,?,?,?,?,?,?,?,?)} -->
+<!-- 	</select> -->
+	
+	<select id="getTransLogCur" parameterType="TransLog" resultType="TransLog">
+		SELECT 
+	      <include refid="TransLogColumns" />
+	       IL.DMS_RELATED_KEY     AS REFERENCE_NO,
+	       IL.CREATE_TIME         AS TRANS_TIME,
+	       M.MCHNT_NAME,
+	       S.SHOP_NAME,
+	       P.PERSONAL_NAME        AS PERSON_NAME,
+	       NVL(IO.INVOICE_STAT,0)        AS INVOICE_STAT
+	  FROM TB_TRANS_LOG${tableNum} TL
+	 INNER JOIN TB_INTFACE_TRANS_LOG${tableNum} IL
+	    ON IL.INTERFACE_PRIMARY_KEY = TL.DMS_RELATED_KEY
+	   AND TL.TRANS_ID = IL.TRANS_ID
+	  LEFT JOIN TB_MERCHANT_INF M
+	    ON TL.MCHNT_CODE = M.MCHNT_CODE
+	  LEFT JOIN TB_SHOP_INF S
+	    ON TL.SHOP_CODE = S.SHOP_CODE
+	 INNER JOIN TB_SHOP_INF S1
+	    ON S.P_SHOP_CODE = S1.SHOP_CODE
+	  LEFT JOIN TB_ACCOUNT_INF AI
+	    ON AI.ACCOUNT_NO = TL.PRI_ACCT_NO
+	  LEFT JOIN TB_USER_INF U
+	    ON U.USER_ID = AI.USER_ID
+	  LEFT JOIN TB_PERSON_INF P
+	    ON P.PERSONAL_ID = AI.PERSONAL_ID
+	  LEFT JOIN TB_INVOICE_ORDER IO
+	    ON IO.ITF_PRIMARY_KEY = TL.DMS_RELATED_KEY
+	 WHERE 1 = 1
+	 	AND TL.TRANS_ID IN ('W10','W11','W71','W74','W30','W75')
+	 	AND TL.TRANS_ST IN ('1','3','17')
+	 	AND TL.RESP_CODE = '00'
+	    AND TL.MCHNT_CODE = #{mchntCode}
+	    AND S1.SHOP_CODE = #{shopCode}
+	   <if test="shopName !=null and shopName !='' ">
+			AND S.SHOP_NAME LIKE '%' || #{shopName} || '%'
+		</if>
+		<if test="personName !=null and personName !='' ">
+			AND P.PERSONAL_NAME LIKE '%' || #{personName} || '%'
+		</if>
+		<if test="transId !=null and transId !='' ">
+			AND TL.TRANS_ID=#{transId}
+		</if>
+		<if test="transSt !=null and transSt !='' ">
+			AND TL.TRANS_ST=#{transSt}
+		</if>
+		<if test="dmsRelatedKey !=null and dmsRelatedKey !='' ">
+			AND SUBSTR(TL.DMS_RELATED_KEY,-6)=#{dmsRelatedKey}
+		</if>
+		<if test="invoiceStat !=null and invoiceStat !='' ">
+			AND IO.INVOICE_STAT = #{invoiceStat}
+		</if>
+	 ORDER BY TRANS_TIME DESC
+	</select>
+	
+	<select id="getTransLogHis" parameterType="TransLog" resultType="TransLog">
+		SELECT 
+	      <include refid="TransLogColumns" />
+	       IL.DMS_RELATED_KEY     AS REFERENCE_NO,
+	       IL.CREATE_TIME         AS TRANS_TIME,
+	       M.MCHNT_NAME,
+	       S.SHOP_NAME,
+	       P.PERSONAL_NAME        AS PERSON_NAME,
+	       NVL(IO.INVOICE_STAT,0)        AS INVOICE_STAT
+	  FROM TB_TRANS_LOG_HIS TL
+	 INNER JOIN TB_INTFACE_TRANS_LOG_HIS IL
+	    ON IL.INTERFACE_PRIMARY_KEY = TL.DMS_RELATED_KEY
+	   AND TL.TRANS_ID = IL.TRANS_ID
+	  LEFT JOIN TB_MERCHANT_INF M
+	    ON TL.MCHNT_CODE = M.MCHNT_CODE
+	  LEFT JOIN TB_SHOP_INF S
+	    ON TL.SHOP_CODE = S.SHOP_CODE
+	 INNER JOIN TB_SHOP_INF S1
+	    ON S.P_SHOP_CODE = S1.SHOP_CODE
+	  LEFT JOIN TB_ACCOUNT_INF AI
+	    ON AI.ACCOUNT_NO = TL.PRI_ACCT_NO
+	  LEFT JOIN TB_USER_INF U
+	    ON U.USER_ID = AI.USER_ID
+	  LEFT JOIN TB_PERSON_INF P
+	    ON P.PERSONAL_ID = AI.PERSONAL_ID
+	  LEFT JOIN TB_INVOICE_ORDER IO
+	    ON IO.ITF_PRIMARY_KEY = TL.DMS_RELATED_KEY
+	 WHERE 1 = 1
+	 	AND TL.TRANS_ID IN ('W10','W11','W71','W74','W30','W75')
+	 	AND TL.TRANS_ST IN ('1','3','17')
+	 	AND TL.RESP_CODE = '00'
+	    AND TL.MCHNT_CODE = #{mchntCode}
+	    AND S1.SHOP_CODE = #{shopCode}
+	   <if test="shopName !=null and shopName !='' ">
+			AND S.SHOP_NAME LIKE '%' || #{shopName} || '%'
+		</if>
+		<if test="personName !=null and personName !='' ">
+			AND P.PERSONAL_NAME LIKE '%' || #{personName} || '%'
+		</if>
+		<if test="transId !=null and transId !='' ">
+			AND TL.TRANS_ID=#{transId}
+		</if>
+		<if test="transSt !=null and transSt !='' ">
+			AND TL.TRANS_ST=#{transSt}
+		</if>
+		<if test="dmsRelatedKey !=null and dmsRelatedKey !='' ">
+			AND SUBSTR(TL.DMS_RELATED_KEY,-6)=#{dmsRelatedKey}
+		</if>
+		<if test="invoiceStat !=null and invoiceStat !='' ">
+			AND IO.INVOICE_STAT = #{invoiceStat}
+		</if>
+		<if test="startTransTime != null and startTransTime != ''">
+            AND IL.CREATE_TIME &gt;= to_date(#{startTransTime}, 'YYYY-MM-DD HH24:MI:SS')
+        </if>
+        <if test="endTransTime != null  and endTransTime != ''">
+           	AND IL.CREATE_TIME &lt;= to_date(#{endTransTime}, 'YYYY-MM-DD HH24:MI:SS')
+        </if>
+	 ORDER BY TRANS_TIME DESC
+	</select>
+	
+	
+	<select id="getTransLogByDmsRelatedKey" parameterType="string" resultType="TransLog">
+		SELECT 
+	      <include refid="TransLogColumns" />
+	       IL.DMS_RELATED_KEY     AS REFERENCE_NO,
+	       IL.CREATE_TIME         AS TRANS_TIME,
+	       M.MCHNT_NAME,
+	       S.SHOP_NAME,
+	       P.PERSONAL_NAME        AS PERSON_NAME,
+	       NVL(IO.INVOICE_STAT,0)        AS INVOICE_STAT
+	  FROM TB_TRANS_LOG${tableNum} TL
+	 INNER JOIN TB_INTFACE_TRANS_LOG${tableNum} IL
+	    ON IL.INTERFACE_PRIMARY_KEY = TL.DMS_RELATED_KEY
+	   AND TL.TRANS_ID = IL.TRANS_ID
+	  LEFT JOIN TB_MERCHANT_INF M
+	    ON TL.MCHNT_CODE = M.MCHNT_CODE
+	  LEFT JOIN TB_SHOP_INF S
+	    ON TL.SHOP_CODE = S.SHOP_CODE
+	 INNER JOIN TB_SHOP_INF S1
+	    ON S.P_SHOP_CODE = S1.SHOP_CODE
+	  LEFT JOIN TB_ACCOUNT_INF AI
+	    ON AI.ACCOUNT_NO = TL.PRI_ACCT_NO
+	  LEFT JOIN TB_USER_INF U
+	    ON U.USER_ID = AI.USER_ID
+	  LEFT JOIN TB_PERSON_INF P
+	    ON P.PERSONAL_ID = AI.PERSONAL_ID
+	  LEFT JOIN TB_INVOICE_ORDER IO
+	    ON IO.ITF_PRIMARY_KEY = TL.DMS_RELATED_KEY
+	 WHERE TL.DMS_RELATED_KEY = #{dmsRelatedKey}
+	</select>
+</mapper>

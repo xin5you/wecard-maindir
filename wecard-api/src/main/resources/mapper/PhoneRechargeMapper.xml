@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wecard.api.module.phoneRecharge.mapper.PhoneRechargeMapper">
+
+	<sql id="phoneRechargeColumns">
+		R_ID,
+		SUPPLIER_ORDER_NO,
+		CHANNEL_ORDER_NO,
+		SUPPLIER,
+		USER_ID,
+		PHONE,
+		TELEPHONE_FACE,
+		TRANS_AMT,
+		DISCOUNTS_AMT,
+		SUPPLIER_AMT,
+		FLUX_FACE,
+		GOODS_NO,
+		TRANS_STAT,
+		ORDER_TYPE,
+		REQ_CHANNEL,
+		NOTIFY_URL,
+		ATTACH,
+		RESV1,
+		RESV2,
+		RESV3,
+		RESV4,
+		RESV5,
+		RESV6,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER,
+		CREATE_TIME,
+		UPDATE_USER,
+		UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+	
+	<select id="getPhoneRechargeOrderById" parameterType="String" resultType="PhoneRechargeOrder">
+		SELECT 
+			<include refid="phoneRechargeColumns" />
+		FROM TB_PHONE_RECHARGE_ORDER WHERE R_ID = #{rId}
+	</select>
+	
+	<insert id="innsertPhoneRechargeOrder" parameterType="PhoneRechargeOrder">
+		INSERT INTO TB_PHONE_RECHARGE_ORDER
+		(
+			<include refid="phoneRechargeColumns" />
+		) VALUES (
+			#{rId,jdbcType=VARCHAR},
+			#{supplierOrdeNo,jdbcType=VARCHAR},
+			#{channelOrderNo,jdbcType=VARCHAR},
+			#{supplier,jdbcType=VARCHAR},
+			#{userId,jdbcType=VARCHAR},
+			#{phone,jdbcType=VARCHAR},
+			#{telephoneFace,jdbcType=VARCHAR},
+			#{transAmt,jdbcType=VARCHAR},
+			#{discountsAmt,jdbcType=VARCHAR},
+			#{supplierAmt,jdbcType=VARCHAR},
+			#{fluxFace,jdbcType=VARCHAR},
+			#{goodsNo,jdbcType=VARCHAR},
+			#{transStat,jdbcType=VARCHAR},
+			#{orderType,jdbcType=VARCHAR},
+			#{reqChannel,jdbcType=VARCHAR},
+			#{notifyUrl,jdbcType=VARCHAR},
+			#{attach,jdbcType=VARCHAR},
+			#{resv1,jdbcType=VARCHAR},
+			#{resv2,jdbcType=VARCHAR},
+			#{resv3,jdbcType=VARCHAR},
+			#{resv4,jdbcType=VARCHAR},
+			#{resv5,jdbcType=VARCHAR},
+			#{resv6,jdbcType=VARCHAR},
+			'0',
+			#{remarks,jdbcType=VARCHAR},
+			#{createUser,jdbcType=VARCHAR},
+			sysdate,
+			#{updateUser,jdbcType=VARCHAR},
+			sysdate,
+			'0'
+		)
+	</insert>
+	
+	
+	<update id="updatePhoneRechargeOrder" parameterType="PhoneRechargeOrder">
+		UPDATE TB_PHONE_RECHARGE_ORDER SET 
+		<if test="supplierOrdeNo != null and supplierOrdeNo != '' ">
+       		SUPPLIER_ORDER_NO = #{supplierOrdeNo,jdbcType=VARCHAR},
+        </if>
+        <if test="channelOrderNo != null and channelOrderNo != '' ">
+	       CHANNEL_ORDER_NO = #{channelOrderNo,jdbcType=VARCHAR},
+	    </if>
+	    <if test="transStat != null and transStat != '' ">
+	       TRANS_STAT = #{transStat,jdbcType=VARCHAR},
+	    </if>
+	    <if test="dataStat != null and dataStat != '' ">
+	       DATA_STAT = #{dataStat,jdbcType=VARCHAR},
+	    </if>  
+	       UPDATE_TIME = sysdate,
+	       LOCK_VERSION = LOCK_VERSION+1
+	       WHERE R_ID = #{rId}
+	</update>
+	
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.common.wecard.module.rule.mapper.RuleDeclareDao">
+		
+	<resultMap type="RuleDeclare" id="RuleDeclareResultMap">
+		<result column="RULE_ID" property="ruleId"/>
+		<result column="RULE_TYPE_CODE" property="ruleTypeCode"/>
+		<result column="RULE_TYPE" property="ruleType"/>
+		<result column="TRANS_RULE_ID" property="transRuleId"/>
+		<result column="RULE_FACTOR_NUM" property="ruleFactorNum"/>
+		
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="RuleDeclareColumns">
+		m.RULE_ID,
+		m.RULE_TYPE_CODE,
+		m.RULE_TYPE,
+		m.TRANS_RULE_ID,
+		m.RULE_FACTOR_NUM,
+		m.DATA_STAT,
+		m.REMARKS,
+		m.CREATE_USER,
+		m.UPDATE_USER,
+		m.CREATE_TIME,
+		m.UPDATE_TIME,
+		m.LOCK_VERSION	
+	</sql>
+	
+	<select id="getRuleDeclareById" parameterType="java.lang.String" resultMap="RuleDeclareResultMap">
+		SELECT 
+	  		<include refid="RuleDeclareColumns" />
+		 		FROM TB_RULE_DECLARE m WHERE  m.RULE_ID=#{ruleId}
+	</select>
+	
+	<insert id="insertRuleDeclare" parameterType="RuleDeclare">
+		INSERT INTO TB_RULE_DECLARE (
+			RULE_ID,
+			RULE_TYPE_CODE,
+			RULE_TYPE,
+			TRANS_RULE_ID,
+			RULE_FACTOR_NUM,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER, 
+			CREATE_TIME, 
+			LOCK_VERSION
+		 )  VALUES (
+		 		#{ruleId},
+		 		#{ruleTypeCode,jdbcType=VARCHAR},
+		 		#{ruleType,jdbcType=VARCHAR},
+		 		#{transRuleId,jdbcType=VARCHAR},
+		 		#{ruleFactorNum,jdbcType=VARCHAR},
+		 		#{dataStat,jdbcType=VARCHAR},
+		 		#{remarks,jdbcType=VARCHAR},
+		 		#{createUser,jdbcType=VARCHAR},
+		 		sysdate,
+		 		'0') 
+	</insert>
+	
+	<update id="updateRuleDeclare" parameterType="RuleDeclare">
+			UPDATE TB_RULE_MODEL SET
+				RULE_TYPE_CODE=#{ruleTypeCode},
+		 		RULE_TYPE=#{ruleType,jdbcType=VARCHAR},
+		 		TRANS_RULE_ID=#{transRuleId,jdbcType=VARCHAR},
+		 		RULE_FACTOR_NUM=#{ruleFactorNum,jdbcType=VARCHAR},,
+				DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+				REMARKS=#{remarks,jdbcType=VARCHAR},
+				UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+				UPDATE_TIME=sysdate
+			 	WHERE RULE_ID = #{ruleId} 
+	</update>
+
+</mapper>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<#include "../../common/wecardHeader.html"> 
+	</head>
+	<body>
+		<form id="myForm" name="myForm" action="${s.base}/trans/order/unifiedOrder.html" method="post">
+			<input id="channel" name="channel" type="hidden" value="${orderReq.channel!}"/>
+			<input id="userId" name="userId" type="hidden" value="${orderReq.userId!}" />
+			<input id="orderId" name="orderId" type="hidden" value="${orderReq.orderId!}" />
+			<input id="innerMerchantNo" name="innerMerchantNo" type="hidden" value="${orderReq.innerMerchantNo!}" />
+			<input id="innerShopNo" name="innerShopNo" type="hidden" value="${orderReq.innerShopNo!}" />
+			<input id="commodityName" name="commodityName" type="hidden" value="${orderReq.commodityName!}" />
+			<input id="commodityNum" name="commodityNum" type="hidden" value="${orderReq.commodityNum!}" />
+			<input id="txnAmount" name="txnAmount" type="hidden" value="${orderReq.txnAmount!}" />
+			<input id="attach" name="attach" type="hidden" value="${orderReq.attach!}" />
+			<input id="notify_url" name="notify_url" type="hidden" value="${orderReq.notify_url!}" />
+			<input id="redirect_type" name="redirect_type" type="hidden" value="${orderReq.redirect_type!}" />
+			<input id="redirect_url" name="redirect_url" type="hidden" value="${orderReq.redirect_url!}" />
+			<input id="sign" name="sign" type="hidden" value="${orderReq.sign!}" />
+		</form>
+		<script type="text/javascript">
+			document.myForm.submit();
+		</script>
+	</body>
+</html>	

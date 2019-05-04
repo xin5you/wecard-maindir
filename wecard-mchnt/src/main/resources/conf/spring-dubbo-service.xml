@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">     
+	
+	<!-- 服务消费者应用名称 -->
+	<dubbo:application name="dubbo_wecard_mchnt" />
+
+	<!-- 服务消费者缺省值配置 -->
+	<dubbo:consumer check="false" timeout="2000" />
+
+	<dubbo:registry  address="${wecard.dubbo.registry.address}"/>
+	<!-- 要引用的服务 -->
+	<dubbo:reference id="wxDroolsExcutor" interface="com.cn.thinkx.service.drools.WxDroolsExcutor" cluster="failfast">
+		<dubbo:method name="getRechargeDiscount" timeout="60000" retries="0"/>
+	</dubbo:reference>
+	
+	<dubbo:reference id="java2TxnBusinessFacade" interface="com.cn.thinkx.service.txn.Java2TxnBusinessFacade" cluster="failfast">
+		<dubbo:method name="consumeTransactionITF" mock="true" timeout="3000" retries="0" />
+		<dubbo:method name="merchantWithdrawITF" timeout="5000" retries="0" />
+		<dubbo:method name="merchantAccountOpeningITF" timeout="10000" retries="0"/>
+		<dubbo:method name="customerAccountOpeningITF" timeout="10000" retries="0"/>
+		<dubbo:method name="consumeRefundITF" timeout="10000" retries="0" />
+		<dubbo:method name="transExceptionQueryITF" timeout="10000" retries="2" />
+	</dubbo:reference>
+	
+	<dubbo:reference id="hkbTxnFacade" interface="com.cn.thinkx.facade.service.HKBTxnFacade" cluster="failfast">
+		<dubbo:method name="cardBalanceQueryITF" timeout="20000" retries="2"/>
+	</dubbo:reference>
+</beans>

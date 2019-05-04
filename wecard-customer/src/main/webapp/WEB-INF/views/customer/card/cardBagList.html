@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<#include "../../common/wecardHeader.html"> 
+<script src="${s.base}/static/js/module/card/cardBagList.js?v=${s.version}" ></script>
+    <!--通用媒体查询-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+
+    <title>&#x6211;&#x7684;&#x5361;&#x5305;</title>
+</head>
+<body>
+
+<#if (!cardList ??) || cardList?size == 0>
+	<div class="hkb_shopping_card_blank">
+
+    <img src="${s.base}/static/images/card_blank_1.png">
+
+    <div>&#x60A8;&#x7684;&#x5361;&#x5305;&#x76EE;&#x524D;&#x6CA1;&#x6709;&#x4F1A;&#x5458;&#x5361;</div>
+
+    <div class="card_blank_text">去购卡</div>
+
+</div>
+</#if>
+
+
+<#if cardList ??&& cardList?size gt 0>
+	<#list cardList as cards>
+			<div class="hkb_cards_holder hkb_shadow">
+			    <a class="card_content hkb_alignment_center" href="${s.base}/customer/card/cardRecharge.html?innerMerchantNo=${cards.mchntCode!}">
+			        <div class="content_left hkb_alignment_left">
+			            <div class="business_pic"><img src="${cards.productImage!}"></div>
+			            <div class="content_right">
+			                <p>${cards.productName!}</p>
+			                <p>&#x4F59;&#x989D;&#xFF1A;&#xFFE5;<span>${cards.productBalance!}</span></p>
+			            </div>
+			        </div>
+			        <div class="recharge">
+			            <p><img src="${s.base}/static/images/card_rechange.png"></p>
+			            <p>&#x70B9;&#x51FB;&#x5145;&#x503C;</p>
+			        </div>
+			
+			    </a>
+			    <a class="card_border hkb_alignment_center" href="${s.base}/customer/card/cardTransList.html?innerMerchantNo=${cards.mchntCode!}">
+			        <div>&#x67E5;&#x770B;&#x8D26;&#x5355;</div>
+			        <div><img src="${s.base}/static/images/card_arrow.png"></div>
+			    </a>
+			</div>
+	</#list>
+</#if>	
+</body>
+</html>

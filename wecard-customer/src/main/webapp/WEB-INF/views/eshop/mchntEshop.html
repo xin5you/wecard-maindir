@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<#include "../common/wecardHeader.html">
+		<!--通用媒体查询-->
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+		<title>商户列表</title>
+	</head>
+	<body>
+		<#if (!eshopList ??) || eshopList?size == 0>
+			<div class="hkb_shopping_store_blank">
+			
+			    <img src="${s.base}/static/images/store_blank_1.png">
+			
+			    <div>Sorry&#x4EB2;&#xFF0C;&#x60A8;&#x5F53;&#x524D;&#x5DF2;&#x8D2D;&#x5361;&#x5546;&#x6237;&#x6682;&#x672A;&#x5F00;&#x653E;&#x7535;&#x5B50;&#x5546;&#x57CE;&#x54E6;~</div>
+			
+			</div>
+		</#if>
+	
+		<#if eshopList ??&& eshopList?size gt 0>
+		<div class="hkb_mall_list">
+			<img src="${s.base}/static/images/hkb_banner.jpg" />
+		</div>
+		<!-- 会员卡-->
+		<!--Banner1-->
+		<div class="hkb_membership_card">
+			<!-- list 1-->
+			<#list eshopList as eshop> 
+				<a class="hkb_membership_banner1" href="${s.base}/eshop/mchntEshop/redirectUrl.html?eShopId=${eshop.eShopId}">
+				<div class="hkb_banner1_images">
+					<img src="${eshop.bgUrl}" />
+				</div>
+				<div class="seller_logo_1">
+					<img src="${eshop.eShopLogo}" />
+				</div>
+	
+				<div class="hkb_banner1_background">
+					<div class="hkb_banner1_text">
+						<img src="${s.base}/static/images/hkb_house_1.png" />
+						${eshop.eShopName}
+					</div>
+					<div class="banner1_next">
+						<img src="${s.base}/static/images/hkb_next.png" />
+					</div>
+				</div>
+				<div class="banner1_go">
+					<div class="banner1_go_text">GO</div>
+				</div>
+			</a> 
+			</#list> 
+		</#if>
+		</div>
+	</body>
+</html>

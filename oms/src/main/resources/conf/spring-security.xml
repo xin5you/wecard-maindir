@@ -1,0 +1,82 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+  xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!-- 开发环境可以放置 <debug /> 配置，会输出详细Security处理日志，正式环境建议屏蔽 <debug /> 配置 
+    <debug />-->
+    <http pattern="/login/loginIndex.do" security="none" />
+    <http pattern="/denied.jsp" security="none" />
+    <http pattern="/login/doLogin.do" security="none" />
+	<http pattern="/authcode/genAuthCode.do" security="none" />
+	<http pattern="/login/main.do" security="none" />
+	  <!-- auto-config="true" -->  
+     <http use-expressions="true" entry-point-ref="myAuthenticationEntryPoint" >
+            
+          <intercept-url pattern="/**" access="isAuthenticated()" />
+          
+          <!-- 单用户登陆 -->
+          <session-management>
+             <concurrency-control max-sessions="1"  error-if-maximum-exceeded="true"/>
+          </session-management>
+           <!-- 尝试访问没有权限的页面时跳转的页面 -->
+          <access-denied-handler error-page="/denied.jsp"/>
+          <custom-filter ref="loginFilter" position="FORM_LOGIN_FILTER"/>
+          <custom-filter ref="myFilter" before="FILTER_SECURITY_INTERCEPTOR"/>
+          <!-- 检测失效的sessionId,session超时时，定位到另外一个URL -->  
+           <session-management invalid-session-url="/denied.jsp" />
+           <logout invalidate-session="true"  logout-success-url="/"  logout-url="/login/logout.do"/>
+
+  	</http>
+	 
+	 <!-- 登录验证器 -->  
+    <beans:bean id="loginFilter"  
+        class="com.cn.thinkx.oms.module.security.controller.MyUsernamePasswordAuthenticationFilter">  
+       <beans:property name="filterProcessesUrl" value="/user/doLogin.do"></beans:property>  
+          <!-- 验证成功后的处理  -->   
+        <beans:property name="authenticationSuccessHandler" ref="loginLogAuthenticationSuccessHandler"></beans:property>
+        <beans:property name="authenticationFailureHandler" ref="simpleUrlAuthenticationFailureHandler"></beans:property>  
+        <beans:property name="authenticationManager" ref="authenticationManager"></beans:property>
+    </beans:bean>
+    
+    <beans:bean id="loginLogAuthenticationSuccessHandler"  
+        class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">  
+        <beans:property name="defaultTargetUrl" value="/main/index.do"></beans:property>  
+    </beans:bean>
+    
+    <beans:bean id="simpleUrlAuthenticationFailureHandler"  
+        class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">  
+        <!-- 可以配置相应的跳转方式。属性forwardToDestination为true采用forward false为sendRedirect -->  
+        <beans:property name="defaultFailureUrl" value="/login/loginIndex.do"></beans:property>  
+    </beans:bean>
+    
+    <!-- 实现了UserDetailsService的Bean 用户拥有的权限：登录后取得用户所保有的权限信息-->
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider user-service-ref="userDetailService" />
+	</authentication-manager>
+	
+    <!-- 认证过滤器 -->  
+        <beans:bean id="myFilter"  class="com.cn.thinkx.oms.module.security.service.impl.MyFilterSecurityInterceptor"> 
+            <beans:property name="authenticationManager"  ref="authenticationManager" /> 
+            <beans:property name="accessDecisionManager"  ref="myAccessDecisionManager" />    
+            <beans:property name="securityMetadataSource" ref="mySecurityMetadataSource" /> 
+        </beans:bean>
+	
+	  <!-- 获取登录的用户、用户权限 -->	   
+	    <beans:bean id="userDetailService" class="com.cn.thinkx.oms.module.security.service.impl.MyUserDetailServiceImpl"></beans:bean>
+	
+	   <!-- 判断是否有权限访问请求的url页面 -->
+	    <beans:bean id="myAccessDecisionManager" class="com.cn.thinkx.oms.module.security.service.impl.MyAccessDecisionManager"></beans:bean>     
+	    
+	    <!-- 获取数据库中所有的url资源，读出url资源与权限的对应关系  -->    
+	    <beans:bean id="mySecurityMetadataSource" class="com.cn.thinkx.oms.module.security.service.impl.MySecurityMetadataSource"> </beans:bean>  
+	
+	 	<!-- 未登录的切入点 -->
+	    <beans:bean id="myAuthenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+	        <beans:property name="loginFormUrl" value="/login/loginIndex.do"></beans:property>
+	    </beans:bean>
+	
+</beans:beans>

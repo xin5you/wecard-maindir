@@ -1,0 +1,231 @@
+<!-- header -->
+<header th:fragment="navbar">
+<!-- nav -->
+<!-- /nav -->
+<nav class="basic_platform_nav">
+    <!-- /标题-->
+    <span class="nav_hkb_title">
+    	<img th:src="@{/icon/nav_hkb_logo.png}" />
+    	知了企服商户自助服务平台
+    </span>
+    <div class="nav_hkb_operation">
+        <!-- <span class="hkb_user"> -->
+        <span>
+	        <img th:src="@{/icon/nav_hkb_personal.png}" />
+	        <a th:if="${session.sessionUser.userName == null}"></a>
+        	<a th:unless="${session.sessionUser.userName == null}" th:text="${session.sessionUser.userName}"></a>
+        </span>
+        <!-- 下拉窗口-->
+        <!-- <div class="hkb_user_list" id="userList">
+            <div class="title">账户信息</div>
+            	<div class="user_details">
+                	<p><span>职位：</span>门店店长</p>
+                	<p><span>账号：</span>977979797979797</p>
+            	</div>
+            	<div class="user_operation">
+                	<a href="javascript:;">修改密码</a>
+                	<a href="javascript:;">详情</a>
+            	</div>
+        	</div> -->
+        	<span id="userLogOut" class="hkb_home">
+	        	<img th:src="@{/icon/nav_hkb_logout.png}" />
+	        	退出
+        	</span>
+    </div>
+</nav>
+<!-- 二级页 -->
+<!-- /二级页-->
+<div class="nav_hkb_tab">
+    <div class="tab_content">
+        <ul id="HKB_tabUl">
+            <!-- 商户数据-->
+            <li class="tab_block" sec:authorize="hasRole('ROLE_DIY_ORIGINAL_MANAGER')">
+                <div class="tab_block_title">
+                    <!-- 标题 -->
+                    <img th:src="@{/icon/tab_management_data_green.png}" />
+                    <span>数据管理</span>
+                </div>
+                <!-- 下拉框-->
+                <div class="drop_down_list">
+                    <div class="main_content">
+                        <!-- 内容1-->
+                        <div class="drop_content_tab" id="mchnt" sec:authorize="hasRole('ROLE_DIY_MCHNT_DATA')">
+                            <p class="img_box">
+                                <img th:src="@{/icon/tab_management_data_green.png}" />
+                            </p>
+                            <p>商户数据</p>
+                        </div>
+                        <!-- 内容2-->
+                        <div class="drop_content_tab" id="shop" sec:authorize="hasRole('ROLE_DIY_SHOP_DATA')">
+                            <p class="img_box">
+                                <img th:src="@{/icon/tab_store_data_green.png}" />
+                            </p>
+                            <p>门店数据</p>
+                        </div>
+                        <!-- 内容2-->
+                        <div class="drop_content_tab" id="shopStatics" sec:authorize="hasRole('ROLE_DIY_OPERATE_DATA_LIST')">
+                            <p class="img_box">
+                                <img th:src="@{/icon/tab_set_data_green.png}" />
+                            </p>
+                            <p>运营数据设置</p>
+                        </div>
+                        <!-- arrow-->
+                    </div>
+                </div>
+            </li>
+            
+            <!-- 商户数据-->
+            <li class="tab_block" sec:authorize="hasRole('ROLE_DIY_MCHNT_TRANS')">
+                <div class="tab_block_title">
+                    <!-- 标题 -->
+                    <img th:src="@{/icon/tab_management_data_green.png}" />
+                    <span>交易流水管理</span>
+                </div>
+                <!-- 下拉框-->
+                <div class="drop_down_list">
+                    <div class="main_content">
+                        <!-- 内容1-->
+                        <div class="drop_content_tab" id="transQuery"  sec:authorize="hasRole('ROLE_DIY_MCHNT_TRANS_QUERY')">
+                            <p class="img_box">
+                                <img th:src="@{/icon/tab_management_data_green.png}" />
+                            </p>
+                            <p>交易流水查询</p>
+                        </div>
+                        <!-- 内容2-->
+                        <div class="drop_content_tab" id="transCount"  sec:authorize="hasRole('ROLE_DIY_MCHNT_TRANS_COUNT')">
+                            <p class="img_box">
+                                <img th:src="@{/icon/tab_store_data_green.png}" />
+                            </p>
+                            <p>当日交易统计</p>
+                        </div>
+                        <!-- arrow-->
+                    </div>
+                </div>
+            </li>
+            
+            <!-- 分销商/话费 -->
+            <li class="tab_block" sec:authorize="hasRole('ROLE_DIY_CHANNEL_MANAGER')">
+                <div class="tab_block_title">
+                    <!-- 标题 -->
+                    <img th:src="@{/icon/tab_management_data_green.png}" />
+                    <span>分销商/话费</span>
+                </div>
+                <!-- 下拉框-->
+                <div class="drop_down_list">
+                    <div class="main_content">
+                        <!-- 内容1-->
+                        <div class="drop_content_tab" id="channel" sec:authorize="hasRole('ROLE_DIY_CHANNEL_INF')">
+                            <p class="img_box">
+                                <img th:src="@{/icon/tab_management_data_green.png}" />
+                            </p>
+                            <p>分销商信息</p>
+                        </div>
+                        <!-- 内容2-->
+                        <div class="drop_content_tab" id="listOrder" sec:authorize="hasRole('ROLE_DIY_CHANNEL_ORDER')">
+                            <p class="img_box">
+                                <img th:src="@{/icon/tab_store_data_green.png}" />
+                            </p>
+                            <p>充值订单</p>
+                        </div>
+                        <!-- arrow-->
+                    </div>
+                </div>
+            </li>
+            
+            <!-- 商户管理-->
+            <li class="tab_block" sec:authorize="hasRole('ROLE_DIY_SYSUSER_MANAGER')">
+                <div class="tab_block_title">
+                    <img th:src="@{/icon/tab_management_merchant_green.png}" />
+                    <span>&#x5546;&#x6237;&#x7BA1;&#x7406;</span>
+                </div>
+                <!-- 下拉框-->
+                <div class="drop_down_list">
+                    <div class="main_content">
+                        <!-- 内容1-->
+                        <div class="drop_content_tab" id="member" sec:authorize="hasRole('ROLE_DIY_USERINF')">
+                            <p class="img_box">
+                                <img th:src="@{/icon/tab_management_member_green.png}" />
+                            </p>
+                            <p>成员管理</p>
+                        </div>
+                        <!-- arrow-->
+                    </div>
+                </div>
+            </li>
+            <!--运营数据查询 -->
+            <li class="tab_block" sec:authorize="hasRole('ROLE_DIY_OPERATE_DATA_QUERY_MANAGER')">
+                <div class="tab_block_title">
+                    <img th:src="@{/icon/tab_query_data_green.png}" />
+                    <span>&#x8FD0;&#x8425;&#x6570;&#x636E;&#x67E5;&#x8BE2;</span>
+                </div>
+                <!-- 下拉框-->
+                <div class="drop_down_list">
+                    <div class="main_content">
+                        <div class="drop_content_tab" id="positOprStatistics" sec:authorize="hasRole('ROLE_DIY_OPERATE_DATA_QUERY')">
+                            <p class="img_box">
+                                <img th:src="@{/icon/tab_query_data_green.png}" />
+                            </p>
+                            <p>&#x5546;&#x6237;&#x6570;&#x636E;&#x67E5;&#x8BE2;</p>
+                        </div>
+                        <!-- arrow-->
+                        <span class="arrow"></span>
+                    </div>
+                </div>
+            </li>
+            <!--开票 -->
+            <li class="tab_block" sec:authorize="hasRole('ROLE_DIY_INVOICE_ORDER')">
+                <div class="tab_block_title">
+                    <img th:src="@{/icon/tab_query_data_green.png}" />
+                    <span>开票管理</span>
+                </div>
+                <!-- 下拉框-->
+                <div class="drop_down_list">
+                    <div class="main_content">
+                     	<!-- 内容2-->
+                        <div class="drop_content_tab" id="invoiceOrder" sec:authorize="hasRole('ROLE_DIY_INVOICE_ORDER_PER')">
+                            <p class="img_box">
+                                <img th:src="@{/icon/tab_query_data_green.png}" />
+                            </p>
+                            <p>个充开票</p>
+                        </div>
+                        <!-- 内容2-->
+                        <div class="drop_content_tab" id="invoOrdStatistics" sec:authorize="hasRole('ROLE_DIY_INVO_ORD_STATISTICS')">
+                            <p class="img_box">
+                                <img th:src="@{/icon/tab_management_member_green.png}" />
+                            </p>
+                            <p>开票金额统计</p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+</div>
+<!-- 下拉菜单 -->
+<!-- 下拉框-->
+<!--
+<div class="drop_down_list show">
+    <div class="main_content">
+        <ul>
+            <li>
+                <p class="img_box">
+                    <img th:src="@{/icon/tab_data_query_gray.png}" />
+                    <img th:src="@{/icon/tab_data_query_green.png}" />
+                </p>
+                <p>运营数据查询</p>
+            </li>
+            <li>
+                <p class="img_box">
+                    <img th:src="@{/icon/tab_data_edit_gray.png}" />
+                    <img th:src="@{/icon/tab_data_edit_green.png}" />
+                </p>
+                <p>商户数据修改</p>
+            </li>
+        </ul>
+    </div>
+</div>-->
+<script th:src="@{/diy/js/main/navbar.js}"></script>
+
+
+</header>

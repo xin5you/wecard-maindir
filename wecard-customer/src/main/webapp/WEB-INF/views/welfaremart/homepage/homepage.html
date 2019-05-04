@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<#include "../../common/wecardHeader.html">
+    <meta charset="UTF-8">
+    <title>卡券集市</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no, email=no">
+	<link rel="stylesheet" href="${s.base}/static/css/hkb_welfare.min.css?v=${s.version}" />
+</head>
+<body>
+	<!--知了企服-福利买卖-->
+	<input type="hidden" id="mchntCode" name="mchntCode" value="${userInfo.mchntCode}" />
+	<div class="home_all">
+		<!--信息板-->
+		<div class="home_all_plate">
+			<div class="home_ban">
+			    <div class="home_number">
+			        <div class="number_left">
+			            <p>知了余额</p>
+			            <p><span>${userInfo.balance!}</span></p>
+			        </div>
+			        <div class="number_right" >
+			            <p>我的卡券</p>
+			            <p><span>${userInfo.cardNum!}</span>张</p>
+			        </div>
+			    </div>
+			    <div s="" class="box_in" >
+			        <div>
+			            <img src="${s.base}/static/images/welfaremart/card_show.png">
+			            <p>点击以下兑换卡券</p>
+			        </div>
+			        <!-- <a href="${s.base}/welfareMart/welfareCardBagList.html">我的卡券</a> -->
+			    </div>
+			</div>
+		</div>
+		<div class="home_all_empty"></div>
+		<div>
+			<#if cardKeysProductList ??&& cardKeysProductList?size gt 0>
+				<#list cardKeysProductList as phoneCards>
+			    <!--卡券-->
+				<a class="list_box" href="${s.base}/welfareMart/toWelfareBuyCard.html?productCode=${phoneCards.productCode!}" >
+					<div class="left">
+					    <p><span>￥</span><span>${phoneCards.orgAmount!}</span></p>
+					</div>
+					<div class="right">
+					    <div>
+					        <p class="card_name">${phoneCards.productName!}</p>
+					        <p class="card_money">售价：<span>${phoneCards.amount!}</span></p>
+					    </div>
+					    <p class="card_go">点击兑换</p>
+					</div>
+				</a>
+				</#list>
+			</#if>
+		</div>
+	</div>
+	
+	<script src="${s.base}/static/js/common/fastclick.min.js?v=${s.version}"></script>
+	<script src="${s.base}/static/js/common/hkb_welfare.min.js?v=${s.version}"></script>
+	<script src="${s.base}/static/js/common/LAreaData2.min.js?v=${s.version}"></script>
+	<script src="${s.base}/static/js/module/welfaremart/homepage/homepage.js"></script>
+</body>
+</html>

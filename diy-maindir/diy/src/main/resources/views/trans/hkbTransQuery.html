@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	lang="en">
+<link rel="stylesheet" th:href="@{/diy/css/hkbServicePlatform.min.css}" />
+<head th:include="main/header::header" />
+<!-- nav 导航栏-->
+<header th:include="main/navbar::navbar"/>
+<body>
+
+<!-- 退款流程 -->
+<form id="searchForm" th:action="@{/trans/mchnt/getTransQuery}" th:object="${log}" method="post">
+<div class="content_body">
+
+    <div class="title_content_title">
+        <p><img th:src="@{/icon/tab_query_data_green.png}" />交易流水查询</p>
+    </div>
+
+
+    <div class="info_middle_body">
+
+    <!-- 操作组件-->
+
+
+      <div class="info_content_operation">
+          <!-- data组件-->
+          <div class="control_list half_list">
+
+            <div class="hkb_date_list">
+                <span>档口名称：</span>
+                <span>
+                     <input type="text" class="layui-input hkb_item" id="shopName" name="shopName" th:value="*{shopName}" placeholder="请输入档口名称"/>					 
+
+                </span>
+            </div>
+
+            <div class="hkb_date_list">
+                <span>用户名：</span>
+                <span>
+                     <input type="text" id="personName" name="personName" th:value="*{personName}" class="layui-input hkb_item" placeholder="请输入用户名"/>
+
+                </span>
+            </div>
+
+
+        </div>
+
+          <div class="control_list half_list">
+
+              <div class="hkb_date_list">
+                  <span>交易类型：</span>
+                  <span>
+                      <select class="layui-input hkb_item" id='transId' name="transId" >
+                        <option value="">全部</option>
+								<option th:each="tt,ttStat : ${transTypeList}" th:value="${tt.code}"><span th:text="${tt.value}"></span></option>
+                    </select>
+
+                </span>
+              </div>
+
+              <div class="hkb_date_list">
+                  <span>流水号：</span>
+                  <span>
+                     <input type="text" class="layui-input hkb_item" id="dmsRelatedKey" name="dmsRelatedKey" th:value="*{dmsRelatedKey}" placeholder="请输入流水号后六位"/>
+
+                </span>
+              </div>
+
+
+          </div>
+
+          <div class="control_list half_list">
+
+
+              <div class="hkb_date_list">
+                  <span>查询记录：</span>
+                  <span>
+                      <select class="layui-input hkb_item" id="queryType" name="queryType">
+                        <option value="cur">当天记录</option>
+                        <option value="his" >历史记录</option>
+                    </select>
+
+                </span>
+              </div>
+              <div class="hkb_date_list" id="date1">
+                  <span>交易开始时间：</span>
+                  <span>
+                     <input type="text" id="startTransTime" name="startTransTime" th:value="*{startTransTime}" class="layui-input hkb_item Wdate" placeholder="请选择开始时间" readonly="readonly"/>
+
+                </span>
+              </div>
+
+
+          </div>
+
+          <div class="control_list half_list">
+
+
+              <div class="hkb_date_list" id="date2">
+                  <span>交易结束时间：</span>
+                  <span>
+                     <input type="text" id="endTransTime" name="endTransTime" th:value="*{endTransTime}" class="layui-input hkb_item Wdate" placeholder="请选择结束时间" readonly="readonly"/>
+                </span>
+              </div>
+
+
+          </div>
+
+
+
+          <!-- 按钮 双-->
+
+        <div class="control_list btn_list list_row" style="text-align: right">
+
+            <button type="button" class="hkb_btn btn_green" id="btn-search" >查询</button>
+
+            <button type="button" class="hkb_btn btn_white" id="btn-reset" >重置</button>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- table -->
+
+    <div class="info_content_table">
+
+
+        <!-- table 单独-->
+        <table class="table_box" border="0" cellpadding="0" cellspacing="1" rules="cols">
+            <thead>
+            <tr class="hkb_title_tr">
+                <th>流水号</th>
+                <th>清算日</th>
+                <th>用户名</th>
+                <th>商户名称</th>
+                <th>档口名称</th>
+                <th>交易类型</th>
+                <th>交易金额</th>
+                <th>交易状态</th>
+                <th>处理结果</th>
+                <th>交易时间</th>
+                <th>原交易流水号</th>
+                <th th:if="${log.queryType == 'cur'}">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr align="center" th:each="trans,transStat : ${pageInfo.list}" th:inline="text">
+			                <td><span th:text="${trans.dmsRelatedKey}"></span></td>
+			                <td><span th:text="${trans.settleDate}"></span></td>
+			                <td><span th:text="${trans.personName}"></span></td>
+			                <td><span th:text="${trans.mchntName}"></span></td>
+			                <td><span th:text="${trans.shopName}"></span></td>
+			                <td><span th:text="${trans.transType}"></span></td>
+			                <td><span th:text="${trans.transAmt}"></span></td>
+			                <td><span th:text="${trans.transStat}"></span></td>
+			                <td><span th:text="${trans.respCode}"></span></td>
+			                <td><span th:text="${trans.transTime}"></span></td>
+			                <td><span th:text="${trans.orgDmsRelatedKey}"></span></td>
+			                <td th:if="${log.queryType == 'cur'}" class="table_operation">
+			                	<a class="btn-detail trans_refund" th:if="${trans.transSt ==1 and trans.transId == 'W10' or trans.transId == 'W71' and trans.transSt ==1}" th:attr="dmsKey=${trans.dmsRelatedKey}">退款</a>
+			                </td>
+			            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <!-- next-->
+    <div th:if="${not #lists.isEmpty(pageInfo.list)}" th:include="main/pagination::page" class="info_page"></div>
+
+
+    </div>
+
+</div>
+	</form>
+
+
+<!-- 确认退款-->
+<!--确认退款-->
+<div class="hkb_dialog" id="refundsConfirmation">
+
+    <div class="dialog_bg"></div>
+    <div class="dialog_box">
+        <div class="dialog_top">
+            <div class="dialog_close"><span>×</span></div>
+            <p>退款确认</p>
+        </div>
+        <!-- body-->
+        <div class="dialog_body">
+            <div class="dialog_content">
+                <!-- list 1-->
+                <div class="dialog_list">
+                    <div>
+                        <span>交易流水号：</span>
+                        <span id="dmsKey"></span>
+						<input type="hidden" class="dialog_input" id="txnKey" name="txnKey" value="" />
+                        <input type="hidden" class="dialog_input" id="phone" name="phone" value="" />
+                    </div>
+                    <div>
+                        <span>结算日期：</span>
+                        <span id="settleDate"></span>
+                    </div>
+                </div>
+                <div class="dialog_list">
+                    <div>
+                        <span>退款金额：</span>
+                        <span id="transAmt"></span>
+                    </div>
+                    <div>
+                        <span>操作人手机号：</span>
+                        <span id="phoneNumber"></span>
+                        <div class="identifying_code" id="identifyingCode">点击获取验证码</div>
+                    </div>
+                </div>
+                <div class="dialog_list">
+                    <div>
+                        <span>验证码：</span>
+                        <input class="dialog_input" placeholder="请输入验证码" id="phoneCode" name="phoneCode"/>
+                        <span class="dialog_error" id="dialog_error"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- footer -->
+        <div class="dialog_footer">
+            <button type="button" class="hkb_btn btn_white" onclick="refundsDialog.hide()">关闭</button>
+            <button type="button" class="hkb_btn btn_green" id="drawBack">确认退款</button>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- 退款成功-->
+<!--退款成功-->
+<div class="hkb_dialog" id="refundsState">
+
+    <div class="dialog_bg"></div>
+    <div class="dialog_box">
+        <div class="dialog_top">
+            <div class="dialog_close"><span>×</span></div>
+            <p>退款成功</p>
+        </div>
+        <!-- body-->
+        <div class="dialog_body">
+            <div class="dialog_content">
+                <!-- 退款动画 成功-->
+                <div class="pay_animation_right">
+
+                    <div class="swal2-icon swal2-success animate">
+
+                        <span class="line tip animate-success-tip"></span>
+
+                        <span class="line long animate-success-long"></span>
+
+                        <div class="placeholder"></div>
+
+                        <div class="fix"></div>
+
+                    </div>
+
+                </div>
+                <!-- 退款动画 失败-->
+                <!--<div class="payment_animation_wrong">-->
+                    <!--<div class="swal2-icon swal2-error animate-error-icon">-->
+             <!--<span class="x-mark animate-x-mark">-->
+             <!--<span class="line left"></span>-->
+             <!--<span class="line right"></span>-->
+             <!--</span>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!-- 退款文案-->
+                <p class="dialog_big_text">退款成功</p>
+            </div>
+        </div>
+        <!-- footer -->
+        <div class="dialog_footer">
+            <button type="button" class="hkb_btn btn_green" id="hkb_close" >关闭</button>
+        </div>
+    </div>
+</div>
+
+
+
+<script th:src="@{/diy/js/trans/transQuery/hkbTransQuery.js}"></script>
+	<script th:inline="javascript">
+			$("#transId").val(/*[[${log.transId}]]*/);
+			$("#queryType").val(/*[[${log.queryType}]]*/);
+		</script>
+	
+<script>addEventListener('load',function(){
+
+	//多个input绑定 format: "YYYY"/"YYYY-MM"/"YYYY-MM-DD "/"YYYY-MM-DD hh:mm:ss"
+
+//     $(".moredate").each(function(){
+//         $(this).jeDate({
+//             format: "YYYY-MM-DD hh:mm:ss"
+//         });
+//     });
+	
+    //退款确认
+    refundsDialog = new hkbShowDialog({
+
+        'ele': 'refundsConfirmation'
+    })
+
+    //退款成功
+
+    stateDialog = new hkbShowDialog({
+
+        'ele': 'refundsState'
+    })
+  //获取验证码
+    memberManagement.dropDownCode({
+        //倒计时按钮
+        'codeButton':document.getElementById('identifyingCode'),
+        //倒计时秒数
+        'nums':60
+    });
+
+})
+</script>
+</body>
+</html>

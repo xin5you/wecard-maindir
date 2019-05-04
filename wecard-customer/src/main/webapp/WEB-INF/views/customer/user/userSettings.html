@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	    <!--通用媒体查询-->
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+		<title>交易密码设置</title>
+		<#include "../../common/wecardHeader.html">
+		<script src="${s.base}/static/js/common/security.js?v=${s.version}"></script>
+		<script type="text/javascript" src="${s.base}/static/js/module/user/userSettings.js?v=${s.version}"></script>
+		<script type="text/javascript"> 
+		<!--  //通过模和公钥参数获取公钥 --> 
+		var publicKey = new RSAUtils.getKeyPair("${publicKeyExponent!}", "", "${publicKeyModulus!}");
+		</script>  
+	</head>
+<body style="background: white">
+<form action="${s.base!}/customer/user/userPwdResCommit.html" method="post" id = "myForm">
+	<input type="hidden" name="userpwd" id="userpwd" value="" >
+	<!-- 密码重置 -->
+	<!-- 注册点击 -->
+	<div class="hkb_register_inputlist">
+	<!-- 手机号码 -->
+		<div class="register_phone">
+		    <label>
+		        <img src="${s.base}/static/images/icon1.png">
+		        <input class="input_phone_icon no_entered" type="text" pattern="[0-9]*" value = "${phoneNo!}" placeholder="" readonly>
+		    </label>
+	        <div class="input_phone_active">
+	            <input type="button" class="phone_active_text" value="获取验证码" id="sendPhoneCode" onclick="sendCode(this)">
+	        </div>
+		</div>
+	    <hr>
+	    <!-- 验证码 -->
+	    <div class="register">
+	        <label>
+	           <img src="${s.base}/static/images/icon2.png">
+	           <input class="input_icon" type="text" pattern="[0-9]*" id="phoneCode" name="phoneCode" value="" placeholder="请输入验证码"  maxlength="6">
+	      </label>
+	    </div>
+	    <hr>
+	    <!-- 密码 -->
+	    <div class="register">
+	        <label>
+	           <img src="${s.base}/static/images/icon3.png">
+	           <input class="input_icon" type="password" pattern="[0-9]*" name="password"  id="password" value="" placeholder="请输入6位数字交易密码" maxlength="6">
+	        </label>
+	    </div>
+	    <hr>
+	    <div class="register">
+	        <label>
+	            <input class="input_key_again" type="password" pattern="[0-9]*" name="passwordConfirm"  id="passwordConfirm" value="" placeholder="请输入6位数字交易密码" maxlength="6">
+	        </label>
+	    </div>
+	    <hr>
+	<!--此处为报错文案显示处-->
+	    <div class="register_input_repeat" style="display: none" id = "checkViews"></div>
+	</div>
+	<!-- 密码重置 -->
+	<div class="password_go">
+	    <a class="" href= "#" id = "userSetBtn"><span>确认重置</span></a>
+	</div>
+</form>
+</body>
+</html>

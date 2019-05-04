@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.mchnteshop.mapper.MchntEshopInfMapper">
+
+	<sql id="MchntEshopInfColumns">
+		M.ESHOP_ID,
+		M.ESHOP_NAME,
+		M.MCHNT_CODE,
+		M.SHOP_CODE,
+		M.ESHOP_URL,
+		M.DATA_STAT,
+		M.ESHOP_LOGO,
+		M.BG_URL,
+		M.CHANNEL_CODE,
+		M.REMARKS,
+		M.CREATE_USER,
+		M.UPDATE_USER,
+		M.CREATE_TIME,
+		M.UPDATE_TIME,
+		M.LOCK_VERSION
+	</sql>
+		
+	<insert id="insertMchntEshopInf" parameterType="MchntEshopInf">
+	 		<selectKey resultType="string" order="BEFORE" keyProperty="eShopId">  
+				<include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getCommonId" />
+		</selectKey>
+		INSERT INTO TB_MCHNT_ESHOP_INF
+		(
+		ESHOP_ID,
+		ESHOP_NAME,
+		MCHNT_CODE,
+		SHOP_CODE,
+		ESHOP_URL,
+		CHANNEL_CODE,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION,
+		ESHOP_LOGO,
+		BG_URL
+		) VALUES (
+		#{eShopId},
+		#{eShopName,jdbcType=VARCHAR},
+		#{mchntCode,jdbcType=VARCHAR},
+		#{shopCode,jdbcType=VARCHAR},
+		#{eShopUrl,jdbcType=VARCHAR},
+		#{channelCode,jdbcType=VARCHAR},
+		'0',
+		#{remarks,jdbcType=VARCHAR},
+		#{createUser,jdbcType=VARCHAR},
+		#{updateUser,jdbcType=VARCHAR},
+		sysdate,
+		sysdate,
+		'0',
+		#{eShopLogo,jdbcType=VARCHAR},
+		#{bgUrl,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<select id="getMchntEshopInfById" parameterType="java.lang.String"  resultType="MchntEshopInf">
+		SELECT 
+		<include refid="MchntEshopInfColumns" /> 
+		,ME.MCHNT_NAME,S.SHOP_NAME 
+		FROM TB_MCHNT_ESHOP_INF M INNER JOIN 
+		TB_MERCHANT_INF ME ON M.MCHNT_CODE = ME.MCHNT_CODE 
+		INNER JOIN TB_SHOP_INF S ON M.SHOP_CODE = S.SHOP_CODE 
+		WHERE M.DATA_STAT = '0'
+   			AND ME.DATA_STAT = '0'
+   			AND S.DATA_STAT = '0' 
+   			AND ESHOP_ID = #{eShopId}
+	</select>
+	
+	<select id="getMchntEshopInfByMchntCode" parameterType="java.lang.String"  resultType="MchntEshopInf">
+		SELECT 
+		<include refid="MchntEshopInfColumns" /> 
+		FROM TB_MCHNT_ESHOP_INF M 
+		WHERE M.DATA_STAT = '0' AND MCHNT_CODE = #{mchntCode}
+	</select>
+	
+	<select id="getMchntEshopInfList"  resultType="MchntEshopInf">
+		SELECT 
+		 <include refid="MchntEshopInfColumns" /> 
+		 ,ME.MCHNT_NAME ,S.SHOP_NAME 
+		FROM TB_MCHNT_ESHOP_INF M INNER JOIN 
+		TB_MERCHANT_INF ME ON M.MCHNT_CODE = ME.MCHNT_CODE 
+		INNER JOIN TB_SHOP_INF S ON M.SHOP_CODE = S.SHOP_CODE 
+		 WHERE M.DATA_STAT = '0'
+   			AND ME.DATA_STAT = '0'
+   			AND S.DATA_STAT = '0'
+		<if test="eShopName != null and eShopName != '' " >
+		  AND M.ESHOP_NAME LIKE '%'|| #{eShopName} ||'%' 
+		  </if>
+		  <if test="mchntName !=null and mchntName != '' ">
+		  AND ME.MCHNT_NAME LIKE '%'|| #{mchntName} ||'%' 
+		  </if>
+		  <if test="mchntCode !=null and mchntCode != '' ">
+		       AND M.MCHNT_CODE LIKE '%'|| #{mchntCode} ||'%' 
+		  </if>
+	</select>
+	
+	<update id="updateMchntEshopInf" parameterType="MchntEshopInf">
+		UPDATE TB_MCHNT_ESHOP_INF SET 
+		ESHOP_NAME = #{eShopName,jdbcType=VARCHAR},
+		MCHNT_CODE = #{mchntCode,jdbcType=VARCHAR},
+		SHOP_CODE = #{shopCode,jdbcType=VARCHAR},
+		ESHOP_URL = #{eShopUrl,jdbcType=VARCHAR},
+		CHANNEL_CODE = #{channelCode,jdbcType=VARCHAR},
+		ESHOP_LOGO = #{eShopLogo,jdbcType=VARCHAR},
+		BG_URL = #{bgUrl,jdbcType=VARCHAR},
+		DATA_STAT = #{dataStat,jdbcType=VARCHAR},
+		REMARKS = #{remarks,jdbcType=VARCHAR},
+		CREATE_USER = #{createUser,jdbcType=VARCHAR},
+		UPDATE_USER = #{updateUser,jdbcType=VARCHAR},
+		CREATE_TIME = #{createTime,jdbcType=DATE},
+		UPDATE_TIME = sysdate,
+		LOCK_VERSION = LOCK_VERSION+1 
+		WHERE ESHOP_ID = #{eShopId,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="deleteMchntEshopInf" parameterType="java.lang.String">
+		UPDATE TB_MCHNT_ESHOP_INF SET DATA_STAT = '1' WHERE ESHOP_ID = #{eShopId}
+	</update>
+	
+</mapper>

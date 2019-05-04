@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kmodule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://www.drools.org/xsd/kmodule">
+         
+    <kbase name="KB_DISCOUNT" packages="rules.test">
+        <ksession name="KS_DISCOUNT" />
+    </kbase>
+    <kbase name="KB_WECARD_MANJIAN" packages="rules.wecard">
+        <ksession name="KS_WECARD_MANJIAN" />
+    </kbase>
+     <kbase name="KS-CONSUMERULES" packages="rules.consume">
+        <ksession name="KS_CONSUMERULES"/>
+    </kbase>
+     <kbase name="KS-RECHAREGRULES" packages="rules.recharge">
+        <ksession name="KS_RECHAREGRULES"/>
+    </kbase>
+</kmodule>

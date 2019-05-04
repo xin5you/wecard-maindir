@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>知了企服</title>
+ 	<#include "../../common/head.html">
+	<link rel="stylesheet" href="${s.base}/res/weui/weui.css" />
+	<link rel="stylesheet" href="${s.base}/res/jqueryui/css/jquery-weui.css">
+	<script src="${s.base}/res/jqueryui/js/jquery-weui.js"></script>
+	<script src="${s.base}/res/common/common.js"></script>
+	<script src="${s.base}/res/weui/router.min.js"></script>
+
+	<script src="${s.base}/res/jweixin-1.0.0.js"></script>
+
+</head>
+<body ontouchstart>
+<div class="js_container" id="container">
+<div class="employee_inf">
+    <div class="hkb_textarea textarea_shadow">
+        <div class="entry">
+            <div class="entry_1">
+                <label class="hkb_label">流水号</label>
+            </div>
+            <div class="entry_2 font_blue">${translog.dmsRelatedKey!}</div>
+        </div>
+        <div class="entry">
+            <div class="entry_1">
+                <label class="hkb_label">商户名称</label>
+            </div>
+            <div class="entry_2">${shopInf.mchntName!}</div>
+        </div>
+        <div class="entry">
+            <div class="entry_1">
+                <label class="hkb_label">门店名称</label>
+            </div>
+            <div class="entry_2">
+               		${shopInf.shopName!}
+            </div>
+        </div>
+        <div class="entry">
+            <div class="entry_1">
+                <label class="hkb_label">交易时间</label>
+            </div>
+            <div class="entry_2">${translog.createTime?string("yyyy-MM-dd HH:mm:ss")}</div>
+        </div>
+        <div class="entry">
+            <div class="entry_1">
+                <label class="hkb_label">交易金额</label>
+            </div>
+            <div class="entry_2">${translog.transAmt!}</div>
+        </div>
+        <#if translog.transSt='3'>
+        <div class="entry">
+            <div class="entry_1">
+                <label class="hkb_label">交易状态</label>
+            </div>
+            <div class="entry_2" style="color: #ffacac;">已退款</div>
+        </div>
+		<div class="entry">
+            <div class="entry_1">
+                <label class="hkb_label">退款时间</label>
+            </div>
+            <div class="entry_2" style="color: #ffacac;">${translog.updateTime?string("yyyy-MM-dd HH:mm:ss")}</div>
+        </div>
+        </#if>
+        <div class="entry">
+            <div class="entry_1">
+                <label class="hkb_label">手机尾号</label>
+            </div>
+            <div class="entry_2">*** **** ${personInf.mobilePhoneNo!}</div>
+        </div>
+    </div>
+    <#if roleType?contains("100") || roleType?contains("300") >
+    	<#if translog.transSt='1' && translog.createTime?string("yyyy-MM-dd")==.now?string("yyyy-MM-dd")>
+	    <a href="javascript:void(0);" class="btn_area" id="translogRefundBtn">
+	        <div class="hkb_btn btn_color">同意退款</div>
+	    </a>
+	    </#if>
+    </#if>
+ </div>
+</div>
+
+<script type="text/html" id="tpl_refundPage">
+<div class="register">
+  <input type="hidden" id="txnPrimaryKey" value="${translog.txnPrimaryKey!}">
+  <div class="hkb_textarea textarea_shadow">
+        <div class="entry">
+            <div class="entry_1">
+                <label class="hkb_label">流水号</label>
+            </div>
+            <div class="entry_2 font_blue">${translog.dmsRelatedKey!}</div>
+        </div>
+		
+		<div class="entry">
+            <div class="entry_1">
+                <label class="hkb_label">交易金额</label>
+            </div>
+            <div class="entry_2">${translog.transAmt!}</div>
+        </div>
+		<div class="entry entry_btn">
+      		<div class="entry_1">
+       			 <label class="hkb_label">动态口令</label>
+      		</div>
+      		<div class="entry_2">
+        		<input id="phoneCode" class="hkb_input" type="text"  placeholder="请输入手机动态口令" maxlength="6"/>
+      		</div>
+      		<div class="entry_3">
+        		<input type="button" class="code_btn"  value="获取验证码" id="sendPhoneCode"/>
+     		 </div>
+   		 </div>
+    </div>
+    <div id="weui_cells_tips" class="errors"></div>
+    <!--按钮-->
+	<a href="javascript:translogDetail.translogRefundCommit();" class="btn_area payback_commit">
+    	<div class="hkb_btn btn_color">确认退款</div>
+	</a>
+ </div>
+</script>
+
+<script type="text/html" id="tpl_msg">
+ <div class="weui_msg">
+        <div class="weui_icon_area"><i class="weui_icon_success weui_icon_msg"></i></div>
+        <div class="weui_text_area">
+            <h2 class="weui_msg_title">操作提示</h2>
+            <p class="weui_msg_desc">退款成功</p>
+        </div>
+		<a href="javascript:translogDetail.closeWindow();"  class="btn_area">
+			<div id="c_btn" class="hkb_btn btn_color">关 闭</div>
+		</a>
+    </div>
+</script>
+
+<script src="${s.base}/res/js/wxclient/translog/translogDetail.js"></script>
+</body>
+</html>

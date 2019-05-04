@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:include="main/header::header" />
+<body>
+ <!--知了企服商户自助管理平台登录页-->
+	<nav class="login_nav">  <!--logo标题-->
+	    <div class="login_nav_logo">
+	    	<img th:src="@{/images/hkb_self_logo.png}" />
+	    </div>
+	    <div class="login_nav_title">&#x6C47;&#x5361;&#x5B9D;&#x5546;&#x6237;&#x81EA;&#x52A9;&#x7BA1;&#x7406;&#x5E73;&#x53F0;</div>
+	</nav>
+	<form th:action="@{/doLogin}" th:method="post" id="login_form">
+		<section class="login_content">
+    		<div>
+        		<div class="login_content_left">
+        			<img th:src="@{/images/hkb_self_login.png}" />
+        		</div>
+        		<div class="login_content_right">     <!--登录框-->
+	            	<div class="login_content_input">
+		                <div class="login_input_title"></div>
+		                <div class="login_input_account">
+		                	<label>
+		                    	<img th:src="@{/images/hkb_icon_account.png}" />
+		                        <input id="username" name="username" class="login_input_label" type="tel" placeholder="&#x624B;&#x673A;&#x53F7;&#x7801;" maxlength="11" />
+		                        <div class="login_input_line"></div>
+		                    </label>
+		                    <label>
+		                       <img th:src="@{/images/hkb_icon_password.png}" />
+		                        <input id="password" name="password" class="login_input_label text-login" type="password" placeholder="密码" maxlength="11"/>
+		                        <div class="login_input_line"></div>
+		                    </label>
+		                    <label>
+		                        <img th:src="@{/images/hkb_icon_code.png}" /> 
+		                        <input name="authCode" id="authCode" class="login_input_label text-login" type="tel" placeholder="验证码" maxlength="4" autocomplete="off" />
+		                        <div class="login_input_line"></div>
+		                        <div class="hkb_login_code">
+		                        	<img src="" id="authCodeImg" class="auth-code-img" alt="点击换一张" title="点击换一张" />
+		                        </div>
+		                    </label>
+		                </div>
+		                <div class="login_content_prompt">
+		                	<span style="font-weight: bold;font-size: small;" id="errorcontent" th:text="${session.SECURITY_LOGIN_EXCEPTION}"></span>
+		                </div>
+		                <div class="login_input_button">
+		                	<a id="submitLogin" href="#">登录</a>
+		                </div>
+<!-- 		                <div class="login_input_prompt"> -->
+<!-- 		                	<a href="#">忘记密码？</a> -->
+<!-- 		                </div> -->
+	            	</div>
+        		</div>
+    		</div>
+		</section>
+	</form>
+	
+<!-- 	<footer class="login_footer"> -->
+<!-- 	   版权地址 -->
+<!-- 	    <div class="login_footer_link"> -->
+<!-- 	        <a href="#">&#x7528;&#x6237;&#x534F;&#x8BAE;</a> -->
+<!-- 	        <a href="#">&#x9690;&#x79C1;&#x653F;&#x7B56;</a> -->
+<!-- 	        <a href="#">&#x5E38;&#x89C1;&#x95EE;&#x9898;</a> -->
+<!-- 	    </div> -->
+<!-- 	    <div class="login_footer_copyright">Copyright © 2011-2017 上海航棠企业服务有限公司 版权所有 保留一切权利</div> -->
+<!-- 	    <div class="login_footer_ip">上B0-00000000号 | 苏ICP备00000000号-0</div> -->
+<!-- 	</footer> -->
+	<script>addEventListener('load',function(){})</script>
+	<script th:src="@{/diy/js/login/login.js}"></script>
+</body>
+</html>

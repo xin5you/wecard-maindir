@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.iboot.diy.api.invoice.mapper.InvoiceOrderMapper">
+	
+	<sql id ="TransLogColumns">
+	 TL.TXN_PRIMARY_KEY,
+       TL.SETTLE_DATE,
+       TL.ORG_TXN_PRIMARY_KEY,
+       TL.DMS_RELATED_KEY,
+       TL.ORG_DMS_RELATED_KEY,
+       TL.TRANS_ID,
+       TL.TRANS_ST,
+       TL.TERM_CODE,
+       TL.SHOP_CODE,
+       TL.MCHNT_CODE,
+       TL.INS_CODE,
+       TL.RESP_CODE,
+       TL.PRI_ACCT_NO,
+       TL.CARD_NO,
+       TL.USER_NAME,
+       TL.PRODUCT_CODE,
+       TL.TRANS_AMT,
+       TL.ORG_TRANS_AMT,
+       TL.TRANS_CURR_CD,
+       TL.CARD_ATTR,
+       TL.TRANS_CHNL,
+       TL.TRANS_FEE,
+       TL.TRANS_FEE_TYPE,
+       TL.TFR_IN_ACCT_NO,
+       TL.TFR_OUT_ACCT_NO,
+       TL.ADDITIONAL_INFO,
+       TL.REMARKS,
+       TL.CREATE_TIME,
+       TL.UPDATE_TIME
+	</sql>
+	
+	<sql id = "InvoiceOrderColumns">
+		IO.ITF_PRIMARY_KEY,
+		IO.INVOICE_USER_NAME,
+		IO.INVOICE_MOBILE,
+		IO.INVOICE_AMT,
+		IO.INVOICE_TYPE,
+		IO.MCHNT_CODE,
+		IO.SHOP_CODE,
+		IO.INVOICE_INFO,
+		IO.INVOICE_STAT,
+		IO.DATA_STAT,
+		IO.REMARKS,
+		IO.CREATE_USER,
+		IO.UPDATE_USER,
+		IO.CREATE_TIME,
+		IO.UPDATE_TIME,
+		IO.LOCK_VERSION
+	</sql>
+	
+	<sql id="CARTransLogPaginWhereW20">
+		<where>
+			1 = 1 AND
+			TL.TRANS_ID = 'W20'
+			AND TL.TRANS_ST = '1'
+			AND TL.RESP_CODE = '00'
+			AND TL.TRANS_CHNL = '40002001'
+			<if test="mchntCode !=null and mchntCode !='' ">
+				AND TL.MCHNT_CODE = #{mchntCode}
+			</if>
+			<if test="personName !=null and personName !='' ">
+				AND P.PERSONAL_NAME LIKE '%' || #{personName} || '%'
+			</if>
+			<if test="dmsRelatedKey !=null and dmsRelatedKey !='' ">
+				AND SUBSTR(TL.DMS_RELATED_KEY,-6)=#{dmsRelatedKey}
+			</if>
+			<if test="invoiceStat ==0">
+				AND  IO.INVOICE_STAT is null
+			</if>
+			<if test="invoiceStat ==1">
+				AND IO.INVOICE_STAT = #{invoiceStat}
+			</if>
+			<if test="startTransTime != null and startTransTime != '' ">
+				AND TL.SETTLE_DATE &gt;= #{startTransTime}
+			</if>
+			<if test="endTransTime != null and endTransTime != '' ">
+				AND TL.SETTLE_DATE &lt;= #{endTransTime}
+			</if>
+		</where>
+		 
+	</sql>
+	<select id="getTransLogCur" parameterType="TransLog" resultType="TransLog">
+		SELECT 
+	      <include refid="TransLogColumns" />,
+	       IL.DMS_RELATED_KEY     AS REFERENCE_NO,
+	       IL.CREATE_TIME         AS TRANS_TIME,
+	       M.MCHNT_NAME,
+	       P.PERSONAL_NAME        AS PERSON_NAME,
+	       NVL(IO.INVOICE_STAT,0)        AS INVOICE_STAT
+	  FROM (	
+			SELECT 
+			 <include refid="TransLogColumns" />
+			 FROM tb_trans_log1 TL
+			UNION ALL
+				SELECT 
+				 <include refid="TransLogColumns" />
+					 FROM tb_trans_log2 TL
+			UNION ALL
+				SELECT 
+				 <include refid="TransLogColumns" />
+					 FROM tb_trans_log_his TL
+	   ) TL 
+	   INNER JOIN 
+	   (	
+			SELECT 
+			 	DMS_RELATED_KEY     AS DMS_RELATED_KEY,
+       			CREATE_TIME         AS CREATE_TIME,
+	       		TRANS_ID AS TRANS_ID,
+	       		INTERFACE_PRIMARY_KEY AS INTERFACE_PRIMARY_KEY
+			 FROM TB_INTFACE_TRANS_LOG1
+			UNION ALL
+				SELECT 
+				 	DMS_RELATED_KEY     AS DMS_RELATED_KEY,
+	       			CREATE_TIME         AS CREATE_TIME,
+	       			TRANS_ID AS TRANS_ID,
+	       			INTERFACE_PRIMARY_KEY AS INTERFACE_PRIMARY_KEY
+	       			
+				FROM TB_INTFACE_TRANS_LOG2
+			UNION ALL
+				SELECT 
+					DMS_RELATED_KEY     AS DMS_RELATED_KEY,
+	       			CREATE_TIME         AS CREATE_TIME,
+	       			TRANS_ID AS TRANS_ID,
+	       			INTERFACE_PRIMARY_KEY AS INTERFACE_PRIMARY_KEY
+				FROM TB_INTFACE_TRANS_LOG_HIS 
+	   ) IL 
+	    ON IL.INTERFACE_PRIMARY_KEY = TL.DMS_RELATED_KEY
+	   AND TL.TRANS_ID = IL.TRANS_ID
+	  LEFT JOIN TB_MERCHANT_INF M
+	    ON TL.MCHNT_CODE = M.MCHNT_CODE
+	  LEFT JOIN TB_ACCOUNT_INF AI
+	    ON AI.ACCOUNT_NO = TL.PRI_ACCT_NO
+	  LEFT JOIN TB_USER_INF U
+	    ON U.USER_ID = AI.USER_ID
+	  LEFT JOIN TB_PERSON_INF P
+	    ON P.PERSONAL_ID = AI.PERSONAL_ID
+	  LEFT JOIN TB_INVOICE_ORDER IO
+	    ON IO.ITF_PRIMARY_KEY = TL.DMS_RELATED_KEY
+		<include refid="CARTransLogPaginWhereW20"/>
+	 ORDER BY TRANS_TIME DESC
+	</select>
+	
+	<insert id="insert" parameterType="InvoiceOrder">
+	    <selectKey resultType="String" order="AFTER" keyProperty="id">  
+				<include refid="com.cn.iboot.diy.api.base.mapper.SqlCommonMapper.getInvoiceOrderId" />
+		</selectKey>
+		insert into TB_INVOICE_ORDER(
+			ITF_PRIMARY_KEY,
+			INVOICE_USER_NAME,
+			INVOICE_MOBILE,
+			INVOICE_AMT,
+			INVOICE_TYPE,
+			MCHNT_CODE,
+			SHOP_CODE,
+			INVOICE_INFO,
+			INVOICE_STAT,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER,
+			UPDATE_USER,
+			CREATE_TIME,
+			UPDATE_TIME,
+			LOCK_VERSION
+		) values (
+			#{itfPrimaryKey,jdbcType=VARCHAR},
+			#{invoiceUserName,jdbcType=VARCHAR},
+			#{invoiceMobile,jdbcType=VARCHAR},
+			#{invoiceAmt,jdbcType=VARCHAR},
+			#{invoiceType,jdbcType=VARCHAR},
+			#{mchntCode,jdbcType=VARCHAR},
+			#{shopCode,jdbcType=VARCHAR},
+			#{invoiceInfo,jdbcType=VARCHAR},
+			#{invoiceStat,jdbcType=VARCHAR},
+			'0',
+			#{remarks,jdbcType=VARCHAR},
+			#{createUser,jdbcType=VARCHAR},
+			#{updateUser,jdbcType=VARCHAR},
+			sysdate,
+			sysdate,
+			0
+		)
+	</insert>
+	
+	<update id="updateByPrimaryKey" parameterType="InvoiceOrder">
+		update TB_INVOICE_ORDER
+		<set>
+			ITF_PRIMARY_KEY=#{itfPrimaryKey,jdbcType=VARCHAR},
+			INVOICE_USER_NAME=#{invoiceUserName,jdbcType=VARCHAR},
+			INVOICE_MOBILE=#{invoiceMobile,jdbcType=VARCHAR},
+			INVOICE_AMT=#{invoiceAmt,jdbcType=VARCHAR},
+			INVOICE_TYPE=#{invoiceType,jdbcType=VARCHAR},
+			INVOICE_INFO=#{invoiceInfo,jdbcType=VARCHAR},
+			INVOICE_STAT=#{invoiceStat,jdbcType=VARCHAR},
+			DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+			REMARKS=#{remarks,jdbcType=VARCHAR},
+			UPDATE_USER=#{updateUser},
+			LOCK_VERSION=LOCK_VERSION+1
+		</set>
+		where ID=#{id}
+	</update>
+	
+	<select id="getInvoiceByItfPrimaryKey" parameterType="String" resultType="InvoiceOrder">
+		select 
+			<include refid="InvoiceOrderColumns" />,
+			M.MCHNT_NAME,
+			S.SHOP_NAME
+		from TB_INVOICE_ORDER IO LEFT JOIN TB_MERCHANT_INF M
+	    ON IO.MCHNT_CODE = M.MCHNT_CODE
+	    LEFT JOIN TB_SHOP_INF S
+	    ON IO.SHOP_CODE = S.SHOP_CODE
+		where  1=1 AND ITF_PRIMARY_KEY=#{itfPrimaryKey}
+	</select>
+	
+	<delete id="deleteByPrimaryKey" parameterType="InvoiceOrder">
+		update TB_INVOICE_ORDER SET DATA_STAT='1' WHERE ID = #{id}
+	</delete>
+	
+	<select id="getTransLogByDmsRelatedKey" parameterType="string" resultType="TransLog">
+		SELECT 
+	      <include refid="TransLogColumns" />,
+	       IL.DMS_RELATED_KEY     AS REFERENCE_NO,
+	       IL.CREATE_TIME         AS TRANS_TIME,
+	       M.MCHNT_NAME,
+	       P.PERSONAL_NAME        AS PERSON_NAME,
+	       NVL(IO.INVOICE_STAT,0)        AS INVOICE_STAT
+	  FROM (	
+			SELECT 
+			 <include refid="TransLogColumns" />
+			 FROM tb_trans_log1 TL
+			UNION ALL
+				SELECT 
+				 <include refid="TransLogColumns" />
+					 FROM tb_trans_log2 TL
+			UNION ALL
+				SELECT 
+				 <include refid="TransLogColumns" />
+					 FROM tb_trans_log_his TL
+	   ) TL 
+	   INNER JOIN 
+	   (	
+			SELECT 
+			 	DMS_RELATED_KEY     AS DMS_RELATED_KEY,
+       			CREATE_TIME         AS CREATE_TIME,
+	       		TRANS_ID AS TRANS_ID,
+	       		INTERFACE_PRIMARY_KEY AS INTERFACE_PRIMARY_KEY
+			 FROM TB_INTFACE_TRANS_LOG1
+			UNION ALL
+				SELECT 
+				 	DMS_RELATED_KEY     AS DMS_RELATED_KEY,
+	       			CREATE_TIME         AS CREATE_TIME,
+	       			TRANS_ID AS TRANS_ID,
+	       			INTERFACE_PRIMARY_KEY AS INTERFACE_PRIMARY_KEY
+	       			
+				FROM TB_INTFACE_TRANS_LOG2
+			UNION ALL
+				SELECT 
+					DMS_RELATED_KEY     AS DMS_RELATED_KEY,
+	       			CREATE_TIME         AS CREATE_TIME,
+	       			TRANS_ID AS TRANS_ID,
+	       			INTERFACE_PRIMARY_KEY AS INTERFACE_PRIMARY_KEY
+				FROM TB_INTFACE_TRANS_LOG_HIS 
+	   ) IL 
+	    ON IL.INTERFACE_PRIMARY_KEY = TL.DMS_RELATED_KEY
+	   AND TL.TRANS_ID = IL.TRANS_ID
+	  LEFT JOIN TB_MERCHANT_INF M
+	    ON TL.MCHNT_CODE = M.MCHNT_CODE
+	  LEFT JOIN TB_ACCOUNT_INF AI
+	    ON AI.ACCOUNT_NO = TL.PRI_ACCT_NO
+	  LEFT JOIN TB_USER_INF U
+	    ON U.USER_ID = AI.USER_ID
+	  LEFT JOIN TB_PERSON_INF P
+	    ON P.PERSONAL_ID = AI.PERSONAL_ID
+	  LEFT JOIN TB_INVOICE_ORDER IO
+	    ON IO.ITF_PRIMARY_KEY = TL.DMS_RELATED_KEY
+	    WHERE TL.DMS_RELATED_KEY = #{dmsRelatedKey}
+	     
+	</select>
+	
+	<select id="getInvoiceCountByItfPrimaryKey" parameterType="string" resultType="int">
+		SELECT COUNT(T.ITF_PRIMARY_KEY)  
+		FROM TB_INVOICE_ORDER T WHERE T.ITF_PRIMARY_KEY=#{itfPrimaryKey}
+	
+	</select>
+</mapper>

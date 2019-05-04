@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.common.service.module.dict.mapper.BaseDictMapper">
+
+			<select id="getAllBaseDictByKey" resultType="BaseDict">
+				SELECT DICT_CODE,DICT_VALUE FROM TB_BASE_DICT WHERE DATA_STAT = '0'
+			</select>
+			
+			<select id="getBaseDictByKList" resultType="BaseDict">
+				SELECT 
+				DICT_ID,
+			    DICT_CODE,
+			    ISDEFAULT,
+			    SEQ,
+			    DICT_NAME,
+			    PID,
+			    DICT_TYPE,
+			    DICT_VALUE,
+			    DATA_STAT,
+			    REMARKS,
+			    CREATE_USER,
+			    UPDATE_USER,
+			    CREATE_TIME,
+			    UPDATE_TIME
+			  FROM TB_BASE_DICT
+			 WHERE DATA_STAT = '0' 
+			</select>
+			
+			<insert id="innsertBaseDict" parameterType="BaseDict">
+				 INSERT INTO TB_BASE_DICT
+			   (DICT_ID,
+			    DICT_CODE,
+			    ISDEFAULT,
+			    SEQ,
+			    DICT_NAME,
+			    PID,
+			    DICT_TYPE,
+			    DICT_VALUE,
+			    DATA_STAT,
+			    REMARKS,
+			    CREATE_USER,
+			    UPDATE_USER,
+			    CREATE_TIME,
+			    UPDATE_TIME)
+			 VALUES
+			   (
+			   #{dictId,jdbcType=VARCHAR},
+			   #{dictCode,jdbcType=VARCHAR},
+			   #{isdefault,jdbcType=VARCHAR},
+			   #{seq,jdbcType=VARCHAR},
+			   #{dictName,jdbcType=VARCHAR},
+			   #{pid,jdbcType=VARCHAR},
+			   #{dictType,jdbcType=VARCHAR},
+			   #{dictValue,jdbcType=VARCHAR},
+			   #{dataStat,jdbcType=VARCHAR},
+			   '0',
+			   #{createUser,jdbcType=VARCHAR},
+			   #{updateUser,jdbcType=VARCHAR},
+			   sysdate,
+			   sysdate,
+			   '0'
+			   )
+				
+			</insert>
+			
+</mapper>

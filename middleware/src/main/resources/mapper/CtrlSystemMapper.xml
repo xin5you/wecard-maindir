@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.thinkx.biz.core.mapper.CtrlSystemMapper">
+
+    <select id="getCtrlSystem" parameterType="CtrlSystem" resultType="CtrlSystem">
+		SELECT 
+		  settle_date     ,
+		  pre_settle_date ,
+		  trans_flag      ,
+		  cur_log_num     ,
+		  pre_log_num     ,
+		  batch_stat      ,
+		  settle_stat     ,
+		  create_user     ,
+		  update_user     ,
+		  create_time     ,
+		  update_time
+		FROM TB_CTRL_ST 
+		WHERE rownum &gt;= 0 AND rownum &lt;=1
+    </select>
+</mapper>

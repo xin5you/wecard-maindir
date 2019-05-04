@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
+	default-autowire="byName">
+
+	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+		<property name="customEditors">
+			<map>
+				<entry key="java.net.SocketAddress">
+					<bean class="org.apache.mina.integration.beans.InetSocketAddressEditor" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+
+	<!-- 线程池过滤器，提供高性能的并发处理 -->
+	<bean id="executorFilter" class="org.apache.mina.filter.executor.ExecutorFilter">
+		<constructor-arg>
+			<bean class="org.apache.mina.filter.executor.OrderedThreadPoolExecutor">
+				<property name="maximumPoolSize" value="100" />
+				<property name="corePoolSize" value="20" />
+			</bean>
+		</constructor-arg>
+	</bean>
+
+	<!-- 成帧协议过滤器，本过滤器以长度域作为成帧依据，支持各种长度域长度和三种长度域类型，详细说明见具体配置项 -->
+	<bean id="codecFilter" class="org.apache.mina.filter.codec.ProtocolCodecFilter">
+		<constructor-arg>
+			<bean class="com.cn.thinkx.pms.mina.code.HeadPadLenPackageCodecFactory">
+				<!-- 指定长度域长度，默认值为5 -->
+				<constructor-arg type="int" index="0">
+					<value>5</value>
+				</constructor-arg>
+				<!-- 指定长度域类型， "N"-number string, "BCD"-number string with bcd compress, 
+					"Bi"-binary data，默认值为"N" -->
+				<constructor-arg type="java.lang.String" index="1">
+					<value>N</value>
+				</constructor-arg>
+				<!-- 指定是否包含长度域，默认为不包含 -->
+				<constructor-arg type="boolean" index="2">
+					<value>false</value>
+				</constructor-arg>
+			</bean>
+		</constructor-arg>
+	</bean>
+	<!-- 报文处理协议过滤器 -->
+	<bean id="headPadLenCommPackProc"
+		class="com.cn.thinkx.pms.mina.processor.HeadLenCommPackProcessorImpl">
+		<property name="lenFieldType">
+			<value>N</value>
+		</property>
+		<property name="lenFieldLen">
+			<value>5</value>
+		</property>
+		<property name="includeLenField">
+			<value>false</value>
+		</property>
+	</bean>
+
+	<bean id="appObjectProcessor" class="com.cn.thinkx.pms.mina.processor.AppObjectProcessorImpl" />
+
+	<bean id="packageDecoder" class="com.cn.thinkx.pms.mina.code.PackageDecoder">
+		<property name="commPackageProcessor" ref="headPadLenCommPackProc" />
+		<property name="objMsgProcessor" ref="appObjectProcessor" />
+	</bean>
+
+	<bean id="packageEncoder" class="com.cn.thinkx.pms.mina.code.PackageEncoder">
+		<property name="commPackageProcessor" ref="headPadLenCommPackProc" />
+		<property name="objMsgProcessor" ref="appObjectProcessor" />
+	</bean>
+	<bean id="packageCodecFilter" class="org.apache.mina.filter.codec.ProtocolCodecFilter">
+		<constructor-arg>
+			<bean class="com.cn.thinkx.pms.mina.code.PackageCodecFactory">
+				<constructor-arg ref="packageDecoder" />
+				<constructor-arg ref="packageEncoder" />
+			</bean>
+		</constructor-arg>
+	</bean>
+	<!-- 日志过滤器，提供往来报文长度和报文内容打印，此过滤器应配置在成帧过滤器之后 -->
+	<bean id="packLogFilter" class="com.cn.thinkx.pms.mina.filter.PackLogFilter"/>
+
+	<bean id="filterChain"
+		class="org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder">
+		<property name="filters">
+			<map>
+				<entry key="executor" value-ref="executorFilter" />
+				<entry key="codec" value-ref="packageCodecFilter" />
+				<entry key="logging" value-ref="packLogFilter" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="semaphoreServerHandler" class="com.cn.thinkx.pms.SemaphoreServerHandler">
+	</bean>
+
+	<bean id="acceptorServer" class="org.apache.mina.transport.socket.nio.NioSocketAcceptor">
+		<property name="defaultLocalAddress" value=":10404" />
+		<property name="handler" ref="semaphoreServerHandler" />
+		<property name="reuseAddress" value="true" />
+		<property name="filterChainBuilder" ref="filterChain" />
+	</bean>
+	
+</beans>

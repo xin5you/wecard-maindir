@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.thinkx.wxclient.mapper.WxTransLogMapper">
+	<sql id="WxTransLogColumns">
+		wx_primary_key,
+		settle_date,
+		org_wx_primary_key,
+		dms_related_key,
+		org_dms_related_key,
+		trans_id,
+		trans_st,
+		ins_code,
+		mchnt_code,
+		shop_code,
+		sponsor,
+		operator_open_id,
+		resp_code,
+		pri_acct_no,
+		card_no,
+		user_inf_user_name,
+		product_code,
+		trans_amt,
+		upload_amt,
+		trans_curr_cd,
+		trans_chnl,
+		trans_fee,
+		trans_fee_type,
+		tfr_in_acct_no,
+		tfr_out_acct_no,
+		additional_info,
+		remarks,
+		create_user,
+		update_user,
+		create_time,
+		update_time
+	</sql>
+	<select id="getPrimaryKey" parameterType="java.util.Map" statementType="CALLABLE">
+		<![CDATA[
+			{ call PROC_TB_WX_TRANS_LOG(#{id, jdbcType=VARCHAR, mode=OUT}) }
+		]]>
+	</select>
+	
+	<select id="getWxTransLogById" parameterType="String" resultType="WxTransLog">
+		SELECT 
+	       <include refid="WxTransLogColumns" /> 
+		FROM TB_WX_TRANS_LOG1
+		WHERE wx_primary_key = #{wxPrimaryKey,jdbcType=VARCHAR}
+		UNION
+		SELECT 
+		   <include refid="WxTransLogColumns" /> 
+		FROM TB_WX_TRANS_LOG2
+		WHERE wx_primary_key = #{wxPrimaryKey,jdbcType=VARCHAR}
+	</select>
+
+    <insert id="insertWxTransLog" parameterType="WxTransLog" flushCache="true">
+		INSERT INTO TB_WX_TRANS_LOG${tableNum}
+		  (<include refid="WxTransLogColumns" />)
+		VALUES
+		  (#{wxPrimaryKey,jdbcType=VARCHAR},
+		   #{settleDate,jdbcType=VARCHAR},
+		   #{orgWxPrimaryKey,jdbcType=VARCHAR},
+		   #{dmsRelatedKey,jdbcType=VARCHAR},
+		   #{orgDmsRelatedKey,jdbcType=VARCHAR},
+		   #{transId,jdbcType=VARCHAR},
+		   #{transSt,jdbcType=INTEGER},
+		   #{insCode,jdbcType=VARCHAR},
+		   #{mchntCode,jdbcType=VARCHAR},
+		   #{shopCode,jdbcType=VARCHAR},
+		   #{sponsor,jdbcType=VARCHAR},
+		   #{operatorOpenId,jdbcType=VARCHAR},
+		   #{respCode,jdbcType=VARCHAR},
+		   #{priAcctNo,jdbcType=VARCHAR},
+		   #{cardNo,jdbcType=VARCHAR},
+		   #{userInfUserName,jdbcType=VARCHAR},
+		   #{productCode,jdbcType=VARCHAR},
+		   #{transAmt,jdbcType=VARCHAR},
+		   #{uploadAmt,jdbcType=VARCHAR},
+		   #{transCurrCd,jdbcType=VARCHAR},
+		   #{transChnl,jdbcType=VARCHAR},
+		   #{transFee,jdbcType=VARCHAR},
+		   #{transFeeType,jdbcType=VARCHAR},
+		   #{tfrInAcctNo,jdbcType=VARCHAR},
+		   #{tfrOutAccNo,jdbcType=VARCHAR},
+		   #{additionalInfo,jdbcType=VARCHAR},
+		   #{remarks,jdbcType=VARCHAR},
+		   '99999999',
+		   '99999999',
+		   SYSDATE,
+		   SYSDATE)
+    </insert>
+    
+    <update id="updateWxTransLog" parameterType="WxTransLog" flushCache="true">
+		UPDATE TB_WX_TRANS_LOG${tableNum} SET 
+			trans_st = #{transSt,jdbcType=INTEGER},
+			resp_code = #{respCode,jdbcType=VARCHAR},
+			trans_amt = #{transAmt,jdbcType=VARCHAR},
+		<if test="dmsRelatedKey !=null and dmsRelatedKey !='' ">
+			dms_related_key = #{dmsRelatedKey,jdbcType=VARCHAR},
+		</if>
+		<if test="orgDmsRelatedKey !=null and orgDmsRelatedKey !='' ">
+			org_dms_related_key = #{orgDmsRelatedKey,jdbcType=VARCHAR},
+		</if>
+		<if test="transFee !=null and transFee !='' ">
+			trans_fee=#{transFee,jdbcType=VARCHAR},
+		</if>
+			update_time = SYSDATE 
+		WHERE wx_primary_key = #{wxPrimaryKey} 
+	</update>
+
+</mapper>

@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+	lang="en">
+<link rel="stylesheet" th:href="@{/diy/css/hkbServicePlatform.min.css}" />
+<head th:include="main/header::header" />
+<!-- nav 导航栏-->
+<header th:include="main/navbar::navbar" />
+<body>
+	<form id="searchForm" th:action="@{/operate/posit/listOprStatistics}"
+		th:object="${positOprStatistics}" class="form-inline" method="post">
+		<div class="content_body">
+			<div class="title_content_title">
+				<p>
+					<img th:src="@{/icon/tab_query_data_green.png}" />运营数据查询
+				</p>
+			</div>
+			<!-- 操作组件-->
+			<div class="info_content_operation">
+				<!-- data组件-->
+				<div class="control_list">
+
+					<div class="hkb_date_list">
+						<span>开始时间:</span> <span> <input type="text"
+							class="layui-input hkb_item Wdate" id="startDate" name="startDate"
+							placeholder="请输入开始时间" lay-key="1"
+							th:value="${positOprStatistics.startDate}" />
+
+						</span>
+					</div>
+
+					<div class="hkb_date_list">
+						<span> 结束时间：</span> <span> <input type="text"
+							class="layui-input hkb_item Wdate" id="endDate" name="endDate"
+							placeholder="请输入结束时间" lay-key="1"
+							th:value="${positOprStatistics.endDate}" />
+						</span>
+					</div>
+
+				</div>
+
+				<!-- 按钮 双-->
+
+				<div class="control_list btn_list" style="text-align: right">
+
+					<button id="btn-search" type="button" class="hkb_btn btn_green">查询</button>
+
+					<button id="btn-reset" type="button" class="hkb_btn btn_white">重置</button>
+
+				</div>
+
+
+				<div class="control_list">
+
+					<div class="hkb_word_list">
+						<span>门店：</span> <span th:text="${positOprStatistics.shopName}"></span>
+					</div>
+
+					<div class="hkb_word_list">
+						<span>消费总金额：</span> <span th:text="${totalPayAmt}"></span>
+					</div>
+				</div>
+
+				
+
+			</div>
+
+			<!-- table title-->
+
+			<div class="title_content_title title_gray">
+				<p>档口数据</p>
+				<p><button type="button" class="hkb_btn btn_green" id="btn_upload" sec:authorize="hasRole('ROLE_DIY_POSIT_OPR_UPLOAD')">导出表格</button></p>
+			</div>
+
+			<!-- table -->
+
+			<div class="info_content_table">
+
+
+				<!-- table 单独-->
+				<table class="table_box" border="0" cellpadding="0" cellspacing="1"
+					rules="cols">
+					<thead>
+						<tr class="hkb_title_tr">
+							<th>序号</th>
+							<th>档口名</th>
+							<th>总消费额</th>
+
+						</tr>
+					</thead>
+					<tbody>
+						<tr align="center" th:if="${#lists.isEmpty(pageInfo.list)}">
+								<td colspan="3"><span th:text="暂无数据"></span></td>
+						</tr>
+						<tr align="center" th:if="${not #lists.isEmpty(pageInfo.list)}"
+							th:each="entity,orderStat:${pageInfo.list}">
+							<td><span th:text="${orderStat.index+1}"></span></td>
+							<td><span th:text="${entity.shopName}"></span></td>
+							<td><span th:text="${entity.payAmt}"></span></td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+
+			<!-- next-->
+			<div th:if="${not #lists.isEmpty(pageInfo.list)}" th:include="main/pagination::page" class="info_page"></div>
+
+		</div>
+	</form>
+	<script th:src="@{/diy/js/operate/hkbOperateDataQuery.js}"></script>
+	<script>
+	addEventListener('load',function(){
+		//多个input绑定 format: "YYYY"/"YYYY-MM"/"YYYY-MM-DD "/"YYYY-MM-DD hh:mm:ss"
+
+// 	    $(".moredate").each(function(){
+// 	        $(this).jeDate({
+// 	            format: "YYYY-MM-DD"
+// 	        });
+// 	    });
+	})
+	</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>知了企服</title>
+    <#include "../../common/wecardHeader.html">
+</head>
+<body ontouchstart>
+    <div class="container js_container" id="container"></div>
+    <div class="page">
+		<div class="hd">
+		    <h1 class="page_title">员工管理</h1>
+		</div>
+		<div class="bd">
+		    <div class="weui_panel weui_panel_access">
+		        <div class="weui_panel_hd"><a class="weui_btn weui_btn_primary"  href="${s.base}/wxclient/mchnt/employeeManager.html?flag=0"/>新增员工</a></div>
+		        <div class="weui_panel_bd">
+			        <div class="block-content-content">
+						<table class="fm-table">
+							<thead>
+								<tr >
+									<td>微信昵称</td>
+									<td>角色</td>
+									<td>操作</td>
+								</tr>
+							</thead>
+							<#if mchntManagerList??&&mchntManagerList?size gt 0>
+							<tbody>
+								<#list mchntManagerList as row>
+								<tr class="even-tr" id="row${row.mangerId!}">
+									<td>${row.nicknameStr!}</td>
+									<td>${row.roleName!}</td>
+									<td>
+										<a href="${s.base}/wxclient/mchnt/employeeManager.html?flag=1&managerId=${row.mangerId!}">备注</a>&nbsp;&nbsp;
+										<#if mchntManager??&& (mchntManager.roleType=='100' || (row.shopId==mchntManager.shopId && mchntManager.mangerId !=row.mangerId && row.roleType !='200'))>
+										<a href="javascript:void(0);" onclick="listEmployee.showDialogconfirm('${row.mangerId!}')" >解除</a>
+										</#if>
+									</td>
+								</tr>
+								</#list>
+								</tbody>
+							</#if>
+						</table>
+					</div>
+		    </div>
+		</div>
+	</div>
+</div>
+	<script type="text/javascript" src="${s.base}/res/js/wxclient/employee/listEmployee.js"></script>
+</body>
+</html>

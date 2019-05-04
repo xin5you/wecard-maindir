@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wxclient.mapper.WxFansRoleDao">
+		
+	<resultMap type="WxFansRole" id="WxFansRoleResultMap">
+		<result column="FANS_ID" property="fansId"/>
+		<result column="ROLE_ID" property="roleId"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="WxMchntFansColumns">
+		m.FANS_ID,
+		m.ROLE_ID,
+		m.DATA_STAT,
+		m.REMARKS,
+		m.CREATE_USER, 
+		m.UPDATE_USER, 
+		m.CREATE_TIME, 
+		m.UPDATE_TIME, 
+		m.LOCK_VERSION
+	</sql>
+	
+	<insert id="insertFansRole" parameterType="WxFansRole">
+		INSERT INTO TB_WX_FANS_ROLE (
+			FANS_ID,
+			ROLE_ID,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER, 
+			CREATE_TIME, 
+			LOCK_VERSION
+		 )  VALUES ( 
+		 		#{fansId},
+		 		#{roleId},
+		 		#{dataStat,jdbcType=VARCHAR},
+		 		#{remarks,jdbcType=VARCHAR},
+		 		#{createUser,jdbcType=VARCHAR},
+		 		sysdate,
+		 		'0') 
+	</insert>
+	
+	<update id="deleteWxMchntFansByFansId" parameterType="java.lang.String">
+		UPDATE TB_WX_FANS_ROLE SET 
+			DATA_STAT='1',
+			UPDATE_TIME=sysdate
+			WHERE FANS_ID=#{fansId}
+	</update>
+</mapper>

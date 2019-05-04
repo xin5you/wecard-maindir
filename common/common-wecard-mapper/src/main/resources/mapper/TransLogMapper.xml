@@ -1,0 +1,783 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.common.wecard.module.trans.mapper.TransLogDao">
+
+	<sql id="TransLogPageColumns">
+		txn_primary_key,
+		settle_date,
+		org_txn_primary_key,
+		dms_related_key,
+		org_dms_related_key,
+		trans_id,
+		trans_st,
+		term_code,
+		shop_code,
+		mchnt_code,
+		ins_code,
+		resp_code,
+		pri_acct_no,
+		card_no,
+		user_name,
+		product_code,
+		to_number(trans_amt) as trans_amt,
+		org_trans_amt,
+		trans_curr_cd,
+		card_attr,
+		trans_chnl,
+		trans_fee,
+		trans_fee_type,
+		tfr_in_acct_no,
+		tfr_out_acct_no,
+		additional_info,
+		remarks,
+		create_time,
+		update_time
+	</sql>
+	
+	<sql id="TransLogColumns">
+		txn_primary_key,
+		settle_date,
+		org_txn_primary_key,
+		dms_related_key,
+		org_dms_related_key,
+		trans_id,
+		trans_st,
+		term_code,
+		shop_code,
+		mchnt_code,
+		ins_code,
+		resp_code,
+		pri_acct_no,
+		card_no,
+		user_name,
+		product_code,
+		trans_amt,
+		org_trans_amt,
+		trans_curr_cd,
+		card_attr,
+		trans_chnl,
+		trans_fee,
+		trans_fee_type,
+		tfr_in_acct_no,
+		tfr_out_acct_no,
+		additional_info,
+		remarks,
+		create_time,
+		update_time
+	</sql>
+	
+	<sql id="InterfaceTransColumns">
+	           INTERFACE_PRIMARY_KEY,
+               SETTLE_DATE,
+               ORG_INTERFACE_PRIMARY_KEY,
+               DMS_RELATED_KEY,
+               ORG_DMS_RELATED_KEY,
+               TRANS_ID,
+               TRANS_ST,
+               INS_CODE,
+               MCHNT_CODE,
+               SHOP_CODE,
+               RESP_CODE,
+               PRI_ACCT_NO,
+               CARD_NO,
+               USER_INF_USER_NAME,
+               PRODUCT_CODE,
+               TRANS_AMT,
+               UPLOAD_AMT,
+               TRANS_CURR_CD,
+               TRANS_CHNL,
+               TRANS_FEE,
+               TRANS_FEE_TYPE,
+               TFR_IN_ACCT_NO,
+               TFR_OUT_ACCT_NO,
+               ADDITIONAL_INFO,
+               REMARKS,
+               CREATE_USER,
+               UPDATE_USER,
+               CREATE_TIME,
+               UPDATE_TIME
+	</sql>
+	
+	<sql id="CARTransLogColumns">
+  			SETTLE_DATE,
+            SUM(TRANS_AMT) AS TRANS_AMT,
+            COUNT(1) AS TRANS_COUNT
+	</sql>
+	
+	<sql id="CARTransLogColumnsW10">
+		SETTLE_DATE,
+        TRANS_AMT  AS CONSUMER_AMOUNT,
+        TRANS_COUNT AS CONSUMER_COUNT,
+        0 as RECHARGE_AMOUNT,
+        0 as RECHARGE_COUNT
+	</sql>
+	
+	<sql id="CARTransLogColumnsW20">
+		SETTLE_DATE,
+        0 AS CONSUMER_AMOUNT,
+        0 AS CONSUMER_COUNT,
+        TRANS_AMT AS RECHARGE_AMOUNT,
+        TRANS_COUNT AS RECHARGE_COUNT
+	</sql>
+	
+	<sql id="CARTransLogColumnsUNION">
+			SETTLE_DATE,
+			sum(CONSUMER_AMOUNT) as CONSUMER_AMOUNT,
+			sum(CONSUMER_COUNT) as CONSUMER_COUNT, 
+			sum(RECHARGE_AMOUNT) as RECHARGE_AMOUNT,
+			sum(RECHARGE_COUNT)	 as RECHARGE_COUNT
+	</sql>
+	
+	<sql id="CARTransLogPageColumns">
+		SETTLE_DATE,
+        to_number(CONSUMER_AMOUNT) AS CONSUMER_AMOUNT,
+         CONSUMER_COUNT,
+         to_number(RECHARGE_AMOUNT) AS RECHARGE_AMOUNT,
+         RECHARGE_COUNT,
+         rn
+	</sql>
+	
+	<sql id="TransLogPaginWhere">
+		<where>
+			resp_code='00'
+			<if test="entity.settleDate !=null and entity.settleDate !='' ">
+					AND SETTLE_DATE=#{entity.settleDate}
+			</if>
+			<if test="entity.transId !=null and entity.transId !='' ">
+					AND TRANS_ID=#{entity.transId}
+			</if>
+			<if test="entity.insCode !=null and entity.insCode !='' ">
+					AND INS_CODE=#{entity.insCode}
+			</if>
+			 <if test="entity.mchntCode !=null and entity.mchntCode !='' ">
+					AND mchnt_code=#{entity.mchntCode}
+			</if>
+			 <if test="entity.transSt !=null and entity.transSt !='' ">
+					AND TRANS_ST=#{entity.tansSt}
+			 </if>
+			  <if test="entity.cardNo !=null and entity.cardNo !='' ">
+					AND CARD_NO=#{entity.cardNo}
+			 </if>
+			 <if test="entity.userName !=null and entity.userName !='' ">
+					AND USER_NAME=#{entity.userName}
+			 </if>
+		</where>
+	</sql>
+	
+	
+	 <sql id="CARTransLogPaginWhere">
+		<where>
+			RESP_CODE='00'
+			AND TRANS_ID='W10' 
+			<if test="entity.transId !=null and entity.transId !='' ">
+					AND TRANS_ID=#{entity.transId}
+			</if>
+			<if test="entity.shopCode !=null and entity.shopCode !='' ">
+					AND SHOP_CODE=#{entity.shopCode}
+			 </if>
+			<if test="entity.insCode !=null and entity.insCode !='' ">
+					AND INS_CODE=#{entity.insCode}
+			</if>
+			 <if test="entity.mchntCode !=null and entity.mchntCode !='' ">
+					AND mchnt_code=#{entity.mchntCode}
+			</if>
+			 <if test="entity.transSt !=null and entity.transSt !='' ">
+					AND TRANS_ST=#{entity.tansSt}
+			 </if>
+			  <if test="entity.cardNo !=null and entity.cardNo !='' ">
+					AND CARD_NO=#{entity.cardNo}
+			 </if>
+			 <if test="entity.settleDate !=null and entity.settleDate !='' ">
+					AND SETTLE_DATE=#{entity.settleDate}
+			 </if>
+			 <if test="entity.userName !=null and entity.userName !='' ">
+					AND USER_NAME=#{entity.userName}
+			 </if>
+		</where>
+		
+		 GROUP BY SETTLE_DATE
+	</sql>
+	
+	<sql id="CARTransLogDetailPaginWhere">
+		<where>
+			RESP_CODE='00'
+			AND TRANS_ID='W10'
+			<if test="entity.transId !=null and entity.transId !='' ">
+					AND TRANS_ID=#{entity.transId}
+			</if>
+			<if test="entity.shopCode !=null and entity.shopCode !='' ">
+					AND SHOP_CODE=#{entity.shopCode}
+			 </if>
+			<if test="entity.insCode !=null and entity.insCode !='' ">
+					AND INS_CODE=#{entity.insCode}
+			</if>
+			 <if test="entity.mchntCode !=null and entity.mchntCode !='' ">
+					AND mchnt_code=#{entity.mchntCode}
+			</if>
+			 <if test="entity.transSt !=null and entity.transSt !='' ">
+					AND TRANS_ST=#{entity.tansSt}
+			 </if>
+			  <if test="entity.cardNo !=null and entity.cardNo !='' ">
+					AND CARD_NO=#{entity.cardNo}
+			 </if>
+			 <if test="entity.settleDate !=null and entity.settleDate !='' ">
+					AND SETTLE_DATE=#{entity.settleDate}
+			 </if>
+			 <if test="entity.userName !=null and entity.userName !='' ">
+					AND USER_NAME=#{entity.userName}
+			 </if>
+		</where>
+	</sql>
+	
+	  <sql id="CARTransLogPaginWhereW10">
+		<where>
+			RESP_CODE='00'
+			AND TRANS_ID ='W10'
+			<if test="entity.transId !=null and entity.transId !='' ">
+					AND TRANS_ID=#{entity.transId}
+			</if>
+			<if test="entity.shopCode !=null and entity.shopCode !='' ">
+					AND SHOP_CODE=#{entity.shopCode}
+			 </if>
+			<if test="entity.insCode !=null and entity.insCode !='' ">
+					AND INS_CODE=#{entity.insCode}
+			</if>
+			 <if test="entity.mchntCode !=null and entity.mchntCode !='' ">
+					AND mchnt_code=#{entity.mchntCode}
+			</if>
+			 <if test="entity.transSt !=null and entity.transSt !='' ">
+					AND TRANS_ST=#{entity.tansSt}
+			 </if>
+			  <if test="entity.cardNo !=null and entity.cardNo !='' ">
+					AND CARD_NO=#{entity.cardNo}
+			 </if>
+			 <if test="entity.settleDate !=null and entity.settleDate !='' ">
+					AND SETTLE_DATE=#{entity.settleDate}
+			 </if>
+			 <if test="entity.userName !=null and entity.userName !='' ">
+					AND USER_NAME=#{entity.userName}
+			 </if>
+		</where>
+		 GROUP BY SETTLE_DATE
+	</sql>
+	
+	 <sql id="CARTransLogCountWhereW10">
+		<where>
+			RESP_CODE='00'
+			AND TRANS_ST='1'
+			AND TRANS_ID ='W10'
+			<if test="entity.transId !=null and entity.transId !='' ">
+					AND TRANS_ID=#{entity.transId}
+			</if>
+			<if test="entity.shopCode !=null and entity.shopCode !='' ">
+					AND SHOP_CODE=#{entity.shopCode}
+			 </if>
+			<if test="entity.insCode !=null and entity.insCode !='' ">
+					AND INS_CODE=#{entity.insCode}
+			</if>
+			 <if test="entity.mchntCode !=null and entity.mchntCode !='' ">
+					AND mchnt_code=#{entity.mchntCode}
+			</if>
+			 <if test="entity.transSt !=null and entity.transSt !='' ">
+					AND TRANS_ST=#{entity.tansSt}
+			 </if>
+			  <if test="entity.cardNo !=null and entity.cardNo !='' ">
+					AND CARD_NO=#{entity.cardNo}
+			 </if>
+			 <if test="entity.settleDate !=null and entity.settleDate !='' ">
+					AND SETTLE_DATE=#{entity.settleDate}
+			 </if>
+			 <if test="entity.userName !=null and entity.userName !='' ">
+					AND USER_NAME=#{entity.userName}
+			 </if>
+		</where>
+		 GROUP BY SETTLE_DATE
+	</sql>
+	
+	
+	<sql id="CARTransLogPaginWhereW20">
+		<where>
+			RESP_CODE='00'
+			AND  TRANS_ID='W20'
+			<if test="entity.transId !=null and entity.transId !='' ">
+					AND TRANS_ID=#{entity.transId}
+			</if>
+			<if test="entity.insCode !=null and entity.insCode !='' ">
+					AND INS_CODE=#{entity.insCode}
+			</if>
+			 <if test="entity.mchntCode !=null and entity.mchntCode !='' ">
+					AND MCHNT_CODE=#{entity.mchntCode}
+			</if>
+			 <if test="entity.transSt !=null and entity.transSt !='' ">
+					AND TRANS_ST=#{entity.tansSt}
+			 </if>
+			  <if test="entity.cardNo !=null and entity.cardNo !='' ">
+					AND CARD_NO=#{entity.cardNo}
+			 </if>
+			 <if test="entity.settleDate !=null and entity.settleDate !='' ">
+					AND SETTLE_DATE=#{entity.settleDate}
+			 </if>
+			  <if test="entity.userName !=null and entity.userName !='' ">
+					AND USER_NAME=#{entity.userName}
+			 </if>
+		</where>
+		 GROUP BY SETTLE_DATE
+	</sql>
+	
+		<sql id="CARTransLogCountWhereW20">
+		<where>
+			RESP_CODE='00'
+			AND  TRANS_ST='1'
+			AND  TRANS_ID='W20'
+			<if test="entity.transId !=null and entity.transId !='' ">
+					AND TRANS_ID=#{entity.transId}
+			</if>
+			<if test="entity.insCode !=null and entity.insCode !='' ">
+					AND INS_CODE=#{entity.insCode}
+			</if>
+			 <if test="entity.mchntCode !=null and entity.mchntCode !='' ">
+					AND MCHNT_CODE=#{entity.mchntCode}
+			</if>
+			 <if test="entity.transSt !=null and entity.transSt !='' ">
+					AND TRANS_ST=#{entity.tansSt}
+			 </if>
+			  <if test="entity.cardNo !=null and entity.cardNo !='' ">
+					AND CARD_NO=#{entity.cardNo}
+			 </if>
+			 <if test="entity.settleDate !=null and entity.settleDate !='' ">
+					AND SETTLE_DATE=#{entity.settleDate}
+			 </if>
+			  <if test="entity.userName !=null and entity.userName !='' ">
+					AND USER_NAME=#{entity.userName}
+			 </if>
+		</where>
+		 GROUP BY SETTLE_DATE
+	</sql>
+	
+	<sql id="getInterfaceTrans">
+		<where>
+			RESP_CODE = '00'
+			AND DMS_RELATED_KEY = #{entity.dmsRelatedKey}
+			<if test="entity.transChnl !=null and entity.transChnl !='' ">
+				AND TRANS_CHNL = #{entity.transChnl}
+			</if>
+			<if test="entity.transSt !=null and entity.transSt !='' ">
+				AND TRANS_ST = #{entity.transSt}
+			</if>
+			<if test="entity.transId !=null and entity.transId !='' ">
+				AND TRANS_ID = #{entity.transId}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="querySumTransAmount" parameterType="TransLog" resultType="long">
+		SELECT 
+		 	NVL(sum(to_number(trans_amt)),0) as transAmt
+		from (	
+				SELECT 
+				 <include refid="TransLogColumns" />
+				 FROM tb_trans_log1 
+						<include refid="TransLogPaginWhere"/>
+			UNION ALL
+				SELECT 
+				 <include refid="TransLogColumns" />
+					 FROM tb_trans_log2 
+					 	<include refid="TransLogPaginWhere"/>
+			UNION ALL
+				SELECT 
+				 <include refid="TransLogColumns" />
+					 FROM tb_trans_log_his 
+					 	<include refid="TransLogPaginWhere"/>
+		 ) p
+	</select>
+	
+	
+	<select id="getTotalItemsCount" parameterType="TransLog" resultType="java.lang.Integer">
+		SELECT 
+		 	count(txn_primary_key)
+		from (	
+				SELECT 
+				 <include refid="TransLogColumns" />
+				 FROM tb_trans_log1 
+						<include refid="TransLogPaginWhere"/>
+			UNION ALL
+				SELECT 
+				 <include refid="TransLogColumns" />
+					 FROM tb_trans_log2 
+					 	<include refid="TransLogPaginWhere"/>
+			UNION ALL
+				SELECT 
+				 <include refid="TransLogColumns" />
+					 FROM tb_trans_log_his 
+					 	<include refid="TransLogPaginWhere"/>
+		 ) p
+	</select>
+	
+	<select id="paginationEntity" resultType="TransLog">
+	SELECT 
+		<include refid="TransLogPageColumns" /> 
+		 FROM (
+  			SELECT a.*, ROWNUM rn  FROM (
+					SELECT 
+					 	 <include refid="TransLogColumns" /> 
+						 from (	
+							SELECT 
+							 <include refid="TransLogColumns" />
+							 FROM tb_trans_log1 
+									<include refid="TransLogPaginWhere"/>
+						UNION ALL
+							SELECT 
+							 <include refid="TransLogColumns" />
+								 FROM tb_trans_log2 
+								 	<include refid="TransLogPaginWhere"/>
+						UNION ALL
+						
+							SELECT 
+							 <include refid="TransLogColumns" />
+								 FROM tb_trans_log_his 
+								 	<include refid="TransLogPaginWhere"/>
+						
+					   ) p ORDER BY create_time DESC
+				) a  WHERE ROWNUM &lt;= (#{page.pageNum}* #{page.pageSize})
+		) b  WHERE rn &gt;= (((#{page.pageNum}-1)* #{page.pageSize})+1)
+	</select>
+
+
+
+
+	<!-- query consume and rechargeable transLog page the BEGIN -->
+	<select id="getTotalItemsByCARCount" parameterType="TransLog" resultType="java.lang.Integer">
+		SELECT 
+		 	count(1)
+		from (	
+				SELECT 
+				 <include refid="CARTransLogColumns" />
+				 FROM tb_trans_log1 
+						<include refid="CARTransLogPaginWhere"/>
+			UNION ALL
+				SELECT 
+				 <include refid="CARTransLogColumns" />
+					 FROM tb_trans_log2 
+					 	<include refid="CARTransLogPaginWhere"/>
+			UNION ALL
+				SELECT 
+				 <include refid="CARTransLogColumns" />
+					 FROM tb_trans_log_his 
+					 	<include refid="CARTransLogPaginWhere"/>
+		 ) p
+	</select>
+	
+	<select id="queryTransByCARList" resultType="TransLog">
+	SELECT 
+		<include refid="CARTransLogPageColumns" />
+			 FROM (
+  				SELECT a.*, ROWNUM rn  FROM (
+					SELECT 
+					 	<include refid="CARTransLogColumnsUNION" />
+						 FROM (	
+						SELECT   SETTLE_DATE, TRANS_AMT AS CONSUMER_AMOUNT, TRANS_COUNT AS CONSUMER_COUNT, 0 AS RECHARGE_AMOUNT,0 AS RECHARGE_COUNT 
+							FROM(
+							SELECT 
+								 <include refid="CARTransLogColumns" />
+								 FROM tb_trans_log1 
+										<include refid="CARTransLogPaginWhereW10"/>
+							UNION ALL
+								SELECT 
+								 <include refid="CARTransLogColumns" />
+									 FROM tb_trans_log2 
+									 	<include refid="CARTransLogPaginWhereW10"/>
+							UNION ALL
+							
+								SELECT 
+								 <include refid="CARTransLogColumns" />
+									 FROM tb_trans_log_his 
+									 	<include refid="CARTransLogPaginWhereW10"/>
+						
+					   ) W10 
+					   
+					   UNION
+					SELECT 	SETTLE_DATE,0 AS CONSUMER_AMOUNT, 0 AS CONSUMER_COUNT,TRANS_AMT AS RECHARGE_AMOUNT,TRANS_COUNT AS RECHARGE_COUNT
+					   FROM (
+						   SELECT 
+								 <include refid="CARTransLogColumns" />
+								 FROM tb_trans_log1 
+										<include refid="CARTransLogPaginWhereW20"/>
+							UNION ALL
+								SELECT 
+								 <include refid="CARTransLogColumns" />
+									 FROM tb_trans_log2 
+									 	<include refid="CARTransLogPaginWhereW20"/>
+							UNION ALL
+							
+								SELECT 
+								 <include refid="CARTransLogColumns" />
+									 FROM tb_trans_log_his 
+									 	<include refid="CARTransLogPaginWhereW20"/>
+						
+					   		) W20
+					   ) p group by settle_date order by settle_date desc
+					    
+				) a  WHERE ROWNUM &lt;= (#{page.pageNum}* #{page.pageSize})
+		) b  WHERE rn &gt;= (((#{page.pageNum}-1)* #{page.pageSize})+1)
+	</select>
+	
+	
+	<select id="getTotalTransDetailByCARList" parameterType="TransLog" resultType="java.lang.Integer">
+		SELECT 
+		 	count(txn_primary_key)
+		from (	
+				SELECT 
+				 <include refid="TransLogColumns" />
+				 FROM tb_trans_log1 
+						<include refid="CARTransLogDetailPaginWhere"/>
+			UNION ALL
+				SELECT 
+				 <include refid="TransLogColumns" />
+					 FROM tb_trans_log2 
+					 	<include refid="CARTransLogDetailPaginWhere"/>
+			UNION ALL
+				SELECT 
+				 <include refid="TransLogColumns" />
+					 FROM tb_trans_log_his 
+					 	<include refid="CARTransLogDetailPaginWhere"/>
+		 ) p
+	</select>
+	<select id="queryTransDetailByCARList" resultType="TransLog">
+			SELECT 
+				 <include refid="TransLogPageColumns" /> 
+			 FROM (
+  			SELECT a.*, ROWNUM rn  FROM (
+					SELECT 
+					 	 <include refid="TransLogColumns" /> 
+						 from (	
+							SELECT 
+							 <include refid="TransLogColumns" />
+							 FROM tb_trans_log1 
+									<include refid="CARTransLogDetailPaginWhere"/>
+						UNION ALL
+							SELECT 
+							 <include refid="TransLogColumns" />
+								 FROM tb_trans_log2 
+								 	<include refid="CARTransLogDetailPaginWhere"/>
+						UNION ALL
+						
+							SELECT 
+							 <include refid="TransLogColumns" />
+								 FROM tb_trans_log_his 
+								 	<include refid="CARTransLogDetailPaginWhere"/>
+						
+					   ) p ORDER BY create_time DESC
+				) a  WHERE ROWNUM &lt;= (#{page.pageNum}* #{page.pageSize})
+		) b  WHERE rn &gt;= (((#{page.pageNum}-1)* #{page.pageSize})+1)
+	</select>
+	<!-- query consume and rechargeable transLog page the END -->
+	
+	
+	<select id="getTransLogListBySettleDate" resultType="TransLog">
+					SELECT 
+					 	p.txn_primary_key,
+						p.settle_date,
+						p.org_txn_primary_key,
+						p.dms_related_key,
+						p.org_dms_related_key,
+						p.trans_id,
+						p.trans_st,
+						p.term_code,
+						p.shop_code,
+						p.mchnt_code,
+						p.ins_code,
+						p.resp_code,
+						p.pri_acct_no,
+						p.card_no,
+						p.user_name,
+						p.product_code,
+						p.trans_amt,
+						p.org_trans_amt,
+						p.trans_curr_cd,
+						p.card_attr,
+						p.trans_chnl,
+						p.trans_fee,
+						p.trans_fee_type,
+						p.tfr_in_acct_no,
+						p.tfr_out_acct_no,
+						p.additional_info,
+						p.remarks,
+						p.create_time,
+						p.update_time,
+						pi.MOBILE_PHONE_NO
+						 from (	
+							SELECT 
+							 <include refid="TransLogColumns" />
+							 FROM tb_trans_log1 
+									<include refid="CARTransLogDetailPaginWhere"/>
+							UNION ALL
+								SELECT 
+								 <include refid="TransLogColumns" />
+									 FROM tb_trans_log2 
+									 	<include refid="CARTransLogDetailPaginWhere"/>
+							UNION ALL
+							
+								SELECT 
+								 <include refid="TransLogColumns" />
+									 FROM tb_trans_log_his 
+									 	<include refid="CARTransLogDetailPaginWhere"/>
+					   ) p 
+					   left join tb_account_inf ti on ti.account_no =p.pri_acct_no
+       				   left join tb_person_inf pi on pi.personal_id=ti.personal_id
+					   ORDER BY p.create_time DESC
+		</select>
+		
+		
+	<select id="queryTransCountBySettleDate" resultType="TransLog">
+				SELECT 
+					 	<include refid="CARTransLogColumnsUNION" />
+						 FROM (	
+						SELECT   SETTLE_DATE, TRANS_AMT AS CONSUMER_AMOUNT, TRANS_COUNT AS CONSUMER_COUNT, 0 AS RECHARGE_AMOUNT,0 AS RECHARGE_COUNT 
+							FROM(
+							SELECT 
+								 <include refid="CARTransLogColumns" />
+								 FROM tb_trans_log1 
+										<include refid="CARTransLogCountWhereW10"/>
+							UNION ALL
+								SELECT 
+								 <include refid="CARTransLogColumns" />
+									 FROM tb_trans_log2 
+									 	<include refid="CARTransLogCountWhereW10"/>
+							UNION ALL
+							
+								SELECT 
+								 <include refid="CARTransLogColumns" />
+									 FROM tb_trans_log_his 
+									 	<include refid="CARTransLogCountWhereW10"/>
+					   ) W10 
+
+					   ) p group by settle_date order by settle_date desc
+
+	</select>
+		
+		
+	<select id="queryHisTransCountByMchntId" resultType="TransLog">
+				SELECT 
+						sum(CONSUMER_AMOUNT) as CONSUMER_AMOUNT,
+						sum(CONSUMER_COUNT) as CONSUMER_COUNT, 
+						sum(RECHARGE_AMOUNT) as RECHARGE_AMOUNT,
+						sum(RECHARGE_COUNT)	 as RECHARGE_COUNT
+						 FROM (	
+						SELECT  TRANS_AMT AS CONSUMER_AMOUNT, TRANS_COUNT AS CONSUMER_COUNT, 0 AS RECHARGE_AMOUNT,0 AS RECHARGE_COUNT 
+							FROM(
+								SELECT 
+										SUM(TRANS_AMT) AS TRANS_AMT,
+          							 	COUNT(1) AS TRANS_COUNT
+									 FROM TB_TRANS_LOG_HIS 
+									 	<include refid="CARTransLogCountWhereW10"/>
+					   ) W10
+				UNION
+					SELECT 	0 AS CONSUMER_AMOUNT, 0 AS CONSUMER_COUNT,TRANS_AMT AS RECHARGE_AMOUNT,TRANS_COUNT AS RECHARGE_COUNT
+					   FROM (
+						   	SELECT 
+				   		             SUM(TRANS_AMT) AS TRANS_AMT,
+          							 COUNT(1) AS TRANS_COUNT
+									 FROM TB_TRANS_LOG_HIS 
+									 	<include refid="CARTransLogCountWhereW20"/>
+					   		) W20
+					   ) P 
+
+	</select>
+		
+	<select id="getTransLogByRelatedKey"  parameterType="java.lang.String" resultType="TransLog">
+
+			SELECT 
+			<include refid="TransLogColumns" /> 
+			FROM (
+					SELECT 
+						<include refid="TransLogColumns" />
+								 FROM TB_TRANS_LOG1 
+										WHERE TXN_PRIMARY_KEY=#{relatedKey}
+					UNION ALL
+						SELECT 
+						 <include refid="TransLogColumns" />
+							 FROM TB_TRANS_LOG2 
+							 	WHERE TXN_PRIMARY_KEY=#{relatedKey}
+					UNION ALL
+						SELECT 
+						 <include refid="TransLogColumns" />
+							 FROM TB_TRANS_LOG_HIS 
+							 	WHERE TXN_PRIMARY_KEY=#{relatedKey}
+		 		)  WHERE ROWNUM=1
+			 
+	</select>
+	
+	<select id="getInterfaceTransByPrimaryKey" parameterType="java.lang.String" resultType="InterfaceTrans">
+	       SELECT 
+	           T.INTERFACE_PRIMARY_KEY,
+               T.SETTLE_DATE,
+               T.ORG_INTERFACE_PRIMARY_KEY,
+               T.DMS_RELATED_KEY,
+               T.ORG_DMS_RELATED_KEY,
+               T.TRANS_ID,
+               T.TRANS_ST,
+               T.INS_CODE,
+               T.MCHNT_CODE,
+               T.SHOP_CODE,
+               T.RESP_CODE,
+               T.PRI_ACCT_NO,
+               T.CARD_NO,
+               T.USER_INF_USER_NAME,
+               T.PRODUCT_CODE,
+               T.TRANS_AMT,
+               T.UPLOAD_AMT,
+               T.TRANS_CURR_CD,
+               T.TRANS_CHNL,
+               T.TRANS_FEE,
+               T.TRANS_FEE_TYPE,
+               T.TFR_IN_ACCT_NO,
+               T.TFR_OUT_ACCT_NO,
+               T.ADDITIONAL_INFO,
+               T.REMARKS,
+               T.CREATE_USER,
+               T.UPDATE_USER,
+               T.CREATE_TIME,
+               T.UPDATE_TIME, 
+	           MCHNT_NAME,
+	           SHOP_NAME
+		  FROM (
+			  SELECT 
+			          <include refid="InterfaceTransColumns" />
+			          FROM TB_INTFACE_TRANS_LOG_HIS
+			         WHERE INTERFACE_PRIMARY_KEY = #{primarykey}
+		        UNION ALL
+			        SELECT 
+			          <include refid="InterfaceTransColumns" />
+			          FROM TB_INTFACE_TRANS_LOG1
+			         WHERE INTERFACE_PRIMARY_KEY = #{primarykey}
+		        UNION ALL
+			        SELECT 
+			        <include refid="InterfaceTransColumns" />
+			          FROM TB_INTFACE_TRANS_LOG2
+			         WHERE INTERFACE_PRIMARY_KEY = #{primarykey} 
+			) T
+		  LEFT JOIN TB_MERCHANT_INF M
+		    ON T.MCHNT_CODE = M.MCHNT_CODE
+		  LEFT JOIN TB_SHOP_INF S
+		    ON S.SHOP_CODE = T.SHOP_CODE
+	</select>
+	
+	<select id="getInterfaceTransByInterfaceTrans"  parameterType="InterfaceTrans" resultType="InterfaceTrans">
+		SELECT 
+			<include refid="InterfaceTransColumns" /> 
+		FROM TB_INTFACE_TRANS_LOG1 
+			<include refid="getInterfaceTrans"/>
+		UNION ALL
+		SELECT 
+			<include refid="InterfaceTransColumns" /> 
+		FROM TB_INTFACE_TRANS_LOG2 
+			<include refid="getInterfaceTrans"/>
+		UNION ALL
+		SELECT 
+			<include refid="InterfaceTransColumns" /> 
+		FROM TB_INTFACE_TRANS_LOG_HIS 
+			<include refid="getInterfaceTrans"/>
+	</select>
+	
+</mapper>

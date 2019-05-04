@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.statement.mapper.FinancingStatementMapper">
+    
+    <select id="getFinancingSummarizingList" parameterType="Condition" resultType="FinancingSummarizing">
+		    select tt.mchnt_name,
+       sum(wx_consume_amt) as wx_consume_amt,
+       sum(jf_consume_amt) as jf_consume_amt,
+       sum(wx_recharge_upload_amt) as wx_recharge_upload_amt,
+       sum(jf_recharge_upload_amt) as jf_recharge_upload_amt,
+       sum(pt_recharge_upload_amt) as pt_recharge_upload_amt,
+       sum(pt_subsidy_amt) as pt_subsidy_amt,
+       round((sum(wx_consume_amt) + sum(jf_consume_amt) +
+             sum(wx_recharge_upload_amt) + sum(jf_recharge_upload_amt) +
+             sum(pt_recharge_upload_amt) + sum(pt_subsidy_amt)) * mc.gross_profit_rate / 10000) as service_charge,
+       (sum(wx_consume_amt) + sum(jf_consume_amt) +
+       sum(wx_recharge_upload_amt) + sum(jf_recharge_upload_amt) +
+       sum(pt_recharge_upload_amt) + sum(pt_subsidy_amt)) as settle_amt
+  from (select m.mchnt_name as mchnt_name,
+               sum(t.trans_amt) as wx_consume_amt,
+               0 as jf_consume_amt,
+               0 as wx_recharge_upload_amt,
+               0 as jf_recharge_upload_amt,
+               0 as pt_recharge_upload_amt,
+               0 as pt_subsidy_amt,
+               m.mchnt_id
+          from tb_trans_log_his t, tb_intface_trans_log_his i, tb_merchant_inf m
+         where t.dms_related_key = i.interface_primary_key
+           and t.trans_id = i.trans_id
+           and t.mchnt_code = m.mchnt_code
+           and m.remarks = 'ACC_ITF'
+           and t.trans_id = 'W71'
+           and t.resp_code = '00'
+           and t.trans_st = 1
+           and t.trans_chnl in ('40001010', '40002001')
+        and t.settle_date &gt;=#{startTime}
+        and t.settle_date &lt;=#{endTime}
+         group by m.mchnt_name, m.mchnt_id
+        union
+        select m.mchnt_name as mchnt_name,
+               0 as wx_consume_amt,
+               sum(t.trans_amt) as jf_consume_amt,
+               0 as wx_recharge_upload_amt,
+               0 as jf_recharge_upload_amt,
+               0 as pt_recharge_upload_amt,
+               0 as pt_subsidy_amt,
+               m.mchnt_id
+          from tb_trans_log_his t, tb_intface_trans_log_his i, tb_merchant_inf m
+         where t.dms_related_key = i.interface_primary_key
+           and t.trans_id = i.trans_id
+           and t.mchnt_code = m.mchnt_code
+           and m.remarks = 'ACC_ITF'
+           and t.trans_id = 'W71'
+           and t.resp_code = '00'
+           and t.trans_st = 1
+           and t.trans_chnl = '40004001'
+        and t.settle_date &gt;=#{startTime}
+        and t.settle_date &lt;=#{endTime}
+         group by m.mchnt_name, m.mchnt_id
+        union
+        select m.mchnt_name as mchnt_name,
+               0 as wx_consume_amt,
+               0 as jf_consume_amt,
+               sum(t.org_trans_amt) as wx_recharge_upload_amt,
+               0 as jf_recharge_upload_amt,
+               0 as pt_recharge_upload_amt,
+               0 as pt_subsidy_amt,
+               m.mchnt_id
+          from tb_trans_log_his t, tb_intface_trans_log_his i, tb_merchant_inf m
+         where t.dms_related_key = i.interface_primary_key
+           and t.trans_id = i.trans_id
+           and t.mchnt_code = m.mchnt_code
+           and m.remarks = 'ACC_ITF'
+           and t.trans_id = 'W20'
+           and t.resp_code = '00'
+           and t.trans_st = 1
+           and t.trans_chnl = '40002001'
+        and t.settle_date &gt;=#{startTime}
+        and t.settle_date &lt;=#{endTime}
+         group by m.mchnt_name, m.mchnt_id
+        union
+        select m.mchnt_name as mchnt_name,
+               0 as wx_consume_amt,
+               0 as jf_consume_amt,
+               0 as wx_recharge_upload_amt,
+               sum(t.org_trans_amt) as jf_recharge_upload_amt,
+               0 as pt_recharge_upload_amt,
+               0 as pt_subsidy_amt,
+               m.mchnt_id
+          from tb_trans_log_his t, tb_intface_trans_log_his i, tb_merchant_inf m
+         where t.dms_related_key = i.interface_primary_key
+           and t.trans_id = i.trans_id
+           and t.mchnt_code = m.mchnt_code
+           and m.remarks = 'ACC_ITF'
+           and t.trans_id = 'W20'
+           and t.resp_code = '00'
+           and t.trans_st = 1
+           and t.trans_chnl = '40004001'
+        and t.settle_date &gt;=#{startTime}
+        and t.settle_date &lt;=#{endTime}
+         group by m.mchnt_name, m.mchnt_id
+        union
+        select m.mchnt_name as mchnt_name,
+               0 as wx_consume_amt,
+               0 as jf_consume_amt,
+               0 as wx_recharge_upload_amt,
+               0 as jf_recharge_upload_amt,
+               sum(t.org_trans_amt) as pt_recharge_upload_amt,
+               0 as pt_subsidy_amt,
+               m.mchnt_id
+          from tb_trans_log_his t, tb_intface_trans_log_his i, tb_merchant_inf m
+         where t.dms_related_key = i.interface_primary_key
+           and t.trans_id = i.trans_id
+           and t.mchnt_code = m.mchnt_code
+           and m.remarks = 'ACC_ITF'
+           and t.trans_id = 'W20'
+           and t.resp_code = '00'
+           and t.trans_st = 1
+           and t.trans_chnl = '10001001'
+        and t.settle_date &gt;=#{startTime}
+       and t.settle_date &lt;=#{endTime}
+         group by m.mchnt_name, m.mchnt_id
+        union
+        select m.mchnt_name as mchnt_name,
+               0 as wx_consume_amt,
+               0 as jf_consume_amt,
+               0 as wx_recharge_upload_amt,
+               0 as jf_recharge_upload_amt,
+               0 as pt_recharge_upload_amt,
+               sum(t.trans_amt) as pt_subsidy_amt,
+               m.mchnt_id
+          from tb_trans_log_his t, tb_intface_trans_log_his i, tb_merchant_inf m
+         where t.dms_related_key = i.interface_primary_key
+           and t.trans_id = i.trans_id
+           and t.mchnt_code = m.mchnt_code
+           and m.remarks = 'ACC_ITF'
+           and t.trans_id = 'S20'
+           and t.resp_code = '00'
+           and t.trans_st = 1
+          and t.settle_date &gt;= #{startTime} 
+          and t.settle_date &lt;= #{endTime} 
+         group by m.mchnt_name, m.mchnt_id) tt,
+       tb_merchant_cash_manage mc
+ where mc.mchnt_id = tt.mchnt_id
+ group by mchnt_name, mc.gross_profit_rate
+    </select>
+    
+</mapper>

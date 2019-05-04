@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+			<setting name="logImpl" value="SLF4J" />
+		<!-- <setting name="logImpl" value="STDOUT_LOGGING" /> -->
+	</settings>
+
+	<typeAliases>
+		<typeAlias type="com.cn.thinkx.wechat.base.wxapi.domain.Account" alias="Account" />
+		<typeAlias type="com.cn.thinkx.wechat.base.wxapi.domain.AccountFans" alias="AccountFans" />
+		<typeAlias type="com.cn.thinkx.wechat.base.wxapi.domain.AccountMenu" alias="AccountMenu" />
+		<typeAlias type="com.cn.thinkx.wechat.base.wxapi.domain.AccountMenuGroup" alias="AccountMenuGroup" />
+		<typeAlias type="com.cn.thinkx.wechat.base.wxapi.domain.MsgBase" alias="MsgBase" />
+		<typeAlias type="com.cn.thinkx.wechat.base.wxapi.domain.MsgNews" alias="MsgNews" />
+		<typeAlias type="com.cn.thinkx.wechat.base.wxapi.domain.MsgNewsVO" alias="MsgNewsVO" />
+		<typeAlias type="com.cn.thinkx.wechat.base.wxapi.domain.MsgText" alias="MsgText" />
+		
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.trans.WxTransLog" alias="WxTransLog" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.detail.DetailBizInfo" alias="DetailBizInfo" />
+		
+		<typeAlias type="com.cn.thinkx.beans.CtrlSystem" alias="CtrlSystem" />
+		
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.trans.TransLog" alias="TransLog" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.merchant.MerchantInf" alias="MerchantInf" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.merchant.MerchantCashManager" alias="MerchantCashManager" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.merchant.MerchantInfList" alias="MerchantInfList" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.shop.ShopInf" alias="ShopInf" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.merchant.MerchantManager" alias="MerchantManager" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.merchant.MchntAcctInf" alias="MchntAcctInf" />
+
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.rule.RuleTemplate" alias="RuleTemplate" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.rule.RuleType" alias="RuleType" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.rule.RuleDeclare" alias="RuleDeclare" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.trans.TransRule" alias="TransRule" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.rule.RuleFactor" alias="RuleFactor" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.trans.TransRuleDeclare" alias="TransRuleDeclare" />
+		
+		
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.user.UserMerchantAcct" alias="UserMerchantAcct" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.account.AccountInf" alias="AccountInf" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.user.UserInf" alias="UserInf" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.person.PersonInf" alias="PersonInf" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.channeluser.ChannelUserInf" alias="ChannelUserInf" />
+		
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.image.ImageManager" alias="ImageManager" />
+		
+		<typeAlias type="com.cn.thinkx.common.service.module.channel.domain.ChannelSecurityInf" alias="ChannelSecurityInf" />
+		<typeAlias type="com.cn.thinkx.common.service.module.dict.domain.BaseDict" alias="BaseDict" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.trans.WxTransOrder" alias="WxTransOrder" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.trans.WxTransOrderDetail" alias="WxTransOrderDetail" />
+	    <typeAlias type="com.cn.thinkx.common.wecard.domain.eshop.MchntEshopInf" alias="MchntEshopInf" />
+	    <typeAlias type="com.cn.thinkx.common.wecard.domain.trans.InterfaceTrans" alias="InterfaceTrans" />
+	    <typeAlias type="com.cn.thinkx.common.wecard.domain.accmchnt.AccMchntTransLog" alias="AccMchntTransLog" />
+	    
+	    <typeAlias type="com.cn.thinkx.common.wecard.domain.cardkeys.CardKeys" alias="CardKeys" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.cardkeys.CardKeysOrderInf" alias="CardKeysOrderInf" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.cardkeys.CardKeysProduct" alias="CardKeysProduct" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.cardkeys.CardKeysTransLog" alias="CardKeysTransLog" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.cardkeys.UserBankInf" alias="UserBankInf" />
+		
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.phoneRecharge.PhoneRechargeOrder" alias="PhoneRechargeOrder" />
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.phoneRecharge.PhoneRechargeShop" alias="PhoneRechargeShop" />
+		
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.ecomorder.OrderInf" alias="OrderInf" />
+		
+		<typeAlias type="com.cn.thinkx.common.wecard.domain.cardkeys.WithdrawBlacklistInf" alias="WithdrawBlacklistInf" />
+	</typeAliases>
+
+	<mappers>
+	</mappers>
+</configuration>

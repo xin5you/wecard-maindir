@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.common.wecard.module.rule.mapper.RuleFactorDao">
+		
+	<resultMap type="RuleFactor" id="RuleFactorResultMap">
+		<result column="RULE_FACTOR_ID" property="ruleFactorId"/>
+		<result column="RULE_ID" property="ruleId"/>
+		<result column="RULE_FACTOR" property="ruleFactor"/>
+		<result column="RULE_PARAM" property="ruleParam"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="RuleFactorColumns">
+		m.RULE_FACTOR_ID,
+		m.RULE_ID,
+		m.RULE_FACTOR,
+		m.RULE_PARAM
+		m.DATA_STAT,
+		m.REMARKS,
+		m.CREATE_USER,
+		m.UPDATE_USER,
+		m.CREATE_TIME,
+		m.UPDATE_TIME,
+		m.LOCK_VERSION	
+	</sql>
+	
+	
+	<insert id="insertRuleFactor" parameterType="RuleFactor">
+		INSERT INTO TB_RULE_FACTOR (
+			RULE_ID,
+			RULE_FACTOR,
+			RULE_PARAM,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER, 
+			CREATE_TIME, 
+			LOCK_VERSION
+		 )  VALUES (
+		 		#{ruleId,jdbcType=VARCHAR},
+		 		#{ruleFactor,jdbcType=VARCHAR},
+		 		#{ruleParam,jdbcType=VARCHAR},
+		 		#{dataStat,jdbcType=VARCHAR},
+		 		#{remarks,jdbcType=VARCHAR},
+		 		#{createUser,jdbcType=VARCHAR},
+		 		sysdate,
+		 		'0') 
+	</insert>
+	
+	<update id="updateRuleFactor" parameterType="RuleFactor">
+			UPDATE TB_RULE_FACTOR SET
+		 		RULE_ID=#{ruleId,jdbcType=VARCHAR},
+		 		RULE_FACTOR=#{ruleFactor,jdbcType=VARCHAR},
+		 		RULE_PARAM=#{ruleParam,jdbcType=VARCHAR},
+				DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+				REMARKS=#{remarks,jdbcType=VARCHAR},
+				UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+				UPDATE_TIME=sysdate
+			 	WHERE MCHNT_RULE_ID = #{ruleFactorId} 
+	</update>
+
+</mapper>

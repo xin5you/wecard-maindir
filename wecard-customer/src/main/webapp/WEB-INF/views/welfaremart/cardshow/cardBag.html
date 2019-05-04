@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<#include "../../common/wecardHeader.html">
+    <meta charset="UTF-8">
+    <title>我的卡券</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no, email=no">
+	<link rel="stylesheet" href="${s.base}/static/css/hkb_welfare.min.css?v=${s.version}" />
+</head>
+<body>
+	<!--知了企服-我的卡券-->
+	<!-- <form id="rechargeFrom" name="rechargeFrom" action="${s.base}/welfareMart/welfareCardRechargeCommit.do" method="post"> -->
+		<!-- <input type="hidden" id="productCode" name="productCode" /> -->
+		<div class="card_bag_list">
+		    <!--卡列表-->
+		    <#if phoneList ??&& phoneList?size gt 0>
+				<#list phoneList as phone>
+			    <div class="my_card_bag">
+			        <div class="card_bag_left">
+			            <div class="bag_left_up">
+				            <span>￥</span>
+				            <span>${phone.orgAmount!}</span>
+				        </div>
+			            <div class="bag_left_down">${phone.productType!}</div>
+			        </div>
+			        <div class="card_bag_right">
+			            <div class="bag_right_up">
+			            	<span>${phone.productName!}</span>
+			            	<span><b>${phone.num!}<b>(张)</span>
+			            </div>
+			            <div class="bag_right_down">
+			                <a class="right_down_block border_color decideRecharge" data="${phone.productCode!}" name="${phone.productTypeCode!}" value="${phone.mobile!}">
+				                <span>充值</span>
+				                <span class="card_bag_icon">
+				                	<img src="${s.base}/static/images/welfaremart/buy_card.png">
+				                </span>
+			                </a>
+			                <a class="right_down_block border_color toResell" data="${phone.productCode!}" >
+			                	<span>转让</span>
+			                	<span class="card_bag_icon">
+			                		<img src="${s.base}/static/images/welfaremart/turn_money.png">
+			                	</span>
+			                </a>
+			            </div>
+			        </div>
+			    </div>
+			    </#list>
+		    </#if>
+		</div>
+		<div>
+			<div class="card_bag_bottom"></div>
+			<div class="transaction_details_box">
+				<a href="${s.base}/welfareMart/toCardBagTransDetails.html">交易明细</a>
+			</div>
+		</div>
+	<!-- </form> -->
+	<!--预加载效果-->
+	<div class="loading_page">
+	    <div class="show_loading">
+	        <main>
+	            <div class="loader">
+	                <div class="loader-inner line-scale">
+	                    <div></div>
+	                    <div></div>
+	                    <div></div>
+	                    <div></div>
+	                    <div></div>
+	                </div>
+	            </div>
+	        </main>
+	        <p>提交中</p>
+	    </div>
+	</div>
+
+	<script src="${s.base}/static/js/common/fastclick.min.js?v=${s.version}"></script>
+	<script src="${s.base}/static/js/common/hkb_welfare.min.js?v=${s.version}"></script>
+	<script src="${s.base}/static/js/common/LAreaData2.min.js?v=${s.version}"></script>
+	
+	<script src="${s.base}/static/js/module/welfaremart/cardshow/cardBag.js"></script>
+	<script>
+		//弹出框
+	    /*var personalHold=document.getElementsByClassName('decideRecharge')[0];
+	    personalHold.addEventListener('click',function () {
+	    	var productCode = $(this).attr('data');
+	    	var type = $(this).attr('name');
+	    	var mobile = $(this).attr('value');
+	        jfShowTips.dialogShow({
+	            "mainText": "确定为"+mobile+"充值？",
+	            "minText": "  ",
+	            "hasCheck": false,
+	            "hasCancel": true,
+	            "checkFn": function () {
+	            	window.location.href = CONETXT_PATH + '/welfareMart/welfareCardRechargeCommit.html?productCode='+productCode;
+	                 $.ajax({
+        				url : CONETXT_PATH + '/welfareMart/welfareCardRecharge.html',
+        				type : 'post',
+        				dataType : "json",
+        				data : {
+        					productCode : productCode
+        				},
+        				success : function(data) {
+        					 jfShowTips.dialogRemove();//弹出框消失
+        					if (data != null) {
+        						var itemId = data.itemId;
+        						if (type == "11") {
+        							window.location.href = CONETXT_PATH + '/welfareMart/welfareCardRechargeCommit.html?productCode='+productCode;
+        		                } else if (type == "12") {
+        		                	// location.href = CONETXT_PATH + '/unicomAync/buy.html?mobile='+mobile+'&itemId='+itemId+'&type=2';
+        		                }
+        					} else {
+        						jfShowTips.toastShow({'text' : '网络异常，请稍后再试'});
+        					}
+        				}
+        			}); 
+	            }
+	        })
+	    },false)*/
+	</script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.enterpriseorder.mapper.BatchOrderListMapper">
+	
+	<sql id="BatchOrderListColumns">
+	        L.ORDER_LIST_ID,
+            L.ORDER_ID,
+            L.USER_NAME,
+            L.PHONE_NO,
+            L.USER_CARD_NO,
+            L.PRODUCT_CODE,
+            L.PRODUCT_NAME,
+            L.AMOUNT,
+            L.ORDER_STAT,
+            L.ORDER_DESC,
+            L.DATA_STAT,
+            L.REMARKS,
+            L.CREATE_USER,
+            L.UPDATE_USER,
+            L.CREATE_TIME,
+            L.UPDATE_TIME,
+            L.LOCK_VERSION
+	</sql>
+	
+	<select id="getBatchOrderListList" parameterType="string" resultType="BatchOrderList">
+	   SELECT 
+	   <include refid="BatchOrderListColumns" /> 
+	   FROM TB_BATCH_ORDER_LIST L
+	  WHERE L.DATA_STAT='0' AND L.ORDER_ID = #{orderId} 
+	  ORDER BY L.ORDER_STAT DESC,L.UPDATE_TIME DESC,ORDER_LIST_ID DESC
+	</select>
+	
+	<select id="getBatchOrderListFailList" parameterType="string" resultType="BatchOrderList">
+       SELECT 
+       <include refid="BatchOrderListColumns" /> 
+       FROM TB_BATCH_ORDER_LIST L
+      WHERE L.DATA_STAT='0' 
+      AND (L.ORDER_STAT = '99' OR ORDER_STAT='0')
+      AND L.ORDER_ID = #{orderId} 
+      
+    </select>
+    
+    <select id="getBatchOrderListByOrderIdAndPhoneNo" parameterType="BatchOrderList" resultType="BatchOrderList">
+    SELECT 
+       <include refid="BatchOrderListColumns" /> 
+       FROM TB_BATCH_ORDER_LIST L
+      WHERE L.DATA_STAT='0' 
+      AND L.ORDER_ID = #{orderId} 
+      AND L.PHONE_NO=#{phoneNo}
+    </select>
+    
+    <select id="getBatchOrderListByOrderListId" parameterType="string" resultType="BatchOrderList">
+    SELECT 
+       <include refid="BatchOrderListColumns" /> 
+       FROM TB_BATCH_ORDER_LIST L
+      WHERE L.DATA_STAT='0' 
+      AND L.ORDER_LIST_ID = #{orderListId} 
+    </select>
+		
+	<insert id="addBatchOrderList" parameterType="java.util.ArrayList">  
+		INSERT  INTO TB_BATCH_ORDER_LIST(
+           ORDER_LIST_ID,
+		   ORDER_ID,
+		   USER_NAME,
+		   PHONE_NO,
+		   USER_CARD_NO,
+		   PRODUCT_CODE,
+		   PRODUCT_NAME,
+		   AMOUNT,
+		   ORDER_STAT,
+		   ORDER_DESC,
+		   DATA_STAT,
+		   REMARKS,
+		   CREATE_USER,
+		   UPDATE_USER,
+		   CREATE_TIME,
+		   UPDATE_TIME,
+		   LOCK_VERSION)   
+         SELECT 
+           TO_CHAR(sysdate, 'YYYYMMDDHHMISS') || to_char(seq_oms_all_tb_id.nextval, 'fm00000000')  as ORDER_LIST_ID, 
+           ORDER_ID,
+		   USER_NAME,
+		   PHONE_NO,
+		   USER_CARD_NO,
+		   PRODUCT_CODE,
+		   PRODUCT_NAME,
+		   AMOUNT,
+		   ORDER_STAT,
+		   ORDER_DESC,
+		   DATA_STAT,
+		   REMARKS,
+		   CREATE_USER,
+		   UPDATE_USER,
+		   CREATE_TIME,
+		   UPDATE_TIME,
+		   LOCK_VERSION FROM(  
+	        <foreach collection="list" item="item" index="index" separator="union all">  
+	            select  
+	            #{item.orderId,jdbcType=VARCHAR} as ORDER_ID,
+	             #{item.userName,jdbcType=VARCHAR} as USER_NAME,
+	             #{item.phoneNo,jdbcType=VARCHAR} as PHONE_NO,
+	             #{item.userCardNo,jdbcType=VARCHAR} as USER_CARD_NO,
+	             #{item.productCode,jdbcType=VARCHAR} as PRODUCT_CODE,
+	             #{item.productName,jdbcType=VARCHAR} as PRODUCT_NAME,
+	             #{item.amount,jdbcType=VARCHAR} as AMOUNT,
+	             #{item.orderStat,jdbcType=VARCHAR} as ORDER_STAT,
+	             #{item.orderDesc,jdbcType=VARCHAR} as ORDER_DESC,
+	             '0' as DATA_STAT,
+	             #{item.remarks,jdbcType=VARCHAR} as REMARKS,
+	             #{item.createUser,jdbcType=VARCHAR} as CREATE_USER,
+	             #{item.updateUser,jdbcType=VARCHAR} as UPDATE_USER,
+	             sysdate as CREATE_TIME,
+	             sysdate as UPDATE_TIME,
+	             '0' as LOCK_VERSION
+	            from  
+	            dual  
+	        </foreach>  
+        ) A  
+</insert> 
+
+        <insert id="addOrderList" parameterType="BatchOrderList">
+	        <selectKey resultType="string" order="BEFORE" keyProperty="orderListId">  
+                <include refid="com.cn.thinkx.oms.module.common.mapper.SqlCommonMapper.getCommonId" />
+            </selectKey>
+	        INSERT INTO TB_BATCH_ORDER_LIST
+	          (ORDER_LIST_ID,
+	           ORDER_ID,
+	           USER_NAME,
+	           PHONE_NO,
+	           USER_CARD_NO,
+	           PRODUCT_CODE,
+	           PRODUCT_NAME,
+	           AMOUNT,
+	           ORDER_STAT,
+	           ORDER_DESC,
+	           DATA_STAT,
+	           REMARKS,
+	           CREATE_USER,
+	           UPDATE_USER,
+	           CREATE_TIME,
+	           UPDATE_TIME,
+	           LOCK_VERSION) 
+	        VALUES 
+	             (
+	             #{orderListId},
+	             #{orderId,jdbcType=VARCHAR}, 
+	             #{userName,jdbcType=VARCHAR}, 
+	             #{phoneNo,jdbcType=VARCHAR}, 
+	             #{userCardNo,jdbcType=VARCHAR}, 
+	             #{productCode,jdbcType=VARCHAR}, 
+	             #{productName,jdbcType=VARCHAR}, 
+	             #{amount,jdbcType=VARCHAR}, 
+	             #{orderStat,jdbcType=VARCHAR}, 
+	             #{orderDesc,jdbcType=VARCHAR}, 
+	             '0',
+	             #{remarks,jdbcType=VARCHAR}, 
+	             #{createUser,jdbcType=VARCHAR}, 
+	             #{updateUser,jdbcType=VARCHAR}, 
+	             sysdate,
+	             sysdate,
+	             '0'
+	             ) 
+        </insert>
+        
+        <update id="updateBatchOrderList" parameterType="BatchOrderList">
+		      UPDATE TB_BATCH_ORDER_LIST
+		        <trim prefix="SET" suffixOverrides=",">
+		            <if test="orderId != null and orderId != '' ">ORDER_ID     = #{orderId,jdbcType=VARCHAR},</if>
+		            <if test="userName != null and userName != '' ">USER_NAME    = #{userName,jdbcType=VARCHAR},</if>
+		            <if test="phoneNo != null and phoneNo != '' ">PHONE_NO     = #{phoneNo,jdbcType=VARCHAR},</if>
+		            <if test="userCardNo != null and userCardNo != '' ">USER_CARD_NO = #{userCardNo,jdbcType=VARCHAR},</if>
+		            <if test="productCode != null and productCode != '' ">PRODUCT_CODE = #{productCode,jdbcType=VARCHAR},</if>
+		            <if test="productName != null and productName != '' ">PRODUCT_NAME = #{productName,jdbcType=VARCHAR},</if>
+		            <if test="amount != null and amount != '' ">AMOUNT       = #{amount,jdbcType=VARCHAR},</if>
+		            <if test="orderStat != null and orderStat != '' ">ORDER_STAT   = #{orderStat,jdbcType=VARCHAR},</if>
+		            <if test="orderDesc != null and orderDesc != '' ">ORDER_DESC   = #{orderDesc,jdbcType=VARCHAR},</if>
+		            <if test="dataStat != null and dataStat != '' ">DATA_STAT    = #{dataStat,jdbcType=VARCHAR},</if>
+		            <if test="remarks != null and remarks != '' ">REMARKS      = #{remarks,jdbcType=VARCHAR},</if>
+		            <if test="updateUser != null and updateUser != '' ">UPDATE_USER  = #{updateUser,jdbcType=VARCHAR},</if>
+		            UPDATE_TIME = SYSDATE,
+		            LOCK_VERSION = LOCK_VERSION + 1 
+            </trim>
+		      WHERE ORDER_LIST_ID = #{orderListId,jdbcType=VARCHAR}
+        </update>
+        
+        <update id="deleteBatchOrderList" parameterType="string">
+            UPDATE TB_BATCH_ORDER_LIST SET DATA_STAT = '1' WHERE ORDER_LIST_ID=#{orderListId}
+        </update>
+        
+	
+</mapper>

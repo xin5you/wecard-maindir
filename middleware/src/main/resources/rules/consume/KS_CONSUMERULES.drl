@@ -1,0 +1,33 @@
+package com.cn.thinkx.consume
+
+import com.cn.thinkx.dubbo.facadeImpl.drools.valid.RuleUtil;
+import com.cn.thinkx.pms.base.utils.DroolsConstants;
+
+//消费折扣
+rule "consume_reduction"
+	lock-on-active true
+	 salience 99
+	 when
+	 	//消费折扣
+	 	 $m:TranDroolsTransRuleeTypeCode==DroolsConstants.RuleTypeEnum.RULETYPE_4000.getCode(),
+	 	 			ruleParam<=10000,
+	 			    inMoney>=ruleFactor,inMoney:inMoney, p1:ruleParam); 
+	 then
+	 	 $m.setInMoney(RuleUtil.multiplyUtil(inMoney,p1));
+	 	 update($m);
+end
+
+
+//消费满减
+rule "consume_full_subtract"
+	lock-on-active true
+	 salience 98
+	 when
+	 	//消费满减
+	 	$m:TransRulDroolsTransRuleeCode==DroolsConstants.RuleTypeEnum.RULETYPE_3000.getCode(),
+	 			    inMoney>=ruleFactor,inMoney:inMoney, p1:ruleParam); 
+	 then
+	 	 $m.setInMoney(RuleUtil.subUtil(inMoney,p1));
+	 	 update($m);
+end
+//其他消费类型定义 折中折 折后减  后续定义

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wxclient.mapper.WxResourceDao">
+		
+	<resultMap type="WxResource" id="WxResourceResultMap">
+		<result column="RESOURCE_ID" property="resourceId"/>
+		<result column="RESOURCE_NAME" property="resourceName"/>
+		<result column="DESP" property="desp"/>
+		<result column="fansId" property="fansId"/>
+		<result column="OPENID" property="openId"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="WxResourceColumns">
+		m.RESOURCE_ID,
+		m.RESOURCE_NAME,
+		m.DESP,
+		m.DATA_STAT,
+		m.REMARKS,
+		m.CREATE_USER, 
+		m.UPDATE_USER, 
+		m.CREATE_TIME, 
+		m.UPDATE_TIME, 
+		m.LOCK_VERSION
+	</sql>
+	
+	<insert id="insertWxResource" parameterType="WxResource">
+		INSERT INTO TB_WX_RESOURCE (
+			RESOURCE_NAME,
+			DESP,
+			DATA_STAT,
+			REMARKS,
+			CREATE_USER, 
+			CREATE_TIME, 
+			LOCK_VERSION
+		 )  VALUES ( 
+		 		#{resourceName,jdbcType=VARCHAR},
+		 		#{desp,jdbcType=VARCHAR},
+		 		#{dataStat,jdbcType=VARCHAR},
+		 		#{remarks,jdbcType=VARCHAR},
+		 		#{createUser,jdbcType=VARCHAR},
+		 		sysdate,
+		 		'0') 
+	</insert>
+	
+		<select id="getAllWxResourceList" parameterType="WxResource" resultMap="WxResourceResultMap">
+		SELECT 
+			<include refid="WxResourceColumns" />
+			FROM TB_WX_RESOURCE 
+			
+	</select>
+	
+	<select id="findWxResourceListByParam" parameterType="WxResource" resultMap="WxResourceResultMap">
+		select
+			  OPENID,
+		      RESOURCE_ID,
+		      DESP
+			FROM VIEW_MERCHANT_FANS_ROLE_SOURCE WHERE OPENID=#{openId}
+			
+	</select>
+
+</mapper>

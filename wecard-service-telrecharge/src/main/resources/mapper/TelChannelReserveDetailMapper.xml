@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wecard.facade.telrecharge.mapper.TelChannelReserveDetailMapper">
+		
+	<resultMap type="TelChannelReserveDetail" id="TelChannelReserveDetailResultMap">
+		<result column="ID" property="id"/>
+	 	<result column="CHANNEL_ID" property="channelId"/>
+	 	<result column="RESERVE_AMT" property="reserveAmt"/>
+	 	<result column="RESERVE_TYPE" property="reserveType"/>
+		<result column="RESV1" property="resv1"/>
+		<result column="RESV2" property="resv2"/>
+		<result column="RESV3" property="resv3"/>
+		<result column="RESV4" property="resv4"/>
+		<result column="RESV5" property="resv5"/>
+		<result column="RESV6" property="resv6"/>
+		<result column="DATA_STAT" property="dataStat"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+		<result column="CHANNEL_NAME" property="channelName"/>
+	</resultMap>
+	
+	<sql id="TableName">
+			TB_TEL_CHANNEL_RESERVE_DETAIL
+	</sql>
+	
+	<sql id="ColumnResult">
+	 	M.ID, 
+	 	M.CHANNEL_ID, 
+	 	M.RESERVE_AMT, 
+	 	M.RESERVE_TYPE, 
+		M.RESV1,
+		M.RESV2,
+		M.RESV3,
+		M.RESV4,
+		M.RESV5,
+		M.RESV6,
+		M.DATA_STAT,
+		M.REMARKS,
+		M.CREATE_USER	,
+		M.UPDATE_USER,
+		M.CREATE_TIME,
+		M.UPDATE_TIME,
+		M.LOCK_VERSION
+	</sql>
+
+	<select id="getById" parameterType="java.lang.String" resultMap="TelChannelReserveDetailResultMap">
+		SELECT 
+	  		<include refid="ColumnResult" />,
+	  		C.CHANNEL_NAME
+		 		     FROM 	TB_TEL_CHANNEL_RESERVE_DETAIL M, TB_TEL_CHANNEL_INF C
+						 WHERE M.CHANNEL_ID = C.CHANNEL_ID
+						   AND M.DATA_STAT = '0'
+						   AND C.DATA_STAT = '0'
+						   AND M.ID=#{id}
+	</select>
+	
+	
+	<select id="getList" parameterType="TelChannelReserveDetail" resultMap="TelChannelReserveDetailResultMap">
+		SELECT 
+	  		<include refid="ColumnResult" />,
+	  		C.CHANNEL_NAME
+		FROM TB_TEL_CHANNEL_RESERVE_DETAIL M, TB_TEL_CHANNEL_INF C
+		 WHERE M.CHANNEL_ID = C.CHANNEL_ID
+			AND M.DATA_STAT = '0'
+			AND C.DATA_STAT = '0'
+		<if test="channelName != null and channelName != '' ">
+			AND C.CHANNEL_NAME LIKE '%' || #{channelName} || '%'
+		</if>
+		<if test="channelId != null and channelId != '' ">
+			AND M.CHANNEL_ID = #{channelId}
+		</if>
+		ORDER BY M.UPDATE_TIME DESC
+	</select>
+	
+		<insert id="insert" parameterType="TelChannelReserveDetail">
+			 <selectKey resultType="string" order="BEFORE" keyProperty="id">  
+			<include refid="com.cn.thinkx.wecard.facade.telrecharge.mapper.SqlTelCommonMapper.getTelCommonId" />
+		</selectKey>
+			INSERT INTO <include refid="TableName" /> (
+				ID, 
+			 	CHANNEL_ID, 
+			 	RESERVE_AMT, 
+			 	RESERVE_TYPE, 
+				RESV1,
+				RESV2,
+				RESV3,
+				RESV4,
+				RESV5,
+				RESV6,
+				DATA_STAT,
+				REMARKS,
+				CREATE_USER	,
+				UPDATE_USER,
+				CREATE_TIME,
+				UPDATE_TIME,
+				LOCK_VERSION
+			 )  VALUES (
+					#{id,jdbcType=VARCHAR},
+		 			#{channelId,jdbcType=VARCHAR},
+					#{reserveAmt,jdbcType=VARCHAR},
+					#{reserveType,jdbcType=VARCHAR},
+			 		#{resv1,jdbcType=VARCHAR},
+			 		#{resv2,jdbcType=VARCHAR},
+			 		#{resv3,jdbcType=VARCHAR},
+			 		#{resv4,jdbcType=VARCHAR},
+			 		#{resv5,jdbcType=VARCHAR},
+			 		#{resv6,jdbcType=VARCHAR},
+			 		'0',
+			 		#{remarks,jdbcType=VARCHAR},
+			 		#{createUser,jdbcType=VARCHAR},
+			 		#{createUser,jdbcType=VARCHAR},
+			 		sysdate,
+			 		sysdate,
+			 		'0') 
+		</insert>
+
+		<update id="update"  parameterType="TelChannelReserveDetail">
+			UPDATE <include refid="TableName" /> SET
+ 				CHANNEL_ID=#{channelId,jdbcType=VARCHAR},
+				RESERVE_AMT=#{reserveAmt,jdbcType=VARCHAR},
+				RESERVE_TYPE=#{reserveType,jdbcType=VARCHAR},
+		 		RESV1=#{resv1,jdbcType=VARCHAR},
+		 		RESV2=#{resv2,jdbcType=VARCHAR},
+		 		RESV3=#{resv3,jdbcType=VARCHAR},
+		 		RESV4=#{resv4,jdbcType=VARCHAR},
+		 		RESV5=#{resv5,jdbcType=VARCHAR},
+		 		RESV6=#{resv6,jdbcType=VARCHAR},
+				DATA_STAT=#{dataStat,jdbcType=VARCHAR},
+				REMARKS=#{remarks,jdbcType=VARCHAR},
+				UPDATE_USER=#{updateUser,jdbcType=VARCHAR},
+				UPDATE_TIME=sysdate,
+				LOCK_VERSION=LOCK_VERSION+1
+			 	WHERE LOCK_VERSION=#{lockVersion} AND ID = #{id} 
+	</update>
+	
+		<update id="deleteById" parameterType="string">
+			UPDATE <include refid="TableName" /> SET DATA_STAT='1'  WHERE　ID = #{id} 
+		</update>
+
+</mapper>

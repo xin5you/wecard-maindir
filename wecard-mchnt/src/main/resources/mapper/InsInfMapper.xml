@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.merchant.mapper.InsInfDao">
+
+	<resultMap type="InsInf"  id="InsInfResultMap">
+		<result column="INS_CODE" property="insCode"/>
+		<result column="PRODUCT_CODE" property="productCode"/>
+	</resultMap>
+
+	<select id="getInsInfByMchntId" parameterType="java.lang.String" resultMap="InsInfResultMap">
+	    select
+          ii.INS_CODE,
+          rip.PRODUCT_CODE 
+     from tb_merchant_inf m
+     left join tb_ins_inf ii
+       on m.ins_id = ii.ins_id
+     left join tb_rel_ins_product rip
+       on rip.ins_id = ii.ins_id
+    where m.data_stat = '0'
+      and ii.data_stat = '0'
+      and rip.data_stat = '0'
+      and m.mchnt_id = #{mchntId}
+	</select>
+
+</mapper>

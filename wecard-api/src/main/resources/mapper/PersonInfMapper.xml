@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.wecard.api.module.customer.mapper.PersonInfMapper">
+		
+	<resultMap type="PersonInf" id="PersonInfResultMap">
+		<result column="PERSONAL_ID" property="personalId"/>
+		<result column="USER_ID" property="userId"/>
+		<result column="PERSONAL_NAME" property="personalName"/>
+		<result column="PERSONAL_CARD_TYPE" property="personalCardType"/>
+		<result column="PERSONAL_CARD_NO" property="personalCardNo"/>
+		<result column="SEX" property="sex"/>
+		<result column="BIRTHDAY" property="birthday"/>
+		<result column="NATIVE_PLACE" property="nativePlace"/>
+		<result column="MOBILE_PHONE_NO" property="mobilePhoneNo"/>
+		<result column="EMAIL" property="email"/>
+		<result column="MARRIAGE_STAT" property="marriageStat"/>
+		<result column="HOME_ADDRESS" property="homeAddress"/>
+		<result column="COMPANY_ADDRESS" property="companyAddress"/>
+		<result column="TRANS_HABIT" property="transHabit"/>
+		<result column="REMARKS" property="remarks"/>
+		<result column="CREATE_USER" property="createUser"/>
+		<result column="UPDATE_USER" property="updateUser"/>
+		<result column="CREATE_TIME" property="createTime"/>
+		<result column="UPDATE_TIME" property="updateTime"/>
+		<result column="LOCK_VERSION" property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="PersonInfColumns">
+		m.PERSONAL_ID,
+		m.USER_ID,
+		m.PERSONAL_NAME,
+		m.PERSONAL_CARD_TYPE,
+		m.PERSONAL_CARD_NO,
+		m.SEX,		
+		m.BIRTHDAY,
+		m.NATIVE_PLACE,
+		m.MOBILE_PHONE_NO,
+		m.EMAIL,
+		m.MARRIAGE_STAT,
+		m.HOME_ADDRESS,
+		m.COMPANY_ADDRESS,
+		m.TRANS_HABIT,
+		m.REMARKS,
+		m.CREATE_USER, 
+		m.UPDATE_USER, 
+		m.CREATE_TIME, 
+		m.UPDATE_TIME, 
+		m.LOCK_VERSION
+	</sql>
+	
+	<select id="getPersonInfById" parameterType="java.lang.String" resultMap="PersonInfResultMap">
+		SELECT 
+	  		<include refid="PersonInfColumns" />
+		 FROM TB_PERSON_INF m WHERE  m.PERSONAL_ID=#{personId} AND m.DATA_STAT = '0'
+	</select>
+	
+	<select id="getPersonInfByOpenId" parameterType="java.lang.String" resultType="PersonInf">
+	           SELECT 
+	           <include refid="PersonInfColumns" />
+               FROM TB_PERSON_INF m,
+                     TB_USER_INF u,
+                     TB_CHANNEL_USER_INF c
+                     WHERE  u.DATA_STAT='0'
+                     AND m.DATA_STAT = '0'
+                      AND　m.USER_ID=u.USER_ID
+                     AND c.USER_ID=u.USER_ID
+                     AND c.CHANNEL_CODE='40001010'
+                     AND c.EXTERNAL_ID=#{openid}
+	</select>
+	
+</mapper>

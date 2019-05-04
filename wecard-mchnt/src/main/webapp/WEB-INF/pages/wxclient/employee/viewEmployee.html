@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>知了企服</title>
+	<#include "../../common/head.html">
+	<script src="${s.base}/res/jweixin-1.0.0.js"></script>
+</head>
+<body>
+<div class="employee_inf">
+    <div class="hkb_textarea textarea_shadow">
+        <!--复制 list-->
+        <div class="entry">
+            <div class="entry_1">
+                <label class="hkb_label">员工信息</label>
+            </div>
+            <div class="entry_2">${merchantManager.name !}</div>
+        </div>
+        <!--list 结束-->
+        <!--复制 list-->
+        <div class="entry">
+            <div class="entry_1">
+                <label class="hkb_label">员工号</label>
+            </div>
+            <div class="entry_2">${merchantManager.remarks !}</div>
+        </div>
+        <!--list 结束-->
+        <!--复制 list-->
+        <div class="entry">
+            <div class="entry_1">
+                <label class="hkb_label">注册手机号</label>
+            </div>
+            <div class="entry_2">${merchantManager.phoneNumber !}</div>
+        </div>
+        <!--list 结束-->
+        <!--复制 list-->
+        <div class="entry">
+            <div class="entry_1">
+                <label class="hkb_label">商户名称</label>
+            </div>
+            <div class="entry_2">${merchantManager.mchntName !}</div>
+        </div>
+        <!--list 结束-->
+        <!--复制 list-->
+        <div class="entry">
+            <div class="entry_1">
+                <label class="hkb_label">门店名称</label>
+            </div>
+            <div class="entry_2"> ${merchantManager.shopName !}</div>
+        </div>
+        <!--list 结束-->
+        <!--复制 list-->
+        <div class="entry">
+            <div class="entry_1">
+                <label class="hkb_label">角色名称</label>
+            </div>
+            <div class="entry_2">${merchantManager.roleName !}</div>
+        </div>
+        <!--list 结束-->
+    </div>
+    <!--按钮-->
+    <a href="javascript:void(0);" class="btn_area" id="backBtn">
+        <div class="hkb_btn btn_color">返回</div>
+    </a></div>
+<script type="text/javascript">
+	$(function () {	
+		$('#backBtn').bind("click", function(){
+        	wx.closeWindow();
+        });
+	})
+</script>
+</body>
+</html>

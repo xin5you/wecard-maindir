@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ 
+    <!--通用媒体查询-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+<title>知了企服</title>
+<#include "../../common/wecardHeader.html">
+<script src="${s.base}/static/js/module/wallet/scanCode.js?v=${s.version}"></script>
+<script src="${s.base}/static/js/common/security.js?v=${s.version}"></script>
+</head>
+<body>
+<form action="${s.base!}/customer/user/payConfirm.html" method="post" id = "myForm">
+	<input id="openid" name = "openid" type="hidden"  value="${cOpenid!} "/>
+	<input id="merchantCode" name="merchantCode" type="hidden" value="${detail.mchntCode!}" />
+	<input id="mchntName" name="mchntName" type="hidden" value="${detail.mchntName!}" />
+	<input id="shopCode" name="shopCode" type="hidden" value="${detail.shopCode!}" />
+	<input id="shopName" name="shopName" type="hidden" value="${detail.shopName!}" />
+	<input id="insCode" name="insCode" type="hidden" value="${detail.insCode!}" />
+	<input id="qrCodeUrl" name="qrCodeUrl" type="hidden" value="${detail.qrCodeUrl!}" />
+	<input id="payAmount" name="payAmount" type="hidden" value="" />
+	<input id="key" name="key" type="hidden" value="" />
+	<input id="userMchntAccBal" name = "userMchntAccBal" type="hidden" value="${userMchntAccBal!}" />
+	<input id="accHkbAccBal" name = "accHkbAccBal" type="hidden" value="${accHkbAccBal!}" />
+	<input id="brandLogo" name = "brandLogo" type="hidden" value="${detail.brandLogo !}" />
+	<input id="mchntType" name = "mchntType" type="hidden" value="${detail.mchntType !}" />
+<!-- 输入金额 -->
+<div class="hkb_title">
+    <div class="logo"><img src="${detail.brandLogo !}"></div>
+    <div>${detail.mchntName !}(${detail.shopName !})</div>
+</div>
+
+<div class="hkb_money_amount">
+    <div class="money_squareness">
+        <div class="money_title">付款金额（元）：</div>
+        <div class="value">
+            <span class="rmb_unit">￥</span>
+            <div class="number keybroad">
+                <div class="keyNumshow" id="savekeyNum" name = "savekeyNum"></div>
+                <input readonly class="key_input" id="key_input" value="" >
+            </div>
+        </div>
+        <div class="money_text">请咨询服务台后输入</div>
+    </div>
+</div>
+<div class="hkb_register_inputlist" style="margin-top:10px;">
+ 	<div class="register_input_repeat" style="display: none" id = "checkViews"></div>
+ </div>
+<div class="money_next">
+   <a id="pay_next_step2" href="#"><span>去 买 单</span></a>
+</div>
+
+
+</form>
+<script>addEventListener('load',function(){
+    /*弹出数字键盘*/
+    var jfkeybroad = new jfNumKeybroad.keyBroadShow({
+            'hideButton':'money_next',   //其他的关闭按钮
+            'showNumEle':'savekeyNum',   //点击出现键盘的元素，并且存储数字，ID选择器
+            'saveNumEle':'keyNumshow',  //用于显示当前金额的值的元素，用于判断光标，class选择器
+            'clearButton':false,       //清除数字按钮
+            'saveInput':'key_input',   //存入键盘的值，input元素的class选择器
+            'MaxNum':'7'               //键盘可以输入的最大位数
+        });
+    jfkeybroad.run();//页面初始的时候，开启键盘
+
+});
+</script>
+</body>
+</html>

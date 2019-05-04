@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--通用媒体查询-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+<title>知了企服</title>
+<#include "../../common/wecardHeader.html">
+<script type="text/javascript" src="${s.base}/static/js/module/wallet/paySuccess.js?v=${s.version}"></script>
+</head>
+<body>
+<!--操作成功-->
+<div class="hkb_success_animation">
+    <!--成功动画-->
+    <!--支付成功动画-->
+    <div class="hkb_animation_pay">
+        <div class="hkb_circle_white">
+            <div class="hkb_circle_green"></div>
+            <div class="hkb_animation_success">
+                <div class="swal2-icon swal2-success animate">
+                    <span class="line tip1 animate-success-tip1"></span>
+                    <span class="line long1 animate-success-long1"></span>
+                </div>
+            </div>
+            <div class="hkb_line_orange">
+                <div class="hkb_line_top"><img src="${s.base}/static/images/hkb_line_top.png"></div>
+                <div class="hkb_line_bottom"><img src="${s.base}/static/images/hkb_line_bottom.png"></div>
+            </div>
+        </div>
+	</div>
+    <!-- 动画 -->
+    <div class="hkb_pay_success_text">
+        <div class="hkb_text_success">支付成功</div>
+        <!--消费账单-->
+        <div class="hkb_fail_text_bill">
+            <div class="hkb_fail_bill">
+                <span class="fail_bill_text">金额：</span>
+                <span class="fail_bill_text"> ${transAmt !}元</span>
+            </div>
+            <div class="hkb_fail_bill">
+                <span class="fail_bill_text">${transTime !}</span>
+            </div>
+            <div class="hkb_fail_bill">
+                <span class="fail_bill_text">${mchntName !} (${shopName !})</span>
+            </div>
+        </div>
+        <!--关闭-->
+        <div class="hkb_button_success">
+            <a class="main_btn" href="#"><span>关闭</span>
+            </a>
+        </div>
+    </div>
+</div>
+<script>
+// 阻止浏览器后退按钮  
+$(document).ready(function(e) {	
+	var counter = 0;
+	if (window.history && window.history.pushState) {
+		$(window).on('popstate', function () {
+			window.history.pushState('forward', null, '#');
+			window.history.forward(1);
+		});
+	}
+	window.history.pushState('forward', null, '#'); //在IE中必须得有这两行
+	window.history.forward(1);
+});
+</script>
+</body>
+</html>

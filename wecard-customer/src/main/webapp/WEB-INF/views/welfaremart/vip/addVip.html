@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<#include "../../common/wecardHeader.html">
+    <meta charset="UTF-8">
+    <title>我的银行卡</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no, email=no">
+	<link rel="stylesheet" href="${s.base}/static/css/hkb_welfare.min.css?v=${s.version}" />
+</head>
+<body>
+	<!-- <form id="addVipForm" name="addVipForm" action="${s.base}/welfareMart/welfareAddBankCommit.html" method="post"> -->
+		<!--知了企服-添加银行卡-->
+		<input type="hidden" id="productCode" name="productCode" value="${productCode!}" />
+		<input type="hidden" id="num" name="num" value="${num!}" />
+		<input type="hidden" id="check" name="check" value="${check!}" />
+		<input type="hidden" id="accountBank" name="accountBank" />
+		<input type="hidden" id="bankType" name="bankType" />
+		<input type="hidden" id="accountBankAddr" name="accountBankAddr" />
+		<input type="hidden" id="mobile" name="mobile" value="${mobile!}"/>
+		
+		<div class="add_card">
+		    <div class="add_line">
+		        <p class="add_name">姓名</p>
+		        <p id="userName" name="userName" class="out_name">${userName!}</p>
+		    </div>
+		    <div class="add_line">
+		        <p class="add_name">银行卡号</p>
+		        <input id="bankNo" name="bankNo" class="out_name" pattern="[0-9]*" placeholder="请输入银行卡号" maxlength="19" onkeyup="this.value=this.value.replace(/\D/g,'')" />
+		    </div>
+		    <div class="add_line">
+		        <p class="add_name">开户行</p>
+		        <div class="out_right">
+		            <!-- <img src="${s.base}/static/images/welfaremart/vip/icon-bank-1.png"> -->
+		            <!-- <input id="accountBank" name="accountBank" placeholder="请输入开户行"> -->
+		            <p id="accountBankName" name="accountBankName" class="out_name"></p>
+		        </div>
+		    </div>
+		    <div class="add_line">
+		        <p class="add_name">银行卡类型</p>
+		        <p id="bankTypeName" name="bankTypeName" class="out_name"></p>
+		    </div>
+		    <div class="add_line add_bank_addr">
+        		<p class="add_name">所在省市</p>
+        		<div class="add_vip_icon" id="product_address_show" >请输入地址</div>
+        		<!-- <div class="add_vip_icon" id="product_address_show" >上海市,上海市</div> -->
+    		</div>
+		    <div class="add_line">
+		        <p class="add_name">开户行支行(选填)</p>
+		        <input id="accountBranch" name="accountBranch" class="out_name" placeholder="请填写开户支行">
+		    </div>
+		    <div class="add_line add_vip">
+        		<input class="add_vip_name" type="tel" pattern="[0-9]*" placeholder="请填写验证码" id="phoneCode" name="phoneCode" maxlength="6">
+        		<div class="phone_code">
+            		<div class="number_place">
+                		<input class="right_code_box" type="button" value="获取验证码" onclick="settime(this)" id="sendPhoneCode">
+            		</div>
+        		</div>
+    		</div>
+    		<div class="add_line">
+        		<p class="add_name">设为默认</p>
+        		<input id="isdefault" type="checkbox" class="open_close_btn">
+    		</div>
+		</div>
+		
+		<div class="jf_pop_up" id="product_address">
+    		<div class="jf_pop_up_main">
+        		<div class="pop_top">
+		            <div class="pop_title">请选择地址</div>
+		            <div class="pop_cancel"></div>
+		            <!--            <div class="pop_line"></div>-->
+        		</div>
+        		<div class="pop_main">
+            		<div class="product_prompt_address">
+                		<div id="jd_address_select">
+                    		<div class="top_address jdshop_alignment_middle">
+		                        <div>请选择</div>
+		                        <div></div>
+		                        <div></div>
+		                        <div></div>
+		                        <div></div>
+                    		</div>
+		                    <div class="address"></div>
+		                    <div class="address"></div>
+		                    <div class="address"></div>
+		                    <div class="address"></div>
+		                    <div class="address"></div>
+                		</div>
+            		</div>
+        		</div>
+    		</div>
+    		<div class="jf_pop_up_bg"></div>
+		</div>
+		
+		<!--底部按钮-->
+		<div>
+    		<div class="resell_bottom_box">
+        		<a href="#" id="addBank">保存</a>
+    		</div>
+    		<div class="resell_bottom_plate"></div>
+		</div>
+	<!-- </form> -->
+	
+	<script src="${s.base}/static/js/common/fastclick.min.js"></script>
+	<script src="${s.base}/static/js/common/hkb_welfare.min.js"></script>
+	<script src="${s.base}/static/js/common/LAreaData2.min.js"></script>
+	<script src="${s.base}/static/js/module/welfaremart/vip/addVip.js"></script>
+	<script>
+	    //点击穿透问题
+	    //第一个参数为弹框id 第二个参数为带有滚动条元素的classname
+	    //jfProductDetails.clickThrough('product_address','address')
+	    productAddress = new jfShowPop({
+	        'ele': 'product_address'
+	    })
+	  	//获取验证码
+	    var codeTime=60; //先声明一个变量为60s时间
+	    
+		function settime(obj) { //调用函数参数的方法
+			if (codeTime == 0) { //如果变量等于0，也就是时间为0时
+				obj.removeAttribute("disabled"); //按钮可点击
+				obj.value = "获取验证码"; //按钮文字为“获取验证码”
+				codeTime = 60; //时间为60s
+				document.getElementsByClassName('phone_code')[0].className = 'phone_code'; //按钮颜色变灰色
+				return;
+			} else { //反之
+				obj.setAttribute("disabled", true); //按钮不可点击
+				obj.value = "重新获取(" + codeTime + "s)"; //按钮文字为“重新获取”
+				codeTime--; //时间60s递减
+				document.getElementsByClassName('phone_code')[0].className = 'phone_code grey_button'; //按钮颜色变橙色
+			}
+			setTimeout(function() {
+				settime(obj) //参数每一秒执行一次
+			}, 1000)
+		}
+	</script>
+	
+</body>
+</html>

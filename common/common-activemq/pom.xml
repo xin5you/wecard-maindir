@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.cn.thinkx</groupId>
+    <artifactId>common</artifactId>
+    <version>1.0</version>
+  </parent>
+     <groupId>com.cn.thinkx.common</groupId>
+	 <artifactId>common-activemq</artifactId>
+     <version>1.0-SNAPSHOT</version>
+	 <packaging>jar</packaging>
+	 <name>common-activemq</name>
+  	 <url>http://maven.apache.org</url>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <dependencies>
+  
+  		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+  
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jms</artifactId>
+			<version>4.1.0.RELEASE</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+	  
+		 <dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>${fastjson.version}</version>
+			<type>jar</type>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.apache.activemq</groupId>
+		    <artifactId>activemq-core</artifactId>
+		    <version>5.7.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.activemq</groupId>
+		    <artifactId>activemq-pool</artifactId>
+		    <version>5.13.0</version>
+		</dependency>
+		
+		<dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>7.0</version>
+        </dependency>
+  </dependencies>
+</project>

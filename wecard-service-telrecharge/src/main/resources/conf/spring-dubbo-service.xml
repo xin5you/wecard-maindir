@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">   
+
+	
+	<!-- 要暴露的服务接口 -->
+	<dubbo:service interface="com.cn.thinkx.wecard.facade.telrecharge.service.TelChannelAreaInfFacade" ref="telChannelAreaInfFacade" cluster="failover">
+		<dubbo:method name="saveTelChannelAreaInf" timeout="10000" retries="0"/>
+		<dubbo:method name="updateTelChannelAreaInf" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelAreaInfById" timeout="10000" retries="3"/>
+		<dubbo:method name="deleteTelChannelAreaInfById" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelAreaInfList" timeout="10000" retries="3"/>
+	</dubbo:service>
+	
+	<dubbo:service interface="com.cn.thinkx.wecard.facade.telrecharge.service.TelChannelInfFacade" ref="telChannelInfFacade" cluster="failover">
+		<dubbo:method name="saveTelChannelInf" timeout="10000" retries="0"/>
+		<dubbo:method name="updateTelChannelInf" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelInfById" timeout="10000" retries="3"/>
+		<dubbo:method name="deleteTelChannelInfById" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelInfList" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelInfPage" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelInfByMchntCode" timeout="10000" retries="3"/>
+	</dubbo:service>
+	
+	<dubbo:service interface="com.cn.thinkx.wecard.facade.telrecharge.service.TelChannelItemListFacade" ref="telChannelItemListFacade" cluster="failover">
+		<dubbo:method name="saveTelChannelItemList" timeout="10000" retries="0"/>
+		<dubbo:method name="updateTelChannelItemList" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelItemListById" timeout="10000" retries="3"/>
+		<dubbo:method name="deleteTelChannelItemListById" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelItemList" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelItemListPage" timeout="10000" retries="3"/>
+	</dubbo:service>
+	
+	<dubbo:service interface="com.cn.thinkx.wecard.facade.telrecharge.service.TelChannelOrderInfFacade" ref="telChannelOrderInfFacade" cluster="failover">
+		<dubbo:method name="saveTelChannelOrderInf" timeout="10000" retries="0"/>
+		<dubbo:method name="updateTelChannelOrderInf" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelOrderInfById" timeout="10000" retries="3"/>
+		<dubbo:method name="deleteTelChannelOrderInfById" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelOrderInfList" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelOrderInfByOuterId" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelOrderInfPage" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelOrderInf" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelOrderInfListToUpload" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelOrderInfCount" timeout="10000" retries="3"/>
+	</dubbo:service>
+	
+	<dubbo:service interface="com.cn.thinkx.wecard.facade.telrecharge.service.TelChannelProductInfFacade" ref="telChannelProductInfFacade" cluster="failover">
+		<dubbo:method name="saveTelChannelProductInf" timeout="10000" retries="0"/>
+		<dubbo:method name="updateTelChannelProductInf" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelProductInfById" timeout="10000" retries="3"/>
+		<dubbo:method name="deleteTelChannelProductInfById" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelProductInfList" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelProductInfPage" timeout="10000" retries="3"/>
+		<dubbo:method name="getChannelProductByItemId" timeout="10000" retries="3"/>
+		<dubbo:method name="getChannelProductListByChannelId" timeout="10000" retries="3"/>
+	</dubbo:service>
+	
+	<dubbo:service interface="com.cn.thinkx.wecard.facade.telrecharge.service.TelChannelReserveDetailFacade" ref="telChannelReserveDetailFacade" cluster="failover">
+		<dubbo:method name="saveTelChannelReserveDetail" timeout="10000" retries="0"/>
+		<dubbo:method name="updateTelChannelReserveDetail" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelReserveDetailById" timeout="10000" retries="3"/>
+		<dubbo:method name="deleteTelChannelReserveDetailById" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelReserveDetailList" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelChannelReserveDetailPage" timeout="10000" retries="3"/>
+		<dubbo:method name="updateTelChannelInfReserve" timeout="10000" retries="3"/>
+	</dubbo:service>
+	
+	<dubbo:service interface="com.cn.thinkx.wecard.facade.telrecharge.service.TelProviderInfFacade" ref="telProviderInfFacade" cluster="failover">
+		<dubbo:method name="saveTelProviderInf" timeout="10000" retries="0"/>
+		<dubbo:method name="updateTelProviderInf" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelProviderInfById" timeout="10000" retries="3"/>
+		<dubbo:method name="deleteTelProviderInfById" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelProviderInfList" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelProviderInfPage" timeout="10000" retries="3"/>
+	</dubbo:service>
+	
+	<dubbo:service interface="com.cn.thinkx.wecard.facade.telrecharge.service.TelProviderOrderInfFacade" ref="telProviderOrderInfFacade" cluster="failover">
+		<dubbo:method name="saveTelProviderOrderInf" timeout="10000" retries="0"/>
+		<dubbo:method name="updateTelProviderOrderInf" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelProviderOrderInfById" timeout="10000" retries="3"/>
+		<dubbo:method name="deleteTelProviderOrderInfById" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelProviderOrderInfList" timeout="10000" retries="3"/>
+		<dubbo:method name="getTelProviderOrderInfPage" timeout="10000" retries="3"/>
+	</dubbo:service>
+	
+</beans>

@@ -1,0 +1,78 @@
+server:
+  port: 11301
+  address: 127.0.0.1
+  contextPath: /diy
+redis: 
+  pool: 
+    data: 
+      session: 
+        host: 192.168.110.2:7111,192.168.110.3:7112,192.168.110.4:7113
+spring:
+  dubbo:
+    registry:
+      address: zookeeper://192.168.110.2:12811?backup=192.168.110.3:12812,192.168.110.4:12813
+      port: 12880
+    application:
+      name: dubbo_diy
+    protocol:
+      name: dubbo
+    scan: com.cn.iboot.diy
+  datasource:
+    name: mySpringBoot
+    url: jdbc:oracle:thin:@192.168.110.5:1521:JXDB
+    username: isdiydb
+    password: isdiydb
+    driver-class-name: oracle.jdbc.OracleDriver
+    type: com.alibaba.druid.pool.DruidDataSource
+    minActive: 1
+    maxActive: 20
+    initialSize: 1
+    timeBetweenEvictionRunsMillis: 3000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+  thymeleaf: 
+    prefix: classpath:/views/
+    #content-type: text/html
+    #suffix: .html
+    #mode: HTML5
+    #encoding: UTF-8
+    # set to false for hot refresh
+    cache: false
+  redis: 
+    cluster: 
+      nodes: 192.168.110.2:7111,192.168.110.3:7112,192.168.110.4:7113,192.168.110.4:7114,192.168.110.2:7115,192.168.110.3:7116
+      connection-timeout: 1000
+      soTimeout: 3000
+      max-attempts: 5
+      password: 
+      max-redirects: 2
+    timeout: 3000
+    pool: 
+      max-total: 1024
+      max-active: 8
+      max-idle: 8
+      max-wait: -1
+      min-idle: 0
+      block-when-exhausted: true
+      max-wait-millis: 3000
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      minEvictableIdleTimeMillis: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      numTestsPerEvictionRun: 1
+myBatis:
+  mapperLocations: classpath:mapper/*.xml
+  configLocations: classpath:conf/mybatis-config.xml
+  #typeAliasesPackage: com.cn.iboot.diy.test.domain
+logging:
+  config: classpath:conf/logback-diy.xml
+SEND_MSG_FLAG: true
+SEND_URL: http://222.73.117.138:7891/mt
+ACCOUNT: N6902126
+PASSWORD: e6fe6110
+CHANNEL_CODE: 40006001
+HKB_URL: http://hkb.tao-lue.com/trans/order/translogRefundCommit.html

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.thinkx.oms.module.common.mapper.WxTransLogMapper">
+	<sql id="WxTransLogColumns">
+		WX_PRIMARY_KEY,
+		SETTLE_DATE,
+		ORG_WX_PRIMARY_KEY,
+		DMS_RELATED_KEY,
+		ORG_DMS_RELATED_KEY,
+		TRANS_ID,
+		TRANS_ST,
+		INS_CODE,
+		MCHNT_CODE,
+		SHOP_CODE,
+		SPONSOR,
+		OPERATOR_OPEN_ID,
+		RESP_CODE,
+		PRI_ACCT_NO,
+		CARD_NO,
+		USER_INF_USER_NAME,
+		PRODUCT_CODE,
+		TRANS_AMT,
+		UPLOAD_AMT,
+		TRANS_CURR_CD,
+		TRANS_CHNL,
+		TRANS_FEE,
+		TRANS_FEE_TYPE,
+		TFR_IN_ACCT_NO,
+		TFR_OUT_ACCT_NO,
+		ADDITIONAL_INFO,
+		ORDER_ID,
+		ORG_ORDER_ID,
+		REMARKS,
+		CREATE_USER,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME
+	</sql>
+	<select id="getPrimaryKey" parameterType="java.util.Map" statementType="CALLABLE">
+		<![CDATA[
+			{ CALL PROC_TB_WX_TRANS_LOG(#{id, jdbcType=VARCHAR, mode=OUT}) }
+		]]>
+	</select>
+	
+	<select id="getWxTransLogById" parameterType="String" resultType="WxTransLog">
+		SELECT 
+	       <include refid="WxTransLogColumns" /> 
+		FROM TB_WX_TRANS_LOG1
+		WHERE WX_PRIMARY_KEY = #{wxPrimaryKey,jdbcType=VARCHAR}
+		UNION
+		SELECT 
+		   <include refid="WxTransLogColumns" /> 
+		FROM TB_WX_TRANS_LOG2
+		WHERE WX_PRIMARY_KEY = #{wxPrimaryKey,jdbcType=VARCHAR}
+	</select>
+
+    <insert id="insertWxTransLog" parameterType="WxTransLog" flushCache="true">
+		INSERT INTO TB_WX_TRANS_LOG${tableNum}
+		  (<include refid="WxTransLogColumns" />)
+		VALUES
+		  (#{wxPrimaryKey,jdbcType=VARCHAR},
+		   #{settleDate,jdbcType=VARCHAR},
+		   #{orgWxPrimaryKey,jdbcType=VARCHAR},
+		   #{dmsRelatedKey,jdbcType=VARCHAR},
+		   #{orgDmsRelatedKey,jdbcType=VARCHAR},
+		   #{transId,jdbcType=VARCHAR},
+		   #{transSt,jdbcType=INTEGER},
+		   #{insCode,jdbcType=VARCHAR},
+		   #{mchntCode,jdbcType=VARCHAR},
+		   #{shopCode,jdbcType=VARCHAR},
+		   #{sponsor,jdbcType=VARCHAR},
+		   #{operatorOpenId,jdbcType=VARCHAR},
+		   #{respCode,jdbcType=VARCHAR},
+		   #{priAcctNo,jdbcType=VARCHAR},
+		   #{cardNo,jdbcType=VARCHAR},
+		   #{userInfUserName,jdbcType=VARCHAR},
+		   #{productCode,jdbcType=VARCHAR},
+		   #{transAmt,jdbcType=VARCHAR},
+		   #{uploadAmt,jdbcType=VARCHAR},
+		   #{transCurrCd,jdbcType=VARCHAR},
+		   #{transChnl,jdbcType=VARCHAR},
+		   #{transFee,jdbcType=VARCHAR},
+		   #{transFeeType,jdbcType=VARCHAR},
+		   #{tfrInAcctNo,jdbcType=VARCHAR},
+		   #{tfrOutAccNo,jdbcType=VARCHAR},
+		   #{additionalInfo,jdbcType=VARCHAR},
+		   #{orderId,jdbcType=VARCHAR},
+		   #{orgOrderId,jdbcType=VARCHAR},
+		   #{remarks,jdbcType=VARCHAR},
+		   '99999999',
+		   '99999999',
+		   SYSDATE,
+		   SYSDATE)
+    </insert>
+    
+    <update id="updateWxTransLog" parameterType="WxTransLog" flushCache="true">
+		UPDATE TB_WX_TRANS_LOG${tableNum} SET 
+			TRANS_ST = #{transSt,jdbcType=INTEGER},
+			RESP_CODE = #{respCode,jdbcType=VARCHAR},
+			TRANS_AMT = #{transAmt,jdbcType=VARCHAR},
+		<if test="dmsRelatedKey !=null and dmsRelatedKey !='' ">
+			DMS_RELATED_KEY = #{dmsRelatedKey,jdbcType=VARCHAR},
+		</if>
+		<if test="orgDmsRelatedKey !=null and orgDmsRelatedKey !='' ">
+			ORG_DMS_RELATED_KEY = #{orgDmsRelatedKey,jdbcType=VARCHAR},
+		</if>
+		<if test="transFee !=null and transFee !='' ">
+			TRANS_FEE=#{transFee,jdbcType=VARCHAR},
+		</if>
+		<if test="orgOrderId !=null and orgOrderId !='' ">
+			ORG_ORDER_ID=#{orgOrderId,jdbcType=VARCHAR},
+		</if>
+			UPDATE_TIME = SYSDATE 
+			WHERE WX_PRIMARY_KEY = #{wxPrimaryKey}
+	</update>
+
+	<update id="updateWxCurTransLog" parameterType="WxTransLog" flushCache="true">
+		UPDATE TB_WX_TRANS_LOG${tableNum} SET 
+		<if test="transSt !=null and transSt !='' ">
+			TRANS_ST = #{transSt,jdbcType=INTEGER},
+		</if>
+		<if test="respCode !=null and respCode !='' ">
+			RESP_CODE = #{respCode,jdbcType=VARCHAR},
+		</if>
+			UPDATE_TIME = SYSDATE 
+			WHERE WX_PRIMARY_KEY = #{wxPrimaryKey}
+	</update>
+	<update id="updateWxHisTransLog" parameterType="WxTransLog" flushCache="true">
+		UPDATE TB_WX_TRANS_LOG_HIS SET 
+		<if test="transSt !=null and transSt !='' ">
+			TRANS_ST = #{transSt,jdbcType=INTEGER},
+		</if>
+		<if test="respCode !=null and respCode !='' ">
+			RESP_CODE = #{respCode,jdbcType=VARCHAR},
+		</if>
+			UPDATE_TIME = SYSDATE 
+			WHERE WX_PRIMARY_KEY = #{wxPrimaryKey}
+	</update>
+</mapper>

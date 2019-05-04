@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--通用媒体查询-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
+    <title>知了企服</title>
+    <#include "../common/wecardHeader.html">
+<!-- 		<script src="${s.base}/static/js/common/jquery.qrcode.js?v=${s.version}"></script> -->
+		<script src="${s.base}/static/js/common/utf.js?v=${s.version}"></script>
+		<script src="${s.base}/static/js/common/jquery-barcode.js?v=${s.version}"></script>
+		<script src="${s.base}/static/js/common/security.js?v=${s.version}"></script>
+		<script src="${s.base}/static/js/common/reconnecting-websocket.js?v=${s.version}"></script>
+		<script src="${s.base}/static/js/module/jfpay/qrcode-customer.js?v=${s.version}"></script>
+		<script type="text/javascript">
+			var wsUrl = '${wsUrl}';
+		  	var key = new RSAUtils.getKeyPair('${publicKeyExponent!}', '', '${publicKeyModulus!}');
+		</script>
+</head>
+<body id="full_bg">
+<input id="openid" type="hidden" value="${openid!}"/>
+<input id="payType" type="hidden" value="JF_PAY"/>
+<input id="hkbUserID" type="hidden" value="${hkbUserID!}"/>
+<input id="jfUserID" type="hidden" value="${jfUserID!}"/>
+<!-- 付款码 -->
+
+<!-- 付款码 -->
+
+<div class="hkb_codes_background">
+
+    <div class="codes_background_color">
+
+        <!-- 二维码白色底 -->
+
+        <div class="hkb_codes_card">
+
+            <div class="codes_title">此类付款码供扫码付款时使用</div>
+            <!-- 二维码 -->
+            <div class="codes_card" id="QR_code"></div>
+
+            <!-- 中间图片-->
+            <div class="logo_QR"><img src="${s.base}/static/images/code.png"/></div>
+
+            <!-- 二维码未出现时动画-->
+            <div class="hkb_QR_loading">
+                <div class="k-spinner">
+                    <div class="k-bubble-1"></div>
+                    <div class="k-bubble-2"></div>
+                </div>
+
+            </div>
+
+            <!-- 分割线-->
+            <div class="codes_line"> </div>
+
+        </div>
+
+
+        <div class="codes_circle ">
+             <div class="codes_test">提示：二维码有效期为60秒</div>
+        </div>
+
+        <!--<div class="codes_all hkb_alignment_center" onclick="payShow.show()">-->
+
+            <!--<div class="codes_wechat"><img src="../../images/wechat.png"/><span>微信支付</span>   &lt;!&ndash;微信支付&ndash;&gt;-->
+
+            <!--</div>-->
+
+            <!--<div class="codes_change">-->
+                <!--&lt;!&ndash; 更换图标 &ndash;&gt;-->
+                <!--<div class="change_circle"><img src="../../images/circle-orange.png"/><span>更换</span>-->
+
+                <!--</div>-->
+            <!--</div>-->
+
+        <!--</div>-->
+
+
+    </div>
+
+</div>
+
+<div class="hkb_codes_bg"></div>
+<script>addEventListener('load',function(){
+
+//     //二维码
+
+//注意
+
+    //使用API
+    //qrcode.clear()                    //二维码清除方法
+    //qrcode.makeCode('new_content')    //添加新的解析地址
+
+
+
+
+
+    //弹框
+    payShow=new hkbShowPop({'ele':'pay_way'});
+
+    //选择支付方式
+    payment.paymentMethod();
+
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.key.mapper.KeyIndexMapper">
+	
+	<resultMap type="KeyIndex" id="KeyIndexResultMap">
+		<result column="KEY_ID"          property="keyId"/>
+		<result column="VERSION_ID"      property="versionId"/>
+		<result column="KEY_INDEX"       property="keyIndex"/>
+		<result column="KEY_NAME"        property="keyName"/>
+		<result column="REMARKS"         property="remarks"/>
+		<result column="CREATE_USER"     property="createUser"/>
+		<result column="UPDATE_USER"     property="updateUser"/>
+		<result column="CREATE_TIME"     property="createTime"/>
+		<result column="UPDATE_TIME"     property="updateTime"/>
+		<result column="LOCK_VERSION"    property="lockVersion"/>
+	</resultMap>
+	
+	<sql id="KeyIndexColumns">
+		t.KEY_ID,
+		t.VERSION_ID,
+		t.KEY_INDEX,
+		t.KEY_NAME,
+		t.REMARKS,
+		t.CREATE_USER,
+		t.UPDATE_USER,
+		t.CREATE_TIME,
+		t.UPDATE_TIME,
+		t.LOCK_VERSION
+	</sql>
+	
+	<select id="getKeyIndexByKeyNameAndVersionId" resultMap="KeyIndexResultMap">
+		SELECT 
+	  		<include refid="KeyIndexColumns" />
+		FROM TB_KEY_INDEX t 
+		WHERE  t.KEY_NAME = #{keyName} 
+		 	AND t.VERSION_ID = #{versionId} 
+	</select>
+	
+</mapper>

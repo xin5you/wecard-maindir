@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.cardkeys.mapper.CardKeysMapper">
+
+	<sql id="CardKeysColumns">
+		CARD_KEY,
+		PRODUCT_CODE,
+		ACCOUNT_ID,
+		ACTIVE_START_DATE,
+		ACTIVE_END_DATE,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+
+	<sql id="CardKeysFields">
+		#{cardKey, jdbcType=VARCHAR},
+		#{productCode, jdbcType=VARCHAR},
+		#{accountId, jdbcType=VARCHAR},
+		#{activeStartDate, jdbcType=VARCHAR},
+		#{activeEndDate, jdbcType=VARCHAR},
+		'0',
+		#{remarks, jdbcType=VARCHAR},
+		#{createUser, jdbcType=VARCHAR},
+		#{updateUser, jdbcType=VARCHAR},
+		SYSDATE,
+		SYSDATE,
+		'0'
+	</sql>
+	
+	<sql id="tableName">
+			TB_CARD_KEYS
+	</sql>
+
+	<select id="getCardKeysByCardKey" parameterType="CardKeys" resultType="CardKeys">
+		SELECT
+			<include refid="CardKeysColumns" />
+		FROM 
+			<include refid="tableName" />
+		WHERE 1=1
+		<if test="dataStat !=null and dataStat !='' ">
+			AND DATA_STAT = #{dataStat}
+		</if>
+			AND CARD_KEY = #{cardKey}
+	</select>
+	
+	<update id="updateCardKeys" parameterType="CardKeys">
+		UPDATE 
+			<include refid="tableName" />
+		SET
+		<if test="dataStat !=null and dataStat !='' ">
+			DATA_STAT = #{dataStat},
+		</if>
+			UPDATE_TIME = sysdate,
+			LOCK_VERSION = LOCK_VERSION+1
+		WHERE CARD_KEY = #{cardKey}
+	</update>
+
+</mapper>

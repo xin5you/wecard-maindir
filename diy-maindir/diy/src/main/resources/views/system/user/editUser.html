@@ -1,0 +1,131 @@
+﻿<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" lang="en">
+<head th:include="main/header::header" />
+<body>
+<!-- nav 导航栏-->
+<header th:include="main/navbar::navbar" />
+<input th:value="${user.id}" name = "id"  id= "userId" type = "hidden"/>
+<input th:value="${user.mchntCode}" name = "mchntCode"  id= "mchntCode" type = "hidden"/>
+<input th:value="${roleIdTmp}" name = "roleIdTmp"  id= "roleIdTmp" type = "hidden"/>
+<input th:value="${user.roleId}" name = "userRoleId"  id= "userRoleId" type = "hidden"/>
+<input th:value="${user.phoneNo}" name = "phoneNo"  id= "phoneNo" type = "hidden"/>
+<!--成员管理-->
+<div class="content_body">
+    <div class="title_content_title">
+        <p>
+        	<img th:src="@{/icon/tab_add_membersa_green.png}" />
+        	<span>成员管理</span>&#xA0;&gt;&#xA0;<span>编辑成员</span>
+        </p>
+        <p>
+            <button type="button" class="hkb_btn btn_white">返回</button>
+        </p>
+    </div>
+    <div class="info_content_operation">
+        <div class="control_list_center">
+            <div class="hkb_list word_list">
+                <span>用户名：</span>
+                <span>
+                	<input id="userName" name="userName" type="text" class="text_input" th:value="${user.userName}" maxlength="15"/>
+                </span>
+            </div>
+
+            <div class="hkb_list word_list">
+                <span>手机号码：</span>
+                <span th:text="${user.phoneNo}"></span>
+            </div>
+
+            <div class="hkb_list text_list">
+                <span>登录密码：</span>
+                <span>
+                	<input id="password" type = "password" class="text_input" name="password" th:value="${user.password}" readonly="readonly"/>
+<!--                      <input type="password" class="text_input" placeholder="&#x8BF7;&#x8F93;&#x5165;&#x767B;&#x5F55;&#x5BC6;&#x7801;" value="iasbnfuisbsi" /> -->
+                </span>
+            </div>
+
+            <div class="hkb_list text_list">
+                <span>确认密码：</span>
+                <span>
+                	<input id="upassword" type = "password" class="text_input" name="upassword" th:value="${user.password}" readonly="readonly"/>
+<!--                      <input type="password" class="text_input" placeholder="&#x8BF7;&#x8F93;&#x5165;&#x786E;&#x8BA4;&#x5BC6;&#x7801;" value="iasbnfuisbsi" /> -->
+                </span>
+            </div>
+        </div>
+
+        <div class="control_list_center right_list">
+            <div class="hkb_list word_list">
+                <span>所属行业：</span>
+                <span>餐饮(园区食堂)</span>
+            </div>
+            <div class="hkb_list word_list">
+                <span>所属商户：</span>
+                <span th:text="${mchntName}"></span>
+            </div>
+
+            <div class="hkb_list select_list">
+                <span>职位选择：</span>
+                <span>
+                    <select class="hkb_selectinput" id="roleId" name="roleId">
+                        <option value="0">请选择</option>
+                        <option th:each="role,roleStat : ${roleList}"  th:value="${role.id}"><span th:text="${role.roleName}"></span></option>
+                    </select>
+                </span>
+            </div>
+
+            <div class="hkb_list select_list" id = "shopId">
+                <span>门店选择：</span>
+                <span>
+                    <select class="hkb_selectinput" id="shopCode" name="shopCode">
+                       <option value="0">请选择</option>
+                        <option th:each="shop,shopStat : ${shopList}" th:value="${shop.shopCode}"><span th:text="${shop.shopName}"></span></option>
+                    </select>
+                </span> 
+            </div>
+        </div>
+    </div>
+        <!-- button-->
+        <div class="page_button">
+            <a><button class="hkb_bottom_btn cancel_btn">取消</button></a>
+            <a sec:authorize="hasRole('ROLE_DIY_USERINF_EDITCOMMIT')"><button class="hkb_bottom_btn confirm_btn">保存</button></a>
+        </div>
+</div>
+<div class="hkb_dialog" id="text1">
+	    <div class="dialog_bg"></div>
+	    <div class="dialog_box">
+	        <div class="dialog_top">
+	            <div class="dialog_close"><span>×</span></div>
+	            <p id="dialogTitle"></p>
+	        </div>
+	        <!-- body-->
+	        <div class="dialog_body">
+	            <div class="dialog_content" id="dialogContent"></div>
+	        </div>
+	        <!-- footer -->
+	        <div class="dialog_footer">
+	            <button type="button" id="btn-error" class="hkb_btn btn_green">关闭</button>
+	        </div>
+	    </div>
+	</div>
+	
+<script th:src="@{/diy/js/system/user/editUser.js}"></script>
+<script th:inline="javascript">
+addEventListener('load',function(){
+	$("#roleId").val(/*[[${user.roleId}]]*/);
+	$("#shopCode").val(/*[[${user.shopCode}]]*/);
+	var userRoleId = $("#userRoleId").val();
+	var roleIdTmp = $("#roleIdTmp").val();
+	if( userRoleId == roleIdTmp){
+		$("#shopId").hide();
+		$('#shopCode').attr("disabled",true);
+	}else{
+		$("#shopId").show();
+		$('#shopCode').attr("disabled",false);
+	}
+	textDialog = new hkbShowDialog({
+        'ele': 'text1'
+    })
+})
+
+</script>
+</body>
+</html>
