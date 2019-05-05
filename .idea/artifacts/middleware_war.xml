@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="middleware:war">
+    <output-path>$PROJECT_DIR$/middleware/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>middleware</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="middleware-1.0.war">
+      <element id="artifact" artifact-name="middleware:war exploded" />
+    </root>
+  </artifact>
+</component>

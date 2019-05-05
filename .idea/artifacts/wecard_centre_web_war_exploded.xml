@@ -1,0 +1,142 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="wecard-centre-web:war exploded">
+    <output-path>$PROJECT_DIR$/wecard-centre-web/target/wecard-centre-web-1.0</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <exploded>true</exploded>
+        <module>wecard-centre-web</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="wecard-centre-web" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: org.springframework:spring-aop:4.3.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-beans:4.3.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-context:4.3.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-core:4.3.0.RELEASE" />
+          <element id="library" level="project" name="Maven: commons-logging:commons-logging:1.2" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-expression:4.3.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-jdbc:4.3.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-test:4.3.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-context-support:4.3.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-tx:4.3.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-web:4.3.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:4.3.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.aspectj:aspectjweaver:1.8.9" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.7.5" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.7.0" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.7.5" />
+          <element id="library" level="project" name="Maven: commons-pool:commons-pool:1.6" />
+          <element id="library" level="project" name="Maven: commons-collections:commons-collections:3.2.1" />
+          <element id="library" level="project" name="Maven: commons-beanutils:commons-beanutils:1.9.2" />
+          <element id="library" level="project" name="Maven: commons-lang:commons-lang:2.6" />
+          <element id="library" level="project" name="Maven: commons-fileupload:commons-fileupload:1.3.1" />
+          <element id="library" level="project" name="Maven: commons-io:commons-io:2.4" />
+          <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.10" />
+          <element id="library" level="project" name="Maven: org.mybatis:mybatis:3.4.0" />
+          <element id="library" level="project" name="Maven: org.mybatis:mybatis-spring:1.3.0" />
+          <element id="library" level="project" name="Maven: org.freemarker:freemarker:2.3.23" />
+          <element id="library" level="project" name="Maven: javax.persistence:persistence-api:1.0.2" />
+          <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-mapper-asl:1.9.12" />
+          <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-core-asl:1.9.12" />
+          <element id="library" level="project" name="Maven: net.sf.json-lib:json-lib:jdk15:2.4" />
+          <element id="library" level="project" name="Maven: net.sf.ezmorph:ezmorph:1.0.6" />
+          <element id="library" level="project" name="Maven: jaxen:jaxen:1.1.6" />
+          <element id="library" level="project" name="Maven: dom4j:dom4j:1.6.1" />
+          <element id="library" level="project" name="Maven: xml-apis:xml-apis:1.0.b2" />
+          <element id="library" level="project" name="Maven: com.thoughtworks.xstream:xstream:1.4.2" />
+          <element id="library" level="project" name="Maven: xmlpull:xmlpull:1.1.3.1" />
+          <element id="library" level="project" name="Maven: xpp3:xpp3_min:1.1.4c" />
+          <element id="library" level="project" name="Maven: oracle:ojdbc:6" />
+          <element id="library" level="project" name="Maven: ch.qos.logback:logback-core:1.1.7" />
+          <element id="library" level="project" name="Maven: ch.qos.logback:logback-classic:1.1.7" />
+          <element id="library" level="project" name="Maven: org.logback-extensions:logback-ext-spring:0.1.4" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.21" />
+          <element id="library" level="project" name="Maven: com.alibaba:druid:1.0.20" />
+          <element id="archive" name="pms-base-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="pms-base" />
+          </element>
+          <element id="library" level="project" name="Maven: com.alibaba:fastjson:1.2.7" />
+          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpclient:4.5.2" />
+          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpcore:4.4.4" />
+          <element id="library" level="project" name="Maven: org.bouncycastle:bcprov-jdk16:1.46" />
+          <element id="library" level="project" name="Maven: org.apache.commons:commons-lang3:3.1" />
+          <element id="library" level="project" name="Maven: com.aliyun:aliyun-java-sdk-core:4.0.6" />
+          <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.8.2" />
+          <element id="library" level="project" name="Maven: javax.xml.bind:jaxb-api:2.1" />
+          <element id="library" level="project" name="Maven: javax.xml.stream:stax-api:1.0-2" />
+          <element id="library" level="project" name="Maven: com.sun.xml.bind:jaxb-core:2.1.14" />
+          <element id="library" level="project" name="Maven: com.sun.xml.bind:jaxb-impl:2.1" />
+          <element id="library" level="project" name="Maven: javax.activation:activation:1.1.1" />
+          <element id="library" level="project" name="Maven: com.aliyun:aliyun-java-sdk-dysmsapi:1.1.0" />
+          <element id="archive" name="common-wechat-base-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="common-wechat-base" />
+          </element>
+          <element id="library" level="project" name="Maven: org.quartz-scheduler:quartz:2.2.3" />
+          <element id="library" level="project" name="Maven: c3p0:c3p0:0.9.1.1" />
+          <element id="library" level="project" name="Maven: org.quartz-scheduler:quartz-jobs:2.2.3" />
+          <element id="archive" name="common-wecard-config-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="common-wecard-config" />
+          </element>
+          <element id="archive" name="common-service-core-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="common-service-core" />
+          </element>
+          <element id="archive" name="common-redis-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="common-redis" />
+          </element>
+          <element id="library" level="project" name="Maven: redis.clients:jedis:2.9.0" />
+          <element id="library" level="project" name="Maven: org.apache.commons:commons-pool2:2.4.2" />
+          <element id="archive" name="common-activemq-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="common-activemq" />
+          </element>
+          <element id="library" level="project" name="Maven: org.springframework:spring-jms:4.1.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-messaging:4.1.0.RELEASE" />
+          <element id="library" level="project" name="Maven: org.apache.activemq:activemq-core:5.7.0" />
+          <element id="library" level="project" name="Maven: org.apache.geronimo.specs:geronimo-jms_1.1_spec:1.1.1" />
+          <element id="library" level="project" name="Maven: org.apache.activemq:kahadb:5.7.0" />
+          <element id="library" level="project" name="Maven: org.apache.activemq.protobuf:activemq-protobuf:1.1" />
+          <element id="library" level="project" name="Maven: org.fusesource.mqtt-client:mqtt-client:1.3" />
+          <element id="library" level="project" name="Maven: org.fusesource.hawtdispatch:hawtdispatch-transport:1.11" />
+          <element id="library" level="project" name="Maven: org.fusesource.hawtdispatch:hawtdispatch:1.11" />
+          <element id="library" level="project" name="Maven: org.fusesource.hawtbuf:hawtbuf:1.9" />
+          <element id="library" level="project" name="Maven: org.apache.geronimo.specs:geronimo-j2ee-management_1.1_spec:1.0.1" />
+          <element id="library" level="project" name="Maven: commons-net:commons-net:3.1" />
+          <element id="library" level="project" name="Maven: org.jasypt:jasypt:1.9.0" />
+          <element id="library" level="project" name="Maven: org.apache.activemq:activemq-pool:5.13.0" />
+          <element id="library" level="project" name="Maven: org.apache.activemq:activemq-jms-pool:5.13.0" />
+          <element id="library" level="project" name="Maven: org.apache.activemq:activemq-client:5.13.0" />
+          <element id="library" level="project" name="Maven: org.apache.geronimo.specs:geronimo-jta_1.0.1B_spec:1.0.1" />
+          <element id="library" level="project" name="Maven: javax:javaee-api:7.0" />
+          <element id="library" level="project" name="Maven: com.sun.mail:javax.mail:1.5.0" />
+          <element id="archive" name="common-wecard-domain-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="common-wecard-domain" />
+          </element>
+          <element id="library" level="project" name="Maven: com.alibaba:dubbo:2.5.3" />
+          <element id="library" level="project" name="Maven: org.javassist:javassist:3.15.0-GA" />
+          <element id="library" level="project" name="Maven: org.jboss.netty:netty:3.2.5.Final" />
+          <element id="library" level="project" name="Maven: org.apache.zookeeper:zookeeper:3.4.8" />
+          <element id="library" level="project" name="Maven: log4j:log4j:1.2.16" />
+          <element id="library" level="project" name="Maven: jline:jline:0.9.94" />
+          <element id="library" level="project" name="Maven: io.netty:netty:3.7.0.Final" />
+          <element id="library" level="project" name="Maven: com.github.sgroschupf:zkclient:0.1" />
+          <element id="archive" name="wecard-facade-telrecharge-1.0.jar">
+            <element id="module-output" name="wecard-facade-telrecharge" />
+          </element>
+          <element id="archive" name="common-base-core-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="common-base-core" />
+          </element>
+          <element id="library" level="project" name="Maven: com.github.jsqlparser:jsqlparser:0.9.5" />
+          <element id="library" level="project" name="Maven: com.github.pagehelper:pagehelper:4.1.6" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/wecard-centre-web/target/wecard-centre-web-1.0/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="javaee-facet-resources" facet="wecard-centre-web/web/Web" />
+    </root>
+  </artifact>
+</component>

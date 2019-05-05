@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="wecard-mchnt:war">
+    <output-path>$PROJECT_DIR$/wecard-mchnt/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>wecard-mchnt</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="wecard-mchnt-1.0.war">
+      <element id="artifact" artifact-name="wecard-mchnt:war exploded" />
+    </root>
+  </artifact>
+</component>

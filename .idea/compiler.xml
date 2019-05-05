@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="common-activemq" />
+        <module name="common-base-core" />
+        <module name="common-redis" />
+        <module name="common-service-core" />
+        <module name="common-wecard-config" />
+        <module name="common-wecard-domain" />
+        <module name="common-wecard-mapper" />
+        <module name="common-wechat-base" />
+        <module name="facade" />
+        <module name="middleware" />
+        <module name="oms" />
+        <module name="pms-base" />
+        <module name="pms-connect" />
+        <module name="pms-socket" />
+        <module name="wecard-api" />
+        <module name="wecard-centre-web" />
+        <module name="wecard-cms" />
+        <module name="wecard-customer" />
+        <module name="wecard-facade-telrecharge" />
+        <module name="wecard-key-api" />
+        <module name="wecard-mchnt" />
+        <module name="wecard-middleware-resp" />
+        <module name="wecard-service-telrecharge" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="common" target="1.7" />
+      <module name="common-activemq" target="1.7" />
+      <module name="common-base-core" target="1.7" />
+      <module name="common-redis" target="1.7" />
+      <module name="common-service-core" target="1.7" />
+      <module name="common-wecard-config" target="1.7" />
+      <module name="common-wecard-domain" target="1.7" />
+      <module name="common-wecard-mapper" target="1.7" />
+      <module name="common-wechat-base" target="1.7" />
+      <module name="facade" target="1.8" />
+      <module name="maindir" target="1.8" />
+      <module name="middleware" target="1.7" />
+      <module name="oms" target="1.7" />
+      <module name="pms-base" target="1.7" />
+      <module name="pms-connect" target="1.7" />
+      <module name="pms-socket" target="1.7" />
+      <module name="wecard-api" target="1.8" />
+      <module name="wecard-centre-web" target="1.8" />
+      <module name="wecard-cms" target="1.7" />
+      <module name="wecard-customer" target="1.8" />
+      <module name="wecard-facade-telrecharge" target="1.8" />
+      <module name="wecard-key-api" target="1.8" />
+      <module name="wecard-mchnt" target="1.7" />
+      <module name="wecard-middleware-resp" target="1.7" />
+      <module name="wecard-service-telrecharge" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

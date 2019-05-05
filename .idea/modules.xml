@@ -2,7 +2,31 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/wxp-maindir.iml" filepath="$PROJECT_DIR$/wxp-maindir.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/common-activemq/common-activemq.iml" filepath="$PROJECT_DIR$/common/common-activemq/common-activemq.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/common-base-core/common-base-core.iml" filepath="$PROJECT_DIR$/common/common-base-core/common-base-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/common-redis/common-redis.iml" filepath="$PROJECT_DIR$/common/common-redis/common-redis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/common-service-core/common-service-core.iml" filepath="$PROJECT_DIR$/common/common-service-core/common-service-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/common-wecard-config/common-wecard-config.iml" filepath="$PROJECT_DIR$/common/common-wecard-config/common-wecard-config.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/common-wecard-domain/common-wecard-domain.iml" filepath="$PROJECT_DIR$/common/common-wecard-domain/common-wecard-domain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/common-wecard-mapper/common-wecard-mapper.iml" filepath="$PROJECT_DIR$/common/common-wecard-mapper/common-wecard-mapper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/common-wechat-base/common-wechat-base.iml" filepath="$PROJECT_DIR$/common/common-wechat-base/common-wechat-base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/facade/facade.iml" filepath="$PROJECT_DIR$/facade/facade.iml" />
+      <module fileurl="file://$PROJECT_DIR$/maindir.iml" filepath="$PROJECT_DIR$/maindir.iml" />
+      <module fileurl="file://$PROJECT_DIR$/middleware/middleware.iml" filepath="$PROJECT_DIR$/middleware/middleware.iml" />
+      <module fileurl="file://$PROJECT_DIR$/oms/oms.iml" filepath="$PROJECT_DIR$/oms/oms.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/pms-base/pms-base.iml" filepath="$PROJECT_DIR$/common/pms-base/pms-base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/pms-connect/pms-connect.iml" filepath="$PROJECT_DIR$/common/pms-connect/pms-connect.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/pms-socket/pms-socket.iml" filepath="$PROJECT_DIR$/common/pms-socket/pms-socket.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wecard-api/wecard-api.iml" filepath="$PROJECT_DIR$/wecard-api/wecard-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wecard-centre-web/wecard-centre-web.iml" filepath="$PROJECT_DIR$/wecard-centre-web/wecard-centre-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wecard-cms/wecard-cms.iml" filepath="$PROJECT_DIR$/wecard-cms/wecard-cms.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wecard-customer/wecard-customer.iml" filepath="$PROJECT_DIR$/wecard-customer/wecard-customer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wecard-facade-telrecharge/wecard-facade-telrecharge.iml" filepath="$PROJECT_DIR$/wecard-facade-telrecharge/wecard-facade-telrecharge.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wecard-key-api/wecard-key-api.iml" filepath="$PROJECT_DIR$/wecard-key-api/wecard-key-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wecard-mchnt/wecard-mchnt.iml" filepath="$PROJECT_DIR$/wecard-mchnt/wecard-mchnt.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/wecard-middleware-resp/wecard-middleware-resp.iml" filepath="$PROJECT_DIR$/common/wecard-middleware-resp/wecard-middleware-resp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wecard-service-telrecharge/wecard-service-telrecharge.iml" filepath="$PROJECT_DIR$/wecard-service-telrecharge/wecard-service-telrecharge.iml" />
     </modules>
   </component>
 </project>

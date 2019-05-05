@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="wecard-service-telrecharge:war">
+    <output-path>$PROJECT_DIR$/wecard-service-telrecharge/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>wecard-service-telrecharge</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="wecard-service-telrecharge-1.0.war">
+      <element id="artifact" artifact-name="wecard-service-telrecharge:war exploded" />
+    </root>
+  </artifact>
+</component>

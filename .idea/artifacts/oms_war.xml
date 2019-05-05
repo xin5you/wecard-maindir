@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="oms:war">
+    <output-path>$PROJECT_DIR$/oms/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>oms</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="oms-1.0.war">
+      <element id="artifact" artifact-name="oms:war exploded" />
+    </root>
+  </artifact>
+</component>
