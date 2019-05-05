@@ -101,9 +101,7 @@
           <element id="archive" name="common-wecard-config-1.0-SNAPSHOT.jar">
             <element id="module-output" name="common-wecard-config" />
           </element>
-          <element id="archive" name="common-redis-1.0-SNAPSHOT.jar">
-            <element id="module-output" name="common-redis" />
-          </element>
+          <element id="file-copy" path="$MAVEN_REPOSITORY$/com/cn/thinkx/common/common-redis/1.0-SNAPSHOT/common-redis-1.0-SNAPSHOT.jar" output-file-name="pom.xml" />
           <element id="archive" name="common-activemq-1.0-SNAPSHOT.jar">
             <element id="module-output" name="common-activemq" />
           </element>

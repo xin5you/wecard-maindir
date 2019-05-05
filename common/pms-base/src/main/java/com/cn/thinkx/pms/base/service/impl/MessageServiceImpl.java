@@ -1,11 +1,5 @@
 package com.cn.thinkx.pms.base.service.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
 import com.alibaba.fastjson.JSONArray;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
@@ -13,12 +7,16 @@ import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
-import com.cn.thinkx.common.redis.util.RedisConstants;
+import com.cn.thinkx.pms.base.redis.util.RedisConstants;
 import com.cn.thinkx.pms.base.service.MessageService;
 import com.cn.thinkx.pms.base.utils.BaseConstants;
 import com.cn.thinkx.pms.base.utils.SMSPropertiesUtils;
 import com.cn.thinkx.pms.base.utils.StringUtil;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 import redis.clients.jedis.JedisCluster;
 
 @Service("messageService")

@@ -35,37 +35,37 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.mina</groupId>
+			<groupId>org.apache.mina</groupId>
 			<artifactId>mina-integration-beans</artifactId>
 			<version>${mina.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.mina</groupId>
+			<groupId>org.apache.mina</groupId>
 			<artifactId>mina-filter-compression</artifactId>
 			<version>${mina.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.mina</groupId>
+			<groupId>org.apache.mina</groupId>
 			<artifactId>mina-integration-jmx</artifactId>
 			<version>${mina.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.mina</groupId>
+			<groupId>org.apache.mina</groupId>
 			<artifactId>mina-integration-ognl</artifactId>
 			<version>${mina.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.mina</groupId>
+			<groupId>org.apache.mina</groupId>
 			<artifactId>mina-integration-xbean</artifactId>
 			<version>${mina.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.mina</groupId>
+			<groupId>org.apache.mina</groupId>
 			<artifactId>mina-statemachine</artifactId>
 			<version>${mina.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.mina</groupId>
+			<groupId>org.apache.mina</groupId>
 			<artifactId>mina-transport-apr</artifactId>
 			<version>${mina.version}</version>
 		</dependency>

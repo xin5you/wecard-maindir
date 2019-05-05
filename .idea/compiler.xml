@@ -8,7 +8,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="common-activemq" />
         <module name="common-base-core" />
-        <module name="common-redis" />
         <module name="common-service-core" />
         <module name="common-wecard-config" />
         <module name="common-wecard-domain" />

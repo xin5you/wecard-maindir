@@ -1,0 +1,14 @@
+com\cn\thinkx\common\activemq\service\impl\WechatMQProducerServiceImpl$2.class
+com\cn\thinkx\common\activemq\domain\WechatCustomerParam.class
+com\cn\thinkx\common\activemq\util\MQConstants.class
+com\cn\thinkx\common\activemq\listener\MQServiceListener.class
+com\cn\thinkx\common\activemq\service\impl\WechatMQProducerServiceImpl$1.class
+com\cn\thinkx\common\activemq\service\impl\WechatMQProducerServiceImpl.class
+com\cn\thinkx\common\activemq\service\WechatMQProducerService.class
+com\cn\thinkx\common\activemq\domain\WechatTemplateParam.class
+com\cn\thinkx\common\activemq\service\impl\WechatMQProducerServiceImpl$4.class
+com\cn\thinkx\common\activemq\listener\MQServiceListener$1.class
+com\cn\thinkx\common\activemq\service\impl\RechargeMobileProducerServiceImpl.class
+com\cn\thinkx\common\activemq\service\impl\RechargeMobileProducerServiceImpl$1.class
+com\cn\thinkx\common\activemq\service\impl\WechatMQProducerServiceImpl$3.class
+com\cn\thinkx\common\activemq\service\RechargeMobileProducerService.class

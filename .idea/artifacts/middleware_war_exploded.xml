@@ -30,11 +30,6 @@
           <element id="library" level="project" name="Maven: org.mybatis:mybatis:3.4.0" />
           <element id="library" level="project" name="Maven: org.mybatis:mybatis-spring:1.3.0" />
           <element id="library" level="project" name="Maven: oracle:ojdbc:6" />
-          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.21" />
-          <element id="library" level="project" name="Maven: ch.qos.logback:logback-core:1.1.7" />
-          <element id="library" level="project" name="Maven: ch.qos.logback:logback-classic:1.1.7" />
-          <element id="library" level="project" name="Maven: org.logback-extensions:logback-ext-spring:0.1.4" />
-          <element id="library" level="project" name="Maven: com.alibaba:fastjson:1.2.12" />
           <element id="library" level="project" name="Maven: com.alibaba:druid:1.0.20" />
           <element id="library" level="project" name="Maven: org.aspectj:aspectjweaver:1.8.9" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.7.5" />
@@ -49,6 +44,7 @@
           <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpcore:4.4.4" />
           <element id="library" level="project" name="Maven: org.quartz-scheduler:quartz:2.2.3" />
           <element id="library" level="project" name="Maven: c3p0:c3p0:0.9.1.1" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.7" />
           <element id="library" level="project" name="Maven: org.kie:kie-spring:6.4.0.Final" />
           <element id="library" level="project" name="Maven: org.jbpm:jbpm-flow:6.4.0.Final" />
           <element id="library" level="project" name="Maven: com.google.protobuf:protobuf-java:2.6.0" />
@@ -125,21 +121,35 @@
           <element id="archive" name="facade-1.0.jar">
             <element id="module-output" name="facade" />
           </element>
+          <element id="library" level="project" name="Maven: com.alibaba:fastjson:1.2.12" />
           <element id="archive" name="pms-connect-1.0-SNAPSHOT.jar">
             <element id="module-output" name="pms-connect" />
           </element>
           <element id="library" level="project" name="Maven: org.apache.mina:mina-core:2.0.7" />
-          <element id="library" level="project" name="Maven: org.mina:mina-integration-beans:2.0.7" />
-          <element id="library" level="project" name="Maven: org.mina:mina-filter-compression:2.0.7" />
-          <element id="library" level="project" name="Maven: org.mina:mina-integration-jmx:2.0.7" />
-          <element id="library" level="project" name="Maven: org.mina:mina-integration-ognl:2.0.7" />
-          <element id="library" level="project" name="Maven: org.mina:mina-integration-xbean:2.0.7" />
-          <element id="library" level="project" name="Maven: org.mina:mina-statemachine:2.0.7" />
-          <element id="library" level="project" name="Maven: org.mina:mina-transport-apr:2.0.7" />
+          <element id="library" level="project" name="Maven: org.apache.mina:mina-integration-beans:2.0.7" />
+          <element id="library" level="project" name="Maven: org.apache.mina:mina-filter-compression:2.0.7" />
+          <element id="library" level="project" name="Maven: com.jcraft:jzlib:1.1.1" />
+          <element id="library" level="project" name="Maven: org.apache.mina:mina-integration-jmx:2.0.7" />
+          <element id="library" level="project" name="Maven: ognl:ognl:3.0.5" />
+          <element id="library" level="project" name="Maven: javassist:javassist:3.11.0.GA" />
+          <element id="library" level="project" name="Maven: org.apache.mina:mina-integration-ognl:2.0.7" />
+          <element id="library" level="project" name="Maven: jboss:javassist:3.7.ga" />
+          <element id="library" level="project" name="Maven: org.apache.mina:mina-integration-xbean:2.0.7" />
+          <element id="library" level="project" name="Maven: org.apache.mina:mina-core:sources:2.0.7" />
+          <element id="library" level="project" name="Maven: org.springframework:spring:2.5.6.SEC03" />
+          <element id="library" level="project" name="Maven: org.apache.xbean:xbean-spring:3.11.1" />
+          <element id="library" level="project" name="Maven: org.apache.mina:mina-statemachine:2.0.7" />
+          <element id="library" level="project" name="Maven: org.apache.mina:mina-transport-apr:2.0.7" />
+          <element id="library" level="project" name="Maven: tomcat:tomcat-apr:5.5.23" />
           <element id="archive" name="pms-base-1.0-SNAPSHOT.jar">
             <element id="module-output" name="pms-base" />
           </element>
+          <element id="library" level="project" name="Maven: redis.clients:jedis:2.9.0" />
+          <element id="library" level="project" name="Maven: ch.qos.logback:logback-core:1.1.7" />
+          <element id="library" level="project" name="Maven: ch.qos.logback:logback-classic:1.1.7" />
+          <element id="library" level="project" name="Maven: org.logback-extensions:logback-ext-spring:0.1.5" />
           <element id="library" level="project" name="Maven: org.bouncycastle:bcprov-jdk16:1.46" />
+          <element id="library" level="project" name="Maven: org.apache.commons:commons-lang3:3.1" />
           <element id="library" level="project" name="Maven: com.aliyun:aliyun-java-sdk-core:4.0.6" />
           <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.8.2" />
           <element id="library" level="project" name="Maven: javax.xml.bind:jaxb-api:2.1" />
@@ -181,11 +191,6 @@
           <element id="library" level="project" name="Maven: org.apache.commons:commons-pool2:2.4.2" />
           <element id="library" level="project" name="Maven: javax:javaee-api:7.0" />
           <element id="library" level="project" name="Maven: com.sun.mail:javax.mail:1.5.0" />
-          <element id="archive" name="common-redis-1.0-SNAPSHOT.jar">
-            <element id="module-output" name="common-redis" />
-          </element>
-          <element id="library" level="project" name="Maven: redis.clients:jedis:2.9.0" />
-          <element id="library" level="project" name="Maven: org.apache.commons:commons-lang3:3.1" />
         </element>
       </element>
       <element id="directory" name="META-INF">

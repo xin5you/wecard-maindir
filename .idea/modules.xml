@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/common-activemq/common-activemq.iml" filepath="$PROJECT_DIR$/common/common-activemq/common-activemq.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/common-base-core/common-base-core.iml" filepath="$PROJECT_DIR$/common/common-base-core/common-base-core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/common/common-redis/common-redis.iml" filepath="$PROJECT_DIR$/common/common-redis/common-redis.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/common-service-core/common-service-core.iml" filepath="$PROJECT_DIR$/common/common-service-core/common-service-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/common-wecard-config/common-wecard-config.iml" filepath="$PROJECT_DIR$/common/common-wecard-config/common-wecard-config.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/common-wecard-domain/common-wecard-domain.iml" filepath="$PROJECT_DIR$/common/common-wecard-domain/common-wecard-domain.iml" />

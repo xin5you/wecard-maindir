@@ -134,7 +134,7 @@
     <orderEntry type="module" module-name="wecard-middleware-resp" />
     <orderEntry type="module" module-name="common-wecard-config" />
     <orderEntry type="module" module-name="common-service-core" />
-    <orderEntry type="module" module-name="common-redis" />
+    <orderEntry type="library" name="Maven: com.cn.thinkx.common:common-redis:1.0-SNAPSHOT" level="project" />
     <orderEntry type="module" module-name="common-activemq" />
     <orderEntry type="library" name="Maven: org.springframework:spring-jms:4.1.0.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-messaging:4.1.0.RELEASE" level="project" />

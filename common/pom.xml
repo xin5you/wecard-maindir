@@ -109,7 +109,6 @@
         <module>common-wechat-base</module>
         <module>wecard-middleware-resp</module>
         <module>common-wecard-config</module>
-        <module>common-redis</module>
         <module>common-activemq</module>
         <module>common-wecard-domain</module>
         <module>common-wecard-mapper</module>

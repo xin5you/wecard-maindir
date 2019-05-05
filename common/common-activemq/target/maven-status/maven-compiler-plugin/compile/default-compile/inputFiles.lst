@@ -1,0 +1,8 @@
+D:\github_zhiliao\wecard-maindir\common\common-activemq\src\main\java\com\cn\thinkx\common\activemq\service\impl\RechargeMobileProducerServiceImpl.java
+D:\github_zhiliao\wecard-maindir\common\common-activemq\src\main\java\com\cn\thinkx\common\activemq\listener\MQServiceListener.java
+D:\github_zhiliao\wecard-maindir\common\common-activemq\src\main\java\com\cn\thinkx\common\activemq\service\impl\WechatMQProducerServiceImpl.java
+D:\github_zhiliao\wecard-maindir\common\common-activemq\src\main\java\com\cn\thinkx\common\activemq\service\RechargeMobileProducerService.java
+D:\github_zhiliao\wecard-maindir\common\common-activemq\src\main\java\com\cn\thinkx\common\activemq\util\MQConstants.java
+D:\github_zhiliao\wecard-maindir\common\common-activemq\src\main\java\com\cn\thinkx\common\activemq\domain\WechatTemplateParam.java
+D:\github_zhiliao\wecard-maindir\common\common-activemq\src\main\java\com\cn\thinkx\common\activemq\service\WechatMQProducerService.java
+D:\github_zhiliao\wecard-maindir\common\common-activemq\src\main\java\com\cn\thinkx\common\activemq\domain\WechatCustomerParam.java

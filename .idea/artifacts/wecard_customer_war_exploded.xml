@@ -114,9 +114,7 @@
           <element id="archive" name="common-wecard-mapper-1.0-SNAPSHOT.jar">
             <element id="module-output" name="common-wecard-mapper" />
           </element>
-          <element id="archive" name="common-redis-1.0-SNAPSHOT.jar">
-            <element id="module-output" name="common-redis" />
-          </element>
+          <element id="library" level="project" name="Maven: com.cn.thinkx.common:common-redis:1.0-SNAPSHOT" />
           <element id="archive" name="common-activemq-1.0-SNAPSHOT.jar">
             <element id="module-output" name="common-activemq" />
           </element>
