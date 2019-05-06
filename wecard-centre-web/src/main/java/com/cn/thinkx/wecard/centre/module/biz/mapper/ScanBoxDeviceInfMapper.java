@@ -1,13 +1,13 @@
 package com.cn.thinkx.wecard.centre.module.biz.mapper;
 
-import java.util.List;
+import com.cn.thinkx.pms.base.redis.vo.BoxDeviceInfoVO;
 
-import com.cn.thinkx.common.redis.vo.BoxDeviceInfoVO;
+import java.util.List;
 
 
 public interface ScanBoxDeviceInfMapper {
-	/*
-	 * 查询扫码盒子设备信息
-	 */
-	public List<BoxDeviceInfoVO> getScanBoxDeviceInfList();
+    /*
+     * 查询扫码盒子设备信息
+     */
+    public List<BoxDeviceInfoVO> getScanBoxDeviceInfList();
 }

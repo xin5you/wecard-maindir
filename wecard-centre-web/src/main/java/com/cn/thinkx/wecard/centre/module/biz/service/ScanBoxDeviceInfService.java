@@ -1,11 +1,11 @@
 package com.cn.thinkx.wecard.centre.module.biz.service;
 
-import java.util.List;
+import com.cn.thinkx.pms.base.redis.vo.BoxDeviceInfoVO;
 
-import com.cn.thinkx.common.redis.vo.BoxDeviceInfoVO;
+import java.util.List;
 
 
 public interface ScanBoxDeviceInfService {
-	
-	List<BoxDeviceInfoVO> getScanBoxDeviceInfList();
+
+    List<BoxDeviceInfoVO> getScanBoxDeviceInfList();
 }

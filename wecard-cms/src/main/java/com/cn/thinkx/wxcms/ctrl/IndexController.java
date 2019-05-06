@@ -8,11 +8,9 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping()
 public class IndexController {
 
-
-
-	@RequestMapping(value = "/index")
-	public ModelAndView index() {
-		// return new ModelAndView("index");
-		return new ModelAndView("redirect:/wxcms/urltoken.html");
-	}
+    @RequestMapping(value = "/index")
+    public ModelAndView index() {
+        // return new ModelAndView("index");
+        return new ModelAndView("redirect:/wxcms/urltoken.html");
+    }
 }

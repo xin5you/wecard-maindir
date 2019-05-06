@@ -1,285 +1,304 @@
 package com.cn.thinkx.dubbo.entity;
 
-import java.util.List;
-
-import com.cn.thinkx.biz.mchnt.model.CardTransInf;
-import com.cn.thinkx.biz.mchnt.model.MchtCommodities;
-import com.cn.thinkx.biz.mchnt.model.MerchantInf;
-import com.cn.thinkx.biz.mchnt.model.ShopDetailInf;
-import com.cn.thinkx.biz.mchnt.model.ShopListInf;
+import com.cn.thinkx.biz.mchnt.model.*;
 import com.cn.thinkx.biz.user.model.CustomerAccount;
-import com.cn.thinkx.common.redis.util.RedisDictProperties;
 import com.cn.thinkx.facade.bean.base.BaseResp;
+import com.cn.thinkx.pms.base.redis.util.RedisDictProperties;
 import com.cn.thinkx.pms.base.utils.StringUtil;
+
+import java.util.List;
 
 /**
  * 交易返回对象，用于接收交易返回时转换json字符串(初始化为code:999 info:null)
- * 
- * @author pucker
  *
+ * @author pucker
  */
 public class TxnResp extends BaseResp {
 
-	/** 客户账户查询接口返回字段 */
-	private String accountFlag;
-	private String cardFlag;
+    /**
+     * 客户账户查询接口返回字段
+     */
+    private String accountFlag;
+    private String cardFlag;
 
-	/** 商户在售卡列表查询接口返回字段 */
-	private String productCode;
-	private String productImage;
-	private String activeRule;
-	private List<MchtCommodities> cardList;
+    /**
+     * 商户在售卡列表查询接口返回字段
+     */
+    private String productCode;
+    private String productImage;
+    private String activeRule;
+    private List<MchtCommodities> cardList;
 
-	/** 客户会员卡列表查询接口返回字段 */
-	private List<CustomerAccount> productList;
+    /**
+     * 客户会员卡列表查询接口返回字段
+     */
+    private List<CustomerAccount> productList;
 
-	/** 商户门店列表查询接口返回字段 */
-	private List<ShopListInf> shopList;
+    /**
+     * 商户门店列表查询接口返回字段
+     */
+    private List<ShopListInf> shopList;
 
-	/** 商户门店明细查询接口返回字段 */
-	private ShopDetailInf shopInfo;
+    /**
+     * 商户门店明细查询接口返回字段
+     */
+    private ShopDetailInf shopInfo;
 
-	/** 商户信息查询接口返回字段 */
-	private MerchantInf merchantInfo;
+    /**
+     * 商户信息查询接口返回字段
+     */
+    private MerchantInf merchantInfo;
 
-	/** 与C端通信交易接口返回字段 */
-	private String balance;
-	private String settleDate;
-	private String txnFlowNo;
-	private String swtFlowNo;
-	private String transAmt;
-	private String oriTxnAmount;
+    /**
+     * 与C端通信交易接口返回字段
+     */
+    private String balance;
+    private String settleDate;
+    private String txnFlowNo;
+    private String swtFlowNo;
+    private String transAmt;
+    private String oriTxnAmount;
 
-	private String cardHolderFee; // 手续费
-	private List<String> shopImages;// 门店照
+    private String cardHolderFee; // 手续费
+    private List<String> shopImages;// 门店照
 
-	private String pageSize; // 总页数
-	private String currPageSize; // 当前页
-	
-	/** 会员卡交易明细查询接口返回字段 */
-	private List<CardTransInf> transList;
-	
-	/** 知了企服退款至嘉福接口返回字段 */
-	private String orderId;// 退款订单号
-	
-	/** 商品可购数量 库存数量 */
-	private String commodityStocks;
-	private String commodityCode;//商品号
-	
-	/**返回接口层流水主键**/
-	private String interfacePrimaryKey;
-	
-	/**返回开户后知了企服用户id**/
-	private String hkbUserID;
+    private String pageSize; // 总页数
+    private String currPageSize; // 当前页
 
-	public String getAccountFlag() {
-		return accountFlag;
-	}
+    /**
+     * 会员卡交易明细查询接口返回字段
+     */
+    private List<CardTransInf> transList;
 
-	public void setAccountFlag(String accountFlag) {
-		this.accountFlag = accountFlag;
-	}
+    /**
+     * 知了企服退款至嘉福接口返回字段
+     */
+    private String orderId;// 退款订单号
 
-	public String getCardFlag() {
-		return cardFlag;
-	}
+    /**
+     * 商品可购数量 库存数量
+     */
+    private String commodityStocks;
+    private String commodityCode;//商品号
 
-	public void setCardFlag(String cardFlag) {
-		this.cardFlag = cardFlag;
-	}
+    /**
+     * 返回接口层流水主键
+     **/
+    private String interfacePrimaryKey;
 
-	public String getProductCode() {
-		return productCode;
-	}
+    /**
+     * 返回开户后知了企服用户id
+     **/
+    private String hkbUserID;
 
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
-	}
+    public String getAccountFlag() {
+        return accountFlag;
+    }
 
-	public String getProductImage() {
-		return productImage;
-	}
+    public void setAccountFlag(String accountFlag) {
+        this.accountFlag = accountFlag;
+    }
 
-	public void setProductImage(String productImage) {
-		if (StringUtil.isNullOrEmpty(productImage)) 
-			this.productImage =RedisDictProperties.getInstance().getdictValueByCode("HKB_DEFAULT_CARD_IMG");
-		else
-			this.productImage =RedisDictProperties.getInstance().getdictValueByCode("HKB_URL_IMG") + productImage;
-	}
+    public String getCardFlag() {
+        return cardFlag;
+    }
 
-	public String getActiveRule() {
-		return activeRule;
-	}
+    public void setCardFlag(String cardFlag) {
+        this.cardFlag = cardFlag;
+    }
 
-	public void setActiveRule(String activeRule) {
-		this.activeRule = activeRule;
-	}
+    public String getProductCode() {
+        return productCode;
+    }
 
-	public List<MchtCommodities> getCardList() {
-		return cardList;
-	}
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
 
-	public void setCardList(List<MchtCommodities> cardList) {
-		this.cardList = cardList;
-	}
+    public String getProductImage() {
+        return productImage;
+    }
 
-	public List<CustomerAccount> getProductList() {
-		return productList;
-	}
+    public void setProductImage(String productImage) {
+        if (StringUtil.isNullOrEmpty(productImage))
+            this.productImage = RedisDictProperties.getInstance().getdictValueByCode("HKB_DEFAULT_CARD_IMG");
+        else
+            this.productImage = RedisDictProperties.getInstance().getdictValueByCode("HKB_URL_IMG") + productImage;
+    }
 
-	public void setProductList(List<CustomerAccount> productList) {
-		this.productList = productList;
-	}
+    public String getActiveRule() {
+        return activeRule;
+    }
 
-	public ShopDetailInf getShopInfo() {
-		return shopInfo;
-	}
+    public void setActiveRule(String activeRule) {
+        this.activeRule = activeRule;
+    }
 
-	public void setShopInfo(ShopDetailInf shopInfo) {
-		this.shopInfo = shopInfo;
-	}
+    public List<MchtCommodities> getCardList() {
+        return cardList;
+    }
 
-	public MerchantInf getMerchantInfo() {
-		return merchantInfo;
-	}
+    public void setCardList(List<MchtCommodities> cardList) {
+        this.cardList = cardList;
+    }
 
-	public void setMerchantInfo(MerchantInf merchantInfo) {
-		this.merchantInfo = merchantInfo;
-	}
+    public List<CustomerAccount> getProductList() {
+        return productList;
+    }
 
-	public String getBalance() {
-		return balance;
-	}
+    public void setProductList(List<CustomerAccount> productList) {
+        this.productList = productList;
+    }
 
-	public void setBalance(String balance) {
-		this.balance = balance;
-	}
+    public ShopDetailInf getShopInfo() {
+        return shopInfo;
+    }
 
-	public String getSettleDate() {
-		return settleDate;
-	}
+    public void setShopInfo(ShopDetailInf shopInfo) {
+        this.shopInfo = shopInfo;
+    }
 
-	public void setSettleDate(String settleDate) {
-		this.settleDate = settleDate;
-	}
+    public MerchantInf getMerchantInfo() {
+        return merchantInfo;
+    }
 
-	public String getTxnFlowNo() {
-		return txnFlowNo;
-	}
+    public void setMerchantInfo(MerchantInf merchantInfo) {
+        this.merchantInfo = merchantInfo;
+    }
 
-	public void setTxnFlowNo(String txnFlowNo) {
-		this.txnFlowNo = txnFlowNo;
-	}
+    public String getBalance() {
+        return balance;
+    }
 
-	public String getSwtFlowNo() {
-		return swtFlowNo;
-	}
+    public void setBalance(String balance) {
+        this.balance = balance;
+    }
 
-	public void setSwtFlowNo(String swtFlowNo) {
-		this.swtFlowNo = swtFlowNo;
-	}
+    public String getSettleDate() {
+        return settleDate;
+    }
 
-	public String getTransAmt() {
-		return transAmt;
-	}
+    public void setSettleDate(String settleDate) {
+        this.settleDate = settleDate;
+    }
 
-	public void setTransAmt(String transAmt) {
-		this.transAmt = transAmt;
-	}
+    public String getTxnFlowNo() {
+        return txnFlowNo;
+    }
 
-	public String getOriTxnAmount() {
-		return oriTxnAmount;
-	}
+    public void setTxnFlowNo(String txnFlowNo) {
+        this.txnFlowNo = txnFlowNo;
+    }
 
-	public void setOriTxnAmount(String oriTxnAmount) {
-		this.oriTxnAmount = oriTxnAmount;
-	}
+    public String getSwtFlowNo() {
+        return swtFlowNo;
+    }
 
-	public String getCardHolderFee() {
-		return cardHolderFee;
-	}
+    public void setSwtFlowNo(String swtFlowNo) {
+        this.swtFlowNo = swtFlowNo;
+    }
 
-	public void setCardHolderFee(String cardHolderFee) {
-		this.cardHolderFee = cardHolderFee;
-	}
+    public String getTransAmt() {
+        return transAmt;
+    }
 
-	public List<String> getShopImages() {
-		return shopImages;
-	}
+    public void setTransAmt(String transAmt) {
+        this.transAmt = transAmt;
+    }
 
-	public void setShopImages(List<String> shopImages) {
-		this.shopImages = shopImages;
-	}
+    public String getOriTxnAmount() {
+        return oriTxnAmount;
+    }
 
-	public List<ShopListInf> getShopList() {
-		return shopList;
-	}
+    public void setOriTxnAmount(String oriTxnAmount) {
+        this.oriTxnAmount = oriTxnAmount;
+    }
 
-	public String getPageSize() {
-		return pageSize;
-	}
+    public String getCardHolderFee() {
+        return cardHolderFee;
+    }
 
-	public String getCurrPageSize() {
-		return currPageSize;
-	}
+    public void setCardHolderFee(String cardHolderFee) {
+        this.cardHolderFee = cardHolderFee;
+    }
 
-	public void setShopList(List<ShopListInf> shopList) {
-		this.shopList = shopList;
-	}
+    public List<String> getShopImages() {
+        return shopImages;
+    }
 
-	public void setPageSize(String pageSize) {
-		this.pageSize = pageSize;
-	}
+    public void setShopImages(List<String> shopImages) {
+        this.shopImages = shopImages;
+    }
 
-	public void setCurrPageSize(String currPageSize) {
-		this.currPageSize = currPageSize;
-	}
+    public List<ShopListInf> getShopList() {
+        return shopList;
+    }
 
-	public List<CardTransInf> getTransList() {
-		return transList;
-	}
+    public String getPageSize() {
+        return pageSize;
+    }
 
-	public void setTransList(List<CardTransInf> transList) {
-		this.transList = transList;
-	}
+    public String getCurrPageSize() {
+        return currPageSize;
+    }
 
-	public String getOrderId() {
-		return orderId;
-	}
+    public void setShopList(List<ShopListInf> shopList) {
+        this.shopList = shopList;
+    }
 
-	public void setOrderId(String orderId) {
-		this.orderId = orderId;
-	}
+    public void setPageSize(String pageSize) {
+        this.pageSize = pageSize;
+    }
 
-	public String getCommodityStocks() {
-		return commodityStocks;
-	}
+    public void setCurrPageSize(String currPageSize) {
+        this.currPageSize = currPageSize;
+    }
 
-	public void setCommodityStocks(String commodityStocks) {
-		this.commodityStocks = commodityStocks;
-	}
+    public List<CardTransInf> getTransList() {
+        return transList;
+    }
 
-	public String getCommodityCode() {
-		return commodityCode;
-	}
+    public void setTransList(List<CardTransInf> transList) {
+        this.transList = transList;
+    }
 
-	public void setCommodityCode(String commodityCode) {
-		this.commodityCode = commodityCode;
-	}
+    public String getOrderId() {
+        return orderId;
+    }
 
-	public String getInterfacePrimaryKey() {
-		return interfacePrimaryKey;
-	}
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
 
-	public void setInterfacePrimaryKey(String interfacePrimaryKey) {
-		this.interfacePrimaryKey = interfacePrimaryKey;
-	}
+    public String getCommodityStocks() {
+        return commodityStocks;
+    }
 
-	public String getHkbUserID() {
-		return hkbUserID;
-	}
+    public void setCommodityStocks(String commodityStocks) {
+        this.commodityStocks = commodityStocks;
+    }
 
-	public void setHkbUserID(String hkbUserID) {
-		this.hkbUserID = hkbUserID;
-	}
+    public String getCommodityCode() {
+        return commodityCode;
+    }
+
+    public void setCommodityCode(String commodityCode) {
+        this.commodityCode = commodityCode;
+    }
+
+    public String getInterfacePrimaryKey() {
+        return interfacePrimaryKey;
+    }
+
+    public void setInterfacePrimaryKey(String interfacePrimaryKey) {
+        this.interfacePrimaryKey = interfacePrimaryKey;
+    }
+
+    public String getHkbUserID() {
+        return hkbUserID;
+    }
+
+    public void setHkbUserID(String hkbUserID) {
+        this.hkbUserID = hkbUserID;
+    }
 }

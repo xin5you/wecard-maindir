@@ -1,10 +1,10 @@
 package com.cn.thinkx.wecard.centre.module.biz.service;
 
-import java.util.List;
+import com.cn.thinkx.pms.base.redis.vo.ShopInfVO;
 
-import com.cn.thinkx.common.redis.vo.ShopInfVO;
+import java.util.List;
 
 public interface ShopInfService {
 
-	public List<ShopInfVO> getShopInfList();
+    List<ShopInfVO> getShopInfList();
 }

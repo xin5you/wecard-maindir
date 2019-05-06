@@ -1,9 +1,19 @@
 package com.cn.thinkx.wecard.customer.module.pub.ctrl;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.cn.thinkx.common.activemq.service.WechatMQProducerService;
+import com.cn.thinkx.common.wecard.domain.channeluser.ChannelUserInf;
+import com.cn.thinkx.facade.service.HKBTxnFacade;
+import com.cn.thinkx.pms.base.redis.util.BaseKeyUtil;
+import com.cn.thinkx.pms.base.utils.BaseConstants;
+import com.cn.thinkx.pms.base.utils.DES3Util;
+import com.cn.thinkx.pms.base.utils.StringUtil;
+import com.cn.thinkx.service.txn.Java2TxnBusinessFacade;
+import com.cn.thinkx.wecard.customer.module.checkstand.service.WxTransOrderService;
+import com.cn.thinkx.wecard.customer.module.customer.service.*;
+import com.cn.thinkx.wecard.customer.module.merchant.service.MerchantInfService;
+import com.cn.thinkx.wecard.customer.module.merchant.service.MerchantManagerService;
+import com.cn.thinkx.wecard.customer.module.merchant.service.ShopInfService;
+import com.cn.thinkx.wecard.customer.module.pub.domain.TxnResp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,90 +24,73 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cn.thinkx.common.activemq.service.WechatMQProducerService;
-import com.cn.thinkx.common.redis.util.BaseKeyUtil;
-import com.cn.thinkx.common.wecard.domain.channeluser.ChannelUserInf;
-import com.cn.thinkx.facade.service.HKBTxnFacade;
-import com.cn.thinkx.pms.base.utils.BaseConstants;
-import com.cn.thinkx.pms.base.utils.DES3Util;
-import com.cn.thinkx.pms.base.utils.StringUtil;
-import com.cn.thinkx.service.txn.Java2TxnBusinessFacade;
-import com.cn.thinkx.wecard.customer.module.checkstand.service.WxTransOrderService;
-import com.cn.thinkx.wecard.customer.module.customer.service.CtrlSystemService;
-import com.cn.thinkx.wecard.customer.module.customer.service.CustomerManagerService;
-import com.cn.thinkx.wecard.customer.module.customer.service.PersonInfService;
-import com.cn.thinkx.wecard.customer.module.customer.service.UserInfService;
-import com.cn.thinkx.wecard.customer.module.customer.service.UserMerchantAcctService;
-import com.cn.thinkx.wecard.customer.module.customer.service.WxTransLogService;
-import com.cn.thinkx.wecard.customer.module.merchant.service.MerchantInfService;
-import com.cn.thinkx.wecard.customer.module.merchant.service.MerchantManagerService;
-import com.cn.thinkx.wecard.customer.module.merchant.service.ShopInfService;
-import com.cn.thinkx.wecard.customer.module.pub.domain.TxnResp;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 @RequestMapping()
 public class IndexController {
-	Logger logger = LoggerFactory.getLogger(IndexController.class);
-	
-	
-	@Autowired
-	@Qualifier("hkbTxnFacade")
-	private HKBTxnFacade hkbTxnFacade;
-	
-	
-	@Autowired
-	@Qualifier("wxTransLogService")
-	private WxTransLogService wxTransLogService;
-	
-	
-	@Autowired
-	@Qualifier("ctrlSystemService")
-	private CtrlSystemService ctrlSystemService;
-	
-	@Autowired
-	@Qualifier("wxTransOrderService")
-	private WxTransOrderService wxTransOrderService;
-	
-	@Autowired
-	@Qualifier("merchantInfService")
-	private MerchantInfService merchantInfService;
+    Logger logger = LoggerFactory.getLogger(IndexController.class);
 
-	@Autowired
+
+    @Autowired
+    @Qualifier("hkbTxnFacade")
+    private HKBTxnFacade hkbTxnFacade;
+
+
+    @Autowired
+    @Qualifier("wxTransLogService")
+    private WxTransLogService wxTransLogService;
+
+
+    @Autowired
+    @Qualifier("ctrlSystemService")
+    private CtrlSystemService ctrlSystemService;
+
+    @Autowired
+    @Qualifier("wxTransOrderService")
+    private WxTransOrderService wxTransOrderService;
+
+    @Autowired
+    @Qualifier("merchantInfService")
+    private MerchantInfService merchantInfService;
+
+    @Autowired
     @Qualifier("userMerchantAcctService")
-	private UserMerchantAcctService userMerchantAcctService;
-	
-	@Autowired
-	@Qualifier("userInfService")
-	private UserInfService userInfService;
-	
-	@Autowired
-	@Qualifier("java2TxnBusinessFacade")
-	private Java2TxnBusinessFacade java2TxnBusinessFacade;
-	
-	@Autowired
-	@Qualifier("shopInfService")
-	private ShopInfService shopInfService;
-	
-	@Autowired
-	@Qualifier("merchantManagerService")
-	private MerchantManagerService merchantManagerService;
-	
-	@Autowired
-	@Qualifier("wechatMQProducerService")
-	private WechatMQProducerService wechatMQProducerService;
-	
-	@Autowired
-	@Qualifier("personInfService")
-	private PersonInfService personInfService;
-	
-	@Autowired
-	@Qualifier("customerManagerService")
-	private CustomerManagerService customerManagerService;
-	
-	@RequestMapping(value = "/index")
-	public ModelAndView index() {
-		ModelAndView mv = new ModelAndView("index");
-		mv.addObject("info", "欢迎来到知了企服公众号后台管理系统，敬请期待...");
+    private UserMerchantAcctService userMerchantAcctService;
+
+    @Autowired
+    @Qualifier("userInfService")
+    private UserInfService userInfService;
+
+    @Autowired
+    @Qualifier("java2TxnBusinessFacade")
+    private Java2TxnBusinessFacade java2TxnBusinessFacade;
+
+    @Autowired
+    @Qualifier("shopInfService")
+    private ShopInfService shopInfService;
+
+    @Autowired
+    @Qualifier("merchantManagerService")
+    private MerchantManagerService merchantManagerService;
+
+    @Autowired
+    @Qualifier("wechatMQProducerService")
+    private WechatMQProducerService wechatMQProducerService;
+
+    @Autowired
+    @Qualifier("personInfService")
+    private PersonInfService personInfService;
+
+    @Autowired
+    @Qualifier("customerManagerService")
+    private CustomerManagerService customerManagerService;
+
+    @RequestMapping(value = "/index")
+    public ModelAndView index() {
+        ModelAndView mv = new ModelAndView("index");
+        mv.addObject("info", "欢迎来到知了企服公众号后台管理系统，敬请期待...");
 //		req.setChannel(CustomerConstants.ChannelCode.CHANNEL4.toString());
 //		
 //		req.setInnerMerchantNo("201610310000001");
@@ -134,33 +127,33 @@ public class IndexController {
 //			e.printStackTrace();
 //		}
 
-		return mv;
-	}
-	
-	@RequestMapping(value = "/om")
-	public ModelAndView index(@RequestParam(value = "p") String p) {
-		String[] paramArr = null;
-		try {
-			if (StringUtil.isNullOrEmpty(p))
-				return null;// TODO 跳转至无法使用二维码页面
-			paramArr = DES3Util.Decrypt3DES(p, BaseKeyUtil.getEncodingAesKey()).split("\\|");
-		} catch (Exception e) {
-			logger.error("商户收银台-->收款码二维码解密失败", e);
-		}
-		String mchntCode = paramArr[0];
-		String shopCode = paramArr[1];
-		if (paramArr.length > 2) {
-			String channl = paramArr[2];
-			if ("JF".equals(channl)) {
-				String JFUserId = paramArr[3];
-				String HKBUserId = paramArr[4];
-				String parm = "?mchntCode="+StringUtil.nullToString(mchntCode)+"&shopCode="+StringUtil.nullToString(shopCode)+"&JFUserId="+StringUtil.nullToString(JFUserId)+"&HKBUserId="+StringUtil.nullToString(HKBUserId);
-				return new ModelAndView("redirect:/jfPay/scanCode.html"+parm);
-			}
-		}
-		return new ModelAndView("redirect:/customer/user/scanCode.html?mchntCode="+StringUtil.nullToString(mchntCode)+"&shopCode="+StringUtil.nullToString(shopCode));
-	}
-	
+        return mv;
+    }
+
+    @RequestMapping(value = "/om")
+    public ModelAndView index(@RequestParam(value = "p") String p) {
+        String[] paramArr = null;
+        try {
+            if (StringUtil.isNullOrEmpty(p))
+                return null;// TODO 跳转至无法使用二维码页面
+            paramArr = DES3Util.Decrypt3DES(p, BaseKeyUtil.getEncodingAesKey()).split("\\|");
+        } catch (Exception e) {
+            logger.error("商户收银台-->收款码二维码解密失败", e);
+        }
+        String mchntCode = paramArr[0];
+        String shopCode = paramArr[1];
+        if (paramArr.length > 2) {
+            String channl = paramArr[2];
+            if ("JF".equals(channl)) {
+                String JFUserId = paramArr[3];
+                String HKBUserId = paramArr[4];
+                String parm = "?mchntCode=" + StringUtil.nullToString(mchntCode) + "&shopCode=" + StringUtil.nullToString(shopCode) + "&JFUserId=" + StringUtil.nullToString(JFUserId) + "&HKBUserId=" + StringUtil.nullToString(HKBUserId);
+                return new ModelAndView("redirect:/jfPay/scanCode.html" + parm);
+            }
+        }
+        return new ModelAndView("redirect:/customer/user/scanCode.html?mchntCode=" + StringUtil.nullToString(mchntCode) + "&shopCode=" + StringUtil.nullToString(shopCode));
+    }
+
 //	@RequestMapping(value = "/hkbConsumeTransactionITF")
 //	@ResponseBody
 //	public TxnResp hkbConsumeTransactionITF(HttpServletRequest request) {
@@ -280,38 +273,38 @@ public class IndexController {
 //		
 //		return resp;
 //	}
-	
-	@RequestMapping(value = "/olderUsersOpenHKBCard")
-	@ResponseBody
-	public TxnResp userRegAndOpenCard(HttpServletRequest request) {
-		TxnResp resp = new TxnResp();
-		resp.setCode(BaseConstants.TXN_TRANS_RESP_SUCCESS);
-		List<ChannelUserInf> olderUsersList = userInfService.getAllChannelUsers();
-		int i = 0;
-		for (ChannelUserInf obj : olderUsersList) {
-			if ("ACC_HKB".equals(obj.getRemarks()))
-				continue;
-			
-			try {
-				TxnResp HKB_RESP = customerManagerService.doHKBAccountOpening(obj.getUserId(), null);
-				if (HKB_RESP == null) {
-					logger.info("老用户userid[{}]批量开通卡失败", obj.getUserId());
-				} else if (BaseConstants.TXN_TRANS_RESP_SUCCESS.equals(HKB_RESP.getCode())) {
-					obj.setRemarks("ACC_JF");
-					i += userInfService.updateChannelUserInf(obj);
-				} else {
-					logger.info("老用户userid[{}]批量开通卡失败，原因[{}]", obj.getUserId(), HKB_RESP.getInfo());
-				}
-				
-			} catch (Exception e) {
-				logger.error("## 批量开卡异常", e);
-			}
-		}
-		resp.setInfo("批量开卡成功，总开卡数量：" + i);
-		return resp;
-	}
-	
-	
+
+    @RequestMapping(value = "/olderUsersOpenHKBCard")
+    @ResponseBody
+    public TxnResp userRegAndOpenCard(HttpServletRequest request) {
+        TxnResp resp = new TxnResp();
+        resp.setCode(BaseConstants.TXN_TRANS_RESP_SUCCESS);
+        List<ChannelUserInf> olderUsersList = userInfService.getAllChannelUsers();
+        int i = 0;
+        for (ChannelUserInf obj : olderUsersList) {
+            if ("ACC_HKB".equals(obj.getRemarks()))
+                continue;
+
+            try {
+                TxnResp HKB_RESP = customerManagerService.doHKBAccountOpening(obj.getUserId(), null);
+                if (HKB_RESP == null) {
+                    logger.info("老用户userid[{}]批量开通卡失败", obj.getUserId());
+                } else if (BaseConstants.TXN_TRANS_RESP_SUCCESS.equals(HKB_RESP.getCode())) {
+                    obj.setRemarks("ACC_JF");
+                    i += userInfService.updateChannelUserInf(obj);
+                } else {
+                    logger.info("老用户userid[{}]批量开通卡失败，原因[{}]", obj.getUserId(), HKB_RESP.getInfo());
+                }
+
+            } catch (Exception e) {
+                logger.error("## 批量开卡异常", e);
+            }
+        }
+        resp.setInfo("批量开卡成功，总开卡数量：" + i);
+        return resp;
+    }
+
+
 ////	@RequestMapping(value = "/mq")
 ////	@ResponseBody
 ////	public String mq() {
