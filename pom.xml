@@ -8,7 +8,6 @@
 	<version>1.0</version>
 	<name>maindir</name>
 	<url>www.thinkx.com.cn</url>
-
 	<prerequisites>
 		<maven>3.2.2</maven>
 	</prerequisites>
