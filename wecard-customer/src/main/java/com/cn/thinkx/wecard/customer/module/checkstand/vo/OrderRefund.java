@@ -18,7 +18,7 @@ public class OrderRefund {
 	
 	private String code;			//返回码（00：成功）
 	private String msg;				//返回信息
-	private String txnFlowNo;		//知了企服退款流水
+	private String txnFlowNo;		//薪无忧退款流水
 	
 	private String channelName;		//渠道名称(只有当channel=40006001时会用到此字段)
 	

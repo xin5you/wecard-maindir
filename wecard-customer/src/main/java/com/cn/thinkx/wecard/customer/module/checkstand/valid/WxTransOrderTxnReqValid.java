@@ -108,8 +108,8 @@ public class WxTransOrderTxnReqValid {
                 buf.append(key).append("=").append(val);
                 buf.append("&");
             }
-            logger.info("知了企服生成签名入参 -->" + buf.toString());
-            logger.info("知了企服生成签名 -->" + genSign);
+            logger.info("薪无忧生成签名入参 -->" + buf.toString());
+            logger.info("薪无忧生成签名 -->" + genSign);
             resp.setInfo("签名错误");
             return true;
         }
@@ -196,7 +196,7 @@ public class WxTransOrderTxnReqValid {
 		}*/
         String genSign = ChannelSignUtil.genSign(refund);
         if (!genSign.equals(refund.getSign())) {
-            logger.error("## 退款接口--->签名验证失败，知了企服生成签名[{}]", genSign);
+            logger.error("## 退款接口--->签名验证失败，薪无忧生成签名[{}]", genSign);
             return "签名错误";
         }
         return null;

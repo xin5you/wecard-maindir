@@ -43,7 +43,7 @@ public class JFPayServiceImpl implements JFPayService {
         //http请求嘉福支付接口
         String json = HttpClientUtil.sendPost(url, jfParam);
         if (StringUtil.isNullOrEmpty(json)) {
-            logger.error("##调用嘉福支付接口返回参数为空,知了企服流水[{}]", jfChnlReq.getSwtFlowNo());
+            logger.error("##调用嘉福支付接口返回参数为空,薪无忧流水[{}]", jfChnlReq.getSwtFlowNo());
             json = HttpClientUtil.sendPost(url, jfParam);
             if (StringUtil.isNullOrEmpty(json)) {
                 resp.setCode(ITFRespCode.CODE96.getCode());
@@ -73,7 +73,7 @@ public class JFPayServiceImpl implements JFPayService {
         //验签失败再次调用嘉福收银台确认交易是否成功
         json = HttpClientUtil.sendPost(url, jfParam);
         if (StringUtil.isNullOrEmpty(json)) {
-            logger.error("## 调用嘉福支付接口返回参数为空，知了企服流水[{}]", jfChnlReq.getSwtFlowNo());
+            logger.error("## 调用嘉福支付接口返回参数为空，薪无忧流水[{}]", jfChnlReq.getSwtFlowNo());
             resp.setCode(ITFRespCode.CODE96.getCode());
             resp.setMsg(ITFRespCode.CODE96.getValue());
             return JSONArray.toJSONString(resp);

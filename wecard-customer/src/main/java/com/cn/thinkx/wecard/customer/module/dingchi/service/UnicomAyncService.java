@@ -32,7 +32,7 @@ public interface UnicomAyncService {
 	UnicomAyncResp hkbQuery(HttpServletRequest req);
 	
 	/**
-	 * 知了企服回调方法(提供鼎驰调用)
+	 * 薪无忧回调方法(提供鼎驰调用)
 	 * 
 	 * @param request
 	 * @return
@@ -40,7 +40,7 @@ public interface UnicomAyncService {
 	String hkbNotify(HttpServletRequest request);
 	
 	/**
-	 * 知了企服退款接口（提供鼎驰调用）
+	 * 薪无忧退款接口（提供鼎驰调用）
 	 * 
 	 * @param refundId
 	 * @param oriSwtFlowNo

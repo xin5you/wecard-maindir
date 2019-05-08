@@ -54,7 +54,7 @@
 		            <input type="checkbox" class="confirm_choose" name="payType" value="VIPCARD_PAY" />
 		        </label>
 		        <a class="card_contain" href="${s.base!}/customer/card/cardRecharge.html?innerMerchantNo=${detail.mchntCode!}">
-		            <div class="card_confirm_text">会员卡余额 ${userMchntAccBal! }，<#if (detail.mchntType=='00')>知了企服余额${accHkbAccBal!}，</#if>买卡立享优惠</div>
+		            <div class="card_confirm_text">会员卡余额 ${userMchntAccBal! }，<#if (detail.mchntType=='00')>薪无忧余额${accHkbAccBal!}，</#if>买卡立享优惠</div>
 		            <img src="${s.base}/static/images/nearby_arrow.png" />
 		        </a>
 		    </div>
@@ -78,7 +78,7 @@
 		                <div class="confirm_card_seller">
 		                    <img src="${s.base}/static/images/hkb_logo.png"></img>
 		                </div>
-		                <div class="confirm_card_text">知了企服余额</div>
+		                <div class="confirm_card_text">薪无忧余额</div>
 		            </div>
 		            <input type="checkbox" class="confirm_choose" name="payType" value="VIPCARD_PAY" />
 		        </label>

@@ -83,7 +83,7 @@ public class CommonSerivceImpl implements CommonSerivce {
                 .parseInt(RedisDictProperties.getInstance().getdictValueByCode("SMS_EXPIRE_TIME"));
         String phoneCode = RandomUtils.getRandomNumbernStr(6);
 //		boolean sendStatus = messageService.sendMessage(phoneNumber,
-//				"【知了企服】验证码：" + phoneCode + "（有效期" + expireMinutes + "分钟）您正在操作<" + bizName + ">业务，切勿告知他人！");
+//				"【薪无忧】验证码：" + phoneCode + "（有效期" + expireMinutes + "分钟）您正在操作<" + bizName + ">业务，切勿告知他人！");
         String templateCode = "";
         if (SendMsgTypeEnum.msg_01.getName().equals(bizName)) {
             templateCode = jedisCluster.hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV, BaseConstants.ALIYUN_MSM_TEMPLATE_CODE_REGISTER);

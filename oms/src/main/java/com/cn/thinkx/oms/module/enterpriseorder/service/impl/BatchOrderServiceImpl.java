@@ -379,11 +379,11 @@ public class BatchOrderServiceImpl implements BatchOrderService {
                                 order.setRemarks(resp.getInfo());
                                 batchOrderListMapper.updateBatchOrderList(order);
                                 if (RedisDictProperties.getInstance().getdictValueByCode("ACC_HKB_PROD_NO").equals(userMerchantAcct.getProductCode())) {
-										/*boolean sendStatus = messageService.sendMessage(order.getPhoneNo(), "【知了企服】尊敬的用户，"+bo.getCompanyName()+"于"+DateUtils.getDate(order.getCreateTime(), "yyyy年MM月dd日")
-										+ "为您"+NumberUtils.hiddingMobileNo(order.getPhoneNo())+"的知了企服余额充值"+NumberUtils.RMBCentToYuan(order.getAmount())+"元，请进入知了企服微信公众号\"我的\"-“个人中心”查看，"
+										/*boolean sendStatus = messageService.sendMessage(order.getPhoneNo(), "【薪无忧】尊敬的用户，"+bo.getCompanyName()+"于"+DateUtils.getDate(order.getCreateTime(), "yyyy年MM月dd日")
+										+ "为您"+NumberUtils.hiddingMobileNo(order.getPhoneNo())+"的薪无忧余额充值"+NumberUtils.RMBCentToYuan(order.getAmount())+"元，请进入薪无忧微信公众号\"我的\"-“个人中心”查看，"
 										+ "如有疑问请致电客服021-64189869");*/
                                     String templateCode = RedisDictProperties.getInstance().getdictValueByCode("ALIYUN_MSM_TEMPLATE_CODE_RECHARGE");
-                                    String templateParam = "{\"company\":\"知了企服\", \"amount\":\"" + NumberUtils.RMBCentToYuan(order.getAmount()) + "\"}";
+                                    String templateParam = "{\"company\":\"薪无忧\", \"amount\":\"" + NumberUtils.RMBCentToYuan(order.getAmount()) + "\"}";
                                     boolean sendStatus = messageService.sendMessage(order.getPhoneNo(), templateCode, templateParam);
                                     if (sendStatus) {
 
@@ -403,11 +403,11 @@ public class BatchOrderServiceImpl implements BatchOrderService {
                                         acc = cardList.get(0);
                                     }
                                     String channelName = BaseIntegrationPayConstants.OMSChannelCode.findOMSChannelCodeByCode("10001001");
-                                    String customerAcount = RedisDictProperties.getInstance().getdictValueByCode("WX_CUSTOMER_ACCOUNT");    //获取知了企服公众号
+                                    String customerAcount = RedisDictProperties.getInstance().getdictValueByCode("WX_CUSTOMER_ACCOUNT");    //获取薪无忧公众号
                                     String desc = "";    //描述
                                     if (merchantacctflag) {
-                                        desc = bo.getCompanyName() + "已为您知了企服余额成功充值\n";
-                                        userMerchantAcct.setMchntName("知了企服余额");
+                                        desc = bo.getCompanyName() + "已为您薪无忧余额成功充值\n";
+                                        userMerchantAcct.setMchntName("薪无忧余额");
                                     } else {
                                         desc = "您已成功购卡充值\n";
                                     }

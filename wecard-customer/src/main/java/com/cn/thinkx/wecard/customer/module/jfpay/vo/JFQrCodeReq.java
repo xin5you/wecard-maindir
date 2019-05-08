@@ -1,14 +1,14 @@
 package com.cn.thinkx.wecard.customer.module.jfpay.vo;
 
 /**
- * 嘉福调用知了企服二维码页面 入参参数
+ * 嘉福调用薪无忧二维码页面 入参参数
  * 
  * @author xiaomei
  *
  */
 public class JFQrCodeReq {
 
-	private String hkbUserID;	//知了企服userID
+	private String hkbUserID;	//薪无忧userID
 	private String jfUserID;	//嘉福UserID
 	private String timestamp;	//时间戳
 	private String sign;		//签名

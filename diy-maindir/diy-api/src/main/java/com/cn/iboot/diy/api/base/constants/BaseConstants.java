@@ -58,7 +58,7 @@ public class BaseConstants {
 	}
 	
 	public enum OMSChannel{
-		CHANNEL1001("1001","知了企服","40001001,40002001,50002001"),// 知了企服
+		CHANNEL1001("1001","薪无忧","40001001,40002001,50002001"),// 薪无忧
 		CHANNEL4001("4001","嘉福","40004001,50004001"),// 嘉福
 		CHANNEL10001("10001","平台","10001001");// 平台
 		private  String code;

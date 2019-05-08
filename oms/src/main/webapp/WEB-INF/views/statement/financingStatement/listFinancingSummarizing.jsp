@@ -60,9 +60,9 @@
 				               <th rowspan="2">结算金额</th>
 				             </tr>
 				             <tr>
-                               <th>知了企服</th>
+                               <th>薪无忧</th>
                                <th>嘉福平台</th>
-                               <th>知了企服</th>
+                               <th>薪无忧</th>
                                <th>嘉福平台</th>
                                <th>平台充值</th>
                              </tr>

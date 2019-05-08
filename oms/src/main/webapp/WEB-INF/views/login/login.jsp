@@ -11,7 +11,7 @@
     <div class="login_box">
 
         <form action="${ctx}/user/doLogin.do" method="post" id="login_form">
-            <div class="top_b">知了企服运营管理平台</div>
+            <div class="top_b">薪无忧运营管理平台</div>
             <div class="alert alert-info alert-login">
                	温馨提示：<span style="font-weight: bold;font-size: small;" id="errorcontent">${sessionScope['SECURITY_LOGIN_EXCEPTION']}</span>
             </div>

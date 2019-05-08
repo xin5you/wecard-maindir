@@ -155,7 +155,7 @@ public class WelfareMartServiceImpl implements WelfareMartService {
         String shopCode = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.ACC_HKB_SHOP_NO);
         String notifyUrl = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.HKB_WELFAREMART_BUYCARD_NOTIFY_URL);
         String redirectUrl = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.HKB_WELFAREMART_REDIRECT_URL);
-        // 设置知了企服收银台所需参数
+        // 设置薪无忧收银台所需参数
         TransOrderReq req = new TransOrderReq();
         req.setChannel(ChannelCode.CHANNEL9.toString());
         req.setUserId(personInf.getUserId());

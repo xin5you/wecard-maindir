@@ -3,7 +3,7 @@ package com.cn.thinkx.facade.bean.base;
 import java.io.Serializable;
 
 /**
- * 知了企服接口基础请求封装类
+ * 薪无忧接口基础请求封装类
  * 
  * @author pucker
  *

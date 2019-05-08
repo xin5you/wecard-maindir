@@ -79,7 +79,7 @@ public class UnicomAyncServiceImpl implements UnicomAyncService {
 
         PhoneRechargeOrder flowOrder = phoneRechargeService.getPhoneRechargeOrderById(serialno);
         if (flowOrder == null) {
-            logger.error("## 手机充值--->知了企服查询接口，查询手机充值订单[{}]信息为空", serialno);
+            logger.error("## 手机充值--->薪无忧查询接口，查询手机充值订单[{}]信息为空", serialno);
             return null;
         }
 
@@ -141,10 +141,10 @@ public class UnicomAyncServiceImpl implements UnicomAyncService {
         }
 
         if ("3".equals(status)) {// 交易失败
-            logger.error("## 手机充值--->流量充值异步回调接口，鼎驰充值失败：鼎驰订单号[{}] 知了企服订单号[{}] 错误信息[{}]", id, downstreamSerialno, statusDesc);
+            logger.error("## 手机充值--->流量充值异步回调接口，鼎驰充值失败：鼎驰订单号[{}] 薪无忧订单号[{}] 错误信息[{}]", id, downstreamSerialno, statusDesc);
             flowOrder.setTransStat(phoneRechargeTransStat.PRTS3.getCode());
         } else if ("2".equals(status)) {// 交易成功
-            logger.info("## 手机充值--->流量充值异步回调接口，鼎驰充值成功：鼎驰订单号[{}] 知了企服订单号[{}]", id, downstreamSerialno);
+            logger.info("## 手机充值--->流量充值异步回调接口，鼎驰充值成功：鼎驰订单号[{}] 薪无忧订单号[{}]", id, downstreamSerialno);
             flowOrder.setTransStat(phoneRechargeTransStat.PRTS2.getCode());
         } else {
             logger.error("## 手机充值--->流量充值异步回调接口，鼎驰回调异常：鼎驰订单号[{}] status[{}] 错误信息[{}]", id, status, statusDesc);

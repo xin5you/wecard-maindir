@@ -183,8 +183,8 @@ public class PPBoxPayServiceImpl implements PPBoxPayService {
         CustomerQrCodeVO qrCodeVO = null;
         String pay_type = PPBoxPayUtil.getPayTypeByAuthCode(req.getAuth_code()); // 支付方式
         String termChannelNo = deviceVO.getChannelNo();// 终端通道号
-        String hkbChannelNo = BaseIntegrationPayConstants.HKB_TERM_CHNL_NO;// 知了企服会员卡通道号
-        if (PPBoxConstants.PPBoxPayType.HKBPAY.getValue().equals(pay_type) && hkbChannelNo.equals(termChannelNo)) {// 知了企服会员卡
+        String hkbChannelNo = BaseIntegrationPayConstants.HKB_TERM_CHNL_NO;// 薪无忧会员卡通道号
+        if (PPBoxConstants.PPBoxPayType.HKBPAY.getValue().equals(pay_type) && hkbChannelNo.equals(termChannelNo)) {// 薪无忧会员卡
             String auth_jsonStr = JedisClusterUtils.getInstance().get(req.getAuth_code());// 根据授权码获取用户信息
             logger.info("用户条码信息[{}]", auth_jsonStr);
             if (StringUtil.isNullOrEmpty(auth_jsonStr)) {
@@ -274,7 +274,7 @@ public class PPBoxPayServiceImpl implements PPBoxPayService {
         TxnResp txnResp = new TxnResp();
         DetailBizInfo detail = new DetailBizInfo();
         boolean flag = false;
-        /** ========知了企服会员卡支付进入以下流程========= **/
+        /** ========薪无忧会员卡支付进入以下流程========= **/
         if (PPBoxConstants.PPBoxPayType.HKBPAY.getValue().equals(pay_type)) {
             txnBean.setTxnType(TransCode.CW10.getCode() + "0");// 交易类型，发送报文时补0
             txnBean.setSwtTxnDate(DateUtil.getCurrentDateStr());// 交易日期
@@ -549,7 +549,7 @@ public class PPBoxPayServiceImpl implements PPBoxPayService {
         payReq.setTransId(log.getTransId());
         payReq.setAuthInfo(openID);
         payReq.setTermNo(log.getTermCode());
-        payReq.setOrderDesc("知了企服[" + deviceVO.getMchntName() + " - " + deviceVO.getShopName() + "]消费");
+        payReq.setOrderDesc("薪无忧[" + deviceVO.getMchntName() + " - " + deviceVO.getShopName() + "]消费");
         payReq.setTimestamp(System.currentTimeMillis());
         payReq.setSign(IntSignUtil.genSign(payReq, RedisDictProperties.getInstance().getdictValueByCode("INT_KEY")));
         try {
@@ -581,7 +581,7 @@ public class PPBoxPayServiceImpl implements PPBoxPayService {
                     }
                 }
             } else {
-                logger.error("## 支付失败：知了企服流水号[{}] 返回码[{}] 返回信息[{}]", wxPrimaryKey, payResp.getCode(), payResp.getInfo());
+                logger.error("## 支付失败：薪无忧流水号[{}] 返回码[{}] 返回信息[{}]", wxPrimaryKey, payResp.getCode(), payResp.getInfo());
                 return JSONObject.toJSONString(resp);
             }
         } catch (Exception e) {

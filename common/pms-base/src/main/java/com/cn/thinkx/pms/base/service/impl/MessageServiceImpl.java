@@ -123,7 +123,7 @@ public class MessageServiceImpl implements MessageService {
 	 /*public static void main(String[] args) { 
 		 MessageService pro = new MessageServiceImpl(); 
 		 System.out.println(pro.sendMessage("13162666043",
-		 "【知了企服】亲爱的会员，你尾号为0265的会员卡于2016-10-09 13:09:17充值100.00元，余额234.72元[上海宸树]"));
+		 "【薪无忧】亲爱的会员，你尾号为0265的会员卡于2016-10-09 13:09:17充值100.00元，余额234.72元[上海宸树]"));
 		 
 		String str= "{\"name\":\"123456\"}";
 		MessageService pro = new MessageServiceImpl();

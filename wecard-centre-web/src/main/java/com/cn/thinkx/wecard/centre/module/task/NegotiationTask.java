@@ -42,12 +42,12 @@ public class NegotiationTask implements Runnable {
     private CardKeysOrderInf cardKeysOrderInf;
 
     /**
-     * 知了企服代付接口请求地址
+     * 薪无忧代付接口请求地址
      */
     private String BW_URL = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.WITHDRAW_REQUEST_URL);
 
     /**
-     * 知了企服请求代付加密KEY
+     * 薪无忧请求代付加密KEY
      */
     private String WELFAREMART_WITHDRAW_KEY = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.WELFAREMART_WITHDRAW_KEY);
 
@@ -68,7 +68,7 @@ public class NegotiationTask implements Runnable {
      * 初始化卡券转让Task<br>
      *
      * @param cko 卡券交易订单
-     * @param url 批量代付知了企服内部请求地址
+     * @param url 批量代付薪无忧内部请求地址
      * @see NegotiationTask
      */
     public NegotiationTask(CardKeysOrderInf cko) {
@@ -106,7 +106,7 @@ public class NegotiationTask implements Runnable {
                         }
                     });
 
-                    // 组装调用知了企服内部代付接口批次明细参数
+                    // 组装调用薪无忧内部代付接口批次明细参数
                     DetailDataVO detail = new DetailDataVO();
                     detail.setSerialNo(cardKeysOrderInf.getOrderId());
                     detail.setReceiverCardNo(cardKeysOrderInf.getBankNo());
@@ -124,7 +124,7 @@ public class NegotiationTask implements Runnable {
                     detail.setOrderName(cardKeysOrderInf.getUserId());
                     List<DetailDataVO> detailData = Arrays.asList(detail);
 
-                    // 组装调用知了企服内部代付接口批次参数
+                    // 组装调用薪无忧内部代付接口批次参数
                     BatchDataVO batch = new BatchDataVO();// 批次
                     batch.setTotalNum("1");
                     batch.setTotalAmount(cardKeysOrderInf.getPaidAmount());

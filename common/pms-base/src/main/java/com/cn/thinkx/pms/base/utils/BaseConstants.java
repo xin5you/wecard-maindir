@@ -28,10 +28,10 @@ public class BaseConstants {
 	// 定义失败值
 	public static final String FAILED = "failed";
 	
-	//知了企服返回交易成功状态
+	//薪无忧返回交易成功状态
 	public static final String HKB_SUCCESS = "SUCCESS";
 	
-	//知了企服返回交易失败状态
+	//薪无忧返回交易失败状态
 	public static final String HKB_FAIL = "FAIL";
 
 	// 交易核心返回状态：成功
@@ -47,7 +47,7 @@ public class BaseConstants {
 	// 微信端管理员权限session名
 	public static final String MANAGER_RESOURCES_SESSION="manager_resources_session";
 
-	// 知了企服通卡信息
+	// 薪无忧通卡信息
 	public static final String ACC_HKB_MCHNT_NO = "ACC_HKB_MCHNT_NO";
 	public static final String ACC_HKB_PROD_NO = "ACC_HKB_PROD_NO";
 	public static final String ACC_HKB_INS_CODE = "ACC_HKB_INS_CODE";
@@ -66,7 +66,7 @@ public class BaseConstants {
 	public static final String PHONE_RECHARGE_DX_GOODS = "PHONE_RECHARGE_DX_GOODS";
 
 
-	//知了企服商城url
+	//薪无忧商城url
 	public static final String ESHOP_HKB_ECOM_STORE_URL= "ESHOP_HKB_ECOM_STORE_URL";
 
 	/** 嘉福（京东，美团，大众点评）*/
@@ -99,27 +99,27 @@ public class BaseConstants {
 	/** 鼎驰 - 余额查询地址Url*/
 	public static final String DINGCHI_QUERYBAL_URL = "DINGCHI_QUERYBAL_URL";
 	
-	/** 知了企服卡券集市  - 购买卡券异步回调链接*/
+	/** 薪无忧卡券集市  - 购买卡券异步回调链接*/
 	public static final String HKB_WELFAREMART_BUYCARD_NOTIFY_URL = "HKB_WELFAREMART_BUYCARD_NOTIFY_URL";
-	/** 知了企服卡券集市  - 购买卡券重定向链接*/
+	/** 薪无忧卡券集市  - 购买卡券重定向链接*/
 	public static final String HKB_WELFAREMART_REDIRECT_URL = "HKB_WELFAREMART_REDIRECT_URL";
-	/** 知了企服卡券集市  - 转让卡券链接*/
+	/** 薪无忧卡券集市  - 转让卡券链接*/
 	public static final String HKB_WELFAREMART_RESELL_URL = "HKB_WELFAREMART_RESELL_URL";
-	/** 知了企服卡券集市  - 转让卡券异步回调链接*/
+	/** 薪无忧卡券集市  - 转让卡券异步回调链接*/
 	public static final String HKB_WELFAREMART_RESELL_NOTIFY_URL = "HKB_WELFAREMART_RESELL_NOTIFY_URL";
-	/** 知了企服卡券集市  - 转让卡券接口加密KEy*/
+	/** 薪无忧卡券集市  - 转让卡券接口加密KEy*/
 	public static final String WELFAREMART_RESELL_KEY = "WELFAREMART_RESELL_KEY";
-	/** 知了企服卡券集市  - 卡券代付接口加密KEy*/
+	/** 薪无忧卡券集市  - 卡券代付接口加密KEy*/
 	public static final String WELFAREMART_WITHDRAW_KEY = "WELFAREMART_WITHDRAW_KEY";
-	/** 知了企服卡券集市  - 卡券充值地址*/
+	/** 薪无忧卡券集市  - 卡券充值地址*/
 	public static final String WELFAREMART_RECHARGE_REQUEST_URL = "WELFAREMART_RECHARGE_REQUEST_URL";
-	/** 知了企服卡券集市  - 卡券充值异步回调地址*/
+	/** 薪无忧卡券集市  - 卡券充值异步回调地址*/
 	public static final String WELFAREMART_RECHARGE_NOTIFY_URL = "WELFAREMART_RECHARGE_NOTIFY_URL";
 	
-	/** 知了企服话费充值，查询话费充值状态URL*/
+	/** 薪无忧话费充值，查询话费充值状态URL*/
 	public static final String WELFAREMART_GET_RECHARGE_STATE_URL = "WELFAREMART_GET_RECHARGE_STATE_URL";
 	
-	/** 批量代付请求地址 - 知了企服 */
+	/** 批量代付请求地址 - 薪无忧 */
 	public static final String WITHDRAW_REQUEST_URL = "WITHDRAW_REQUEST_URL";
 	/** 批量代付请求地址 - 回调 */
 	public static final String WITHDRAW_NOTIFY_URL = "WITHDRAW_NOTIFY_URL";
@@ -130,9 +130,9 @@ public class BaseConstants {
 	
 	/** 话费充值-立方 （front）请求地址 */
 	public static final String PHONE_RECHARGE_FRONT_REQUEST_URL = "PHONE_RECHARGE_FRONT_REQUEST_URL";
-	/** 知了企服手机充值（流量）  - 异步回调地址*/
+	/** 薪无忧手机充值（流量）  - 异步回调地址*/
 	public static final String FLOW_RECHARGE_NOTIFY_URL = "FLOW_RECHARGE_NOTIFY_URL";
-	/** 知了企服手机充值  - 重定向地址*/
+	/** 薪无忧手机充值  - 重定向地址*/
 	public static final String PHONE_RECHARGE_REDIRECT_URL = "PHONE_RECHARGE_REDIRECT_URL";
 	/** 话费充值-立方   - access_token*/
 	public static final String BM_ACCESS_TOKEN = "BM_ACCESS_TOKEN";
@@ -237,7 +237,7 @@ public class BaseConstants {
 	 *
 	 */
 	public enum OMSChannel{
-		CHANNEL1001("1001","知了企服","40001001,40001010,40001002,40002001,50002001,40007001,40008001"),// 知了企服
+		CHANNEL1001("1001","薪无忧","40001001,40001010,40001002,40002001,50002001,40007001,40008001"),// 薪无忧
 		CHANNEL4001("4001","嘉福","40004001,50004001"),// 嘉福
 		CHANNEL6001("6001","电商","40006001"),// 电商
 		CHANNEL10001("10001","平台","10001001");// 平台
@@ -1052,8 +1052,8 @@ public class BaseConstants {
 	 *
 	 */
 	public enum SponsorCode {
-		SPONSOR00("00"),// 知了企服客户微信平台
-		SPONSOR10("10"),// 知了企服商户微信平台
+		SPONSOR00("00"),// 薪无忧客户微信平台
+		SPONSOR10("10"),// 薪无忧商户微信平台
 		SPONSOR20("20"),// 扫码盒子会员卡
 		SPONSOR30("30"),// 扫码盒子微信
 		SPONSOR40("40"),// 扫码盒子支付宝

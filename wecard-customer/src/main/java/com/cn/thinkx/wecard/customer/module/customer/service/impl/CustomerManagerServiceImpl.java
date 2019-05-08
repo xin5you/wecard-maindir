@@ -136,7 +136,7 @@ public class CustomerManagerServiceImpl implements CustomerManagerService {
                         mvFail.addObject("resp", resp);
                         return false;
                     } else {
-                        /** 开卡知了企服通卡 add by pucker 2018/1/30 **/
+                        /** 开卡薪无忧通卡 add by pucker 2018/1/30 **/
                         try {
                             TxnResp HKB_RESP = this.doHKBAccountOpening(userId, null);
                             if (HKB_RESP == null)
@@ -148,7 +148,7 @@ public class CustomerManagerServiceImpl implements CustomerManagerService {
                                 return false;
                             }
                         } catch (Exception e) {
-                            logger.error("## 用户[{}]注册开通知了企服通卡失败", phoneNumber, e);
+                            logger.error("## 用户[{}]注册开通薪无忧通卡失败", phoneNumber, e);
                         }
 
                         // 通知用户注册成功

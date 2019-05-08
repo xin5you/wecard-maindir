@@ -77,7 +77,7 @@ public class BizUserServiceImpl implements BizUserService {
 			return resp;
 		}
 
-		/** 客户会员注册 先查询是否从知了企服注册过 **/
+		/** 客户会员注册 先查询是否从薪无忧注册过 **/
 		UserInf user = this.getUserInfByPhoneNo(req.getMobile(), BaseConstants.ChannelCode.CHANNEL1.toString());
 		if (user == null) 
 			user = this.getUserInfByPhoneNo(req.getMobile(), BaseConstants.ChannelCode.CHANNEL0.toString());// 是否从管理平台注册过

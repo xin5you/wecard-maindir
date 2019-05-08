@@ -23,7 +23,7 @@ public interface UnicomAyncService {
 	String query(HttpServletRequest req);
 	
 	/**
-	 * 知了企服回调方法(提供鼎驰调用)
+	 * 薪无忧回调方法(提供鼎驰调用)
 	 * 
 	 * @param request
 	 * @return

@@ -90,7 +90,7 @@ public class IndexController {
     @RequestMapping(value = "/index")
     public ModelAndView index() {
         ModelAndView mv = new ModelAndView("index");
-        mv.addObject("info", "欢迎来到知了企服公众号后台管理系统，敬请期待...");
+        mv.addObject("info", "欢迎来到薪无忧公众号后台管理系统，敬请期待...");
 //		req.setChannel(CustomerConstants.ChannelCode.CHANNEL4.toString());
 //		
 //		req.setInnerMerchantNo("201610310000001");

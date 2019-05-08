@@ -53,7 +53,7 @@ public class OrderInf extends BaseDomain {
 	 */
 	private String redirectUrl;
 	/**
-	 *知了企服流水（itf主键） 
+	 *薪无忧流水（itf主键）
 	 */
 	private String txnFlowNo;
 	/**

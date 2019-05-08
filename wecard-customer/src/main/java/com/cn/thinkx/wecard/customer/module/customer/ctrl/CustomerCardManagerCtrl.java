@@ -299,7 +299,7 @@ public class CustomerCardManagerCtrl extends BaseController {
             logger.error("## Request buyCardRecharge get openid[Null] failed");
             return super.error500(request);
         }
-        /*** 用户是否已经注册知了企服会员 **/
+        /*** 用户是否已经注册薪无忧会员 **/
         UserInf user = userInfService.getUserInfByOpenId(openid);// TODO 从缓存中获取
         if (user == null) {
             mv = new ModelAndView("redirect:/customer/user/userRegister.html");
@@ -484,7 +484,7 @@ public class CustomerCardManagerCtrl extends BaseController {
     }
 
     /**
-     * 进入知了企服通卡账户
+     * 进入薪无忧通卡账户
      *
      * @param request
      * @return

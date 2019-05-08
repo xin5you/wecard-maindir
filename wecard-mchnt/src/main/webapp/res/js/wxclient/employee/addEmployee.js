@@ -104,8 +104,8 @@ wx.ready(function(){
                		$that.hide();
                		addEmployee.shareId=data.code;
             	    wx.onMenuShareAppMessage({
-		          	      title: '知了企服商户平台',
-		          	      desc:  '您好: 我在知了企服公众号中分配了'+roleName+' 角色,请关注公众号后，点击认证',
+		          	      title: '薪无忧商户平台',
+		          	      desc:  '您好: 我在薪无忧公众号中分配了'+roleName+' 角色,请关注公众号后，点击认证',
 		          	      link:  data.msg+'/wxclient/mchnt/employeeRegByMchant.html?shareId='+data.code,
 		          	      imgUrl: data.msg +'/res/image/sharelog.jpg',
 		          	      trigger: function (res) {

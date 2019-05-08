@@ -8,7 +8,7 @@
 	<body style="overflow-y:hidden;">
 		<%@ include file="/WEB-INF/views/common/navbar.jsp"%>
 		<div style="text-align: center;margin-top: 100px;">
-			<h1>欢迎使用知了企服运营管理平台（oms）</h1>
+			<h1>欢迎使用薪无忧运营管理平台（oms）</h1>
 		</div>
 	</body>
 </html>

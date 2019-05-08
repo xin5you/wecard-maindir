@@ -62,7 +62,7 @@ public interface Java2TxnBusinessFacade {
 	String consumeTransactionITF(TxnPackageBean txnBean) throws Exception;
 	
 	/**
-	 * 知了企服退款至嘉福账户交易接口
+	 * 薪无忧退款至嘉福账户交易接口
 	 * 
 	 * @param bean
 	 * @return

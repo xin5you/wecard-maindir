@@ -1,7 +1,7 @@
 package com.cn.thinkx.wecard.customer.module.phonerecharge.vo;
 
 /**
- * 接收知了企服通知返回参数
+ * 接收薪无忧通知返回参数
  * 
  * @author xiaomei
  *

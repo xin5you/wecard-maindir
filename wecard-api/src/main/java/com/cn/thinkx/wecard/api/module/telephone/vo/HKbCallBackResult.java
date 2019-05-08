@@ -1,7 +1,7 @@
 package com.cn.thinkx.wecard.api.module.telephone.vo;
 
 /**
- * 知了企服手机充值回调
+ * 薪无忧手机充值回调
  * @author zhuqiuyou
  *
  */

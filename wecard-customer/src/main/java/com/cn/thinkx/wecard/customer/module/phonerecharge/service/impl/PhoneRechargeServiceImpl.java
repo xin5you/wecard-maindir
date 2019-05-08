@@ -169,11 +169,11 @@ public class PhoneRechargeServiceImpl implements PhoneRechargeService {
         String shopCode = jedisCluster.hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV, BaseConstants.ACC_HKB_SHOP_NO);
         String phoneKey = jedisCluster.hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV, BaseConstants.PHONE_RECHARGE_REQ_KEY);
 
-        //知了企服话费充值异步回调接口地址
+        //薪无忧话费充值异步回调接口地址
         String phoneRechargeNotify = jedisCluster.hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV, BaseConstants.PHONE_RECHARGE_REQ_NOTIFY_URL);
         String phoneRechargeRedirect = jedisCluster.hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV, BaseConstants.PHONE_RECHARGE_REQ_REDIRECT_URL);
 
-        //知了企服流量充值异步回调接口地址
+        //薪无忧流量充值异步回调接口地址
         String flowRechargeNotifyUrl = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.FLOW_RECHARGE_NOTIFY_URL);
         String phoneRechargeRedirectUrl = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.PHONE_RECHARGE_REDIRECT_URL);
 

@@ -26,7 +26,7 @@ public interface CustomerManagerService {
 			String userId, String password, ModelAndView mvFail) throws Exception;
 
 	/**
-	 * 知了企服通卡账户开通
+	 * 薪无忧通卡账户开通
 	 * 
 	 * @param userId 用户Id
 	 * @param openid 微信openID

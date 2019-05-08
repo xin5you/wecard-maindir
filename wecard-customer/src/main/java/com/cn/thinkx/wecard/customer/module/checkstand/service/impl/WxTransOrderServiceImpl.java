@@ -985,7 +985,7 @@ public class WxTransOrderServiceImpl implements WxTransOrderService {
                     // java2TxnBusinessFacade.HKBPayBackToJF(bean);
                     String jfResult = HKBTxnUtil.hkbPayBackToJF(map);
                     if (StringUtil.isNullOrEmpty(jfResult)) {
-                        logger.info("申请退款--->订单号：[{}]知了企服退款至嘉福账户交易接口返回值为空", translogRefund.getTxnPrimaryKey());
+                        logger.info("申请退款--->订单号：[{}]薪无忧退款至嘉福账户交易接口返回值为空", translogRefund.getTxnPrimaryKey());
                         resultHtml.setMsg(Constants.TransRespEnum.ERROR.getName());
                     }
                     payBackResp = JSONArray.parseObject(jfResult, TxnResp.class);
@@ -1091,7 +1091,7 @@ public class WxTransOrderServiceImpl implements WxTransOrderService {
                     if (users != null) {
                         for (int i = 0; i < users.length; i++) {
                             messageService.sendMessage(users[i],
-                                    "【知了企服】在商户退款时出现故障,微信流水号:" + log.getWxPrimaryKey() + ",请及时处理!");
+                                    "【薪无忧】在商户退款时出现故障,微信流水号:" + log.getWxPrimaryKey() + ",请及时处理!");
                         }
                     }
                 }
@@ -1337,18 +1337,18 @@ public class WxTransOrderServiceImpl implements WxTransOrderService {
             try {
                 json = java2TxnBusinessFacade.transRefundITF(txnBean); //退款接口
             } catch (Exception e) {
-                logger.error("## 退款接口--->远程调用知了企服退款接口异常{}, wx退款流水[{}], itf原交易流水[{}]", e, addWxLog.getWxPrimaryKey(), itfLog.getInterfacePrimaryKey());
+                logger.error("## 退款接口--->远程调用薪无忧退款接口异常{}, wx退款流水[{}], itf原交易流水[{}]", e, addWxLog.getWxPrimaryKey(), itfLog.getInterfacePrimaryKey());
             }
             logger.info("退款接口--->远程调用退款接口, 返回参数[{}]", json);
             txnResp = JSONArray.parseObject(json, TxnResp.class);
 
-            //接收知了企服退款接口返回值，判断是否为空,并调用查询接口判断
+            //接收薪无忧退款接口返回值，判断是否为空,并调用查询接口判断
             try {
                 json = java2TxnBusinessFacade.transExceptionQueryITF(addWxLog.getWxPrimaryKey());
             } catch (Exception e) {
-                logger.error("## 退款接口--->远程调用知了企服订单查询接口异常{}, wx退款流水[{}]", e, addWxLog.getWxPrimaryKey());
+                logger.error("## 退款接口--->远程调用薪无忧订单查询接口异常{}, wx退款流水[{}]", e, addWxLog.getWxPrimaryKey());
             }
-            logger.info("退款接口--->远程调用知了企服订单查询接口, 返回参数[{}]", json);
+            logger.info("退款接口--->远程调用薪无忧订单查询接口, 返回参数[{}]", json);
             txnResp = JSONArray.parseObject(json, TxnResp.class);
             if (txnResp != null) {
                 transOrderDetail.setRespCode(txnResp.getCode());
@@ -1359,10 +1359,10 @@ public class WxTransOrderServiceImpl implements WxTransOrderService {
             }
             transOrderDetail.setTransSt("1");// 插入时为0，报文返回时更新为1
             if (wxTransOrderMapper.updateWxTransOrderDetail(transOrderDetail) < 1) {
-                logger.error("## 退款接口--->远程调用知了企服退款接口更新WxTransOrderDetail订单明细号[{}]失败", transOrderDetail.getOrderListId());
+                logger.error("## 退款接口--->远程调用薪无忧退款接口更新WxTransOrderDetail订单明细号[{}]失败", transOrderDetail.getOrderListId());
             }
             if (wxTransLogService.updateWxTransLog(addWxLog, txnResp) < 1) {
-                logger.error("## 退款接口--->远程调用知了企服退款接口更新WxTransLog流水[{}]失败", addWxLog.getWxPrimaryKey());
+                logger.error("## 退款接口--->远程调用薪无忧退款接口更新WxTransLog流水[{}]失败", addWxLog.getWxPrimaryKey());
             }
         } catch (Exception e) {
             logger.error("## 退款接口--->外部退款订单号{}，申请退款异常{}", req.getRefundOrderId(), e);
@@ -1374,7 +1374,7 @@ public class WxTransOrderServiceImpl implements WxTransOrderService {
                     String[] users = phonesStr.split(",");
                     if (users != null) {
                         for (int i = 0; i < users.length; i++) {
-                            messageService.sendMessage(users[i], "【知了企服】在退款时出现故障,wx退款交易流水号:" + addWxLog.getWxPrimaryKey() + ",请及时处理!");
+                            messageService.sendMessage(users[i], "【薪无忧】在退款时出现故障,wx退款交易流水号:" + addWxLog.getWxPrimaryKey() + ",请及时处理!");
                         }
                     }
                 }

@@ -60,7 +60,7 @@ public class OrderNotifyHttpClient {
             try {
                 request.setParameters(parameters);
                 HttpResponse response = HttpClient.post(request);
-                logger.info("知了企服收银台--->异步回调接口返回值[{}]", response.getStringResult());
+                logger.info("薪无忧收银台--->异步回调接口返回值[{}]", response.getStringResult());
                 if (response != null && StringUtil.isNotEmpty(response.getStringResult())) {
                     if (response.getStringResult() != null && "SUCCESS".equals(response.getStringResult().toUpperCase())) {
                         return TransOrderResult.SUCCESS.getValue();

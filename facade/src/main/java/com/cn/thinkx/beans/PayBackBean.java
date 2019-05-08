@@ -3,7 +3,7 @@ package com.cn.thinkx.beans;
 import java.io.Serializable;
 
 /**
- * 知了企服交易撤销bean
+ * 薪无忧交易撤销bean
  * 
  * @author pucker
  *

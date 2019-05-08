@@ -277,14 +277,14 @@ public class MchntEshopInfManagerCtrl extends BaseController {
                 logger.error("## AccHKBEshop --->跳转卡券集市主页异常[{}]", e);
             }
         } else {
-            logger.info("## 渠道号为[{}]在知了企服系统中不存在", ecmChnl);
+            logger.info("## 渠道号为[{}]在薪无忧系统中不存在", ecmChnl);
             return super.error500(request);
         }
         return new ModelAndView("redirect:" + url);
     }
 
     /**
-     * 进入知了企服商城
+     * 进入薪无忧商城
      *
      * @param request
      * @return
@@ -293,11 +293,11 @@ public class MchntEshopInfManagerCtrl extends BaseController {
     public String toHKBEshop(HttpServletRequest request, HttpServletResponse resp) {
         String openid = WxMemoryCacheClient.getOpenid(request);// 从缓存中获取openid
 
-        /*** 用户是否已经注册知了企服会员 **/
+        /*** 用户是否已经注册薪无忧会员 **/
         UserInf user = userInfService.getUserInfByOpenId(openid);
         if (user != null) {
             String ecom_url = jedisCluster.hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV, BaseConstants.ESHOP_HKB_ECOM_STORE_URL);
-            logger.info("## 知了企服商城  toHKBEshop openId-->[{}],redirect_url-->[{}]", WxMemoryCacheClient.getOpenid(request), ecom_url);
+            logger.info("## 薪无忧商城  toHKBEshop openId-->[{}],redirect_url-->[{}]", WxMemoryCacheClient.getOpenid(request), ecom_url);
 
             SortedMap<String, String> dataMap = new TreeMap<String, String>();
             dataMap.put("channelCode", BaseConstants.ChannelCode.CHANNEL1.toString());
@@ -316,7 +316,7 @@ public class MchntEshopInfManagerCtrl extends BaseController {
             dataMap.put("sign", sign);
 
             try {
-                // 跳转知了企服电商
+                // 跳转薪无忧电商
                 resp.setContentType("text/html;charset=utf-8");
                 PrintWriter out = resp.getWriter();
                 out.println("<form name='mainForm' method='post'  action='" + ecom_url + "' >");

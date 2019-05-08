@@ -127,15 +127,15 @@ public class UnicomAyncServiceImpl implements UnicomAyncService {
         String type = request.getParameter("type");// 充值类型，1：话费、2：流量
 
         if (StringUtil.isNullOrEmpty(openid)) {
-            logger.error("## 知了企服支付接口,获取用户openid为空");
+            logger.error("## 薪无忧支付接口,获取用户openid为空");
             return null;
         }
         if (StringUtil.isNullOrEmpty(mobile)) {
-            logger.error("## 知了企服支付接口,获取充值mobile为空");
+            logger.error("## 薪无忧支付接口,获取充值mobile为空");
             return null;
         }
         if (StringUtil.isNullOrEmpty(itemId)) {
-            logger.error("## 知了企服支付接口,获取充值itemId为空");
+            logger.error("## 薪无忧支付接口,获取充值itemId为空");
             return null;
         }
 
@@ -148,7 +148,7 @@ public class UnicomAyncServiceImpl implements UnicomAyncService {
 		} else if (phoneType == 3) {
 			transAmount = DXFlowType.findByItemId(itemId).getAmount();
 		} else {
-			logger.error("##知了企服支付接口，根据手机号查询所属运营商不存在");
+			logger.error("##薪无忧支付接口，根据手机号查询所属运营商不存在");
 			return null;
 		}*/
         transAmount = NumberUtils.RMBYuanToCent(transAmount);
@@ -159,7 +159,7 @@ public class UnicomAyncServiceImpl implements UnicomAyncService {
         } else if (StringUtil.equals("2", type)) {// 充值流量
             channel = ChannelCode.CHANNEL9.toString();
         } else {
-            logger.error("## 知了企服支付接口,获取充值类型为空");
+            logger.error("## 薪无忧支付接口,获取充值类型为空");
             return null;
         }
 
@@ -168,11 +168,11 @@ public class UnicomAyncServiceImpl implements UnicomAyncService {
         String insCode = jedisCluster.hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV, BaseConstants.ACC_HKB_INS_CODE);
         CtrlSystem cs = ctrlSystemService.getCtrlSystem();// 得到日切信息
         if (cs == null) {
-            logger.error("## 知了企服支付接口，日切信息为空");
+            logger.error("## 薪无忧支付接口，日切信息为空");
             return null;
         }
         if (!BaseConstants.TRANS_FLAG_YES.equals(cs.getTransFlag())) {
-            logger.error("## 知了企服支付接口，日切状态不允许");
+            logger.error("## 薪无忧支付接口，日切状态不允许");
             return null;
         }
         // 日切状态为允许时，插入微信端流水
@@ -195,7 +195,7 @@ public class UnicomAyncServiceImpl implements UnicomAyncService {
         log.setTransChnl(channel);
         int i = wxTransLogService.insertWxTransLog(log);// 插入业务流水(微信端)
         if (i != 1) {
-            logger.error("## 知了企服支付接口--->insertWxTransLog微信端插入流水记录数量不为1");
+            logger.error("## 薪无忧支付接口--->insertWxTransLog微信端插入流水记录数量不为1");
             return null;
         }
 
@@ -233,13 +233,13 @@ public class UnicomAyncServiceImpl implements UnicomAyncService {
         try {
             int i2 = wxTransLogService.updateWxTransLog(log, txnResp);
             if (i2 != 1) {
-                logger.error("## 知了企服支付接口--->更新wxp流水失败，wxp流水号[{}]", log.getWxPrimaryKey());
+                logger.error("## 薪无忧支付接口--->更新wxp流水失败，wxp流水号[{}]", log.getWxPrimaryKey());
             }
         } catch (Exception e) {
-            logger.error("## 知了企服支付接口--->更新wxp流水异常，wxp流水号[{}]", log.getWxPrimaryKey(), e);
+            logger.error("## 薪无忧支付接口--->更新wxp流水异常，wxp流水号[{}]", log.getWxPrimaryKey(), e);
         }
         txnResp.setWxPrimaryKey(wxPrimaryKey);
-        logger.info("知了企服支付接口hkbPayment()返回信息[{}]", JSONArray.toJSONString(txnResp));
+        logger.info("薪无忧支付接口hkbPayment()返回信息[{}]", JSONArray.toJSONString(txnResp));
         return JSONArray.toJSONString(txnResp);
     }
 
@@ -247,7 +247,7 @@ public class UnicomAyncServiceImpl implements UnicomAyncService {
     public String hkbRefund(String refundId, String oriSwtFlowNo) {
         InterfaceTrans itfLog = transLogService.getInterfaceTransByPrimaryKey(oriSwtFlowNo);
         if (StringUtil.isNullOrEmpty(itfLog) || !ITFRespCode.CODE00.getCode().equals(itfLog.getRespCode())) {
-            logger.error("## 知了企服退款接口，查询流水号为[{}],ITF层原交易不存在", oriSwtFlowNo);
+            logger.error("## 薪无忧退款接口，查询流水号为[{}],ITF层原交易不存在", oriSwtFlowNo);
             return null;
         }
 
@@ -315,7 +315,7 @@ public class UnicomAyncServiceImpl implements UnicomAyncService {
                 logger.error("## 退款接口异常，外部退款流水号为[{}]", wxLog.getWxPrimaryKey(), e);
             }
             logger.info("退款接口，接收的返回参数为：[{}]", json);
-            //接收知了企服退款接口返回值，判断是否为空,并调用查询接口判断
+            //接收薪无忧退款接口返回值，判断是否为空,并调用查询接口判断
             try {
                 json = java2TxnBusinessFacade.transExceptionQueryITF(wxLog.getWxPrimaryKey());
             } catch (Exception e) {
@@ -342,7 +342,7 @@ public class UnicomAyncServiceImpl implements UnicomAyncService {
                     String[] users = phonesStr.split(",");
                     if (users != null) {
                         Arrays.asList(users).stream().forEach(x ->
-                                messageService.sendMessage(x, "【知了企服】在退款时出现故障,原交易流水号:" + oriSwtFlowNo + ",请及时处理!")
+                                messageService.sendMessage(x, "【薪无忧】在退款时出现故障,原交易流水号:" + oriSwtFlowNo + ",请及时处理!")
                         );
                     }
                 }
@@ -374,9 +374,9 @@ public class UnicomAyncServiceImpl implements UnicomAyncService {
         String userId = req.getParameter("userId");// 合作方用户编号(鼎驰科技方提供)
         String serialno = req.getParameter("serialno");// 合作方商户系统的流水号,全局唯一
 
-        WxTransLog log = wxTransLogService.getWxTransLogById(serialno);// 查询知了企服业务流水
+        WxTransLog log = wxTransLogService.getWxTransLogById(serialno);// 查询薪无忧业务流水
         if (log == null) {
-            logger.error("## 知了企服查询接口，外部流水号[{}]在wxp流水中不存在", serialno);
+            logger.error("## 薪无忧查询接口，外部流水号[{}]在wxp流水中不存在", serialno);
             return null;
         }
 
@@ -406,9 +406,9 @@ public class UnicomAyncServiceImpl implements UnicomAyncService {
         String statusDesc = req.getParameter("statusDesc");// 失败时错误信息、如填写不需要作为加密串
         String sign = req.getParameter("sign");// 校验码   (加密方式和 合作方交易的请求加密方式一样，私钥也一样)
 
-        WxTransLog log = wxTransLogService.getWxTransLogById(downstreamSerialno);// 查询知了企服业务流水
+        WxTransLog log = wxTransLogService.getWxTransLogById(downstreamSerialno);// 查询薪无忧业务流水
         if (log == null) {
-            logger.error("## 知了企服异步回调接口，查询Wxp流水为空，WxPrimaryKey[{}]");
+            logger.error("## 薪无忧异步回调接口，查询Wxp流水为空，WxPrimaryKey[{}]");
             return null;
         }
 
@@ -427,41 +427,41 @@ public class UnicomAyncServiceImpl implements UnicomAyncService {
         }
         String hkbSign = DCUtils.genSign(vo, key);
         if (!StringUtils.equals(sign, hkbSign)) {// 签名不正确
-            logger.error("## 知了企服异步回调接口，验签失败，鼎驰回调信息[{}]", JSONArray.toJSONString(vo));
+            logger.error("## 薪无忧异步回调接口，验签失败，鼎驰回调信息[{}]", JSONArray.toJSONString(vo));
             return null;
         }
         if (!StringUtil.isNullOrEmpty(id)) {
             log.setDmsRelatedKey(id);// 鼎驰订单号
             CtrlSystem cs = ctrlSystemService.getCtrlSystem();// 得到日切信息
             if (cs == null) {
-                logger.error("## 知了企服异步回调接口，日切信息为空");
+                logger.error("## 薪无忧异步回调接口，日切信息为空");
                 return null;
             }
             if (!BaseConstants.TRANS_FLAG_YES.equals(cs.getTransFlag())) {
-                logger.error("## 知了企服异步回调接口，日切状态不允许");
+                logger.error("## 薪无忧异步回调接口，日切状态不允许");
                 return null;
             }
             log.setTableNum(cs.getCurLogNum());// 得到当前可以进行操作的流水表号
             try {
                 int i2 = wxTransLogService.updateWxTransLog(log, null);//更新Wxp流水
                 if (i2 != 1) {
-                    logger.error("## 知了企服异步回调接口--->更新wxp外部订单号流水失败，wxp流水号[{}]", log.getWxPrimaryKey());
+                    logger.error("## 薪无忧异步回调接口--->更新wxp外部订单号流水失败，wxp流水号[{}]", log.getWxPrimaryKey());
                 }
             } catch (Exception e) {
-                logger.error("## 知了企服异步回调接口--->更新wxp外部订单号流水异常，wxp流水号[{}]", log.getWxPrimaryKey(), e);
+                logger.error("## 薪无忧异步回调接口--->更新wxp外部订单号流水异常，wxp流水号[{}]", log.getWxPrimaryKey(), e);
             }
         }
         if ("3".equals(status)) {// 交易失败
-            logger.error("## 知了企服异步回调接口，鼎驰充值失败：订单号[{}] 交易流水号[{}] 错误信息[{}]", id, downstreamSerialno, statusDesc);
+            logger.error("## 薪无忧异步回调接口，鼎驰充值失败：订单号[{}] 交易流水号[{}] 错误信息[{}]", id, downstreamSerialno, statusDesc);
             //发起退款
             String json = hkbRefund(id, downstreamSerialno);
-            logger.info("知了企服异步回调接口，退款接口返回参数[{}]", json);
+            logger.info("薪无忧异步回调接口，退款接口返回参数[{}]", json);
             return "ok";
         } else if ("2".equals(status)) {// 交易成功
-            logger.info("## 知了企服异步回调接口，鼎驰充值成功：订单号[{}] 交易流水号[{}]", id, downstreamSerialno);
+            logger.info("## 薪无忧异步回调接口，鼎驰充值成功：订单号[{}] 交易流水号[{}]", id, downstreamSerialno);
             return "ok";
         } else {
-            logger.error("## 知了企服异步回调接口，鼎驰回调异常：订单号[{}] status[{}] 错误信息[{}]", id, status, statusDesc);
+            logger.error("## 薪无忧异步回调接口，鼎驰回调异常：订单号[{}] status[{}] 错误信息[{}]", id, status, statusDesc);
         }
         return null;
     }

@@ -42,7 +42,7 @@ public class BaseIntegrationPayConstants {
 	//申鑫退款成功返回码
 	public static final String SX_PAYMENT_TYPE = "S";
 	
-	//知了企服通道
+	//薪无忧通道
 	public static final String HKB_TERM_CHNL_NO = "101";
 
 	/**
@@ -214,8 +214,8 @@ public class BaseIntegrationPayConstants {
 	 *
 	 */
 	public enum SponsorCode {
-		SPONSOR00("00"),// 知了企服客户微信平台
-		SPONSOR10("10"),// 知了企服商户微信平台
+		SPONSOR00("00"),// 薪无忧客户微信平台
+		SPONSOR10("10"),// 薪无忧商户微信平台
 		SPONSOR20("20"),// 扫码盒子会员卡
 		SPONSOR30("30"),// 扫码盒子微信
 		SPONSOR40("40"),// 扫码盒子支付宝
@@ -293,7 +293,7 @@ public class BaseIntegrationPayConstants {
 	 *
 	 */
 	public enum ChnlNoMethod {
-		CM10("101", "知了企服", ""),
+		CM10("101", "薪无忧", ""),
 		CM20("102", "申鑫", "com.cn.thinkx.integrationpay.shenxinpay.service.ShenXinPayService"),
 		CM30("103", "收钱吧", "");
 
@@ -415,7 +415,7 @@ public class BaseIntegrationPayConstants {
 	}
 	public enum OMSChannelCode {
 		OMSCHANNEL0("10001001","管理平台"),//管理平台
-		OMSCHANNEL1("40001010","知了企服"),// 商户开户、客户开户、密码重置、消费 (从微信公众号发起)
+		OMSCHANNEL1("40001010","薪无忧"),// 商户开户、客户开户、密码重置、消费 (从微信公众号发起)
 		OMSCHANNEL2("40002001","微信"),// 充值、商户提现  (从微信公众号发起)
 		OMSCHANNEL3("40003001","支付宝"),// 充值、商户提现  (从支付宝发起)
 		OMSCHANNEL4("40004001","嘉福平台"),// 充值、商户提现  (从嘉福平台发起)

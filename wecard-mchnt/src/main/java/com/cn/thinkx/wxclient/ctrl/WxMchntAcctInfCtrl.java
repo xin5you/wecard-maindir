@@ -460,7 +460,7 @@ public class WxMchntAcctInfCtrl extends BaseController {
                     // String jfResult = java2TxnBusinessFacade.HKBPayBackToJF(bean);
                     String jfResult = HKBTxnUtil.hkbPayBackToJF(map);
                     if (StringUtil.isNullOrEmpty(jfResult)) {
-                        logger.error("## 商户退款translogRefundCommit 订单号[{}]知了企服退款至嘉福账户交易接口返回值为空", txnPrimaryKey);
+                        logger.error("## 商户退款translogRefundCommit 订单号[{}]薪无忧退款至嘉福账户交易接口返回值为空", txnPrimaryKey);
                         resultHtml.setMsg(Constants.TXN_TRANS_ERROR_DESC);
                     }
                     payBackResp = JSONArray.parseObject(jfResult, TxnResp.class);
@@ -557,7 +557,7 @@ public class WxMchntAcctInfCtrl extends BaseController {
                     String[] users = phonesStr.split(",");
                     if (users != null) {
                         for (int i = 0; i < users.length; i++) {
-                            messageService.sendMessage(users[i], "【知了企服】商户退款出现故障，交易流水号：" + log.getWxPrimaryKey() + "，请您及时处理！");
+                            messageService.sendMessage(users[i], "【薪无忧】商户退款出现故障，交易流水号：" + log.getWxPrimaryKey() + "，请您及时处理！");
                         }
                     }
                 }

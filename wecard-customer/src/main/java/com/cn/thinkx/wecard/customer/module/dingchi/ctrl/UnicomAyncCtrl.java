@@ -33,10 +33,10 @@ public class UnicomAyncCtrl extends BaseController{
 	public ModelAndView buy(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("welfaremart/cardin/inFail");
 
-		//调用知了企服支付，成功返回交易流水、交易时间传入req
+		//调用薪无忧支付，成功返回交易流水、交易时间传入req
 		String json = unicomAyncService.hkbPayment(request);
 		if (StringUtil.isNullOrEmpty(json)) {
-			logger.error("## 知了企服支付接口返回json为空");
+			logger.error("## 薪无忧支付接口返回json为空");
 			return mv;
 		}
 		TxnResp txnResp = JSONArray.parseObject(json, TxnResp.class);
@@ -46,7 +46,7 @@ public class UnicomAyncCtrl extends BaseController{
 		voReq.setDtCreate(DateUtil.getCurrentDateStr(DateUtil.FORMAT_YYYYMMDDHHMMSS));
 
 		if (!ITFRespCode.CODE00.getCode().equals(txnResp.getCode())) {
-			logger.error("## 知了企服支付接口hkbPayment()返回[{}]", txnResp.getCode());
+			logger.error("## 薪无忧支付接口hkbPayment()返回[{}]", txnResp.getCode());
 			return mv;
 		}
 
@@ -56,7 +56,7 @@ public class UnicomAyncCtrl extends BaseController{
 		
 		if (StringUtil.isNullOrEmpty(voResp) || !"00".equals(voResp.getCode())) {
 			String refundJson = unicomAyncService.hkbRefund(null, txnResp.getInterfacePrimaryKey());
-			logger.info("知了企服退款接口返回信息[{}]", refundJson);
+			logger.info("薪无忧退款接口返回信息[{}]", refundJson);
 			return mv;
 		}
 		return new ModelAndView("welfaremart/cardin/cardSuccess");

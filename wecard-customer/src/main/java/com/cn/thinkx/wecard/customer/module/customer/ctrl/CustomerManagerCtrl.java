@@ -381,7 +381,7 @@ public class CustomerManagerCtrl extends BaseController {
         // logger.error("用户注册---------->发送客服消息是吧"+ex);
         // }
 
-        /*** 用户是否已经注册知了企服会员 **/
+        /*** 用户是否已经注册薪无忧会员 **/
         UserInf user = userInfService.getUserInfByOpenId(openid);
         if (user != null) {
             mv = new ModelAndView("customer/user/userRegistered");

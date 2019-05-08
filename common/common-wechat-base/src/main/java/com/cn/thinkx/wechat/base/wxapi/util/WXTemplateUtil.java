@@ -21,7 +21,7 @@ public class WXTemplateUtil {
 	public static TreeMap<String, TreeMap<String, String>> setHKBPayData(String txnDate, String mchntName,
 			String shopName, String payAmt, String accBal, String channelName) {
 		TreeMap<String, TreeMap<String, String>> params = new TreeMap<String, TreeMap<String, String>>();
-		params.put("first", TemplateMessage.item("知了企服余额消费成功\n", "#000000"));
+		params.put("first", TemplateMessage.item("薪无忧余额消费成功\n", "#000000"));
 		params.put("keyword1", TemplateMessage.item(txnDate, "#000000"));
 		params.put("keyword2", TemplateMessage.item(mchntName + " - " + channelName, "#000000"));
 		params.put("keyword3", TemplateMessage.item(payAmt + " 元", "#228B22"));

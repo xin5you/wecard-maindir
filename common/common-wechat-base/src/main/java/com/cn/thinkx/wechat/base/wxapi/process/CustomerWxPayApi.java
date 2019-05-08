@@ -28,7 +28,7 @@ import java.util.SortedMap;
 public class CustomerWxPayApi {
 
     // 统一下单-商品描述
-    public static final String BODY = "知了企服-预付卡";
+    public static final String BODY = "薪无忧-预付卡";
     // 统一下单请求URL
     private static final String UNIFIED_ORDER = "https://api.mch.weixin.qq.com/pay/unifiedorder";
     // 订单查询请求URL

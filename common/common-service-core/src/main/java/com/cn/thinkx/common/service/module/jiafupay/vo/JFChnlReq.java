@@ -10,7 +10,7 @@ public class JFChnlReq {
 
 	private String txnAmount;	//支付金额
 	private String jfUserId;	//嘉福用户编号
-	private String swtFlowNo;	//知了企服流水
+	private String swtFlowNo;	//薪无忧流水
 	private String payType;		//支付方式
 	
 	public String getTxnAmount() {

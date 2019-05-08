@@ -71,7 +71,7 @@ public class TxnResp extends BaseResp {
     private List<CardTransInf> transList;
 
     /**
-     * 知了企服退款至嘉福接口返回字段
+     * 薪无忧退款至嘉福接口返回字段
      */
     private String orderId;// 退款订单号
 
@@ -87,7 +87,7 @@ public class TxnResp extends BaseResp {
     private String interfacePrimaryKey;
 
     /**
-     * 返回开户后知了企服用户id
+     * 返回开户后薪无忧用户id
      **/
     private String hkbUserID;
 

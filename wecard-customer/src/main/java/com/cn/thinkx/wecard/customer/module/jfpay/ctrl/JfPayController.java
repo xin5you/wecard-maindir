@@ -359,7 +359,7 @@ public class JfPayController {
         channelUserInf.setChannelCode(ChannelCode.CHANNEL4.toString());
         String openid = channelUserInfService.getExternalId(channelUserInf);
         if (StringUtil.isNullOrEmpty(openid)) {
-            logger.error("## 二维码生成器方法--->request hkbUserID[{}]在知了企服用户系统中不存在", jfReq.getHkbUserID());
+            logger.error("## 二维码生成器方法--->request hkbUserID[{}]在薪无忧用户系统中不存在", jfReq.getHkbUserID());
             mv = new ModelAndView("common/500");
             mv.addObject("failureMsg", "网络异常，请稍后再试");
             return mv;

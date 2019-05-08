@@ -13,7 +13,7 @@ import com.cn.thinkx.facade.bean.ShopInfQueryRequest;
 import com.cn.thinkx.facade.bean.base.BaseTxnReq;
 
 /**
- * <h3>知了企服交易接口类</h3> <br>
+ * <h3>薪无忧交易接口类</h3> <br>
  * <ul>
  * <li>所有方法均返回json格式字符串，如操作成功返回：{"code":"00","info":"交易成功"}</li>
  * <li>json串的code为交易返回码，如交易成功为："00"</li>
@@ -45,7 +45,7 @@ public interface HKBTxnFacade {
 	String customerCardOpeningITF(CusCardOpeningRequest req) throws Exception;
 	
 	/**
-	 * 客户开卡接口（知了企服通卡）
+	 * 客户开卡接口（薪无忧通卡）
 	 * 
 	 * @param req
 	 * @return json格式字符串

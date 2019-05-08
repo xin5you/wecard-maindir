@@ -39,7 +39,7 @@ public class HttpWebUtil{
 		return RedisDictProperties.getInstance().getdictValueByCode("40006001_REQ_AES_KEY");
 	}
 
-	/**获取知了企服图片服务器路径
+	/**获取薪无忧图片服务器路径
 	 * @return
 	 */
 	public static String getHkbUrlImg(){

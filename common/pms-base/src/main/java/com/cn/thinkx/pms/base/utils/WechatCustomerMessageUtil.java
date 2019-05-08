@@ -3,8 +3,8 @@ package com.cn.thinkx.pms.base.utils;
 public class WechatCustomerMessageUtil {
 
 	// 员工注册成功后发送的消息
-	public static final String E_REG_MSG_PARAM3 = "欢迎使用知了企服服务公众号，您已成功注册成为【%s】【%s】【%s】";
-	public static final String E_REG_MSG_PARAM2 = "欢迎使用知了企服服务公众号，您已成功注册成为【%s】【%s】";
+	public static final String E_REG_MSG_PARAM3 = "欢迎使用薪无忧服务公众号，您已成功注册成为【%s】【%s】【%s】";
+	public static final String E_REG_MSG_PARAM2 = "欢迎使用薪无忧服务公众号，您已成功注册成为【%s】【%s】";
 
 	public static void main(String[] args) {
 		// String

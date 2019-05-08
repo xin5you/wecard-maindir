@@ -9,8 +9,8 @@ package com.cn.thinkx.wecard.customer.module.eshop.vo;
 public class JFExtandJson {
 	private String phoneNo;// 手机号
 	private String userId;// 用户唯一标识
-	private String mchntCode;// 知了企服商户号
-	private String shopCode;// 知了企服门店号
+	private String mchntCode;// 薪无忧商户号
+	private String shopCode;// 薪无忧门店号
 	private String ecomChnl;// 电商标识
 	private String channel;// 渠道号
 	

@@ -5,7 +5,7 @@
              <div class="navbar navbar-fixed-top">
                  <div class="navbar-inner">
                      <div class="container-fluid">
-                         <a class="brand" href="#"><i class="icon-home icon-white"></i>知了企服运营管理平台</a>
+                         <a class="brand" href="#"><i class="icon-home icon-white"></i>薪无忧运营管理平台</a>
                          <ul class="nav user_menu pull-right">
                              <li class="divider-vertical hidden-phone hidden-tablet"></li>
                              <li class="dropdown">

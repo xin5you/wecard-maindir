@@ -53,7 +53,7 @@ public class ShenXinPayService {
         String[] keys = {"INSTID", "USRID", "OUTORDERID", "TXAMT", "BODY", "TXNTYPE", "NOTIFYURL", "SCENE", "AUTHCODE",
                 "SUBJECT"};
         String[] params = {instId, mchntNo, req.getTermSwtFlowNo(),
-                NumberUtils.RMBCentToYuan(req.getTransAmt()), "知了企服", txnType, "", "1", req.getAuthInfo(),
+                NumberUtils.RMBCentToYuan(req.getTransAmt()), "薪无忧", txnType, "", "1", req.getAuthInfo(),
                 req.getOrderDesc()};
         try {
             String service = httpUrl(req.getTermChnlNo(), req.getTransId());

@@ -8,7 +8,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
- * 知了企服 渠道接入 接口签名验证
+ * 薪无忧 渠道接入 接口签名验证
  * 
  * @author pucker
  *

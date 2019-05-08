@@ -12,7 +12,7 @@ import com.cn.iboot.diy.api.base.constants.Constants;
 import com.cn.iboot.diy.api.redis.utils.JedisClusterUtils;
 
 /**
- * 知了企服 渠道接入 接口签名验证
+ * 薪无忧 渠道接入 接口签名验证
  * 
  * @author pucker
  *

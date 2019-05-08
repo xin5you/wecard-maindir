@@ -132,7 +132,7 @@ public class ApacheHttpHandler implements HttpHandler {
 			response.setResponseHeaders(method.getAllHeaders());
 			EntityUtils.consume(entity);
 		} catch (Exception ex) {
-			LOG.error("## 知了企服收银台回调异常", ex);
+			LOG.error("## 薪无忧收银台回调异常", ex);
 			throw ex;
 		} finally {
 			method.releaseConnection();

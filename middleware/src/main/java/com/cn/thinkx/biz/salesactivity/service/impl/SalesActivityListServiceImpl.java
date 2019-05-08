@@ -274,7 +274,7 @@ public class SalesActivityListServiceImpl implements SalesActivityListService {
                             if (BaseConstants.RESPONSE_SUCCESS_CODE.equals(obj.getRespCode())) {
                                 String phoneNo = bizUserMapper.getPhoneNoByUserId(userId);
                                 String productName = bizMchtMapper.getProductNameByCode(iftranslog.getProductCode());
-                                messageService.sendMessage(phoneNo, "【知了企服】" + productName + "到账：" + NumberUtils.RMBCentToYuan(salesActivityDetail.getActivityInfo()) + "元，" + salesActivityDetail.getActivityDsp() + "，祝您生活愉快！");
+                                messageService.sendMessage(phoneNo, "【薪无忧】" + productName + "到账：" + NumberUtils.RMBCentToYuan(salesActivityDetail.getActivityInfo()) + "元，" + salesActivityDetail.getActivityDsp() + "，祝您生活愉快！");
                             } else {
                                 logger.info("充值优惠活动交易--->用户参加营销活动记录失败，id[{}]", log.getInterfacePrimaryKey());
                                 sendMessageByRechargeError(log.getInterfacePrimaryKey()); //发送短信
@@ -296,7 +296,7 @@ public class SalesActivityListServiceImpl implements SalesActivityListService {
         String[] users = phonesStr.split(",");
         if (users != null) {
             for (int i = 0; i < users.length; i++) {
-                messageService.sendMessage(users[i], "【知了企服】在处理返利业务时出现故障,流水号:" + interfacePrimaryKey + ",请及时处理!");
+                messageService.sendMessage(users[i], "【薪无忧】在处理返利业务时出现故障,流水号:" + interfacePrimaryKey + ",请及时处理!");
             }
         }
     }

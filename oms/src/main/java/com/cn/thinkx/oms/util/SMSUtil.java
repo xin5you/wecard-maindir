@@ -45,6 +45,6 @@ public class SMSUtil {
 
 	public static void main(String[] args) {
 		SMSUtil pro = new SMSUtil();
-		System.out.println(pro.sendMessage("13501755206", "【知了企服】亲爱的会员，你尾号为0265的会员卡于2016-10-09 13:09:17充值100.00元，余额234.72元[上海宸树]"));
+		System.out.println(pro.sendMessage("13501755206", "【薪无忧】亲爱的会员，你尾号为0265的会员卡于2016-10-09 13:09:17充值100.00元，余额234.72元[上海宸树]"));
 	}
 }

@@ -47,7 +47,7 @@ public class ApiRechargeNotifyController {
     private TelProviderOrderInfFacade telProviderOrderInfFacade;
 
     /**
-     * 手机充值 知了企服商城回调
+     * 手机充值 薪无忧商城回调
      *
      * @param request
      * @return

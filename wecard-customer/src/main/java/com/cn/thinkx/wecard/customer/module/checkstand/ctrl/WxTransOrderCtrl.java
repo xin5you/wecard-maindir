@@ -658,7 +658,7 @@ public class WxTransOrderCtrl extends BaseController {
                 PrintWriter out = response.getWriter();
 //				out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
 //				out.println("<HTML>");
-//				out.println("<HEAD><TITLE>知了企服收银台</TITLE></HEAD>");
+//				out.println("<HEAD><TITLE>薪无忧收银台</TITLE></HEAD>");
 //				out.println("<BODY>");
                 out.println("<form name=\"submitForm\" action=\"" + transOrder.getOrderDetail().getRedirectUrl()
                         + "\" method=\"post\">");
@@ -738,7 +738,7 @@ public class WxTransOrderCtrl extends BaseController {
     }
 
     /**
-     * 退款接口（知了企服商城退款接口）
+     * 退款接口（薪无忧商城退款接口）
      *
      * @param request
      * @param obj

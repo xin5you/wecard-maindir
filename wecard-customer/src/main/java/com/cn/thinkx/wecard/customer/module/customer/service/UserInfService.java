@@ -24,7 +24,7 @@ public interface UserInfService {
 	UserInf getUserChannelInfByUserId(String channelCode,String userId);
 	
 	/**
-	 * 查找所有知了企服渠道用户
+	 * 查找所有薪无忧渠道用户
 	 * 
 	 * @return
 	 */

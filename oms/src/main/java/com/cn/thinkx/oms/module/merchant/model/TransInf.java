@@ -16,8 +16,8 @@ public class TransInf {
 	private String queryType;
 	private String startTime;
 	private String endTime;
-	private String accHkbMchntNo;	//知了企服通卡商户号
-	private String accHkbInsCode;	//知了企服通卡机构号
+	private String accHkbMchntNo;	//薪无忧通卡商户号
+	private String accHkbInsCode;	//薪无忧通卡机构号
 
 	public String getAccHkbMchntNo() {
 		return accHkbMchntNo;

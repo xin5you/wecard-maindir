@@ -31,7 +31,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * 知了企服用户提现控制类<br><br>
+ * 薪无忧用户提现控制类<br><br>
  * <p>
  * 功能 [批量代付至用户银行卡]<br>
  * 描述 [根据代付渠道区分请求路径，所有代付路径只支持POST请求方式，返回JSON格式数据]
@@ -81,7 +81,7 @@ public class WithdrawController {
         StopWatch sw = new StopWatch();
         sw.start();
 
-        logger.info("获取知了企服代付定时job请求参数：{}", paramData);
+        logger.info("获取薪无忧代付定时job请求参数：{}", paramData);
 
         // 验签通过后才调用代付接口
         boolean isItTheSign = withdrawOrderService.YFBWithdrawCheckSign(paramData);
