@@ -53,6 +53,7 @@ public class WxApiCtrl {
     String doGet(HttpServletRequest request, @PathVariable String account) {
         // 如果是多账号，根据url中的account参数获取对应的MpAccount处理即可
         MpAccount mpAccount = WxMemoryCacheClient.getSingleMpAccount();// 获取缓存中的唯一账号
+        logger.info("当前公众号信息：{}", com.alibaba.fastjson.JSONObject.toJSONString(account));
         if (mpAccount != null) {
             String token = mpAccount.getToken();// 获取token，进行验证；
             String signature = request.getParameter("signature");// 微信加密签名

@@ -16,6 +16,7 @@ import redis.clients.jedis.JedisCluster;
  * 系统启动时自动加载，把公众号信息加入到缓存中
  */
 public class AppDefineInitService implements SpringBeanDefineService {
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     @Qualifier("accountService")
@@ -27,8 +28,6 @@ public class AppDefineInitService implements SpringBeanDefineService {
 
     @Override
     public void initApplicationCacheData() {
-        Logger logger = LoggerFactory.getLogger(getClass());
-
         Account account = accountService.getByAccount(
 //				jedisCluster.hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV, "WX_CUSTOMER_ACCOUNT"));
                 jedisCluster.hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV, "WX_HUIKABAO_LIFE_ACCOUNT"));
