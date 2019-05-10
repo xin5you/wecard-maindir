@@ -3,145 +3,22 @@
   <component name="ChangeListManager">
     <list default="true" id="ef507840-0be6-4fcd-96ce-9aa20dc5b98b" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/common-service-core/src/main/java/com/cn/thinkx/common/service/module/jiafupay/service/impl/JFPayServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/common-service-core/src/main/java/com/cn/thinkx/common/service/module/jiafupay/service/impl/JFPayServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/common-service-core/src/main/java/com/cn/thinkx/common/service/module/jiafupay/vo/JFChnlReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/common-service-core/src/main/java/com/cn/thinkx/common/service/module/jiafupay/vo/JFChnlReq.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/common-wecard-config/src/main/resources/public_system.properties" beforeDir="false" afterPath="$PROJECT_DIR$/common/common-wecard-config/src/main/resources/public_system.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/common-wecard-domain/src/main/java/com/cn/thinkx/common/wecard/domain/ecomorder/OrderInf.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/common-wecard-domain/src/main/java/com/cn/thinkx/common/wecard/domain/ecomorder/OrderInf.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/common-wecard-mapper/src/main/java/com/cn/thinkx/common/wecard/module/channeluser/mapper/ChannelUserInfMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/common-wecard-mapper/src/main/java/com/cn/thinkx/common/wecard/module/channeluser/mapper/ChannelUserInfMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/common-wechat-base/src/main/java/com/cn/thinkx/wechat/base/wxapi/process/CustomerWxPayApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/common-wechat-base/src/main/java/com/cn/thinkx/wechat/base/wxapi/process/CustomerWxPayApi.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/common-wechat-base/src/main/java/com/cn/thinkx/wechat/base/wxapi/util/WXTemplateUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/common-wechat-base/src/main/java/com/cn/thinkx/wechat/base/wxapi/util/WXTemplateUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/http/ApacheHttpHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/http/ApacheHttpHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/redis/util/ChannelSignUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/redis/util/ChannelSignUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/redis/util/HttpWebUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/redis/util/HttpWebUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/redis/util/SignUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/redis/util/SignUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/redis/util/TxnChannelSignatureUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/redis/util/TxnChannelSignatureUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/service/impl/MessageServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/service/impl/MessageServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/utils/BaseConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/utils/BaseConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/utils/BaseIntegrationPayConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/utils/BaseIntegrationPayConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/utils/WechatCustomerMessageUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/utils/WechatCustomerMessageUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/diy-maindir/diy-api/src/main/java/com/cn/iboot/diy/api/base/constants/BaseConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/diy-maindir/diy-api/src/main/java/com/cn/iboot/diy/api/base/constants/BaseConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/diy-maindir/diy-api/src/main/java/com/cn/iboot/diy/api/base/controller/CommonController.java" beforeDir="false" afterPath="$PROJECT_DIR$/diy-maindir/diy-api/src/main/java/com/cn/iboot/diy/api/base/controller/CommonController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/diy-maindir/diy-api/src/main/java/com/cn/iboot/diy/api/base/service/impl/MessageServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/diy-maindir/diy-api/src/main/java/com/cn/iboot/diy/api/base/service/impl/MessageServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/diy-maindir/diy-api/src/main/java/com/cn/iboot/diy/api/base/utils/ChannelSignUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/diy-maindir/diy-api/src/main/java/com/cn/iboot/diy/api/base/utils/ChannelSignUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/diy-maindir/diy/src/main/resources/views/login/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/diy-maindir/diy/src/main/resources/views/login/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/diy-maindir/diy/src/main/resources/views/login/main.html" beforeDir="false" afterPath="$PROJECT_DIR$/diy-maindir/diy/src/main/resources/views/login/main.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/diy-maindir/diy/src/main/resources/views/main/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/diy-maindir/diy/src/main/resources/views/main/header.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/diy-maindir/diy/src/main/resources/views/main/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/diy-maindir/diy/src/main/resources/views/main/navbar.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/facade/src/main/java/com/cn/thinkx/beans/PayBackBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/facade/src/main/java/com/cn/thinkx/beans/PayBackBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/facade/src/main/java/com/cn/thinkx/facade/bean/base/BaseReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/facade/src/main/java/com/cn/thinkx/facade/bean/base/BaseReq.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/facade/src/main/java/com/cn/thinkx/facade/service/HKBTxnFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/facade/src/main/java/com/cn/thinkx/facade/service/HKBTxnFacade.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/facade/src/main/java/com/cn/thinkx/service/txn/Java2TxnBusinessFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/facade/src/main/java/com/cn/thinkx/service/txn/Java2TxnBusinessFacade.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/middleware/src/main/java/com/cn/thinkx/biz/salesactivity/service/impl/SalesActivityListServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/middleware/src/main/java/com/cn/thinkx/biz/salesactivity/service/impl/SalesActivityListServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/middleware/src/main/java/com/cn/thinkx/biz/user/service/impl/BizUserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/middleware/src/main/java/com/cn/thinkx/biz/user/service/impl/BizUserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/middleware/src/main/java/com/cn/thinkx/dubbo/entity/TxnResp.java" beforeDir="false" afterPath="$PROJECT_DIR$/middleware/src/main/java/com/cn/thinkx/dubbo/entity/TxnResp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/middleware/src/main/java/com/cn/thinkx/integrationpay/shenxinpay/service/ShenXinPayService.java" beforeDir="false" afterPath="$PROJECT_DIR$/middleware/src/main/java/com/cn/thinkx/integrationpay/shenxinpay/service/ShenXinPayService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/middleware/src/main/java/com/cn/thinkx/itf/base/SignUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/middleware/src/main/java/com/cn/thinkx/itf/base/SignUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/oms/src/main/java/com/cn/thinkx/oms/module/enterpriseorder/service/impl/BatchOrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/oms/src/main/java/com/cn/thinkx/oms/module/enterpriseorder/service/impl/BatchOrderServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/oms/src/main/java/com/cn/thinkx/oms/module/merchant/model/TransInf.java" beforeDir="false" afterPath="$PROJECT_DIR$/oms/src/main/java/com/cn/thinkx/oms/module/merchant/model/TransInf.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/oms/src/main/java/com/cn/thinkx/oms/util/SMSUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/oms/src/main/java/com/cn/thinkx/oms/util/SMSUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/oms/src/main/webapp/WEB-INF/views/common/head.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/oms/src/main/webapp/WEB-INF/views/common/head.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/oms/src/main/webapp/WEB-INF/views/common/navbar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/oms/src/main/webapp/WEB-INF/views/common/navbar.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/oms/src/main/webapp/WEB-INF/views/login/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/oms/src/main/webapp/WEB-INF/views/login/login.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/oms/src/main/webapp/WEB-INF/views/main/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/oms/src/main/webapp/WEB-INF/views/main/index.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/oms/src/main/webapp/WEB-INF/views/statement/financingStatement/listFinancingSummarizing.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/oms/src/main/webapp/WEB-INF/views/statement/financingStatement/listFinancingSummarizing.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/pay/service/impl/PPBoxPayServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/pay/service/impl/PPBoxPayServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/phoneRecharge/service/UnicomAyncService.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/phoneRecharge/service/UnicomAyncService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/phoneRecharge/service/impl/UnicomAyncServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/phoneRecharge/service/impl/UnicomAyncServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/phoneRecharge/vo/OrderBack.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/phoneRecharge/vo/OrderBack.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/telephone/controller/ApiRechargeNotifyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/telephone/controller/ApiRechargeNotifyController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/telephone/vo/HKbCallBackResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/telephone/vo/HKbCallBackResult.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/withdraw/controller/WithdrawController.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/withdraw/controller/WithdrawController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/task/NegotiationTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/task/NegotiationTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/checkstand/ctrl/WxTransOrderCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/checkstand/ctrl/WxTransOrderCtrl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/checkstand/service/impl/WxTransOrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/checkstand/service/impl/WxTransOrderServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/checkstand/util/OrderNotifyHttpClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/checkstand/util/OrderNotifyHttpClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/checkstand/valid/WxTransOrderTxnReqValid.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/checkstand/valid/WxTransOrderTxnReqValid.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/checkstand/vo/OrderRefund.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/checkstand/vo/OrderRefund.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/customer/ctrl/CustomerCardManagerCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/customer/ctrl/CustomerCardManagerCtrl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/customer/ctrl/CustomerManagerCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/customer/ctrl/CustomerManagerCtrl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/customer/service/CustomerManagerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/customer/service/CustomerManagerService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/customer/service/UserInfService.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/customer/service/UserInfService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/customer/service/impl/CustomerManagerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/customer/service/impl/CustomerManagerServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/dingchi/ctrl/UnicomAyncCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/dingchi/ctrl/UnicomAyncCtrl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/dingchi/service/UnicomAyncService.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/dingchi/service/UnicomAyncService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/dingchi/service/impl/UnicomAyncServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/dingchi/service/impl/UnicomAyncServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/eshop/ctrl/MchntEshopInfManagerCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/eshop/ctrl/MchntEshopInfManagerCtrl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/eshop/vo/JFExtandJson.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/eshop/vo/JFExtandJson.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/jfpay/ctrl/JfPayController.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/jfpay/ctrl/JfPayController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/jfpay/vo/JFQrCodeReq.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/jfpay/vo/JFQrCodeReq.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/phonerecharge/ctrl/PhoneRechargeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/phonerecharge/ctrl/PhoneRechargeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/phonerecharge/service/impl/PhoneRechargeServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/phonerecharge/service/impl/PhoneRechargeServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/phonerecharge/vo/OrderBack.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/phonerecharge/vo/OrderBack.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/pub/ctrl/IndexController.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/pub/ctrl/IndexController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/pub/service/impl/CommonSerivceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/pub/service/impl/CommonSerivceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/welfaremart/service/impl/WelfareMartServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/welfaremart/service/impl/WelfareMartServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/checkstand/mchntpay/orderPayFail.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/checkstand/mchntpay/orderPayFail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/checkstand/mchntpay/orderPaySuccess.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/checkstand/mchntpay/orderPaySuccess.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/checkstand/mchntpay/orderVailFail.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/checkstand/mchntpay/orderVailFail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/common/fansTips.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/common/fansTips.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/customer/help/helpCenter.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/customer/help/helpCenter.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/customer/user/fail.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/customer/user/fail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/customer/user/success.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/customer/user/success.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/customer/wallet/payConfirm.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/customer/wallet/payConfirm.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/customer/wallet/paySuccess.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/customer/wallet/paySuccess.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/customer/wallet/payfail.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/customer/wallet/payfail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/customer/wallet/qrCode.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/customer/wallet/qrCode.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/customer/wallet/scanCode.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/customer/wallet/scanCode.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/jfpay/payConfirm.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/jfpay/payConfirm.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/jfpay/paySuccess.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/jfpay/paySuccess.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/jfpay/payfail.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/jfpay/payfail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/jfpay/qrCode.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/jfpay/qrCode.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/jfpay/scanCode.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/jfpay/scanCode.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/cardin/cardFail.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/cardin/cardFail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/cardin/cardIn.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/cardin/cardIn.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/cardin/cardSuccess.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/cardin/cardSuccess.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/cardin/inFail.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/cardin/inFail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/cardin/phoneTransDetails.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/cardin/phoneTransDetails.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/cardshow/cardBag.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/cardshow/cardBag.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/cardshow/cardShow.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/cardshow/cardShow.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/cardshow/confirmOrder.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/cardshow/confirmOrder.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/cardshow/noneCard.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/cardshow/noneCard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/cardshow/paySuccess.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/cardshow/paySuccess.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/detaillist/transactionDetails.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/detaillist/transactionDetails.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/common-activemq/target/common-activemq-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/common/common-activemq/target/common-activemq-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/common-activemq/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/common/common-activemq/target/maven-archiver/pom.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/common-wecard-domain/target/common-wecard-domain-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/common/common-wecard-domain/target/common-wecard-domain-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/common-wecard-domain/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/common/common-wecard-domain/target/maven-archiver/pom.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/common-wechat-base/target/classes/com/cn/thinkx/wechat/base/wxapi/process/CustomerWxPayApi.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/common-wechat-base/target/classes/com/cn/thinkx/wechat/base/wxapi/process/CustomerWxPayApi.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/common-wechat-base/target/classes/com/cn/thinkx/wechat/base/wxapi/process/CustomerWxPayApiClient.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/common-wechat-base/target/classes/com/cn/thinkx/wechat/base/wxapi/process/CustomerWxPayApiClient.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/common-wechat-base/target/classes/com/cn/thinkx/wechat/base/wxapi/util/WXTemplateUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/common/common-wechat-base/target/classes/com/cn/thinkx/wechat/base/wxapi/util/WXTemplateUtil.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/common-wechat-base/target/common-wechat-base-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/common/common-wechat-base/target/common-wechat-base-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/common-wechat-base/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/common/common-wechat-base/target/maven-archiver/pom.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/redis/service/impl/RedisCacheServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/redis/service/impl/RedisCacheServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/wecard-middleware-resp/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/common/wecard-middleware-resp/target/maven-archiver/pom.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/wecard-middleware-resp/target/wecard-middleware-resp-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/common/wecard-middleware-resp/target/wecard-middleware-resp-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wecard-api/src/main/resources/conf/spring-common-service.xml" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-api/src/main/resources/conf/spring-common-service.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/resources/conf/spring-common-service.xml" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/resources/conf/spring-common-service.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/customer/user/userAccHKBInfo.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/customer/user/userAccHKBInfo.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/homepage/homepage.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/homepage/homepage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/resell/resell.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/resell/resell.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/resell/resellSuccess.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/resell/resellSuccess.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/vip/addVip.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/vip/addVip.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/vip/bankCard.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/vip/bankCard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/java/com/cn/thinkx/pub/ctrl/CommonController.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/java/com/cn/thinkx/pub/ctrl/CommonController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/java/com/cn/thinkx/pub/ctrl/IndexController.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/java/com/cn/thinkx/pub/ctrl/IndexController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/java/com/cn/thinkx/wxclient/ctrl/WxMchntAcctInfCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/java/com/cn/thinkx/wxclient/ctrl/WxMchntAcctInfCtrl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/common/pay_fail.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/common/pay_fail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/common/pay_success.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/common/pay_success.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/account/mchntAcctList.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/account/mchntAcctList.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/account/mchntSettings.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/account/mchntSettings.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/account/withdraw.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/account/withdraw.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/account/withdrawDetailList.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/account/withdrawDetailList.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/cashier/mchntQrCode.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/cashier/mchntQrCode.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/cashier/mchntScanCode.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/cashier/mchntScanCode.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/common/fansTips.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/common/fansTips.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/common/unvalidated.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/common/unvalidated.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/employee/addEmployee.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/employee/addEmployee.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/employee/editEmployee.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/employee/editEmployee.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/employee/employeeRegByMchant.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/employee/employeeRegByMchant.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/employee/employeeRegister.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/employee/employeeRegister.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/employee/listEmployee.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/employee/listEmployee.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/employee/viewEmployee.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/employee/viewEmployee.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/help/helpCenter.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/help/helpCenter.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/merchant/merchantInfList.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/merchant/merchantInfList.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/merchant/merchantRegister.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/merchant/merchantRegister.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/rule/addRule.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/rule/addRule.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/rule/editRule.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/rule/editRule.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/rule/ruleTypeList.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/rule/ruleTypeList.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/rule/specialOfferList.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/rule/specialOfferList.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/shopInf/shopInfList.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/shopInf/shopInfList.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/shopInf/shopInfManager.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/shopInf/shopInfManager.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/translog/mchntTransDetailList.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/translog/mchntTransDetailList.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/translog/mchntTransList.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/translog/mchntTransList.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/translog/mchntTransLogCount.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/translog/mchntTransLogCount.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/translog/transLogDetail.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/WEB-INF/pages/wxclient/translog/transLogDetail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/res/css/public.css" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/res/css/public.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/res/js/wxclient/employee/addEmployee.js" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-mchnt/src/main/webapp/res/js/wxclient/employee/addEmployee.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/common/pms-connect/target/" />
@@ -180,7 +57,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/CardKeysRetrievingJob.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
+            <state>
               <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
             </state>
           </provider>
@@ -198,7 +75,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/JsTokenBizJob.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
+            <state relative-caret-position="540">
               <caret line="25" column="47" selection-start-line="25" selection-start-column="47" selection-end-line="25" selection-end-column="47" />
             </state>
           </provider>
@@ -207,39 +84,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/ShopInfJob.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
+            <state relative-caret-position="505">
               <caret line="34" column="50" selection-start-line="34" selection-start-column="50" selection-end-line="34" selection-end-column="50" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/biz/service/impl/ShopInfServiceImpl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="18" column="35" selection-start-line="18" selection-start-column="35" selection-end-line="18" selection-end-column="35" />
-              <folding>
-                <element signature="e#588#589#0" expanded="true" />
-                <element signature="e#641#642#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/resources/mapper/ShopInfMapper.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="243">
-              <caret line="9" column="54" selection-start-line="9" selection-start-column="54" selection-end-line="9" selection-end-column="54" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/common/common-wecard-config/src/main/resources/public_system.properties">
+        <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/wxapi/ctrl/WxApiCtrl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="81">
-              <caret line="3" selection-start-line="3" selection-end-line="3" />
+            <state relative-caret-position="216">
+              <caret line="64" column="31" lean-forward="true" selection-start-line="64" selection-start-column="31" selection-end-line="64" selection-end-column="31" />
             </state>
           </provider>
         </entry>
@@ -259,6 +114,12 @@
       <find>getAccessToken</find>
       <find>addMpAccount</find>
       <find>知了企服</find>
+      <find>TB_SETTLE_BILL</find>
+      <find>/message</find>
+      <find>info</find>
+      <find>知了</find>
+      <find>rechargeMobileJmsTemplate</find>
+      <find>hkb.api.jms.template.recharge.mobile.v1</find>
     </findStrings>
     <replaceStrings>
       <replace>薪无忧</replace>
@@ -270,11 +131,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/biz/service/ScanBoxDeviceInfService.java" />
-        <option value="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/biz/service/impl/ScanBoxDeviceInfServiceImpl.java" />
-        <option value="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/biz/service/CardKeysService.java" />
-        <option value="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/biz/service/CardKeysTransLogService.java" />
-        <option value="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/jms/listener/TemplateSessionAwareMessageListener.java" />
         <option value="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/jms/listener/ConsumerSessionAwareMessageListener.java" />
         <option value="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/BaseDictBizJob.java" />
         <option value="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/CardKeysRetrievingJob.java" />
@@ -321,6 +177,11 @@
         <option value="$PROJECT_DIR$/oms/src/main/webapp/WEB-INF/views/login/login.jsp" />
         <option value="$PROJECT_DIR$/oms/src/main/webapp/WEB-INF/views/main/index.jsp" />
         <option value="$PROJECT_DIR$/oms/src/main/webapp/WEB-INF/views/common/head.jsp" />
+        <option value="$PROJECT_DIR$/common/common-wecard-config/src/main/resources/public_system.properties" />
+        <option value="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/homepage/homepage.html" />
+        <option value="$PROJECT_DIR$/wecard-customer/src/main/resources/conf/spring-common-service.xml" />
+        <option value="$PROJECT_DIR$/wecard-api/src/main/resources/conf/spring-common-service.xml" />
+        <option value="$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/redis/service/impl/RedisCacheServiceImpl.java" />
       </list>
     </option>
   </component>
@@ -353,7 +214,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -364,67 +225,25 @@
             <path>
               <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
               <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
-              <item name="common" type="462c0819:PsiDirectoryNode" />
+              <item name="wecard-customer" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
               <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
-              <item name="common" type="462c0819:PsiDirectoryNode" />
-              <item name="common-wecard-config" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
-              <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
-              <item name="common" type="462c0819:PsiDirectoryNode" />
-              <item name="common-wecard-config" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
-              <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
-              <item name="common" type="462c0819:PsiDirectoryNode" />
-              <item name="common-wecard-config" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
-              <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
-              <item name="common" type="462c0819:PsiDirectoryNode" />
-              <item name="common-wecard-config" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
-              <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
-              <item name="oms" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
-              <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
-              <item name="oms" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
-              <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
-              <item name="oms" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="wecard-customer" type="462c0819:PsiDirectoryNode" />
+              <item name="target" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1557281485837" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1557371083255" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -488,19 +307,21 @@
       <workItem from="1557034849968" duration="20792000" />
       <workItem from="1557121290595" duration="6336000" />
       <workItem from="1557279267859" duration="2260000" />
-      <workItem from="1557291051664" duration="3005000" />
+      <workItem from="1557291051664" duration="3655000" />
+      <workItem from="1557368574617" duration="1461000" />
+      <workItem from="1557456083184" duration="3334000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="32995000" />
+    <option name="totallyTimeSpent" value="38440000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Web" order="0" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.2647504" />
+      <window_info content_ui="combo" id="Project" order="1" weight="0.27231467" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="3" />
       <window_info id="Image Layers" order="4" />
@@ -519,7 +340,7 @@
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="10" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.27914613" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.45155993" />
       <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" />
       <window_info anchor="bottom" id="Database Changes" order="13" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="14" weight="0.32840723" />
@@ -539,6 +360,47 @@
       <window_info anchor="right" id="Palette&#9;" order="11" />
       <window_info anchor="right" id="Theme Preview" order="12" />
     </layout>
+    <layout-to-restore>
+      <window_info id="Web" order="0" side_tool="true" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.27231467" />
+      <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
+      <window_info id="Designer" order="3" />
+      <window_info id="Image Layers" order="4" />
+      <window_info id="UI Designer" order="5" />
+      <window_info id="JRebel" order="6" side_tool="true" />
+      <window_info id="Favorites" order="7" side_tool="true" />
+      <window_info id="Capture Tool" order="8" />
+      <window_info anchor="bottom" id="Messages" order="0" />
+      <window_info anchor="bottom" id="Docker" order="1" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Java Enterprise" order="2" />
+      <window_info anchor="bottom" id="Spring" order="3" />
+      <window_info anchor="bottom" id="Message" order="4" />
+      <window_info anchor="bottom" id="Find" order="5" />
+      <window_info anchor="bottom" id="Run" order="6" weight="0.32840723" />
+      <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="10" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.45155993" />
+      <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" />
+      <window_info anchor="bottom" id="Database Changes" order="13" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="14" weight="0.32840723" />
+      <window_info anchor="bottom" id="JRebel Executor" order="15" />
+      <window_info anchor="bottom" id="JRebel Console" order="16" side_tool="true" />
+      <window_info anchor="right" id="JSF" order="0" />
+      <window_info anchor="right" id="CDI" order="1" />
+      <window_info anchor="right" id="Bean Validation" order="2" />
+      <window_info anchor="right" id="Maven" order="3" weight="0.19288956" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="4" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="5" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="6" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="7" />
+      <window_info anchor="right" id="Capture Analysis" order="8" />
+      <window_info anchor="right" id="Maven Projects" order="9" />
+      <window_info anchor="right" id="Database" order="10" />
+      <window_info anchor="right" id="Palette&#9;" order="11" />
+      <window_info anchor="right" id="Theme Preview" order="12" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -554,149 +416,6 @@
     </option>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/oms/src/main/java/com/cn/thinkx/oms/module/cardkeys/controller/CardKeysProductController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="43">
-          <caret line="16" column="52" selection-start-line="16" selection-start-column="52" selection-end-line="16" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/oms/src/main/java/com/cn/thinkx/oms/module/enterpriseorder/service/impl/BatchInvoiceOrderServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-11">
-          <caret line="9" column="30" selection-start-line="9" selection-start-column="30" selection-end-line="9" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/oms/src/main/java/com/cn/thinkx/oms/module/enterpriseorder/service/impl/BatchOrderServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-92">
-          <caret line="10" column="62" selection-start-line="10" selection-start-column="62" selection-end-line="10" selection-end-column="62" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/oms/src/main/java/com/cn/thinkx/oms/module/enterpriseorder/service/impl/BatchOrderListServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/oms/src/main/java/com/cn/thinkx/oms/util/FTPUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-92">
-          <caret line="9" column="16" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/oms/src/main/java/com/cn/thinkx/oms/module/enterpriseorder/controller/BatchOpenCardController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/oms/src/main/java/com/cn/thinkx/oms/module/enterpriseorder/util/PagePersonUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="43">
-          <caret line="4" column="11" selection-start-line="4" selection-start-column="11" selection-end-line="4" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/oms/src/main/java/com/cn/thinkx/oms/module/enterpriseorder/controller/BatchOpenAccountController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-119">
-          <caret line="15" column="6" selection-start-line="15" selection-start-column="6" selection-end-line="15" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/oms/src/main/java/com/cn/thinkx/oms/module/withdrawBlacklist/util/PageWithdrawBlacklistUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="43">
-          <caret line="4" column="6" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/oms/src/main/java/com/cn/thinkx/oms/module/enterpriseorder/controller/BatchRechargeController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-173">
-          <caret line="14" column="34" selection-start-line="14" selection-start-column="34" selection-end-line="14" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/customer/service/impl/UserMerchantAcctServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="70">
-          <caret line="33" column="7" selection-start-line="33" selection-start-column="7" selection-end-line="33" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/oms/src/main/java/com/cn/thinkx/oms/module/customer/service/impl/UserMerchantAcctServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="97">
-          <caret line="30" column="13" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5778">
-          <caret line="214" column="20" selection-start-line="214" selection-start-column="20" selection-end-line="214" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/listener/RechargeMobileSessionAwareMessageListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-918">
-          <caret line="11" column="9" selection-start-line="11" selection-start-column="9" selection-end-line="11" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/service/impl/TelChannelAreaInfServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/service/impl/TelChannelInfFacadeImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/service/impl/TelChannelItemListServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/service/impl/TelChannelOrderInfServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="35" column="13" selection-start-line="35" selection-start-column="13" selection-end-line="35" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/service/impl/TelChannelProductInfServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/service/impl/TelChannelReserveDetailServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/service/impl/TelProviderInfServiceImpl.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -747,20 +466,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="324">
           <caret line="12" column="51" selection-start-line="12" selection-start-column="51" selection-end-line="12" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/CardKeysRetrievingJob.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/resources/conf/spring-job.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1728">
-          <caret line="64" column="88" selection-start-line="64" selection-start-column="88" selection-end-line="64" selection-end-column="88" />
         </state>
       </provider>
     </entry>
@@ -838,35 +543,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/JsTokenBizJob.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="25" column="47" selection-start-line="25" selection-start-column="47" selection-end-line="25" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/redis/util/RedisConstants.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="259">
           <caret line="17" column="31" selection-start-line="17" selection-start-column="31" selection-end-line="17" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/ShopInfJob.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="34" column="50" selection-start-line="34" selection-start-column="50" selection-end-line="34" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/biz/service/impl/ShopInfServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="18" column="35" selection-start-line="18" selection-start-column="35" selection-end-line="18" selection-end-column="35" />
-          <folding>
-            <element signature="e#588#589#0" expanded="true" />
-            <element signature="e#641#642#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -901,6 +581,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/CardKeysRetrievingJob.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/resources/conf/spring-job.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1728">
+          <caret line="64" column="88" selection-start-line="64" selection-start-column="88" selection-end-line="64" selection-end-column="88" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/JsTokenBizJob.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="25" column="47" selection-start-line="25" selection-start-column="47" selection-end-line="25" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/resources/mapper/ShopInfMapper.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="243">
@@ -908,10 +609,154 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/common/common-wecard-config/src/main/resources/public_system.properties">
+    <entry file="file://$PROJECT_DIR$/wecard-centre-web/quartz_tables_oracle.sql">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/eshop/mchntEshop.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-81" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/homepage/homepage.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="397">
+          <caret line="65" column="7" lean-forward="true" selection-start-line="65" selection-start-column="7" selection-end-line="65" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/biz/service/impl/ShopInfServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
+          <folding>
+            <element signature="e#588#589#0" expanded="true" />
+            <element signature="e#641#642#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/ShopInfJob.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="505">
+          <caret line="34" column="50" selection-start-line="34" selection-start-column="50" selection-end-line="34" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/customer/controller/CustomerCardController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3159">
+          <caret line="27" column="13" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/withdraw/controller/WithdrawController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-351">
+          <caret line="42" column="13" selection-start-line="42" selection-start-column="13" selection-end-line="42" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/pay/controller/PPBoxScanPayController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="31" column="13" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-api/src/main/webapp/WEB-INF/web.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="69" column="45" lean-forward="true" selection-start-line="69" selection-start-column="45" selection-end-line="69" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/web.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1053" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/resources/conf/jdbc.properties">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="81">
-          <caret line="3" selection-start-line="3" selection-end-line="3" />
+          <caret line="3" column="21" lean-forward="true" selection-start-line="3" selection-start-column="21" selection-end-line="3" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/pub/ctrl/IndexController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="92" column="22" selection-start-line="92" selection-start-column="22" selection-end-line="92" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="2" column="7" lean-forward="true" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/resources/conf/spring-common-service.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="23" column="81" selection-start-line="23" selection-start-column="81" selection-end-line="23" selection-end-column="81" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-api/src/main/resources/conf/spring-common-service.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="243">
+          <caret line="9" column="81" selection-start-line="9" selection-start-column="81" selection-end-line="9" selection-end-column="81" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-mchnt/src/main/resources/conf/spring-common-service.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-144" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/common-wecard-config/src/main/resources/public_system.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/resources/conf/spring-mq.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1265">
+          <caret line="4" column="109" lean-forward="true" selection-start-line="4" selection-start-column="109" selection-end-line="4" selection-end-column="109" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/resources/conf/spring-common-service.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="7" column="92" lean-forward="true" selection-start-line="7" selection-start-column="92" selection-end-line="7" selection-end-column="92" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/middleware/src/main/resources/conf/spring-common-service.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="27">
+          <caret line="1" column="49" lean-forward="true" selection-start-line="1" selection-start-column="49" selection-end-line="1" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/oms/src/main/resources/conf/spring-common-service.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/redis/service/impl/RedisCacheServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="22" column="18" selection-start-line="22" selection-start-column="18" selection-end-line="22" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/wxapi/ctrl/WxApiCtrl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="64" column="31" lean-forward="true" selection-start-line="64" selection-start-column="31" selection-end-line="64" selection-end-column="31" />
         </state>
       </provider>
     </entry>

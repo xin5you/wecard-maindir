@@ -7,7 +7,7 @@
     						http://www.springframework.org/schema/context        
    							http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
-	<bean id="redisCacheService" class="com.cn.thinkx.common.redis.service.impl.RedisCacheServiceImpl"></bean>
+	<bean id="redisCacheService" class="com.cn.thinkx.pms.base.redis.service.impl.RedisCacheServiceImpl"></bean>
 	
 		<!-- active mq -->
 	<bean id="wechatMQProducerService" class="com.cn.thinkx.common.activemq.service.impl.WechatMQProducerServiceImpl">

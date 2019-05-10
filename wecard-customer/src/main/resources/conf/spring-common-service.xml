@@ -21,7 +21,7 @@
 		<property name="templateMsgJmsTemplate" ref="templateMsgJmsTemplate"></property>
 	</bean>
 	
-	<bean id="redisCacheService" class="com.cn.thinkx.common.redis.service.impl.RedisCacheServiceImpl"></bean>
+	<bean id="redisCacheService" class="com.cn.thinkx.pms.base.redis.service.impl.RedisCacheServiceImpl"></bean>
 	
 	<bean id="messageService" class="com.cn.thinkx.pms.base.service.impl.MessageServiceImpl"></bean>
 </beans>
