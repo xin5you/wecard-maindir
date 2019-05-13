@@ -4,8 +4,8 @@
 <configuration>
 	<settings>
 		<setting name="mapUnderscoreToCamelCase" value="true" />
-		<setting name="logImpl" value="SLF4J" />
-<!-- 		<setting name="logImpl" value="STDOUT_LOGGING" /> -->
+<!-- 		<setting name="logImpl" value="SLF4J" /> -->
+		<setting name="logImpl" value="STDOUT_LOGGING" />
 	</settings>
 	<typeAliases>
 		<typeAlias type="com.cn.thinkx.beans.CtrlSystem" alias="CtrlSystem" />

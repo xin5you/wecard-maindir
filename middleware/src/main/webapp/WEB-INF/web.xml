@@ -7,16 +7,15 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			classpath:conf/spring-config.xml,
+			classpath:/conf/spring-config.xml,
         	classpath*:spring-connect-server-mina.xml,
         	classpath*:spring-connect-serivce.xml,
         	classpath*:spring-connect-tasks.xml,
-        	classpath:conf/spring-mybatis.xml,
-        	classpath:conf/spring-jedis.xml,
-        	classpath:conf/spring-mq.xml,
-        	classpath:conf/spring-common-service.xml,
-<!--         	classpath:conf/spring-dubbo-config.xml -->
-			file:../itfapp/config/spring-dubbo-config.xml
+        	classpath:/conf/spring-mybatis.xml,
+        	classpath:/conf/spring-jedis.xml,
+        	classpath:/conf/spring-mq.xml,
+        	classpath:/conf/spring-common-service.xml,
+        	classpath:/conf/spring-dubbo-config.xml
         </param-value>
 	</context-param>
 	<context-param>

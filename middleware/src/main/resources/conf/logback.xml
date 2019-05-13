@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 	<!-- to console --> 
-<!-- 	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender"> -->
-<!-- 		<encoder>   -->
-<!-- 			<pattern>%d{yyyy-MM-dd HH:mm:ss}|%thread|%-5level|%logger{80}|%method|%line -> %msg%n</pattern>   -->
-<!-- 		</encoder>  -->
-<!-- 	</appender> -->
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>  
+			<pattern>%d{yyyy-MM-dd HH:mm:ss}|%thread|%-5level|%logger{80}|%method|%line -> %msg%n</pattern>  
+		</encoder> 
+	</appender>
 	
 	<!--定义本地目录路径，系统自动生成-->
 	<property name="ACCESS_LOG_HOME" value="../log/middleware/" />
@@ -54,6 +54,6 @@
 	<root level="info">
 		<appender-ref ref="file—info"/>
 		<appender-ref ref="file—error"/>
-<!-- 		<appender-ref ref="stdout"/>  -->
+		<appender-ref ref="stdout"/> 
 	</root>
 </configuration>
