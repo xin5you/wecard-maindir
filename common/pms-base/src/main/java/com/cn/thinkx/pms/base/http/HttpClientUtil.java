@@ -111,6 +111,7 @@ public class HttpClientUtil {
 	 * @return String
 	 */
 	public static String sendPostReturnStr(String url, String data) {
+		logger.info("url=={},data=={}",url,data);
 		RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(10000) // 设置连接超时时间
 				.setConnectionRequestTimeout(10000) // 设置请求超时时间
 				.setSocketTimeout(6000).setRedirectsEnabled(true)// 默认允许自动重定向
@@ -126,6 +127,7 @@ public class HttpClientUtil {
 			post.setEntity(s);
 			HttpResponse res = client.execute(post);
 			if (res.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+				System.out.println("res.getEntity()=="+res.getEntity());
 				 result = EntityUtils.toString(res.getEntity());// 返回json格式：
 			}
 			res = null;
