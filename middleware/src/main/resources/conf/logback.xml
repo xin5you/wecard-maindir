@@ -54,6 +54,6 @@
 	<root level="info">
 		<appender-ref ref="file—info"/>
 		<appender-ref ref="file—error"/>
-		<appender-ref ref="stdout"/> 
+		<!--<appender-ref ref="stdout"/> -->
 	</root>
 </configuration>
