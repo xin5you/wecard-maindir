@@ -150,7 +150,7 @@ public class MchntEshopInfManagerCtrl extends BaseController {
         String eShopId = request.getParameter("eShopId");
         String openid = WxMemoryCacheClient.getOpenid(request);// 从缓存中获取openid
         UserInf user = userInfService.getUserInfByOpenId(openid);
-        /*** 用户是否已经注册汇卡包会员 **/
+        // 用户是否已经注册汇卡包会员
         if (user == null) {
             mv = new ModelAndView("customer/user/userRegister");
             return mv;
@@ -159,7 +159,7 @@ public class MchntEshopInfManagerCtrl extends BaseController {
             MchntEshopInf eShopInf = mchntEshopInfService.getMchntEshopInfById(eShopId);
             if (BaseConstants.ChannelCode.CHANNEL6.toString().equals(eShopInf.getChannelCode())) {
                 PersonInf person = personInfService.getPersonInfByOpenId(openid); // 获取用户基本信息
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
                 sb.append(person.getUserId())
                         .append("|")
                         .append(person.getMobilePhoneNo())
@@ -205,10 +205,8 @@ public class MchntEshopInfManagerCtrl extends BaseController {
         try {
             PersonInf person = personInfService.getPersonInfByOpenId(openid); // 获取用户基本信息
             //			String str = person.getUserId() + "|" + person.getMobilePhoneNo() + "|" + openid;
-            StringBuffer sb = new StringBuffer();
-            sb.append(person.getUserId()).append("|").append(person.getMobilePhoneNo()).append("|").append(openid);
             String sKey = HttpWebUtil.getReqAesKey();
-            String paramInfo = AESUtil.jzEncrypt(sb.toString(), sKey); // 加密后的用户信息
+            String paramInfo = AESUtil.jzEncrypt(person.getUserId() + "|" + person.getMobilePhoneNo() + "|" + openid, sKey); // 加密后的用户信息
             String strTime = String.valueOf(System.currentTimeMillis());
             String timeStamp = AESUtil.jzEncrypt(strTime, sKey); // 加密后的时间戳
             String orderUrl = HttpWebUtil.getOrderDomainUrl();

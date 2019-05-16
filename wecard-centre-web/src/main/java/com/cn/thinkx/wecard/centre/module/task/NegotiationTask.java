@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -68,7 +69,6 @@ public class NegotiationTask implements Runnable {
      * 初始化卡券转让Task<br>
      *
      * @param cko 卡券交易订单
-     * @param url 批量代付薪无忧内部请求地址
      * @see NegotiationTask
      */
     public NegotiationTask(CardKeysOrderInf cko) {
@@ -80,27 +80,32 @@ public class NegotiationTask implements Runnable {
 
     @Override
     public void run() {
-        try {
-            int index = (int) (Math.random() * SCALPER_LIST.size());// 随机选择黄牛号
-            logger.info("黄牛[{}]开始回收卡密交易订单{}", SCALPER_LIST.get(index).getUserName(), cardKeysOrderInf.toString());
+        if (cardKeysOrderInf != null) {
+            try {
+                // 随机选择黄牛号
+                int index = (int) (Math.random() * SCALPER_LIST.size());
+                logger.info("黄牛[{}]开始回收卡密交易订单{}", SCALPER_LIST.get(index).getUserName(), cardKeysOrderInf.toString());
 
-            if (cardKeysOrderInf != null) {
                 CardKeysTransLogService cardKeysTransLogService = CardKeysFactory.getCardKeysTransLogService();
 
                 CardKeysTransLog vo = new CardKeysTransLog();
                 vo.setOrderId(cardKeysOrderInf.getOrderId());
                 vo.setTransId(TransType.W30.getCode());
                 vo.setDataStat(DataStatEnum.TRUE_STATUS.getCode());
-                List<CardKeysTransLog> list = cardKeysTransLogService.getCardKeysTransLogList(vo);// 根据订单号查找所有卡密交易流水
-
-                if (list != null && list.size() > 0) {// 卡密交易流水不为空
-                    list.stream().forEach(item -> {
-                        item.setTfrInAcctNo(SCALPER_LIST.get(index).getUserId());// 设置转入账户(随机黄牛号)
-                        item.setTfrOutAcctNo(cardKeysOrderInf.getUserId());//设置转出账户（转让的用户userID）
-                        item.setTransResult(BaseConstants.RESPONSE_SUCCESS_CODE);// 设置卡密流水交易结果
+                // 根据订单号查找所有卡密交易流水
+                List<CardKeysTransLog> list = cardKeysTransLogService.getCardKeysTransLogList(vo);
+                // 卡密交易流水不为空
+                if (list != null && list.size() > 0) {
+                    list.forEach(item -> {
+                        // 设置转入账户(随机黄牛号)
+                        item.setTfrInAcctNo(SCALPER_LIST.get(index).getUserId());
+                        //设置转出账户（转让的用户userID）
+                        item.setTfrOutAcctNo(cardKeysOrderInf.getUserId());
+                        // 设置卡密流水交易结果
+                        item.setTransResult(BaseConstants.RESPONSE_SUCCESS_CODE);
                         // 更新卡密交易流水失败时，出款扣除失败卡密流水出款金额
                         if (cardKeysTransLogService.updateCardKeysTransLog(item) < 1) {
-                            int amount = Integer.parseInt(cardKeysOrderInf.getPaidAmount()) - Integer.parseInt(item.getTransAmt() + Integer.parseInt(item.getTransFee()));
+                            int amount = Integer.parseInt(cardKeysOrderInf.getPaidAmount()) - Integer.parseInt(item.getTransAmt());
                             cardKeysOrderInf.setPaidAmount("" + amount);
                             logger.error("## 定时任务Task--->回收待转让卡密失败，卡密交易订单号[{}] 卡密交易流水号[{}]", vo.getOrderId(), item.getTxnPrimaryKey());
                         }
@@ -120,17 +125,17 @@ public class NegotiationTask implements Runnable {
                         detail.setBankProvince(bankAddr[0]);
                         detail.setBankCity(bankAddr[1]);
                     }
-                    detail.setAmount(String.valueOf(cardKeysOrderInf.getPaidAmount()));
+                    detail.setAmount(cardKeysOrderInf.getPaidAmount());
                     detail.setOrderName(cardKeysOrderInf.getUserId());
-                    List<DetailDataVO> detailData = Arrays.asList(detail);
+                    List<DetailDataVO> detailData = Collections.singletonList(detail);
 
                     // 组装调用薪无忧内部代付接口批次参数
-                    BatchDataVO batch = new BatchDataVO();// 批次
+                    BatchDataVO batch = new BatchDataVO();
                     batch.setTotalNum("1");
                     batch.setTotalAmount(cardKeysOrderInf.getPaidAmount());
                     batch.setPayDate(DateUtil.getCurrentDateStr());
                     batch.setDetailData(detailData);
-                    batch.setBatchOrderName(new StringBuffer().append("卡密交易订单[").append(cardKeysOrderInf.getOrderId()).append("]批量代付").toString());
+                    batch.setBatchOrderName("卡密交易订单[" + cardKeysOrderInf.getOrderId() + "]批量代付");
 
                     //对参数进行加密
                     WithdrawOrderVO withOrder = new WithdrawOrderVO();
@@ -150,7 +155,7 @@ public class NegotiationTask implements Runnable {
                     withOrder.setBatchOrderName(batch.getBatchOrderName());
                     String sign = SignUtil.genSign(withOrder, WELFAREMART_WITHDRAW_KEY);
                     batch.setSign(sign);
-                    List<BatchDataVO> batchData = Arrays.asList(batch);
+                    List<BatchDataVO> batchData = Collections.singletonList(batch);
 
                     // 调用代付接口,根据代付接口返回信息更新卡密订单
                     JSONObject paramData = new JSONObject();
@@ -161,28 +166,34 @@ public class NegotiationTask implements Runnable {
 
                     // 代付成功后更新卡密交易订单：出款金额置0、订单状态为已转让或者转让失败
                     cardKeysOrderInf.setPaidAmount(null);
-                    cardKeysOrderInf.setDataStat(DataStatEnum.FALSE_STATUS.getCode());// 代付后将卡密订单设置为不可继续代付
-                    if (StringUtil.isNullOrEmpty(rtnStr)) {// 代付返回为空
-                        cardKeysOrderInf.setStat(BaseConstants.orderStat.OS31.getCode());// 转让受理失败
+                    // 代付后将卡密订单设置为不可继续代付
+                    cardKeysOrderInf.setDataStat(DataStatEnum.FALSE_STATUS.getCode());
+                    // 代付返回为空
+                    if (StringUtil.isNullOrEmpty(rtnStr)) {
+                        // 转让受理失败
+                        cardKeysOrderInf.setStat(BaseConstants.orderStat.OS31.getCode());
                     } else {
                         BaseResp resp = JSONObject.parseObject(rtnStr, BaseResp.class);
                         if (BaseConstants.RESPONSE_SUCCESS_CODE.equals(resp.getRespCode())) {
-                            cardKeysOrderInf.setStat(BaseConstants.orderStat.OS33.getCode());// 转让受理成功
+                            // 转让受理成功
+                            cardKeysOrderInf.setStat(BaseConstants.orderStat.OS33.getCode());
                         } else {
-                            cardKeysOrderInf.setStat(BaseConstants.orderStat.OS31.getCode());// 转让受理失败
+                            // 转让受理失败
+                            cardKeysOrderInf.setStat(BaseConstants.orderStat.OS31.getCode());
                         }
                     }
                     cardKeysOrderInfService.updateCardKeysOrderInf(cardKeysOrderInf);
                 } else {
                     logger.error("## 定时任务执行线程异常：订单号[{}]卡密交易流水为空", cardKeysOrderInf.getOrderId());
                 }
-            } else {
-                logger.error("## 定时任务执行线程异常：cardKeysOrderInf对象为空");
+            } catch (Exception e) {
+                // 转让失败
+                cardKeysOrderInf.setStat(BaseConstants.orderStat.OS31.getCode());
+                cardKeysOrderInfService.updateCardKeysOrderInf(cardKeysOrderInf);
+                logger.error("## 定时任务执行线程异常", e);
             }
-        } catch (Exception e) {
-            cardKeysOrderInf.setStat(BaseConstants.orderStat.OS31.getCode());// 转让失败
-            cardKeysOrderInfService.updateCardKeysOrderInf(cardKeysOrderInf);
-            logger.error("## 定时任务执行线程异常", e);
+        } else {
+            logger.error("## 定时任务执行线程异常：cardKeysOrderInf对象为空");
         }
     }
 

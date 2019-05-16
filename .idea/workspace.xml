@@ -2,9 +2,29 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ef507840-0be6-4fcd-96ce-9aa20dc5b98b" name="Default" comment="添加wxp启动加载公众号信息日志">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/checkstand/mchntpay/unifiedOrder.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/checkstand/mchntpay/unifiedOrder.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/customer/user/userRegister.html" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/customer/user/userRegister.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/middleware_war_exploded.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/middleware_war_exploded.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_jcraft_jzlib_1_1_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__javassist_javassist_3_11_0_GA.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__jboss_javassist_3_7_ga.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__ognl_ognl_3_0_5.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_mina_mina_core_2_0_7.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_mina_mina_core_sources_2_0_7.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_mina_mina_filter_compression_2_0_7.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_mina_mina_integration_beans_2_0_7.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_mina_mina_integration_jmx_2_0_7.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_mina_mina_integration_ognl_2_0_7.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_mina_mina_integration_xbean_2_0_7.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_mina_mina_statemachine_2_0_7.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_mina_mina_transport_apr_2_0_7.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_xbean_xbean_spring_3_11_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_2_5_6_SEC03.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__tomcat_tomcat_apr_5_5_23.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/pms-connect/pms-connect.iml" beforeDir="false" afterPath="$PROJECT_DIR$/common/pms-connect/pms-connect.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/middleware/middleware.iml" beforeDir="false" afterPath="$PROJECT_DIR$/middleware/middleware.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/biz/service/impl/CardKeysOrderInfServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/biz/service/impl/CardKeysOrderInfServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/task/NegotiationTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/task/NegotiationTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/eshop/ctrl/MchntEshopInfManagerCtrl.java" beforeDir="false" afterPath="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/eshop/ctrl/MchntEshopInfManagerCtrl.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/common/pms-connect/target/" />
@@ -41,55 +61,37 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/eshop/ctrl/MchntEshopInfManagerCtrl.java">
+        <entry file="file://$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/withdraw/controller/WithdrawController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="348">
-              <caret line="201" column="61" selection-start-line="201" selection-start-column="49" selection-end-line="201" selection-end-column="61" />
+            <state relative-caret-position="-135">
+              <caret line="50" column="14" lean-forward="true" selection-start-line="50" selection-start-column="14" selection-end-line="50" selection-end-column="14" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/customer/user/userRegister.html">
+        <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/task/NegotiationTask.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="486">
-              <caret line="27" column="64" selection-start-line="27" selection-start-column="64" selection-end-line="27" selection-end-column="64" />
+            <state relative-caret-position="194">
+              <caret line="118" column="53" lean-forward="true" selection-start-line="118" selection-start-column="53" selection-end-line="118" selection-end-column="53" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/checkstand/mchntpay/unifiedOrder.html">
+        <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/CardKeysRetrievingJob.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="27">
-              <caret line="40" column="62" selection-start-line="40" selection-start-column="62" selection-end-line="40" selection-end-column="62" />
+            <state relative-caret-position="46">
+              <caret line="73" column="33" selection-start-line="73" selection-start-column="33" selection-end-line="73" selection-end-column="33" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/resources/conf/spring-mvc.xml">
+        <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/resources/mapper/CardKeysOrderInfMapper.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="351">
-              <caret line="76" column="58" selection-start-line="76" selection-start-column="46" selection-end-line="76" selection-end-column="58" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wecard-cms/src/main/java/com/cn/thinkx/wxapi/service/impl/BizServiceImpl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="171" column="45" selection-start-line="171" selection-start-column="45" selection-end-line="171" selection-end-column="45" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/wecard-cms/src/main/java/com/cn/thinkx/wxapi/process/WxApiClient.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="402">
-              <caret line="44" column="13" selection-start-line="44" selection-start-column="13" selection-end-line="44" selection-end-column="13" />
+            <state relative-caret-position="383">
+              <caret line="106" column="14" lean-forward="true" selection-start-line="67" selection-start-column="8" selection-end-line="106" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -98,16 +100,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>common</find>
-      <find>common-base-core</find>
-      <find>logback-ext-spring</find>
-      <find>common-redis</find>
-      <find>mina.version</find>
-      <find>WsScanCodePayMsg</find>
-      <find>TxnChannelSignatureUtil</find>
-      <find>wecard.dubbo.registry.address</find>
-      <find>getAccessToken</find>
-      <find>addMpAccount</find>
       <find>知了企服</find>
       <find>TB_SETTLE_BILL</find>
       <find>/message</find>
@@ -116,6 +108,28 @@
       <find>rechargeMobileJmsTemplate</find>
       <find>hkb.api.jms.template.recharge.mobile.v1</find>
       <find>zhiliao_logo</find>
+      <find>rechargeAmount</find>
+      <find>力方</find>
+      <find>PRS1</find>
+      <find>payment</find>
+      <find>/payment</find>
+      <find>bm</find>
+      <find>BM_APP_KEY</find>
+      <find>TELE_RECHARE_PROVIDER_CODE</find>
+      <find>WX_TEMPLATE_ID_5</find>
+      <find>WX_CUSTOMER_ACCOUNT</find>
+      <find>WX_HUIKABAO_LIFE_ACCOUNT</find>
+      <find>WITHDRAW_QUERY_YFB_URL</find>
+      <find>PHONE_RECHARGE_FRONT_REQUEST_URL</find>
+      <find>recharge/phoneRecharge</find>
+      <find>/recharge</find>
+      <find>/phoneRecharge</find>
+      <find>phoneRecharge</find>
+      <find>recharge</find>
+      <find>phoneRechargeToLiFang</find>
+      <find>phoneRechargeNotify</find>
+      <find>P1003</find>
+      <find>TableName</find>
     </findStrings>
     <replaceStrings>
       <replace>薪无忧</replace>
@@ -128,9 +142,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/BaseDictBizJob.java" />
-        <option value="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/CardKeysRetrievingJob.java" />
-        <option value="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/ChannelSecurityInfBizJob.java" />
         <option value="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/JobDetailBean.java" />
         <option value="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/JsTokenBizJob.java" />
         <option value="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/PaymentChannelJob.java" />
@@ -138,7 +149,6 @@
         <option value="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/ShopInfJob.java" />
         <option value="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/biz/service/ShopInfService.java" />
         <option value="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/TelePhoneRechargeBizJob.java" />
-        <option value="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/task/NegotiationTask.java" />
         <option value="$PROJECT_DIR$/wecard-api/src/test/java/Main.java" />
         <option value="$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/pay/utils/PPBoxPayUtil.java" />
         <option value="$PROJECT_DIR$/wecard-api/pom.xml" />
@@ -179,6 +189,10 @@
         <option value="$PROJECT_DIR$/wecard-api/src/main/resources/conf/spring-common-service.xml" />
         <option value="$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/redis/service/impl/RedisCacheServiceImpl.java" />
         <option value="$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/customer/user/userRegister.html" />
+        <option value="$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/eshop/ctrl/MchntEshopInfManagerCtrl.java" />
+        <option value="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/CardKeysRetrievingJob.java" />
+        <option value="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/biz/service/impl/CardKeysOrderInfServiceImpl.java" />
+        <option value="$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/task/NegotiationTask.java" />
       </list>
     </option>
   </component>
@@ -221,37 +235,125 @@
             <path>
               <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
               <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
-              <item name="wecard-customer" type="462c0819:PsiDirectoryNode" />
+              <item name="wecard-api" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
               <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
-              <item name="wecard-customer" type="462c0819:PsiDirectoryNode" />
+              <item name="wecard-api" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
               <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
-              <item name="wecard-customer" type="462c0819:PsiDirectoryNode" />
+              <item name="wecard-api" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
+              <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
+              <item name="wecard-api" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
+              <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
+              <item name="wecard-api" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="module" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
+              <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
+              <item name="wecard-api" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="module" type="462c0819:PsiDirectoryNode" />
+              <item name="withdraw" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
+              <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
+              <item name="wecard-api" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="module" type="462c0819:PsiDirectoryNode" />
+              <item name="withdraw" type="462c0819:PsiDirectoryNode" />
+              <item name="controller" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
+              <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
+              <item name="wecard-centre-web" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
+              <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
+              <item name="wecard-centre-web" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
+              <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
+              <item name="wecard-centre-web" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
               <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
-              <item name="wecard-customer" type="462c0819:PsiDirectoryNode" />
+              <item name="wecard-centre-web" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
               <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
-              <item name="wecard-customer" type="462c0819:PsiDirectoryNode" />
+              <item name="wecard-centre-web" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="webapp" type="462c0819:PsiDirectoryNode" />
-              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="centre" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
+              <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
+              <item name="wecard-centre-web" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="centre" type="462c0819:PsiDirectoryNode" />
+              <item name="module" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
+              <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
+              <item name="wecard-centre-web" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="centre" type="462c0819:PsiDirectoryNode" />
+              <item name="module" type="462c0819:PsiDirectoryNode" />
+              <item name="quartz" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="wecard-maindir" type="b2602c69:ProjectViewProjectNode" />
+              <item name="wecard-maindir" type="462c0819:PsiDirectoryNode" />
+              <item name="wecard-centre-web" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="centre" type="462c0819:PsiDirectoryNode" />
+              <item name="module" type="462c0819:PsiDirectoryNode" />
+              <item name="task" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -335,7 +437,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="38520000" />
+    <option name="totallyTimeSpent" value="50750000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -437,347 +539,374 @@
     </option>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/utils/AESUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="18" column="55" lean-forward="true" selection-start-line="18" selection-start-column="55" selection-end-line="18" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-facade-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/resp/TeleRespVO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-facade-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/service/TelChannelInfFacade.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="8" column="17" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/mapper/TelChannelProductInfMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="21" column="25" selection-start-line="21" selection-start-column="25" selection-end-line="21" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/service/impl/TelChannelProductInfServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="326">
+          <caret line="103" column="50" selection-start-line="103" selection-start-column="50" selection-end-line="103" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-facade-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/service/TelChannelProductInfFacade.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="46" column="40" selection-start-line="46" selection-start-column="40" selection-end-line="46" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/service/impl/TelProviderInfServiceImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
+        <state relative-caret-position="-837">
           <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/oms/src/main/java/com/cn/thinkx/oms/module/phoneRecharge/service/impl/PhoneRechargeShopServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="100" column="35" selection-start-line="100" selection-start-column="35" selection-end-line="100" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-facade-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/resp/TeleBaseDomain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/jfpay/qrCode.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1487">
+          <caret line="101" column="4" selection-start-line="101" selection-start-column="4" selection-end-line="101" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/javax/javaee-api/7.0/javaee-api-7.0.jar!/javax/jms/MessageListener.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="7" column="17" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/resources/mapper/TelProviderInfMapper.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/common-base-core/src/main/java/com/cn/thinkx/common/base/core/mapper/BaseMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/resources/mapper/TelChannelOrderInfMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="37" column="24" lean-forward="true" selection-start-line="37" selection-start-column="24" selection-end-line="37" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/mapper/TelChannelOrderInfMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="12" column="17" selection-start-line="12" selection-start-column="17" selection-end-line="12" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/eshop/ctrl/MchntEshopInfManagerCtrl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="203" column="9" lean-forward="true" selection-start-line="203" selection-start-column="9" selection-end-line="203" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/oms/src/main/java/com/cn/thinkx/oms/module/phoneRecharge/controller/PhoneRechargeController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-756">
+          <caret line="28" column="30" selection-start-line="28" selection-start-column="30" selection-end-line="28" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/http/HttpClientUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-219">
+          <caret line="72" column="54" lean-forward="true" selection-start-line="72" selection-start-column="54" selection-end-line="72" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/oms/src/main/java/com/cn/thinkx/oms/module/phoneRecharge/controller/PhoneRechargeShopController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-837">
+          <caret line="37" column="28" selection-start-line="37" selection-start-column="28" selection-end-line="37" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/resources/conf/spring-mvc.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="58" column="32" selection-start-line="58" selection-start-column="32" selection-end-line="58" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/welfaremart/service/impl/WelfareMartServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="947" column="63" selection-start-line="947" selection-start-column="55" selection-end-line="947" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/phonerecharge/ctrl/PhoneRechargeController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1053">
+          <caret line="110" column="5" lean-forward="true" selection-start-line="110" selection-start-column="5" selection-end-line="110" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/phoneRecharge/controller/UnicomAyncCtrl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/phoneRecharge/controller/PhoneRechargeNotifyController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="648">
+          <caret line="36" column="55" lean-forward="true" selection-start-line="36" selection-start-column="55" selection-end-line="36" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-facade-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/resp/TeleReqVO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="491">
+          <caret line="22" column="43" lean-forward="true" selection-start-line="22" selection-start-column="43" selection-end-line="22" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-jms/4.1.0.RELEASE/spring-jms-4.1.0.RELEASE.jar!/org/springframework/jms/core/MessageCreator.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/common-activemq/src/main/java/com/cn/thinkx/common/activemq/service/impl/RechargeMobileProducerServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="22" column="42" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
+          <folding>
+            <element signature="e#860#1016#0" expanded="true" />
+            <element signature="e#1015#1016#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/vo/FrtPhoneRechargeReq.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/resources/mapper/TelProviderOrderInMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="33" column="22" selection-start-line="33" selection-start-column="13" selection-end-line="33" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/mapper/TelProviderOrderInfMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="12" column="24" selection-start-line="12" selection-start-column="24" selection-end-line="12" selection-end-column="24" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/service/impl/TelProviderOrderInfImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+        <state relative-caret-position="221">
+          <caret line="49" column="59" selection-start-line="49" selection-start-column="59" selection-end-line="49" selection-end-column="59" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/oms/src/main/resources/conf/config.properties">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/oms/src/main/webapp/WEB-INF/web.xml">
+    <entry file="file://$PROJECT_DIR$/wecard-facade-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/utils/TeleConstants.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1944" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/oms/src/main/resources/conf/jdbc.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="81">
-          <caret line="3" column="21" lean-forward="true" selection-start-line="3" selection-start-column="21" selection-end-line="3" selection-end-column="21" />
+        <state relative-caret-position="194">
+          <caret line="114" column="8" selection-start-line="114" selection-start-column="8" selection-end-line="114" selection-end-column="8" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/resources/conf/quartz.properties">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/JobDetailBean.java">
+    <entry file="file://$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/telephone/util/TelePhoneCheckUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-135">
-          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+        <state relative-caret-position="-278">
+          <caret line="57" column="25" selection-start-line="57" selection-start-column="25" selection-end-line="57" selection-end-column="25" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/common/common-wechat-base/src/main/java/com/cn/thinkx/wechat/base/wxapi/process/WxApi.java">
+    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/service/impl/TelChannelOrderInfServiceImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="268" column="48" lean-forward="true" selection-start-line="268" selection-start-column="48" selection-end-line="268" selection-end-column="48" />
+        <state relative-caret-position="-184">
+          <caret line="104" column="86" selection-start-line="104" selection-start-column="86" selection-end-line="104" selection-end-column="86" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/oms/src/main/resources/conf/spring-dubbo-service.xml">
+    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/listener/RechargeMobileSessionAwareMessageListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1231">
+          <caret line="97" column="30" lean-forward="true" selection-start-line="97" selection-start-column="30" selection-end-line="97" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/java/com/cn/thinkx/wecard/facade/telrecharge/service/impl/TelChannelInfFacadeImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="20" column="25" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/telephone/service/impl/ApiRechargeMobileServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="78">
+          <caret line="106" column="55" lean-forward="true" selection-start-line="106" selection-start-column="55" selection-end-line="106" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/telephone/controller/ApiRechangeMobileController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="324">
-          <caret line="12" column="51" selection-start-line="12" selection-start-column="51" selection-end-line="12" selection-end-column="51" />
+          <caret line="70" column="47" lean-forward="true" selection-start-line="70" selection-start-column="47" selection-end-line="70" selection-end-column="47" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/common/common-wechat-base/src/main/java/com/cn/thinkx/wechat/base/wxapi/domain/Account.java">
+    <entry file="file://$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/phoneRecharge/service/impl/PhoneRechargeServiceImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/resources/mapper/WxCmsAccountMapper.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="24" column="30" lean-forward="true" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/wxcms/mapper/AccountDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="9" column="19" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/wxcms/service/impl/AccountServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="21" column="29" lean-forward="true" selection-start-line="21" selection-start-column="29" selection-end-line="21" selection-end-column="29" />
-          <folding>
-            <element signature="e#621#622#0" expanded="true" />
-            <element signature="e#666#667#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/wxcms/AppDefineInitService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="27" column="49" selection-start-line="27" selection-start-column="49" selection-end-line="27" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/common/common-wechat-base/src/main/java/com/cn/thinkx/wechat/base/wxapi/process/WxMemoryCacheClient.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-820">
-          <caret line="31" column="63" lean-forward="true" selection-start-line="31" selection-start-column="63" selection-end-line="31" selection-end-column="63" />
-          <folding>
-            <element signature="e#1455#1481#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/common/common-wechat-base/src/main/java/com/cn/thinkx/wechat/base/wxapi/process/WxApiClient.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="36" column="43" selection-start-line="36" selection-start-column="43" selection-end-line="36" selection-end-column="43" />
-          <folding>
-            <element signature="e#939#940#0" expanded="true" />
-            <element signature="e#994#995#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/PaymentChannelJob.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1107">
-          <caret line="61" column="89" selection-start-line="61" selection-start-column="89" selection-end-line="61" selection-end-column="89" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/ChannelSecurityInfBizJob.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/redis/util/RedisConstants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="259">
-          <caret line="17" column="31" selection-start-line="17" selection-start-column="31" selection-end-line="17" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/oms/src/main/webapp/WEB-INF/views/login/login.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="13" column="34" selection-start-line="13" selection-start-column="34" selection-end-line="13" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/oms/src/main/webapp/WEB-INF/views/main/index.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="11" column="14" lean-forward="true" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/oms/src/main/webapp/WEB-INF/views/login/denied.jsp">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/oms/src/main/webapp/WEB-INF/views/login/main.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
-          <caret line="4" column="52" selection-start-line="4" selection-start-column="44" selection-end-line="4" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/oms/src/main/webapp/WEB-INF/views/common/head.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="81">
-          <caret line="3" column="22" selection-start-line="3" selection-start-column="22" selection-end-line="3" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/CardKeysRetrievingJob.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/resources/conf/spring-job.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1728">
-          <caret line="64" column="88" selection-start-line="64" selection-start-column="88" selection-end-line="64" selection-end-column="88" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/JsTokenBizJob.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="25" column="47" selection-start-line="25" selection-start-column="47" selection-end-line="25" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/resources/mapper/ShopInfMapper.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="9" column="54" selection-start-line="9" selection-start-column="54" selection-end-line="9" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-centre-web/quartz_tables_oracle.sql">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/eshop/mchntEshop.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-81" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/welfaremart/homepage/homepage.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="397">
-          <caret line="65" column="7" lean-forward="true" selection-start-line="65" selection-start-column="7" selection-end-line="65" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/biz/service/impl/ShopInfServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
-          <folding>
-            <element signature="e#588#589#0" expanded="true" />
-            <element signature="e#641#642#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/ShopInfJob.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="505">
-          <caret line="34" column="50" selection-start-line="34" selection-start-column="50" selection-end-line="34" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/customer/controller/CustomerCardController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3159">
-          <caret line="27" column="13" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
+        <state relative-caret-position="375">
+          <caret line="105" column="38" selection-start-line="105" selection-start-column="19" selection-end-line="105" selection-end-column="38" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/withdraw/controller/WithdrawController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-351">
-          <caret line="42" column="13" selection-start-line="42" selection-start-column="13" selection-end-line="42" selection-end-column="13" />
+        <state relative-caret-position="-135">
+          <caret line="50" column="14" lean-forward="true" selection-start-line="50" selection-start-column="14" selection-end-line="50" selection-end-column="14" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-api/src/main/java/com/cn/thinkx/wecard/api/module/pay/controller/PPBoxScanPayController.java">
+    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/biz/util/CardKeysFactory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="31" column="13" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
+        <state relative-caret-position="513">
+          <caret line="20" column="33" selection-start-line="20" selection-start-column="33" selection-end-line="20" selection-end-column="33" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-api/src/main/webapp/WEB-INF/web.xml">
+    <entry file="jar://D:/Java/jdk1.8.0_191/src.zip!/java/util/Collections.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="69" column="45" lean-forward="true" selection-start-line="69" selection-start-column="45" selection-end-line="69" selection-end-column="45" />
+        <state relative-caret-position="275">
+          <caret line="4787" column="30" selection-start-line="4787" selection-start-column="30" selection-end-line="4787" selection-end-column="30" />
+          <folding>
+            <element signature="e#186747#186748#0" expanded="true" />
+            <element signature="e#186792#186793#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/web.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1053" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/resources/conf/jdbc.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="81">
-          <caret line="3" column="21" lean-forward="true" selection-start-line="3" selection-start-column="21" selection-end-line="3" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/pub/ctrl/IndexController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="92" column="22" selection-start-line="92" selection-start-column="22" selection-end-line="92" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/webapp/WEB-INF/views/index.html">
+    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/vo/WithdrawOrderVO.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
-          <caret line="2" column="7" lean-forward="true" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/resources/conf/spring-common-service.xml">
+    <entry file="file://$PROJECT_DIR$/common/common-wecard-domain/src/main/java/com/cn/thinkx/common/wecard/domain/cardkeys/CardKeysOrderInf.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="23" column="81" selection-start-line="23" selection-start-column="81" selection-end-line="23" selection-end-column="81" />
+        <state relative-caret-position="2570">
+          <caret line="147" column="18" selection-start-line="147" selection-start-column="18" selection-end-line="147" selection-end-column="18" />
+          <folding>
+            <element signature="e#1962#1963#0" expanded="true" />
+            <element signature="e#1986#1987#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-api/src/main/resources/conf/spring-common-service.xml">
+    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/biz/mapper/CardKeysOrderInfMapper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="9" column="81" selection-start-line="9" selection-start-column="81" selection-end-line="9" selection-end-column="81" />
+        <state relative-caret-position="162">
+          <caret line="8" column="27" selection-start-line="8" selection-start-column="27" selection-end-line="8" selection-end-column="27" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-mchnt/src/main/resources/conf/spring-common-service.xml">
+    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/resources/mapper/CardKeysOrderInfMapper.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-144" />
+        <state relative-caret-position="383">
+          <caret line="106" column="14" lean-forward="true" selection-start-line="67" selection-start-column="8" selection-end-line="106" selection-end-column="14" />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/common/common-wecard-config/src/main/resources/public_system.properties">
+    <entry file="file://$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/utils/BaseConstants.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="194">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
+          <caret line="1558" column="8" selection-start-line="1558" selection-start-column="8" selection-end-line="1558" selection-end-column="8" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/resources/conf/spring-mq.xml">
+    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/biz/service/impl/CardKeysOrderInfServiceImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1265">
-          <caret line="4" column="109" lean-forward="true" selection-start-line="4" selection-start-column="109" selection-end-line="4" selection-end-column="109" />
+        <state relative-caret-position="270">
+          <caret line="30" column="64" lean-forward="true" selection-start-line="30" selection-start-column="64" selection-end-line="30" selection-end-column="64" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-service-telrecharge/src/main/resources/conf/spring-common-service.xml">
+    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/quartz/CardKeysRetrievingJob.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="7" column="92" lean-forward="true" selection-start-line="7" selection-start-column="92" selection-end-line="7" selection-end-column="92" />
+        <state relative-caret-position="46">
+          <caret line="73" column="33" selection-start-line="73" selection-start-column="33" selection-end-line="73" selection-end-column="33" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/middleware/src/main/resources/conf/spring-common-service.xml">
+    <entry file="file://$PROJECT_DIR$/common/common-wecard-domain/src/main/java/com/cn/thinkx/common/wecard/domain/cardkeys/CardKeysTransLog.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="27">
-          <caret line="1" column="49" lean-forward="true" selection-start-line="1" selection-start-column="49" selection-end-line="1" selection-end-column="49" />
+        <state relative-caret-position="348">
+          <caret line="58" column="19" selection-start-line="58" selection-start-column="19" selection-end-line="58" selection-end-column="19" />
+          <folding>
+            <element signature="e#1926#1927#0" expanded="true" />
+            <element signature="e#1948#1949#0" expanded="true" />
+            <element signature="e#2204#2205#0" expanded="true" />
+            <element signature="e#2226#2227#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/oms/src/main/resources/conf/spring-common-service.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/common/pms-base/src/main/java/com/cn/thinkx/pms/base/redis/service/impl/RedisCacheServiceImpl.java">
+    <entry file="file://$PROJECT_DIR$/wecard-centre-web/src/main/java/com/cn/thinkx/wecard/centre/module/task/NegotiationTask.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="22" column="18" selection-start-line="22" selection-start-column="18" selection-end-line="22" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/wecard-customer/src/main/java/com/cn/thinkx/wecard/customer/module/wxapi/ctrl/WxApiCtrl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="64" column="31" lean-forward="true" selection-start-line="64" selection-start-column="31" selection-end-line="64" selection-end-column="31" />
+        <state relative-caret-position="194">
+          <caret line="118" column="53" lean-forward="true" selection-start-line="118" selection-start-column="53" selection-end-line="118" selection-end-column="53" />
         </state>
       </provider>
     </entry>
