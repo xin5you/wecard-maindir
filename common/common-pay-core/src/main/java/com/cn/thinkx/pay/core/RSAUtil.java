@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 
 public class RSAUtil extends Coder{
 	 public static final String KEY_ALGORITHM = "RSA";
