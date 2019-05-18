@@ -12,33 +12,32 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 中付统一代付服务接口
  */
 public class ZFPaymentServer {
+    private static Logger logger = LoggerFactory.getLogger(ZFPaymentServer.class);
 
-    private static  Logger logger = LoggerFactory.getLogger(ZFPaymentServer.class);
+    private static final String STR32 = "00000000000000000000000000000000";
 
-
-    private static final String Str32="00000000000000000000000000000000";
     /**
      * 代付签到接口
+     *
      * @param merchantNo 商户号
-     * @return
+     * @return 签到返回码
      */
-    public static JSONObject getPayForAnotherSessionId(String merchantNo,String md5){
-        KeyUtils k=new KeyUtils();
-        String res="";
+    public static JSONObject getPayForAnotherSessionId(String merchantNo, String md5) {
+        String res = "";
         try {
-            JSONObject params=new JSONObject();
+            JSONObject params = new JSONObject();
             params.put("service", "p4aSignIn");
             params.put("merchantNo", merchantNo);
-            params.put("MD5", MD5Util.md5(merchantNo+md5).toUpperCase());
-            res=HttpClientUtil.sendPostReturnStr(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_URL), params.toJSONString());
-            logger.info("返回的签到数据：{}",res);
-
-        }catch (Exception ex){
+            params.put("MD5", Objects.requireNonNull(MD5Util.md5(merchantNo + md5)).toUpperCase());
+            res = HttpClientUtil.sendPostReturnStr(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_URL), params.toJSONString());
+            logger.info("返回的签到数据：{}", res);
+        } catch (Exception ex) {
             logger.error("##代付签到接口执行异常{}", ex);
         }
         return JSONObject.parseObject(res);
@@ -46,34 +45,33 @@ public class ZFPaymentServer {
 
     /**
      * 代付接口
-     * @param un
-     * @return
+     *
+     * @param un 代付请求支付VO
+     * @return 代付返回JSON
      */
-    public static JSONObject doPayForAnotherPay(UnifyPayForAnotherVO un){
-        KeyUtils k=new KeyUtils();
-        String res="";
+    public static JSONObject doPayForAnotherPay(UnifyPayForAnotherVO un) {
+        KeyUtils k = new KeyUtils();
+        String res = "";
         try {
             //1,先获取rsa私钥
-            String privateKey=k.getRSAKey();
+            String privateKey = k.getRSAKey();
 
             //2,获取所需密钥
             //md5,aes
-            Map<String, String> map=k.getKeys(privateKey);
-            String aes=map.get("AES");
-            String MD5=map.get("MD5");
+            Map<String, String> map = k.getKeys(privateKey);
+            String md5 = map.get("MD5");
 
             //zek
-            Map<String, String> map2=k.getZek(privateKey);
-            String zek=map2.get("ZEK");
+            Map<String, String> map2 = k.getZek(privateKey);
+            String zek = map2.get("ZEK");
 
-            System.out.println(zek.length());
-            JSONObject msg=new JSONObject();
+            JSONObject msg = new JSONObject();
 
             msg.put("merchantNo", un.getMerchantNo());
             msg.put("service", "p4aPay");
-            msg.put("payMoney", DES3.encrypt3DES((Str32.substring(0, 32-un.getPayMoney().length())+un.getPayMoney()),zek));
+            msg.put("payMoney", DES3.encrypt3DES((STR32.substring(0, 32 - un.getPayMoney().length()) + un.getPayMoney()), zek));
             msg.put("orderId", un.getOrderId());
-            msg.put("bankCard", DES3.encrypt3DES((Str32.substring(0, 32-un.getBankCard().length())+un.getBankCard()),zek));
+            msg.put("bankCard", DES3.encrypt3DES((STR32.substring(0, 32 - un.getBankCard().length()) + un.getBankCard()), zek));
             msg.put("name", un.getName());
             msg.put("bankName", un.getBankName());
             msg.put("acctType", un.getAcctType());
@@ -81,20 +79,20 @@ public class ZFPaymentServer {
             msg.put("province", un.getProvince());
             msg.put("city", un.getCity());
             msg.put("certType", "0");
-            msg.put("certNumber", DES3.encrypt3DES((Str32.substring(0, 32-un.getCertNumber().length())+un.getCertNumber()),zek));
+            msg.put("certNumber", DES3.encrypt3DES((STR32.substring(0, 32 - un.getCertNumber().length()) + un.getCertNumber()), zek));
             msg.put("sessionId", un.getSessionId());
             msg.put("payKey", un.getPayKey());
 
             //orderId+merchantNo+payMoney+bankCard+key(MD5校验,参数均为明文进行加密)
             //MD5密钥参见3.2.3获取MD5密钥接口
-            msg.put("MD5", MD5Util.md5(msg.getString("orderId")+msg.getString("merchantNo")+un.getPayMoney()+un.getBankCard()+MD5).toUpperCase());
+            msg.put("MD5", Objects.requireNonNull(MD5Util.md5(msg.getString("orderId") + msg.getString("merchantNo") + un.getPayMoney() + un.getBankCard() + md5)).toUpperCase());
 
-            logger.info("##代付查询request params {}",msg.toJSONString());
+            logger.info("##代付查询request params {}", msg.toJSONString());
 
-            res=HttpClientUtil.sendPostReturnStr(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_URL), msg.toJSONString());
+            res = HttpClientUtil.sendPostReturnStr(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_URL), msg.toJSONString());
 
-            logger.info("##中付统一代付结果 response result {}",res);
-        }catch (Exception ex){
+            logger.info("##中付统一代付结果 response result {}", res);
+        } catch (Exception ex) {
             logger.error("##代付接口执行异常{}", ex);
         }
         return JSONObject.parseObject(res);
@@ -102,26 +100,26 @@ public class ZFPaymentServer {
 
     /**
      * 代付查询接口
-     * @param queryVO
-     * @return
+     *
+     * @param queryVO 代付查询VO
+     * @return 代付查询返回JSON
      */
-    public static JSONObject doPayForAnotherQuery(UnifyQueryVO queryVO){
-        KeyUtils k=new KeyUtils();
-        String res="";
+    public static JSONObject doPayForAnotherQuery(UnifyQueryVO queryVO) {
+        String res = "";
         try {
 
-            JSONObject params=new JSONObject();
+            JSONObject params = new JSONObject();
             params.put("service", queryVO.getService());
             params.put("merchantNo", queryVO.getMerchantNo());
             params.put("orderNumber", queryVO.getOrderNumber());
             params.put("inTradeOrderNo", queryVO.getInTradeOrderNo());
             params.put("tradeTime", queryVO.getTradeTime());
             params.put("sessionId", queryVO.getSessionId());
-            params.put("MD5", MD5Util.md5((params.getString("orderNumber")+params.getString("merchantNo")+queryVO.getMD5())).toUpperCase());
-            logger.info("##代付查询request params {}",params.toJSONString());
-            res=HttpClientUtil.sendPostReturnStr(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_URL), params.toJSONString());
-            logger.info("##代付查询response result {}",res);
-        }catch (Exception ex){
+            params.put("MD5", Objects.requireNonNull(MD5Util.md5((params.getString("orderNumber") + params.getString("merchantNo") + queryVO.getMD5()))).toUpperCase());
+            logger.info("##代付查询request params {}", params.toJSONString());
+            res = HttpClientUtil.sendPostReturnStr(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_URL), params.toJSONString());
+            logger.info("##代付查询response result {}", res);
+        } catch (Exception ex) {
             logger.error("##代付查询接口执行异常{}", ex);
         }
         return JSONObject.parseObject(res);
@@ -148,12 +146,12 @@ public class ZFPaymentServer {
         un.setPayKey("111111");
 
         ZFPaymentServer.doPayForAnotherPay(un);*/
-        JSONObject json= getPayForAnotherSessionId("990149635210001","dsFGDS213");
-        UnifyQueryVO queryVO =new UnifyQueryVO();
+        JSONObject json = getPayForAnotherSessionId("990149635210001", "dsFGDS213");
+        UnifyQueryVO queryVO = new UnifyQueryVO();
         queryVO.setService("p4aQuery");
         queryVO.setMerchantNo("990149635210001");
         queryVO.setOrderNumber("20190517135757796201");
-       /* queryVO.setInTradeOrderNo("750c6eef-efb0-4606-9fe3-996b8270c394");*/
+        /* queryVO.setInTradeOrderNo("750c6eef-efb0-4606-9fe3-996b8270c394");*/
         queryVO.setTradeTime("2019-05-17");
         queryVO.setSessionId(json.getString("sessionId"));
         queryVO.setMD5("dsFGDS213");
