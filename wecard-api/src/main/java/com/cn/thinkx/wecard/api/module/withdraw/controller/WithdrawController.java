@@ -61,7 +61,6 @@ public class WithdrawController {
      *
      * @param request
      * @return
-     * @throws IOException
      */
     @RequestMapping(value = "/suning-yfb/withdraw", method = RequestMethod.POST)
     @ResponseBody
@@ -89,7 +88,8 @@ public class WithdrawController {
             return resp;
         }
 
-        String batchNo = BizUtil.generalBatchNo();// 随机生成唯一批次号
+        // 随机生成唯一批次号
+        String batchNo = BizUtil.generalBatchNo();
         String respStr = null;
         try {
             // 调用易付宝代付接口
@@ -102,13 +102,18 @@ public class WithdrawController {
             return resp;
         } else {
             JSONObject json = JSONObject.parseObject(respStr);
-            String merchantNo = RedisPropertiesUtils.getProperty("WITHDRAW_YFB_MERCHANT_CODE");// 请求商户号
-            String jsonKey = new StringBuffer().append(batchNo).append("_").append(merchantNo).toString();// 未全部受理成功key
+            // 请求商户号
+            String merchantNo = RedisPropertiesUtils.getProperty("WITHDRAW_YFB_MERCHANT_CODE");
+            // 未全部受理成功key
+            String jsonKey = batchNo + "_" + merchantNo;
 
-            if (json.containsKey("responseCode") && "0000".equals(json.get("responseCode"))) {// 易付宝受理成功
+            // 易付宝受理成功
+            if (json.containsKey("responseCode") && "0000".equals(json.get("responseCode"))) {
                 resp.setRespCode(BaseConstants.RESPONSE_SUCCESS_CODE);
                 resp.setRespMsg(BaseConstants.RESPONSE_SUCCESS_INFO);
-            } else if (json.containsKey(jsonKey)) {// 易付宝未全部受理成功
+            }
+            // 易付宝未全部受理成功
+            else if (json.containsKey(jsonKey)) {
                 JSONObject jsonValue = (JSONObject) json.get(jsonKey);
                 String responseCode = jsonValue.getString("responseCode");
                 String responseMsg = jsonValue.getString("responseMsg");
@@ -148,32 +153,26 @@ public class WithdrawController {
 
         logger.info("易付宝回调请求参数{}", JSONArray.toJSONString(batchData));
         //验证易付宝请求参数，更新出款订单表，新增出款订单明细表
-        es.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (!StringUtil.isNullOrEmpty(batchData)) {
-                        boolean flag = BizUtil.verifySignature(contentJson, sign);
-                        if (flag) {
-                            withdrawOrderDetailService.YFBBatchWithdrawNotify(content);
-                        } else {
-                            logger.error("## 易付宝回调验签失败，待验签参数{}，易付宝签名{}", contentJson, sign);
-                        }
+        es.execute(() -> {
+            try {
+                if (!StringUtil.isNullOrEmpty(batchData)) {
+                    boolean flag = BizUtil.verifySignature(contentJson, sign);
+                    if (flag) {
+                        withdrawOrderDetailService.YFBBatchWithdrawNotify(content);
+                    } else {
+                        logger.error("## 易付宝回调验签失败，待验签参数{}，易付宝签名{}", contentJson, sign);
                     }
-                } catch (Exception e) {
-                    logger.error("## 易付宝回调异常{}", e);
                 }
+            } catch (Exception e) {
+                logger.error("## 易付宝回调异常{}", e);
             }
         });
         //验证易付宝转让是否成功，成功则发送模板消息
-        es.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    withdrawOrderDetailService.YFBBatchWithdrawSendMsg(content);
-                } catch (Exception e) {
-                    logger.error("## 易付宝回调发送模板消息异常{}", e);
-                }
+        es.execute(() -> {
+            try {
+                withdrawOrderDetailService.YFBBatchWithdrawSendMsg(content);
+            } catch (Exception e) {
+                logger.error("## 易付宝回调发送模板消息异常{}", e);
             }
         });
 

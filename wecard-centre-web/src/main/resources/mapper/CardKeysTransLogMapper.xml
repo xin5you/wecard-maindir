@@ -132,7 +132,10 @@
 		FROM 
 			<include refid="tableName" />
 		WHERE DATA_STAT = '0'
+			AND ORDER_ID=#{orderId}
+		<if test="cardKey !=null and cardKey !='' ">
 			AND CARD_KEY = #{cardKey}
+		</if>
 			AND TRANS_ID = #{transId}
 	</select>
 	
