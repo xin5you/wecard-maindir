@@ -2,6 +2,8 @@ package com.cn.thinkx.wecard.api.module.withdraw.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.cn.thinkx.pay.domain.UnifyPayForAnotherVO;
+import com.cn.thinkx.pay.service.ZFPaymentServer;
 import com.cn.thinkx.pms.base.domain.BaseReq;
 import com.cn.thinkx.pms.base.domain.BaseResp;
 import com.cn.thinkx.pms.base.redis.util.RedisPropertiesUtils;
@@ -26,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -59,8 +60,8 @@ public class WithdrawController {
     /**
      * 易付宝批量代付
      *
-     * @param request
-     * @return
+     * @param request 代付请求
+     * @return 代付结果
      */
     @RequestMapping(value = "/suning-yfb/withdraw", method = RequestMethod.POST)
     @ResponseBody
@@ -190,10 +191,66 @@ public class WithdrawController {
     }
 
     /**
+     * 中付代付
+     *
+     * @param request 代付请求
+     * @return 代付结果
+     */
+    @RequestMapping(value = "/zf-pay/withdraw", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResp zfPayWithdraw(@RequestBody BaseReq request) {
+        // 返回结果
+        BaseResp resp = new BaseResp();
+        resp.setRespCode(BaseConstants.RESPONSE_EXCEPTION_CODE);
+        resp.setRespMsg(BaseConstants.RESPONSE_EXCEPTION_INFO);
+
+        // 获得中付代付请求参数
+        String paramData = request.getParamData();
+        if (StringUtil.isNullOrEmpty(paramData)) {
+            logger.error("## 中付代付请求参数paramData为空");
+            return resp;
+        }
+        StopWatch sw = new StopWatch();
+        sw.start();
+        logger.info("中付代付请求参数：{}", paramData);
+
+        JSONObject respJson = null;
+        try {
+            // 调用中付代付接口
+            UnifyPayForAnotherVO un = new UnifyPayForAnotherVO();
+            respJson = ZFPaymentServer.doPayForAnotherPay(un);
+        } catch (Exception e) {
+            logger.error("## 调用中付代付接口异常{}", e);
+        }
+
+        if (respJson == null) {
+            return resp;
+        } else {
+            // 中付受理成功
+            if (respJson.containsKey("responseCode") && "00".equals(respJson.get("responseCode"))) {
+                resp.setRespCode(BaseConstants.RESPONSE_SUCCESS_CODE);
+                resp.setRespMsg(BaseConstants.RESPONSE_SUCCESS_INFO);
+            }
+            // 易付宝未全部受理成功
+            else {
+                String responseCode = respJson.getString("responseCode");
+                String responseMsg = respJson.getString("responseComment");
+                resp.setRespCode(responseCode);
+                resp.setRespMsg(responseMsg);
+                logger.error("## 中付代付未成功 返回json[{}]", respJson.toJSONString());
+            }
+        }
+
+        sw.stop();
+        logger.info("中付代付请求完成，总共耗时：{}秒", sw.getTime() / 1000);
+        return resp;
+    }
+
+    /**
      * 卡券集市，转让接口
      *
-     * @param req
-     * @return
+     * @param req 转让请求
+     * @return 转让返回
      */
     @RequestMapping(value = "/welfaremart/resellCommit", method = RequestMethod.POST)
     @ResponseBody
