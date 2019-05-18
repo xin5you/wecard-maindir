@@ -345,7 +345,7 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
                 return resp;
             }
 
-            int totalFee = new Double(Double.parseDouble(resellNum) * Double.parseDouble(ckp.getAmount()) * Double.parseDouble(BaseConstants.RESELL_FEE.toString()) / 100).intValue();
+            int totalFee = new Double(Double.parseDouble(resellNum) * Double.parseDouble(ckp.getAmount()) * Double.parseDouble(BaseConstants.RESELL_FEE) / 100).intValue();
             int totalResellAmount = new Double(Double.parseDouble(resellNum) * Double.parseDouble(ckp.getAmount())).intValue();
             int gainAmount = totalResellAmount - totalFee;
 
@@ -398,7 +398,7 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
                 ckt.setProductCode(cko.getProductCode());
                 ckt.setTransAmt(ckp.getAmount());
                 ckt.setOrgTransAmt(ckp.getAmount());
-                ckt.setTransFee(String.valueOf(BaseConstants.RESELL_FEE.toString()));
+                ckt.setTransFee(BaseConstants.RESELL_FEE);
                 ckt.setTransFeeType(TransFeeType.findByCode(ckp.getProductType()).getCode());
                 cktList.add(ckt);
             }
