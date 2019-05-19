@@ -156,8 +156,8 @@ var AddVip = {
 						jfShowTips.toastShow({'text' : '请选择所在省市'});
 						return;
 					}
-					if (accountBankAddr == '请输入地址') {
-						jfShowTips.toastShow({'text' : '请选择所在省市'});
+					if (!accountBranch || accountBranch == "") {
+						jfShowTips.toastShow({'text' : '请填写开户支行'});
 						return;
 					}
 					if (!phoneCode || phoneCode == "") {
