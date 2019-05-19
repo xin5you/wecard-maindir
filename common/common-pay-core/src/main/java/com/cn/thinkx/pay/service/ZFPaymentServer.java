@@ -8,6 +8,7 @@ import com.cn.thinkx.pay.domain.UnifyQueryVO;
 import com.cn.thinkx.pms.base.http.HttpClientUtil;
 import com.cn.thinkx.pms.base.redis.util.RedisDictProperties;
 import com.cn.thinkx.pms.base.utils.MD5Util;
+import com.cn.thinkx.pms.base.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,11 +57,18 @@ public class ZFPaymentServer {
             //1,先获取rsa私钥
             String privateKey = k.getRSAKey();
 
-            //2,获取所需密钥
+/*            //2,获取所需密钥
             //md5,aes
             Map<String, String> map = k.getKeys(privateKey);
-            String md5 = map.get("MD5");
+            String md5 = map.get("MD5");*/
 
+            String md5=RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_SIGN_MD5);
+
+            logger.info("### 中付MD5秘钥 {}",md5);
+            if(StringUtil.isNullOrEmpty(md5)){
+                Map<String, String> map = k.getKeys(privateKey);
+                md5 = map.get("MD5");
+            }
             //zek
             Map<String, String> map2 = k.getZek(privateKey);
             String zek = map2.get("ZEK");
@@ -78,10 +86,23 @@ public class ZFPaymentServer {
             msg.put("cnaps", un.getCnaps());
             msg.put("province", un.getProvince());
             msg.put("city", un.getCity());
-            msg.put("certType", "0");
+            msg.put("certType", un.getCertType());
             msg.put("certNumber", DES3.encrypt3DES((STR32.substring(0, 32 - un.getCertNumber().length()) + un.getCertNumber()), zek));
             msg.put("sessionId", un.getSessionId());
             msg.put("payKey", un.getPayKey());
+
+            //清算号
+            if(StringUtil.isNotEmpty(un.getQsBankCode())){
+                msg.put("qsBankCode", un.getQsBankCode());
+            }
+            //手机号
+            if(StringUtil.isNotEmpty(un.getMobile())){
+                msg.put("mobile", un.getMobile());
+            }
+            //回调地址
+            if(StringUtil.isNotEmpty(un.getMerchantURL())){
+                msg.put("merchantURL", un.getMerchantURL());
+            }
 
             //orderId+merchantNo+payMoney+bankCard+key(MD5校验,参数均为明文进行加密)
             //MD5密钥参见3.2.3获取MD5密钥接口

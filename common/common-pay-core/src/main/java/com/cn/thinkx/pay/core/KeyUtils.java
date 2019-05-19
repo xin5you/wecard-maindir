@@ -16,12 +16,14 @@ import java.util.Map;
  */
 public class KeyUtils {
     
-	//测试数据
+
 	public static final String ZHONGFU_PAY_URL="ZHONGFU_PAY_URL"; //中付获取keyURL路径
 	public static final String ZHONGFU_KEY_URL="ZHONGFU_KEY_URL"; //中付获取keyURL路径
 	public static final String ZHONGFU_PAY_USER_KEY="ZHONGFU_PAY_USER_KEY"; //中付商户号
 	public static final String ZHONGFU_ORGAN_NO="ZHONGFU_ORGAN_NO";  //中付结构号
 	public static final String ZHONGFU_PAY_KEY="ZHONGFU_PAY_KEY";  //中付代付密码
+	public static final String ZHONGFU_SIGN_MD5="ZHONGFU_SIGN_MD5";  //中付代付MD5秘钥
+	public static final String ZHONGFU_NOTIFY_URL="ZHONGFU_NOTIFY_URL";  //中付代付回调URL
 
     private static final String PAY_TYPE="73";
 	private static final String IP="127.0.0.1";

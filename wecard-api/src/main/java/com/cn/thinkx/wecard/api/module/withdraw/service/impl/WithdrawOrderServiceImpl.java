@@ -2,6 +2,9 @@ package com.cn.thinkx.wecard.api.module.withdraw.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.cn.thinkx.pay.core.KeyUtils;
+import com.cn.thinkx.pay.domain.UnifyPayForAnotherVO;
+import com.cn.thinkx.pay.service.ZFPaymentServer;
 import com.cn.thinkx.pms.base.redis.util.RedisConstants;
 import com.cn.thinkx.pms.base.redis.util.RedisDictProperties;
 import com.cn.thinkx.pms.base.redis.util.RedisPropertiesUtils;
@@ -32,10 +35,7 @@ import redis.clients.jedis.JedisCluster;
 import java.io.UnsupportedEncodingException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service("withdrawOrderService")
 public class WithdrawOrderServiceImpl implements WithdrawOrderService {
@@ -523,6 +523,110 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
     @Override
     public WithdrawOrder getWithdrawOrderByPaidId(String paidId) {
         return this.withdrawOrderMapper.getWithdrawOrderByPaidId(paidId);
+    }
+
+
+    /**
+     * 中付 代付
+     * @param batchNo
+     * @param jsonData
+     * @return
+     * @throws Exception
+     */
+    public String zfPayWithdraw(String batchNo, String jsonData) throws Exception {
+        // 解析请求批次json数组
+        JSONArray pBatchArray = JSONArray.parseArray(jsonData);
+        if (pBatchArray == null || pBatchArray.size() < 1) {
+            logger.error("## zfPayWithdraw pBatchArray{} is null or size less than 1", pBatchArray);
+            return null;
+        }
+
+        String totalAmount = null;
+        String batchOrderName = null;
+        String userId = null;
+
+        JSONArray batchArray = new JSONArray();
+        for (int i = 0; i < pBatchArray.size(); i++) {// 遍历出款批次
+            JSONObject pBatchObject = (JSONObject) pBatchArray.get(i);// 获得请求单个批次jsonObject
+            if (pBatchObject == null || pBatchObject.size() < 1) {
+                logger.error("## zfPayWithdraw pBatchObject{} is null or size less than 1", pBatchObject);
+                return null;
+            }
+
+            JSONArray pDetailArray = pBatchObject.getJSONArray("detailData");// 获得请求单个批次的所有明细jsonArray
+            if (pDetailArray == null || pDetailArray.size() < 1) {
+                logger.error("## zfPayWithdraw pDetailArray{} is null or size less than 1", pDetailArray);
+                return null;
+            }
+            String md5=RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_SIGN_MD5);
+            logger.info("### 中付MD5秘钥 {}",md5);
+
+            if(StringUtil.isNullOrEmpty(md5)){
+                if(StringUtil.isNullOrEmpty(md5)){
+
+                    KeyUtils k = new KeyUtils();
+                    String privateKey = k.getRSAKey();
+
+                    Map<String, String> map = k.getKeys(privateKey);
+                    md5 = map.get("MD5");
+                }
+            }
+            // 组装代付请求参数
+            JSONObject jsonSession= ZFPaymentServer.getPayForAnotherSessionId(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_USER_KEY),md5);
+
+            // 调用中付代付接口
+            UnifyPayForAnotherVO un = new UnifyPayForAnotherVO();
+
+            // 组装代付请求参数
+
+            JSONObject pDetailObject = (JSONObject) pDetailArray.get(0);// 获得请求单条明细jsonObject
+            userId = (String) pDetailObject.get("orderName");
+            String serialNo = (String) pDetailObject.get("serialNo");
+            // 查询出款订单表是否有当前卡密交易订单记录
+            if (withdrawOrderMapper.getCountBySerialNo(serialNo) > 0) {
+                logger.error("## 用户[{}]新增出款订单信息重复 批次号[{}] 出款订单号[{}]", userId, batchNo, serialNo);
+                return null;
+            }
+            un.setService("p4aPay");
+            un.setMerchantNo(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_USER_KEY)); //中付商户号
+            un.setPayMoney(pDetailObject.getString("amount")); //金额
+            un.setOrderId(serialNo); //订单号
+            un.setBankCard(pDetailObject.getString("receiverCardNo"));
+            un.setName(pDetailObject.getString("receiverName"));
+            un.setBankName(pDetailObject.getString("bankName"));
+
+            if (pDetailObject.containsKey("receiverType")){
+                if("PERSON".equals(pDetailObject.getString("receiverType"))) {
+                    un.setAcctType("0");
+                }else{
+                    un.setAcctType("1");
+                }
+            }
+            un.setCnaps(pDetailObject.getString("receiverType")); //
+            un.setProvince(pDetailObject.getString("bankProvince"));
+            un.setCity(pDetailObject.getString("bankCity"));
+
+            un.setMerchantURL( RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_NOTIFY_URL));
+            //转账类型
+            un.setCertType("0");
+            un.setCertNumber("430525198807107433");
+
+            un.setSessionId(jsonSession.getString("sessionId"));
+            un.setPayKey(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_KEY));
+
+            }
+
+        String responseStr = null;
+        try {
+            logger.info("发送易付宝代付参数{}", batchArray.toJSONString());
+            // 发送HTTP POST请求至苏宁易付宝代付返回结果
+
+            logger.info("易付宝代付返回{}", responseStr);
+        } catch (Exception e) {
+            logger.error("## YFBBatchWithDraw Exception {}", e);
+        }
+
+        return responseStr;
     }
 
 }
