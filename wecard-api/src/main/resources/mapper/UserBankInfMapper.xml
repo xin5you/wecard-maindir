@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="com.cn.thinkx.wecard.api.module.welfaremart.mapper.UserBankInfMapper">
+<mapper namespace="com.cn.thinkx.wecard.api.module.welfaremart.mapper.userbankinfmapper">
 
 	<sql id="UserBankInfColumns">
 		BANK_NO,
@@ -12,6 +12,7 @@
 		ACCOUNT_BRANCH,
 		ACCOUNT_BANK_ADDR,
 		ISDEFAULT,
+		CNAPS,
 		DATA_STAT,
 		REMARKS,
 		CREATE_USER,
@@ -30,6 +31,7 @@
 		#{accountBranch, jdbcType=VARCHAR},
 		#{accountBankAddr, jdbcType=VARCHAR},
 		#{isdefault, jdbcType=VARCHAR},
+		#{cnaps, jdbcType=VARCHAR},
 		'0',
 		#{remarks, jdbcType=VARCHAR},
 		#{createUser, jdbcType=VARCHAR},

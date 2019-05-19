@@ -62,6 +62,8 @@ public class UserBankInf extends BaseDomain {
 	private String bankTypeName;	//银行卡类型名称
 	private String check;	//是否已存在相同记录
 
+	private String cnaps; //联行号
+
 	public String getBankNo() {
 		return bankNo;
 	}
@@ -165,5 +167,12 @@ public class UserBankInf extends BaseDomain {
 	public void setBankNum(String bankNum) {
 		this.bankNum = bankNum;
 	}
-	
+
+	public String getCnaps() {
+		return cnaps;
+	}
+
+	public void setCnaps(String cnaps) {
+		this.cnaps = cnaps;
+	}
 }

@@ -69,6 +69,8 @@ public class UserBankInf extends BaseDomain {
 	
 	private String logo;	//银行logo
 
+	private String cnaps; //联行号
+
 	public String getBankNo() {
 		return bankNo;
 	}
@@ -188,5 +190,12 @@ public class UserBankInf extends BaseDomain {
 	public void setLogo(String logo) {
 		this.logo = logo;
 	}
-	
+
+	public String getCnaps() {
+		return cnaps;
+	}
+
+	public void setCnaps(String cnaps) {
+		this.cnaps = cnaps;
+	}
 }
