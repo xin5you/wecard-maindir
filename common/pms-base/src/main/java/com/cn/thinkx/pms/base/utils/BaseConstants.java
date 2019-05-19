@@ -244,7 +244,7 @@ public class BaseConstants {
     /**
      * 转让费率
      */
-    public static final String RESELL_FEE = "1";
+    public static final String RESELL_FEE = "3";
 
     /**
      * 电商商城渠道号

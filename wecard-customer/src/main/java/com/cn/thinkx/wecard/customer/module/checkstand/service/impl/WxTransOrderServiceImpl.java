@@ -56,10 +56,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.interfaces.RSAPrivateKey;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service("wxTransOrderService")
 public class WxTransOrderServiceImpl implements WxTransOrderService {
@@ -305,6 +302,7 @@ public class WxTransOrderServiceImpl implements WxTransOrderService {
     /**
      * 收银台 会员卡消费交易-验密后调用交易核心
      **/
+    @Override
     public TxnResp doTransOrderJava2TxnBusiness(HttpServletRequest request) {
         MpAccount mpAccount = WxMemoryCacheClient.getSingleMpAccount();
 
@@ -314,7 +312,7 @@ public class WxTransOrderServiceImpl implements WxTransOrderService {
         String pinTxn = request.getParameter("pinTxn");
         String orderKey = request.getParameter("orderKey");
 
-        /** 查找订单信息 **/
+        /* 查找订单信息 **/
         WxTransOrder transOrder = getWxTransOrdeByOrderKey(orderKey);
 
         if (transOrder == null) {
@@ -324,7 +322,7 @@ public class WxTransOrderServiceImpl implements WxTransOrderService {
             return resp;
         }
 
-        /** 查询微信端已有成功订单数量 */
+        /* 查询微信端已有成功订单数量 */
         int orderNum = wxTransLogService.countWxTransLogByOrderId(orderKey);
         if (orderNum > 0) {
             logger.error("## 收银台会员卡消费 orderKey[{}]：该订单号已有成功流水记录", orderKey);
@@ -333,15 +331,8 @@ public class WxTransOrderServiceImpl implements WxTransOrderService {
             return resp;
         }
 
-        /** 查询微信端交易流水 */
+        /* 查询微信端交易流水 */
         WxTransLog wxTransLog = wxTransLogService.getWxTransLogById(wxPrimaryKey);
-
-        if (wxTransLog == null) {
-            logger.error("## 收银台会员卡 wxPrimaryKey[{}]：没查询到交易流水", wxPrimaryKey);
-            resp.setCode(BaseConstants.RESPONSE_EXCEPTION_CODE);
-            resp.setInfo(BaseConstants.RESPONSE_EXCEPTION_INFO);
-            return resp;
-        }
         wxTransLog.setTableNum(tableNum);
 
         if (!transOrder.getOrderKey().equals(wxTransLog.getOrderId())) {
@@ -351,54 +342,65 @@ public class WxTransOrderServiceImpl implements WxTransOrderService {
             return resp;
         }
 
-        CtrlSystem cs = null;
-        try {
-            cs = ctrlSystemService.getCtrlSystem();// 得到日切信息
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
+        // 得到日切信息
+        CtrlSystem cs = ctrlSystemService.getCtrlSystem();
         if (cs != null) {
             TxnPackageBean txnBean = new TxnPackageBean();
-            txnBean.setTxnType(wxTransLog.getTransId() + "0");// 交易类型，发送报文时补0
-            txnBean.setSwtTxnDate(DateUtil.getCurrentDateStr());// 交易日期
-            txnBean.setSwtTxnTime(DateUtil.getCurrentTimeStr());// 交易时间
-            txnBean.setSwtSettleDate(cs.getSettleDate());// 清算日期
+            // 交易类型，发送报文时补0
+            txnBean.setTxnType(wxTransLog.getTransId() + "0");
+            // 交易日期
+            txnBean.setSwtTxnDate(DateUtil.getCurrentDateStr());
+            // 交易时间
+            txnBean.setSwtTxnTime(DateUtil.getCurrentTimeStr());
+            // 清算日期
+            txnBean.setSwtSettleDate(cs.getSettleDate());
             txnBean.setSwtFlowNo(wxPrimaryKey);
-            txnBean.setIssChannel(wxTransLog.getInsCode());// 机构号
-            txnBean.setInnerMerchantNo(wxTransLog.getMchntCode());// 商户号
-            txnBean.setInnerShopNo(wxTransLog.getShopCode());// 门店号
-            txnBean.setTxnAmount(wxTransLog.getTransAmt());// 交易金额
-            txnBean.setOriTxnAmount(wxTransLog.getUploadAmt());// 原交易金额
+            // 机构号
+            txnBean.setIssChannel(wxTransLog.getInsCode());
+            // 商户号
+            txnBean.setInnerMerchantNo(wxTransLog.getMchntCode());
+            // 门店号
+            txnBean.setInnerShopNo(wxTransLog.getShopCode());
+            // 交易金额
+            txnBean.setTxnAmount(wxTransLog.getTransAmt());
+            // 原交易金额
+            txnBean.setOriTxnAmount(wxTransLog.getUploadAmt());
             txnBean.setChannel(wxTransLog.getTransChnl());
-            txnBean.setCardNo("U" + wxTransLog.getUserInfUserName());// 卡号
-            // U开头为客户端交易，C开头则为刷卡交易
+            // 卡号 U开头为客户端交易，C开头则为刷卡交易
+            txnBean.setCardNo("U" + wxTransLog.getUserInfUserName());
 
             try {
                 if (!StringUtil.isNullOrEmpty(pinTxn)) {
                     RSAPrivateKey privateKey = (RSAPrivateKey) request.getSession()
                             .getAttribute(WxConstants.TRANS_ORDER_RSA_PRIVATE_KEY_SESSION);
-                    String descrypedPwd = RSAUtil.decryptByPrivateKey(pinTxn, privateKey);// 解密后的密码,pinTxn是提交过来的密码
-                    txnBean.setPinTxn(descrypedPwd);// 交易密码
+                    // 交易密码：解密后的密码，pinTxn是提交过来的密码
+                    txnBean.setPinTxn(RSAUtil.decryptByPrivateKey(pinTxn, privateKey));
                 } else {
-                    txnBean.setPinTxn("");// 交易密码
+                    // 交易密码
+                    txnBean.setPinTxn("");
                 }
 
             } catch (Exception e1) {
                 logger.error("收银台会员卡消费交易 解密交易密码出错", e1);
                 resp.setCode(BaseConstants.RESPONSE_EXCEPTION_CODE);
                 resp.setInfo("解密交易密码出错");
-                wxTransLog.setTransSt(1);// 插入时为0，报文返回时更新为1
+                // 插入时为0，报文返回时更新为1
+                wxTransLog.setTransSt(1);
                 wxTransLogService.updateWxTransLog(wxTransLog, resp);
                 return resp;
             }
-            txnBean.setChannel(transOrder.getTransChnl());// 渠道号
-            txnBean.setUserId(transOrder.getUserId());// 用户id
-            txnBean.setTimestamp(System.currentTimeMillis());// 时间戳
-            String signature = TxnChannelSignatureUtil.genSign(txnBean); // 生成的签名
+            // 渠道号
+            txnBean.setChannel(transOrder.getTransChnl());
+            // 用户id
+            txnBean.setUserId(transOrder.getUserId());
+            // 时间戳
+            txnBean.setTimestamp(System.currentTimeMillis());
+            // 生成的签名
+            String signature = TxnChannelSignatureUtil.genSign(txnBean);
             txnBean.setSignature(signature);
 
             // 远程调用消费接口
-            String json = new String();
+            String json = "";
             try {
                 json = java2TxnBusinessFacade.consumeTransactionITF(txnBean);
                 resp = JSONArray.parseObject(json, TxnResp.class);
@@ -419,7 +421,8 @@ public class WxTransOrderServiceImpl implements WxTransOrderService {
 
             // 更新微信交易流水
             try {
-                wxTransLog.setTransSt(1);// 插入时为0，报文返回时更新为1
+                // 插入时为0，报文返回时更新为1
+                wxTransLog.setTransSt(1);
                 wxTransLog.setRespCode(resp.getCode());
                 wxTransLogService.updateWxTransLog(wxTransLog, resp);
             } catch (Exception e) {
@@ -431,13 +434,12 @@ public class WxTransOrderServiceImpl implements WxTransOrderService {
             try {
                 orderDetail = transOrder.getOrderDetail();
                 orderDetail.setRespCode(resp.getCode());
-                orderDetail.setSettleDate(wxTransLog.getSettleDate());// 日切时间
+                orderDetail.setSettleDate(wxTransLog.getSettleDate());
                 orderDetail.setTransSt("1");
                 if (BaseConstants.TXN_TRANS_RESP_SUCCESS.equals(resp.getCode())) {
                     orderDetail.setTxnFlowNo(resp.getInterfacePrimaryKey());
                 }
                 updateWxTransOrderDetail(orderDetail);
-
             } catch (Exception e) {
                 logger.error("收银台updateWxTransOrder异常", e);
             }
@@ -457,81 +459,76 @@ public class WxTransOrderServiceImpl implements WxTransOrderService {
                     TxnResp cbResp = JSONArray.parseObject(cardBalJson, TxnResp.class);
                     String accBal = StringUtil.isNullOrEmpty(cbResp.getBalance()) ? "0" : cbResp.getBalance();
 
-                    /**
-                     * 客服消息-客户 String
-                     * notice_c=String.format(WechatCustomerMessageUtil.
-                     * WECHAT_CUSTOMER_CW10_SUCCESS,txnDate,shopInf.getMchntName
-                     * (),shopInf.getShopName(),payAmt);
-                     * wechatMQProducerService.sendWechatMessage(mpAccount.
-                     * getAccount(), notice_c, wxTransLog.getOperatorOpenId());
-                     */
+//                    /*
+//                     * 客服消息-客户 String
+//                     * notice_c=String.format(WechatCustomerMessageUtil.
+//                     * WECHAT_CUSTOMER_CW10_SUCCESS,txnDate,shopInf.getMchntName
+//                     * (),shopInf.getShopName(),payAmt);
+//                     * wechatMQProducerService.sendWechatMessage(mpAccount.
+//                     * getAccount(), notice_c, wxTransLog.getOperatorOpenId());
+//                     */
                     String channelName = shopInf.getShopName();
                     if (ChannelCode.CHANNEL6.toString().equals(transOrder.getTransChnl())) {
                         OrderInf orderInf = orderInfService.getOrderInfById(transOrder.getDmsRelatedKey());
                         if (orderInf != null) {
-                            channelName = templateMsgPayment.findByCode(orderInf.getChannel()).getValue();
+                            channelName = Objects.requireNonNull(templateMsgPayment.findByCode(orderInf.getChannel())).getValue();
                         }
                     } else if (ChannelCode.CHANNEL8.toString().equals(transOrder.getTransChnl())) {
-                        channelName = templateMsgPayment.findByCode(transOrder.getTransChnl()).getValue();
+                        channelName = Objects.requireNonNull(templateMsgPayment.findByCode(transOrder.getTransChnl())).getValue();
                     } else if (ChannelCode.CHANNEL9.toString().equals(transOrder.getTransChnl())) {
-                        channelName = templateMsgPayment.findByCode(transOrder.getTransChnl()).getValue();
+                        channelName = Objects.requireNonNull(templateMsgPayment.findByCode(transOrder.getTransChnl())).getValue();
                     }
 
-                    /** 模板消息-客户 */
+                    /* 模板消息-客户 */
                     wechatMQProducerService.sendTemplateMsg(mpAccount.getAccount(), wxTransLog.getOperatorOpenId(),
                             "WX_TEMPLATE_ID_0", null, WXTemplateUtil.setHKBPayData(txnDate, shopInf.getMchntName(),
                                     shopInf.getShopName(), payAmt, NumberUtils.RMBCentToYuan(accBal), channelName));
 
-                    /**
-                     * =======================收款通知 发送B端管理员
-                     * ======================
-                     **/
-                    String customerPhone = personInfService.getPhoneNumberByOpenId(wxTransLog.getOperatorOpenId());
-                    /** 发送客服消息
-                     String notice_m = String.format(WechatCustomerMessageUtil.WECHAT_MCHNT_CW10_SUCCESS,
-                     shopInf.getMchntName(), StringUtil.getPhoneNumberFormatLast4(customerPhone),
-                     shopInf.getShopName(), payAmt, txnDate, resp.getInterfacePrimaryKey());*/
-
-                    List<MerchantManager> mngList = merchantManagerService.getMerchantManagerByRoleType(
-                            wxTransLog.getMchntCode(), wxTransLog.getShopCode(),
-                            RoleNameEnum.CASHIER_ROLE_MCHANT.getRoleType());
-                    if (mngList != null && mngList.size() > 0) {
-                        String mchntAcount = RedisDictProperties.getInstance().getdictValueByCode("WX_MCHNT_ACCOUNT");
-                        String payType = "会员卡付款";
-                        for (MerchantManager mng : mngList) {
-                            /**    发送客服消息
-                             wechatMQProducerService.sendWechatMessage(mchntAcount, notice_m, mng.getMangerName());*/
-                            /**    发送模板消息（收款通知）*/
-                            wechatMQProducerService.sendTemplateMsg(mchntAcount, mng.getMangerName(), "WX_TEMPLATE_ID_6", null,
-                                    WXTemplateUtil.setProceedsMsg(StringUtil.getPhoneNumberFormatLast4(customerPhone), shopInf.getMchntName(), NumberUtils.RMBCentToYuan(payAmt), shopInf.getShopName(), payType, resp.getInterfacePrimaryKey(), txnDate));
-                        }
-                    }
+                    /*
+                     * =======================收款通知 发送B端管理员======================
+                     */
+//                    String customerPhone = personInfService.getPhoneNumberByOpenId(wxTransLog.getOperatorOpenId());
+//                    /* 发送客服消息
+//                     String notice_m = String.format(WechatCustomerMessageUtil.WECHAT_MCHNT_CW10_SUCCESS,
+//                     shopInf.getMchntName(), StringUtil.getPhoneNumberFormatLast4(customerPhone),
+//                     shopInf.getShopName(), payAmt, txnDate, resp.getInterfacePrimaryKey());*/
+//
+//                    List<MerchantManager> mngList = merchantManagerService.getMerchantManagerByRoleType(
+//                            wxTransLog.getMchntCode(), wxTransLog.getShopCode(),
+//                            RoleNameEnum.CASHIER_ROLE_MCHANT.getRoleType());
+//                    if (mngList != null && mngList.size() > 0) {
+//                        String mchntAcount = RedisDictProperties.getInstance().getdictValueByCode("WX_MCHNT_ACCOUNT");
+//                        String payType = "会员卡付款";
+//                        for (MerchantManager mng : mngList) {
+//                            /**    发送客服消息
+//                             wechatMQProducerService.sendWechatMessage(mchntAcount, notice_m, mng.getMangerName());*/
+//                            /**    发送模板消息（收款通知）*/
+//                            wechatMQProducerService.sendTemplateMsg(mchntAcount, mng.getMangerName(), "WX_TEMPLATE_ID_6", null,
+//                                    WXTemplateUtil.setProceedsMsg(StringUtil.getPhoneNumberFormatLast4(customerPhone), shopInf.getMchntName(), NumberUtils.RMBCentToYuan(payAmt), shopInf.getShopName(), payType, resp.getInterfacePrimaryKey(), txnDate));
+//                        }
+//                    }
                 } catch (Exception e) {
                     logger.error("发送客服消息接口异常--------》 接口流水号：" + wxPrimaryKey, e);
                 }
-                // 异步通知
+
                 try {
                     final WxTransOrder tsOrder = transOrder;
-
-                    Thread rechargeThread = new Thread(new Runnable() {
-                        public void run() {
-                            String respResult = new OrderNotifyHttpClient().doTransOrderNotifyRequest(tsOrder);
-                            WxTransOrderDetail orderDetail = tsOrder.getOrderDetail();
-                            orderDetail.setOrderRespStat(respResult);
-                            updateWxTransOrderDetail(orderDetail);// 更新订单明细 通知状态
-                        }
-
-                        ;
-                    });
-                    rechargeThread.start();
+                    // 异步通知
+                    new Thread(() -> {
+                        String respResult = new OrderNotifyHttpClient().doTransOrderNotifyRequest(tsOrder);
+                        WxTransOrderDetail orderDetail1 = tsOrder.getOrderDetail();
+                        orderDetail1.setOrderRespStat(respResult);
+                        // 更新订单明细 通知状态
+                        updateWxTransOrderDetail(orderDetail1);
+                    }).start();
                 } catch (Exception e) {
                     logger.error("异步通知异常--------》", e);
                 }
             } else {
-                resp.setTransAmt(wxTransLog.getTransAmt());// 实际转换后的金额 单位 元
+                // 实际转换后的金额 单位（元）
+                resp.setTransAmt(wxTransLog.getTransAmt());
                 return resp;
             }
-
         } else {
             logger.info("消费交易--->日切信息交易允许状态：日切中");
             return null;
