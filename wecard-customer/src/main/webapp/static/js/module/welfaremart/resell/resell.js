@@ -42,7 +42,7 @@ var Resell = {
 		var resellNum = $.trim($("#resellNum").val());
 		var num = $("#num").text();
 		var amount = $('#amount').val();
-		var fee = "1";
+		var fee = "3";// 转让费率
 		if($("#div").hasClass('weui_choose')){
 			if (resellNum != null && resellNum != '' && parseInt(resellNum) > 0) {
 				$('#sendPhoneCode').removeAttr("disabled");
