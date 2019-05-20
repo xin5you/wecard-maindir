@@ -1,21 +1,24 @@
 package com.cn.thinkx.oms.util;
 
+import com.alibaba.fastjson.JSONObject;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.util.CellRangeAddress;
+import java.util.List;
 
 public class ExcelUtil<T> {
 	
@@ -334,4 +337,89 @@ public class ExcelUtil<T> {
             }
         }
     }
+
+	public static void main(String[] args) {
+		String filePath = "D:\\huikabao_aliyun\\cnaps.xlsx";
+		FileInputStream fis = null;
+		Workbook wookbook = null;
+
+		try {
+			//获取一个绝对地址的流
+			fis = new FileInputStream(filePath);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		try {
+			//得到工作簿
+			wookbook = new XSSFWorkbook(fis);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		//得到一个工作表
+		Sheet sheet = wookbook.getSheetAt(0);
+		//获得表头
+		Row rowHead = sheet.getRow(0);
+		//判断表头是否正确
+		if (rowHead.getPhysicalNumberOfCells() != 4) {
+			System.out.println("表头的数量不对!");
+		}
+		//获得数据的总行数
+		int totalRowNum = sheet.getLastRowNum();
+		//获得所有数据
+		List<CnapsVO> list = new ArrayList<>();
+		for (int i = 1; i <= totalRowNum; i++) {
+			CnapsVO cnapsVO = new CnapsVO();
+			//获得第i行对象
+			Row row = sheet.getRow(i);
+			//获得获得第i行第0列的 String类型对象
+			cnapsVO.setBankName(row.getCell((short) 0).getStringCellValue());
+			cnapsVO.setProvince(row.getCell((short) 1).getStringCellValue());
+			cnapsVO.setCity(row.getCell((short) 2).getStringCellValue());
+			cnapsVO.setCnapsNo(row.getCell((short) 3).getStringCellValue());
+			list.add(cnapsVO);
+		}
+
+		System.out.println(JSONObject.toJSONString(list));
+	}
+
+	static class CnapsVO {
+		private String bankName;
+		private String province;
+		private String city;
+		private String cnapsNo;
+
+		public String getBankName() {
+			return bankName;
+		}
+
+		public void setBankName(String bankName) {
+			this.bankName = bankName;
+		}
+
+		public String getProvince() {
+			return province;
+		}
+
+		public void setProvince(String province) {
+			this.province = province;
+		}
+
+		public String getCity() {
+			return city;
+		}
+
+		public void setCity(String city) {
+			this.city = city;
+		}
+
+		public String getCnapsNo() {
+			return cnapsNo;
+		}
+
+		public void setCnapsNo(String cnapsNo) {
+			this.cnapsNo = cnapsNo;
+		}
+	}
 }
