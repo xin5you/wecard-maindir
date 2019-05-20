@@ -36,6 +36,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -125,8 +126,7 @@ public class BatchOrderServiceImpl implements BatchOrderService {
                 batchOrder.setSumAmount("" + NumberUtils.formatMoney(batchOrder.getSumAmount()));
             }
         }
-        PageInfo<BatchOrder> page = new PageInfo<BatchOrder>(list);
-        return page;
+        return new PageInfo<>(list);
     }
 
     @Override
@@ -171,63 +171,61 @@ public class BatchOrderServiceImpl implements BatchOrderService {
      *
      * @param orderId 订单ID
      */
+    @Override
     public void batchOpenAccountITF(final String orderId, User user, final String commitStat) {
 
         BatchOrder order = batchOrderMapper.getBatchOrderById(orderId);
         if (order != null && BaseConstants.OMSOrderStat.orderStat_10.getCode().equals(order.getOrderStat())) {
             order.setOrderStat(BaseConstants.OMSOrderStat.orderStat_20.getCode());
             order.setUpdateUser(user.getId().toString());
-            this.updateBatchOrder(order); // 修改订单状态
+            // 修改订单状态
+            this.updateBatchOrder(order);
         }
         // 批量开户
-        try {
-            cachedThreadPool.execute(new Runnable() {
-                public void run() {
-                    BatchOrder bo;
-                    boolean operErrorFlag = false;
-                    try {
-                        bo = batchOrderMapper.getBatchOrderById(orderId);
-                        bo.setOrderStat(BaseConstants.OMSOrderStat.orderStat_30.getCode());
-                        batchOrderMapper.updateBatchOrder(bo);
-                        List<BatchOrderList> list = getBatchOrderList(orderId, commitStat);
-                        PersonInf personInf;
-                        for (BatchOrderList order : list) {
-                            personInf = new PersonInf();
-                            personInf.setPersonalName(order.getUserName());
-                            personInf.setMobilePhoneNo(order.getPhoneNo());
-                            personInf.setPersonalCardType(BaseConstants.CardTypeEnum.CARD_TYPE_00.getCode());
-                            personInf.setPersonalCardNo(order.getUserCardNo());
-                            try {
-                                int operNum = personInfService.doPersonInfRegister(personInf);// 用户注册
-                                if (operNum > 0) {
-                                    order.setOrderStat(BaseConstants.OMSOrderListStat.orderListStat_00.getCode());
-                                    batchOrderListMapper.updateBatchOrderList(order);
-                                } else {
-                                    operErrorFlag = true;
-                                    order.setOrderStat(BaseConstants.OMSOrderListStat.orderListStat_99.getCode());
-                                    batchOrderListMapper.updateBatchOrderList(order);
-                                }
-                            } catch (Exception ex) {
+        cachedThreadPool.execute(new Runnable() {
+            @Override
+            public void run() {
+                BatchOrder bo;
+                boolean operErrorFlag = false;
+                try {
+                    bo = batchOrderMapper.getBatchOrderById(orderId);
+                    bo.setOrderStat(BaseConstants.OMSOrderStat.orderStat_30.getCode());
+                    batchOrderMapper.updateBatchOrder(bo);
+                    List<BatchOrderList> list = getBatchOrderList(orderId, commitStat);
+                    PersonInf personInf;
+                    for (BatchOrderList order : list) {
+                        personInf = new PersonInf();
+                        personInf.setPersonalName(order.getUserName());
+                        personInf.setMobilePhoneNo(order.getPhoneNo());
+                        personInf.setPersonalCardType(BaseConstants.CardTypeEnum.CARD_TYPE_00.getCode());
+                        personInf.setPersonalCardNo(order.getUserCardNo());
+                        try {
+                            // 用户注册
+                            int operNum = personInfService.doPersonInfRegister(personInf);
+                            if (operNum > 0) {
+                                order.setOrderStat(BaseConstants.OMSOrderListStat.orderListStat_00.getCode());
+                                batchOrderListMapper.updateBatchOrderList(order);
+                            } else {
                                 operErrorFlag = true;
-                                logger.error("批量开户doPersonInfRegister", ex);
+                                order.setOrderStat(BaseConstants.OMSOrderListStat.orderListStat_99.getCode());
+                                batchOrderListMapper.updateBatchOrderList(order);
                             }
+                        } catch (Exception ex) {
+                            operErrorFlag = true;
+                            logger.error("批量开户doPersonInfRegister", ex);
                         }
-                        if (!operErrorFlag) {
-                            bo.setOrderStat(BaseConstants.OMSOrderStat.orderStat_40.getCode());
-                        } else {
-                            bo.setOrderStat(BaseConstants.OMSOrderStat.orderStat_90.getCode());
-                        }
-                        batchOrderMapper.updateBatchOrder(bo);
-                    } catch (Exception ex) {
-                        logger.error("批量开户 异常", ex);
                     }
+                    if (!operErrorFlag) {
+                        bo.setOrderStat(BaseConstants.OMSOrderStat.orderStat_40.getCode());
+                    } else {
+                        bo.setOrderStat(BaseConstants.OMSOrderStat.orderStat_90.getCode());
+                    }
+                    batchOrderMapper.updateBatchOrder(bo);
+                } catch (Exception ex) {
+                    logger.error("## 批量开户异常", ex);
                 }
-
-                ;
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            }
+        });
     }
 
     /**
@@ -235,6 +233,7 @@ public class BatchOrderServiceImpl implements BatchOrderService {
      *
      * @param orderId 订单ID
      */
+    @Override
     public void batchOpenCardITF(final String orderId, User user, final String commitStat) {
         BatchOrder order = batchOrderMapper.getBatchOrderById(orderId);
         if (order != null && BaseConstants.OMSOrderStat.orderStat_10.getCode().equals(order.getOrderStat())) {
@@ -245,6 +244,7 @@ public class BatchOrderServiceImpl implements BatchOrderService {
         // 批量开card
         try {
             cachedThreadPool.execute(new Runnable() {
+                @Override
                 public void run() {
                     BatchOrder bo;
                     boolean operErrorFlag = false;
@@ -316,17 +316,20 @@ public class BatchOrderServiceImpl implements BatchOrderService {
      * @param orderId 订单
      * @param user    用户
      */
+    @Override
     public void batchRechargeCardITF(final String orderId, User user, final String commitStat) {
 
         BatchOrder order = batchOrderMapper.getBatchOrderById(orderId);
         if (order != null && BaseConstants.OMSOrderStat.orderStat_10.getCode().equals(order.getOrderStat())) {
             order.setOrderStat(BaseConstants.OMSOrderStat.orderStat_20.getCode());
             order.setUpdateUser(user.getId().toString());
-            this.updateBatchOrder(order); // 修改订单状态
+            // 修改订单状态
+            this.updateBatchOrder(order);
         }
         // 批量充值
         try {
             cachedThreadPool.execute(new Runnable() {
+                @Override
                 public void run() {
                     BatchOrder bo;
                     boolean operErrorFlag = false;
@@ -384,34 +387,33 @@ public class BatchOrderServiceImpl implements BatchOrderService {
 										+ "如有疑问请致电客服021-64189869");*/
                                     String templateCode = RedisDictProperties.getInstance().getdictValueByCode("ALIYUN_MSM_TEMPLATE_CODE_RECHARGE");
                                     String templateParam = "{\"company\":\"薪无忧\", \"amount\":\"" + NumberUtils.RMBCentToYuan(order.getAmount()) + "\"}";
-                                    boolean sendStatus = messageService.sendMessage(order.getPhoneNo(), templateCode, templateParam);
-                                    if (sendStatus) {
-
-                                    } else {
+                                    if (!messageService.sendMessage(order.getPhoneNo(), templateCode, templateParam)) {
                                         logger.error("## 手机号[{}]短信发送失败", order.getPhoneNo());
                                     }
                                 }
                                 //平台充值的模板推送消息
                                 String openId = batchOrderMapper.getOpenIdByPhoneNo(order.getPhoneNo());
-                                if (openId != null && openId != "") {
+                                if (StringUtils.isNotNull(openId)) {
                                     UserMerchantAcct acc = new UserMerchantAcct();
                                     acc.setExternalId(openId);
                                     acc.setMchntCode(userMerchantAcct.getMchntCode());
-                                    acc.setUserId(personInf.getUserId());
+                                    acc.setUserId(Objects.requireNonNull(personInf).getUserId());
                                     List<UserMerchantAcct> cardList = userMerchantAcctService.getUserMerchantAcctByUser(acc);
                                     if (cardList != null && cardList.size() > 0) {
                                         acc = cardList.get(0);
                                     }
                                     String channelName = BaseIntegrationPayConstants.OMSChannelCode.findOMSChannelCodeByCode("10001001");
-                                    String customerAcount = RedisDictProperties.getInstance().getdictValueByCode("WX_CUSTOMER_ACCOUNT");    //获取薪无忧公众号
-                                    String desc = "";    //描述
+                                    //获取薪无忧公众号
+                                    String customerAcount = RedisDictProperties.getInstance().getdictValueByCode("WX_CUSTOMER_ACCOUNT");
+                                    // 描述
+                                    String desc;
                                     if (merchantacctflag) {
                                         desc = bo.getCompanyName() + "已为您薪无忧余额成功充值\n";
                                         userMerchantAcct.setMchntName("薪无忧余额");
                                     } else {
                                         desc = "您已成功购卡充值\n";
                                     }
-                                    /**        发送模板消息                */
+                                    /*        发送模板消息                */
                                     wechatMQProducerService.sendTemplateMsg(customerAcount, openId, "WX_TEMPLATE_ID_3", null, WXTemplateUtil.setPurchaseData(userMerchantAcct.getMchntName(), channelName, desc, DateUtils.getDate(order.getCreateTime(), "yyyy-MM-dd HH:mm:ss"), NumberUtils.RMBCentToYuan(order.getAmount()), NumberUtils.RMBCentToYuan(acc.getAccBal())));
                                 }
                             } else {
@@ -441,7 +443,7 @@ public class BatchOrderServiceImpl implements BatchOrderService {
         }
     }
 
-    public List<BatchOrderList> getBatchOrderList(String orderId, String commitStat) {
+    private List<BatchOrderList> getBatchOrderList(String orderId, String commitStat) {
         List<BatchOrderList> list = null;
         if (BaseConstants.OMSOrderStat.orderStat_10.getCode().equals(commitStat)) {
             list = batchOrderListMapper.getBatchOrderListList(orderId);
@@ -452,6 +454,7 @@ public class BatchOrderServiceImpl implements BatchOrderService {
         return list;
     }
 
+    @Override
     public void batchUpdateQuotaITF(String orderId, String maxAmt, User user) {
 
         try {
