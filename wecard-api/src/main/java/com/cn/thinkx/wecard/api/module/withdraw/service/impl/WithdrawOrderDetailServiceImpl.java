@@ -11,14 +11,8 @@ import com.cn.thinkx.pms.base.utils.BaseConstants.orderStat;
 import com.cn.thinkx.pms.base.utils.BaseConstants.orderType;
 import com.cn.thinkx.wecard.api.module.pub.model.ChannelUserInf;
 import com.cn.thinkx.wecard.api.module.pub.service.ChannelUserInfService;
-import com.cn.thinkx.wecard.api.module.welfaremart.model.CardKeys;
-import com.cn.thinkx.wecard.api.module.welfaremart.model.CardKeysOrderInf;
-import com.cn.thinkx.wecard.api.module.welfaremart.model.CardKeysProduct;
-import com.cn.thinkx.wecard.api.module.welfaremart.model.CardKeysTransLog;
-import com.cn.thinkx.wecard.api.module.welfaremart.service.CardKeysOrderInfService;
-import com.cn.thinkx.wecard.api.module.welfaremart.service.CardKeysProductService;
-import com.cn.thinkx.wecard.api.module.welfaremart.service.CardKeysService;
-import com.cn.thinkx.wecard.api.module.welfaremart.service.CardKeysTransLogService;
+import com.cn.thinkx.wecard.api.module.welfaremart.model.*;
+import com.cn.thinkx.wecard.api.module.welfaremart.service.*;
 import com.cn.thinkx.wecard.api.module.withdraw.domain.WithdrawOrder;
 import com.cn.thinkx.wecard.api.module.withdraw.domain.WithdrawOrderDetail;
 import com.cn.thinkx.wecard.api.module.withdraw.mapper.WithdrawOrderDetailMapper;
@@ -77,6 +71,10 @@ public class WithdrawOrderDetailServiceImpl implements WithdrawOrderDetailServic
     @Qualifier("cardKeysService")
     private CardKeysService cardKeysService;
 
+@Autowired
+    @Qualifier("userBankInfService")
+    private UserBankInfService userBankInfService;
+
     @Override
     public String getPrimaryKey() {
         Map<String, String> paramMap = new HashMap<String, String>();
@@ -102,7 +100,7 @@ public class WithdrawOrderDetailServiceImpl implements WithdrawOrderDetailServic
     }
 
     @Override
-    public void YFBBatchWithdrawNotify(Content content) throws Exception {
+    public void YFBBatchWithdrawNotify(Content content) {
         List<TransferOrders> transOrders = content.getTransferOrders();
         if (transOrders == null) {
             logger.error("## 代付回调接口--->批次号[{}]的出款明细为空", content.getBatchNo());
@@ -201,6 +199,67 @@ public class WithdrawOrderDetailServiceImpl implements WithdrawOrderDetailServic
     }
 
     @Override
+    public void zfPayNotify(String orderNumber, String inTradeOrderNo, String payMoney) {
+        if (withdrawOrderService.getCountByBatchNo(orderNumber) < 1) {
+            logger.error("## 代付回调接口--->批次号[{}]在出款订单信息中不存在", orderNumber);
+            return;
+        }
+        WithdrawOrder order = withdrawOrderService.getWithdrawOrderById(orderNumber);
+        CardKeysOrderInf cko = cardKeysOrderInfService.getCardKeysOrderByOrderId(order.getPaidId());
+        if (cko == null) {
+            logger.error("## 代付回调接口--->查询订单：{} CardKeysOrderInf的信息为空", JSONObject.toJSONString(order));
+            return;
+        }
+
+        order.setStat("00");
+        order.setPaidRespDesc("代付成功");
+        order.setSuccessAmount(payMoney);
+        order.setSuccessNum("1");
+        order.setSuccessFee("0");
+        order.setFailAmount("0");
+        order.setFailNum("0");
+        if (withdrawOrderService.updateWithdrawOrder(order) < 1) {
+            logger.error("## 代付回调接口--->更新出款订单信息失败，批次号[{}]", inTradeOrderNo);
+            return;
+        }
+
+        WithdrawOrderDetail orderDetail = new WithdrawOrderDetail();
+        if (cardKeysOrderInfService.updateCardKeysOrderInf(cko) < 1) {
+            logger.error("## 代付回调接口--->更新CardKeysOrderInf：{}失败", JSONObject.toJSONString(cko));
+            return;
+        }
+
+        // 获取用户银行卡信息
+        UserBankInf userBankInf = userBankInfService.getUserBankInfByBankNo(cko.getBankNo());
+
+        String id = getPrimaryKey();
+        orderDetail.setDetailId(id);
+        orderDetail.setOrderId(order.getOrderId());
+        orderDetail.setSerialNo(order.getPaidId());
+        orderDetail.setReceiverName(userBankInf.getUserName());
+        orderDetail.setReceiverCardNo(cko.getBankNo());
+        orderDetail.setReceiverType("PERSON");
+        orderDetail.setBankType(userBankInf.getBankType());
+        orderDetail.setBankName(userBankInf.getBankName());
+        orderDetail.setBankCode(userBankInf.getAccountBank());
+        orderDetail.setAmount(new Long(payMoney).intValue());
+        orderDetail.setRespCode("0");
+        orderDetail.setPayTime(DateUtil.getCurrentDateTimeStr());
+        if (insertWithdrawOrderDetail(orderDetail) < 1) {
+            logger.error("## 代付回调接口--->新增出款订单明细信息失败，出款流水：{}", JSONObject.toJSONString(orderDetail));
+            return;
+        }
+
+        if (orderStat.OS31.getCode().equals(cko.getStat())) {
+            boolean isUpdateUserWithdraw = YFBBatchWithdrawNotifyUpdateUserCardKey(cko.getUserId(), cko.getOrderId());
+            if (!isUpdateUserWithdraw) {
+                logger.error("## 代付回调接口--->代付失败，处理用户[{}]卡密和卡密订单及卡密交易流水等信息失败", cko.getUserId());
+                return;
+            }
+        }
+    }
+
+    @Override
     public void YFBBatchWithdrawSendMsg(Content content) throws Exception {
         if (withdrawStat.S07.getCode().equals(content.getStatus())) {
             List<TransferOrders> transOrders = content.getTransferOrders();
@@ -245,7 +304,7 @@ public class WithdrawOrderDetailServiceImpl implements WithdrawOrderDetailServic
     @Override
     public boolean YFBBatchWithdrawNotifyUpdateUserCardKey(String userId, String orderId) {
         if (StringUtil.isNullOrEmpty(userId) || StringUtil.isNullOrEmpty(orderId)) {
-            logger.error("## 易付宝回调接口---> 更新用户[{}]卡密订单[{}]相关信息失败，请求参数为空", userId, orderId);
+            logger.error("## 代付回调接口---> 更新用户[{}]卡密订单[{}]相关信息失败，请求参数为空", userId, orderId);
             return false;
         }
 
@@ -257,7 +316,7 @@ public class WithdrawOrderDetailServiceImpl implements WithdrawOrderDetailServic
         cko.setDataStat("0");
         CardKeysOrderInf order = cardKeysOrderInfService.getOrderFailByUserIdAndOrderId(cko);
         if (order == null) {
-            logger.error("## 易付宝回调接口---> 根据用户[{}]和订单[{}]查询卡密订单代付失败信息为空", userId, orderId);
+            logger.error("## 代付回调接口---> 根据用户[{}]和订单[{}]查询卡密订单代付失败信息为空", userId, orderId);
             return false;
         } else {
             order.setStat(orderStat.OS35.getCode());
@@ -267,11 +326,11 @@ public class WithdrawOrderDetailServiceImpl implements WithdrawOrderDetailServic
         ckt.setDataStat("0");
         List<CardKeysTransLog> cktList = cardKeysTransLogService.getCardKeysTransLogByOrderId(ckt);
         if (cktList.size() < 1) {
-            logger.error("## 易付宝回调接口---> 根据用户[{}]和订单[{}]查询未处理的卡密交易流水信息为空", userId, orderId);
+            logger.error("## 代付回调接口---> 根据用户[{}]和订单[{}]查询未处理的卡密交易流水信息为空", userId, orderId);
             return false;
         }
-        List<CardKeys> cardList = new ArrayList<CardKeys>();
-        List<CardKeysTransLog> transLogList = new ArrayList<CardKeysTransLog>();
+        List<CardKeys> cardList = new ArrayList<>();
+        List<CardKeysTransLog> transLogList = new ArrayList<>();
         for (CardKeysTransLog log : cktList) {
             //卡密流水信息
             CardKeysTransLog transLog = new CardKeysTransLog();
@@ -288,11 +347,11 @@ public class WithdrawOrderDetailServiceImpl implements WithdrawOrderDetailServic
             if (card != null) {
                 cardList.add(card);
             } else {
-                logger.error("## 易付宝回调接口---> 查询用户[{}]已核销的卡密[{}]信息为空", userId, log.getCardKey());
+                logger.error("## 代付回调接口---> 查询用户[{}]已核销的卡密[{}]信息为空", userId, log.getCardKey());
             }
         }
         if (cardList.size() < 1 || cktList.size() != cardList.size()) {
-            logger.error("## 易付宝回调接口---> 查询用户[{}]已核销的卡密数量和卡密交易流水数量不一致", userId);
+            logger.error("## 代付回调接口---> 查询用户[{}]已核销的卡密数量和卡密交易流水数量不一致", userId);
             return false;
         }
 
@@ -300,7 +359,7 @@ public class WithdrawOrderDetailServiceImpl implements WithdrawOrderDetailServic
         try {
             isUpdateUserCardKey = cardKeysOrderInfService.updateUserNegotiation(order, transLogList);
         } catch (Exception e) {
-            logger.error("## 易付宝回调接口---> 处理用户代付失败订单异常{}", e);
+            logger.error("## 代付回调接口---> 处理用户代付失败订单异常{}", e);
         }
 
         return isUpdateUserCardKey;

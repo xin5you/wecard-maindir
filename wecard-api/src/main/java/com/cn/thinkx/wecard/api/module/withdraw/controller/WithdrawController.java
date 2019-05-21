@@ -2,12 +2,15 @@ package com.cn.thinkx.wecard.api.module.withdraw.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.cn.thinkx.pay.core.KeyUtils;
 import com.cn.thinkx.pay.domain.UnifyPayForAnotherVO;
 import com.cn.thinkx.pay.service.ZFPaymentServer;
 import com.cn.thinkx.pms.base.domain.BaseReq;
 import com.cn.thinkx.pms.base.domain.BaseResp;
+import com.cn.thinkx.pms.base.redis.util.RedisDictProperties;
 import com.cn.thinkx.pms.base.redis.util.RedisPropertiesUtils;
 import com.cn.thinkx.pms.base.utils.BaseConstants;
+import com.cn.thinkx.pms.base.utils.MD5Util;
 import com.cn.thinkx.pms.base.utils.StringUtil;
 import com.cn.thinkx.wecard.api.module.withdraw.service.WithdrawOrderDetailService;
 import com.cn.thinkx.wecard.api.module.withdraw.service.WithdrawOrderService;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -132,7 +136,7 @@ public class WithdrawController {
     }
 
     /**
-     * 代付异步回调
+     * 易付宝代付异步回调
      *
      * @param request
      * @return
@@ -244,6 +248,44 @@ public class WithdrawController {
         sw.stop();
         logger.info("中付代付请求完成，总共耗时：{}秒", sw.getTime() / 1000);
         return resp;
+    }
+
+    /**
+     * 中付代付回调<br/>
+     *
+     * <p><i>异步通知机制<i/></p>
+     * 1.交易平台在支付成功后，每隔10秒发送一笔异步通知，共3次。
+     * 2.后续的发送时间间隔分别为2分钟、5分钟、8分钟，每个时间节点发送1笔异步通知。
+     * 3.平台任意时候收到商户返回的success，即结束异步通知
+     *
+     * @param request 中付回调参数
+     * @return 回调是否成功
+     */
+    @RequestMapping(value = "/zf-pay/withdrawNotify")
+    @ResponseBody
+    public String zfPayNotify(HttpServletRequest request) {
+        String responseCode = request.getParameter("responseCode");
+        String responseComment = request.getParameter("responseComment");
+        if ("00".equals(responseCode)) {
+            String orderNumber = request.getParameter("orderNumber");
+            String inTradeOrderNo = request.getParameter("inTradeOrderNo");
+            String payMoney = request.getParameter("payMoney");
+            String signature = request.getParameter("signature");
+            String md5 = RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_SIGN_MD5);
+
+            //生成回调签名
+            String sign = Objects.requireNonNull(MD5Util.md5(orderNumber + inTradeOrderNo + md5)).toUpperCase();
+            if (Objects.equals(sign, signature)) {
+                // 执行代付成功后的回调逻辑（更新订单等）
+                withdrawOrderDetailService.zfPayNotify(orderNumber,inTradeOrderNo, payMoney);
+                return "success";
+            } else {
+                logger.error("## 回调签名不一致，平台订单号：{} 商户订单号：{} 中付签名：{}", orderNumber, inTradeOrderNo, md5);
+            }
+        } else {
+            logger.error("## 中付代付失败，响应码：{} 响应信息：{}", responseCode, responseComment);
+        }
+        return "false";
     }
 
     /**

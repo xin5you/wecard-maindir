@@ -22,5 +22,7 @@ public interface WithdrawOrderDetailService {
 	void YFBBatchWithdrawSendMsg(Content content) throws Exception;
 	
 	boolean YFBBatchWithdrawNotifyUpdateUserCardKey(String userId, String orderId);
+
+	void zfPayNotify(String orderNumber, String inTradeOrderNo, String payMoney);
 	
 }
