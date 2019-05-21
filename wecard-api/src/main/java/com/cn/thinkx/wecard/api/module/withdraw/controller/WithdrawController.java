@@ -276,7 +276,6 @@ public class WithdrawController {
             //生成回调签名
             String sign = Objects.requireNonNull(MD5Util.md5(orderNumber + inTradeOrderNo + md5)).toUpperCase();
             if (Objects.equals(sign, signature)) {
-                // 执行代付成功后的回调逻辑（更新订单等）
                 withdrawOrderDetailService.zfPayNotify(orderNumber,inTradeOrderNo, payMoney);
                 return "success";
             } else {

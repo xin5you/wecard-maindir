@@ -30,10 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service("withdrawOrderDetailService")
 public class WithdrawOrderDetailServiceImpl implements WithdrawOrderDetailService {
@@ -257,6 +254,25 @@ public class WithdrawOrderDetailServiceImpl implements WithdrawOrderDetailServic
                 return;
             }
         }
+
+        // 发送模板消息
+        CardKeysProduct product = new CardKeysProduct();
+        product.setProductCode(cko.getProductCode());
+        CardKeysProduct ckp = cardKeysProductService.getCardKeysProductByCode(product);
+        ChannelUserInf chnlUser = new ChannelUserInf();
+        chnlUser.setUserId(order.getUserId());
+        chnlUser.setChannelCode(ChannelCode.CHANNEL1.toString());
+        String openId = channelUserInfService.getExternalId(chnlUser);
+        if (ckp != null) {
+            String desc = NumberUtils.RMBCentToYuan(ckp.getOrgAmount()) + ckp.getProductUnit() + Objects.requireNonNull(TransFeeType.findByCode(ckp.getProductType())).getValue();
+            wechatMQProducerService.sendTemplateMsg(RedisDictProperties.getInstance().getdictValueByCode("WX_CUSTOMER_ACCOUNT"), openId, "WX_TEMPLATE_ID_5", null,
+                    WXTemplateUtil.setResellData(order.getPaidId(),
+                            payMoney,
+                            DateUtil.getCurrentDateTimeStr(),
+                            NumberUtils.hideCardNo(userBankInf.getAccountBank()),
+                            cko.getNum(),
+                            desc));
+        }
     }
 
     @Override
@@ -285,10 +301,14 @@ public class WithdrawOrderDetailServiceImpl implements WithdrawOrderDetailServic
                             product.setProductCode(cko.getProductCode());
                             CardKeysProduct ckp = cardKeysProductService.getCardKeysProductByCode(product);
                             if (ckp != null) {
-                                StringBuffer productDesc = new StringBuffer();
-                                productDesc.append(new Double(NumberUtils.RMBCentToYuan(ckp.getOrgAmount())).intValue()).append(ckp.getProductUnit()).append(TransFeeType.findByCode(ckp.getProductType()).getValue());
+                                String desc = NumberUtils.RMBCentToYuan(ckp.getOrgAmount()) + ckp.getProductUnit() + Objects.requireNonNull(TransFeeType.findByCode(ckp.getProductType())).getValue();
                                 wechatMQProducerService.sendTemplateMsg(RedisDictProperties.getInstance().getdictValueByCode("WX_CUSTOMER_ACCOUNT"), openId, "WX_TEMPLATE_ID_5", null,
-                                        WXTemplateUtil.setResellData(order.getPaidId(), NumberUtils.RMBCentToYuan(String.valueOf(content.getSuccessAmount())), DateUtil.getCurrentDateTimeStr(), NumberUtils.hideCardNo(t.getReceiverCardNo()), cko.getNum(), productDesc.toString()));
+                                        WXTemplateUtil.setResellData(order.getPaidId(),
+                                                NumberUtils.RMBCentToYuan(String.valueOf(content.getSuccessAmount())),
+                                                DateUtil.getCurrentDateTimeStr(),
+                                                NumberUtils.hideCardNo(t.getReceiverCardNo()),
+                                                cko.getNum(),
+                                                desc));
                             }
                         }
                     } else if (orderNotifyStat.stat2.getValue().equals(String.valueOf(t.isSuccess()))) {
