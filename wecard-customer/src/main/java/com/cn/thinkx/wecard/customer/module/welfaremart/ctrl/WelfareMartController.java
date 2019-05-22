@@ -562,6 +562,8 @@ public class WelfareMartController extends BaseController {
 			result.setMsg(MessageUtil.ERROR_MSSAGE);
 			return result;
 		}
+
+
 		String bankDetail = BankUtil.getCardDetail(bankNo);
 		JSONObject bankJson = JSON.parseObject(bankDetail);
 		if (!StringUtil.equals(bankJson.getString("validated"), "true")) {
