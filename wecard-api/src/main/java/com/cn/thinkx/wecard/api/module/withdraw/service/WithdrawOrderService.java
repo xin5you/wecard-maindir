@@ -1,5 +1,7 @@
 package com.cn.thinkx.wecard.api.module.withdraw.service;
 
+import com.alibaba.fastjson.JSONObject;
+import com.cn.thinkx.pay.domain.UnifyPayForAnotherVO;
 import org.apache.ibatis.annotations.Param;
 
 import com.cn.thinkx.wecard.api.module.withdraw.domain.WithdrawOrder;
@@ -57,5 +59,14 @@ public interface WithdrawOrderService {
 	 * @return
 	 */
 	WelfaremartResellResp welfaremartResellCommit(WelfaremartResellReq req)   throws Exception;
+
+	/**
+	 * 中付 代付
+	 * @param un
+	 * @return
+	 * @throws Exception
+	 */
+	public JSONObject zfPayWithdraw(UnifyPayForAnotherVO un ) throws Exception;
+
 	
 }

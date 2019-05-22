@@ -528,36 +528,12 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
 
     /**
      * 中付 代付
-     * @param batchNo
-     * @param jsonData
+     * @param un
      * @return
      * @throws Exception
      */
-    public String zfPayWithdraw(String batchNo, String jsonData) throws Exception {
+    public JSONObject zfPayWithdraw( UnifyPayForAnotherVO un ) throws Exception {
         // 解析请求批次json数组
-        JSONArray pBatchArray = JSONArray.parseArray(jsonData);
-        if (pBatchArray == null || pBatchArray.size() < 1) {
-            logger.error("## zfPayWithdraw pBatchArray{} is null or size less than 1", pBatchArray);
-            return null;
-        }
-
-        String totalAmount = null;
-        String batchOrderName = null;
-        String userId = null;
-
-        JSONArray batchArray = new JSONArray();
-        for (int i = 0; i < pBatchArray.size(); i++) {// 遍历出款批次
-            JSONObject pBatchObject = (JSONObject) pBatchArray.get(i);// 获得请求单个批次jsonObject
-            if (pBatchObject == null || pBatchObject.size() < 1) {
-                logger.error("## zfPayWithdraw pBatchObject{} is null or size less than 1", pBatchObject);
-                return null;
-            }
-
-            JSONArray pDetailArray = pBatchObject.getJSONArray("detailData");// 获得请求单个批次的所有明细jsonArray
-            if (pDetailArray == null || pDetailArray.size() < 1) {
-                logger.error("## zfPayWithdraw pDetailArray{} is null or size less than 1", pDetailArray);
-                return null;
-            }
             String md5=RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_SIGN_MD5);
             logger.info("### 中付MD5秘钥 {}",md5);
 
@@ -574,59 +550,20 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
             // 组装代付请求参数
             JSONObject jsonSession= ZFPaymentServer.getPayForAnotherSessionId(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_USER_KEY),md5);
 
-            // 调用中付代付接口
-            UnifyPayForAnotherVO un = new UnifyPayForAnotherVO();
-
-            // 组装代付请求参数
-
-            JSONObject pDetailObject = (JSONObject) pDetailArray.get(0);// 获得请求单条明细jsonObject
-            userId = (String) pDetailObject.get("orderName");
-            String serialNo = (String) pDetailObject.get("serialNo");
-            // 查询出款订单表是否有当前卡密交易订单记录
-            if (withdrawOrderMapper.getCountBySerialNo(serialNo) > 0) {
-                logger.error("## 用户[{}]新增出款订单信息重复 批次号[{}] 出款订单号[{}]", userId, batchNo, serialNo);
-                return null;
-            }
-            un.setService("p4aPay");
-            un.setMerchantNo(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_USER_KEY)); //中付商户号
-            un.setPayMoney(pDetailObject.getString("amount")); //金额
-            un.setOrderId(serialNo); //订单号
-            un.setBankCard(pDetailObject.getString("receiverCardNo"));
-            un.setName(pDetailObject.getString("receiverName"));
-            un.setBankName(pDetailObject.getString("bankName"));
-
-            if (pDetailObject.containsKey("receiverType")){
-                if("PERSON".equals(pDetailObject.getString("receiverType"))) {
-                    un.setAcctType("0");
-                }else{
-                    un.setAcctType("1");
-                }
-            }
-            un.setCnaps(pDetailObject.getString("receiverType")); //
-            un.setProvince(pDetailObject.getString("bankProvince"));
-            un.setCity(pDetailObject.getString("bankCity"));
-
             un.setMerchantURL( RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_NOTIFY_URL));
-            //转账类型
-            un.setCertType("0");
-            un.setCertNumber("430525198807107433");
-
             un.setSessionId(jsonSession.getString("sessionId"));
             un.setPayKey(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_KEY));
 
+            JSONObject result = null;
+            try {
+                logger.info("##发送中付代付参数{}", JSONArray.toJSON(un));
+                // 发送HTTP POST请求至苏宁易付宝代付返回结果
+                result =ZFPaymentServer.doPayForAnotherPay(un);
+            } catch (Exception e) {
+                logger.error("## 发送中付代付 Exception {}", e);
             }
 
-        String responseStr = null;
-        try {
-            logger.info("发送易付宝代付参数{}", batchArray.toJSONString());
-            // 发送HTTP POST请求至苏宁易付宝代付返回结果
-
-            logger.info("易付宝代付返回{}", responseStr);
-        } catch (Exception e) {
-            logger.error("## YFBBatchWithDraw Exception {}", e);
-        }
-
-        return responseStr;
+            return result;
     }
 
 }

@@ -221,8 +221,8 @@ public class WithdrawController {
         JSONObject respJson = null;
         try {
             // 调用中付代付接口
-            UnifyPayForAnotherVO un = new UnifyPayForAnotherVO();
-            respJson = ZFPaymentServer.doPayForAnotherPay(un);
+            UnifyPayForAnotherVO un = JSONObject.parseObject(paramData,UnifyPayForAnotherVO.class);
+            respJson = withdrawOrderService.zfPayWithdraw(un);
         } catch (Exception e) {
             logger.error("## 调用中付代付接口异常{}", e);
         }
@@ -244,7 +244,6 @@ public class WithdrawController {
                 logger.error("## 中付代付未成功 返回json[{}]", respJson.toJSONString());
             }
         }
-
         sw.stop();
         logger.info("中付代付请求完成，总共耗时：{}秒", sw.getTime() / 1000);
         return resp;
