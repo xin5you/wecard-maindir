@@ -9,6 +9,7 @@ import com.cn.thinkx.pms.base.utils.BaseConstants.orderType;
 import com.cn.thinkx.wecard.centre.module.biz.service.CardKeysOrderInfService;
 import com.cn.thinkx.wecard.centre.module.biz.service.CardKeysTransLogService;
 import com.cn.thinkx.wecard.centre.module.task.NegotiationTask;
+import com.cn.thinkx.wecard.centre.module.task.ZhongFuPayTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,7 +99,7 @@ public class CardKeysRetrievingJob {
                 }
 
                 if (canExecuteTask) {
-                    es.execute(new NegotiationTask(item));
+                    es.execute(new ZhongFuPayTask(item));
                 }/* else {
 					item.setStat(BaseConstants.orderStat.OS31.getCode());
 					item.setPaidAmount("0");

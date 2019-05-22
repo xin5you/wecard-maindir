@@ -75,7 +75,7 @@ public class ZFPaymentServer {
 
             JSONObject msg = new JSONObject();
 
-            msg.put("merchantNo", un.getMerchantNo());
+            msg.put("merchantNo", RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_USER_KEY));
             msg.put("service", "p4aPay");
             msg.put("payMoney", DES3.encrypt3DES((STR32.substring(0, 32 - un.getPayMoney().length()) + un.getPayMoney()), zek));
             msg.put("orderId", un.getOrderId());
