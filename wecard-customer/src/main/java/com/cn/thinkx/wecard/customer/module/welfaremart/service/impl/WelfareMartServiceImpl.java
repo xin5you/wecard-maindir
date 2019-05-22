@@ -482,6 +482,15 @@ public class WelfareMartServiceImpl implements WelfareMartService {
             }
         }
 
+        String bankName = BankUtil.getBankNameByCode(welfareUserInfo.getAccountBank());
+        String cnaps=CnapsUtil.getCnapsNo(bankName, accountBankAddr.split(",")[0],accountBankAddr.split(",")[1]);
+        logger.info("cnaps=="+cnaps);
+        if (StringUtil.isNullOrEmpty(cnaps)) {
+            logger.error("## 卡券集市--->新增用户银行卡接口，userID[{}]银行卡[{}]类型为获取不到联行号", personInf.getUserId(), bankNo);
+            result.setMsg(MessageUtil.WELFAREMART_NO_ADDBANKCARD);
+            return result;
+        }
+
         UserBankInf userBankInf = new UserBankInf();
         userBankInf.setBankNo(bankNo);
         userBankInf.setUserId(personInf.getUserId());
@@ -490,6 +499,7 @@ public class WelfareMartServiceImpl implements WelfareMartService {
         userBankInf.setAccountBank(welfareUserInfo.getAccountBank());
         userBankInf.setAccountBranch(accountBranch);
         userBankInf.setAccountBankAddr(accountBankAddr);
+        userBankInf.setCnaps(cnaps); //联行号
         if (StringUtil.isNullOrEmpty(isdefault)) {
             userBankInf.setIsdefault("1");
         } else {
@@ -705,14 +715,14 @@ public class WelfareMartServiceImpl implements WelfareMartService {
             logger.error("## 卡券集市--->充值接口，查询userID[{}]手机号[{}]所属运营商信息为空", personInf.getUserId(), personInf.getMobilePhoneNo());
             return null;
         }
-		
+
 		/*String shopFace = String.valueOf(new Double(NumberUtils.RMBCentToYuan(product.getOrgAmount())).intValue());
-		
+
 		PhoneRechargeShop phoneRechargeShop = new PhoneRechargeShop();
 		phoneRechargeShop.setOper(String.valueOf(phoneType));
 		phoneRechargeShop.setShopFace(shopFace);
 		phoneRechargeShop.setIsUsable(IsUsableType.IsUsableType1.getCode());
-		
+
 		if (CardProductType.CP11.getCode().equals(product.getProductType())) {//话费调用立方
 			phoneRechargeShop.setSupplier(phoneRechargeSupplier.PRS1.getCode());
 			phoneRechargeShop.setShopType(ShopType.ShopType1.getCode());
@@ -766,12 +776,12 @@ public class WelfareMartServiceImpl implements WelfareMartService {
                     }
                 }
 				/*else if (CardProductType.CP12.getCode().equals(product.getProductType())) {//流量调用鼎驰
-					if (prs.getSupplier().equals(phoneRechargeSupplier.PRS2.getCode()) && 
+					if (prs.getSupplier().equals(phoneRechargeSupplier.PRS2.getCode()) &&
 							prs.getShopType().equals(ShopType.ShopType2.getCode()) &&
 							prs.getResv1().equals(ShopUnitType.ShopUnitType02.getCode())) {
-							
+
 					} else {
-						
+
 					}
 				}*/
             } else {
@@ -816,13 +826,13 @@ public class WelfareMartServiceImpl implements WelfareMartService {
             logger.error("## 卡券集市--->充值接口，查询userID[{}]手机号[{}]所属运营商信息为空", personInf.getUserId(), personInf.getMobilePhoneNo());
             return flag;
         }
-		
+
 		/*String shopFace = String.valueOf(new Double(NumberUtils.RMBCentToYuan(ckp.getOrgAmount())).intValue());
 		PhoneRechargeShop phoneRechargeShop = new PhoneRechargeShop();
 		phoneRechargeShop.setOper(String.valueOf(phoneType));
 		phoneRechargeShop.setShopFace(shopFace);
 		phoneRechargeShop.setIsUsable(IsUsableType.IsUsableType1.getCode());
-		
+
 		if (CardProductType.CP11.getCode().equals(product.getProductType())) {//话费调用立方
 			phoneRechargeShop.setSupplier(phoneRechargeSupplier.PRS1.getCode());
 			phoneRechargeShop.setShopType(ShopType.ShopType1.getCode());
@@ -874,12 +884,12 @@ public class WelfareMartServiceImpl implements WelfareMartService {
                         return flag;
                     }
                 } else if (CardProductType.CP12.getCode().equals(ckp.getProductType())) {//流量调用鼎驰
-					/*if (prs.getSupplier().equals(phoneRechargeSupplier.PRS2.getCode()) && 
+					/*if (prs.getSupplier().equals(phoneRechargeSupplier.PRS2.getCode()) &&
 							prs.getShopType().equals(ShopType.ShopType2.getCode()) &&
 							prs.getResv1().equals(ShopUnitType.ShopUnitType02.getCode())) {
-							
+
 					} else {
-						
+
 					}*/
                 }
             }
