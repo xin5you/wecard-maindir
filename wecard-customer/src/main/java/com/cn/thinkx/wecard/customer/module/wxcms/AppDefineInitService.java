@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import redis.clients.jedis.JedisCluster;
 
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,20 +39,10 @@ public class AppDefineInitService implements SpringBeanDefineService {
         System.out.println("加载公众号信息：" + JSONObject.toJSONString(account));
         WxMemoryCacheClient.addMpAccount(account);
 
-        String filePath = AppDefineInitService.class.getResource("/bank/cnaps.xlsx").getPath();
-        FileInputStream fis = null;
         Workbook wookbook = null;
-
-        try {
-            //获取一个绝对地址的流
-            fis = new FileInputStream(filePath);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         try {
             //得到工作簿
-            wookbook = new XSSFWorkbook(fis);
+            wookbook = new XSSFWorkbook(this.getClass().getResourceAsStream("/bank/cnaps.xlsx"));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -81,8 +70,6 @@ public class AppDefineInitService implements SpringBeanDefineService {
             cnapsVO.setCnapsNo(row.getCell((short) 3).getStringCellValue());
             list.add(cnapsVO);
         }
-
         CnapsUtil.setCnapsList(list);
     }
-
 }
