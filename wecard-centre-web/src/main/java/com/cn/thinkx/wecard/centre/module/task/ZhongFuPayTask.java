@@ -129,7 +129,7 @@ public class ZhongFuPayTask implements Runnable {
                     // 用户名称
                     payVo.setName(personInf.getPersonalName());
                     // 银行名称
-                    payVo.setBankName(cardKeysOrderInf.getAccountBank());
+                    payVo.setBankName(BankUtil.getBankNameByCode(cardKeysOrderInf.getAccountBank()));
                     // 账户类型，1:对私; 2:对公
                     payVo.setAcctType("1");
                     // 解析开户行省市

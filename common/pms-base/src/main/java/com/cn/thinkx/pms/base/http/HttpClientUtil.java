@@ -127,7 +127,6 @@ public class HttpClientUtil {
 			post.setEntity(s);
 			HttpResponse res = client.execute(post);
 			if (res.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-				System.out.println("res.getEntity()=="+res.getEntity());
 				 result = EntityUtils.toString(res.getEntity());// 返回json格式：
 			}
 			res = null;
