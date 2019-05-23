@@ -144,8 +144,6 @@ public class ZhongFuPayTask implements Runnable {
                     payVo.setCertType("0");
                     // 身份证号
                     payVo.setCertNumber(personInf.getPersonalCardNo());
-                    // 备付金支付密码
-                    payVo.setPayKey("111111");
                     // 调用代付接口,根据代付接口返回信息更新卡密订单
                     JSONObject paramData = new JSONObject();
                     paramData.put("paramData", JSONArray.toJSONString(payVo));
