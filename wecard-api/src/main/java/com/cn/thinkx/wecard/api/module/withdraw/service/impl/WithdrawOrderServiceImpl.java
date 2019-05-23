@@ -528,42 +528,41 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
 
     /**
      * 中付 代付
+     *
      * @param un
      * @return
      * @throws Exception
      */
-    public JSONObject zfPayWithdraw( UnifyPayForAnotherVO un ) throws Exception {
+    @Override
+    public JSONObject zfPayWithdraw(UnifyPayForAnotherVO un) throws Exception {
         // 解析请求批次json数组
-            String md5=RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_SIGN_MD5);
-            logger.info("### 中付MD5秘钥 {}",md5);
+        String md5 = RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_SIGN_MD5);
+        logger.info("### 中付MD5秘钥 {}", md5);
 
-            if(StringUtil.isNullOrEmpty(md5)){
-                if(StringUtil.isNullOrEmpty(md5)){
-
-                    KeyUtils k = new KeyUtils();
-                    String privateKey = k.getRSAKey();
-
-                    Map<String, String> map = k.getKeys(privateKey);
-                    md5 = map.get("MD5");
-                }
+        if (StringUtil.isNullOrEmpty(md5)) {
+            if (StringUtil.isNullOrEmpty(md5)) {
+                KeyUtils k = new KeyUtils();
+                String privateKey = k.getRSAKey();
+                Map<String, String> map = k.getKeys(privateKey);
+                md5 = map.get("MD5");
             }
-            // 组装代付请求参数
-            JSONObject jsonSession= ZFPaymentServer.getPayForAnotherSessionId(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_USER_KEY),md5);
+        }
+        // 组装代付请求参数
+        JSONObject jsonSession = ZFPaymentServer.getPayForAnotherSessionId(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_USER_KEY), md5);
+        un.setMerchantURL(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_NOTIFY_URL));
+        un.setSessionId(jsonSession.getString("sessionId"));
+        un.setPayKey(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_KEY));
 
-            un.setMerchantURL( RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_NOTIFY_URL));
-            un.setSessionId(jsonSession.getString("sessionId"));
-            un.setPayKey(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_KEY));
+        JSONObject result = null;
+        try {
+            logger.info("##发送中付代付参数{}", JSONArray.toJSON(un));
+            // 发送HTTP POST请求至中付代付返回结果
+            result = ZFPaymentServer.doPayForAnotherPay(un);
+        } catch (Exception e) {
+            logger.error("## 发送中付代付 Exception {}", e);
+        }
 
-            JSONObject result = null;
-            try {
-                logger.info("##发送中付代付参数{}", JSONArray.toJSON(un));
-                // 发送HTTP POST请求至苏宁易付宝代付返回结果
-                result =ZFPaymentServer.doPayForAnotherPay(un);
-            } catch (Exception e) {
-                logger.error("## 发送中付代付 Exception {}", e);
-            }
-
-            return result;
+        return result;
     }
 
 }

@@ -245,7 +245,7 @@ public class WithdrawController {
             }
         }
         sw.stop();
-        logger.info("中付代付请求完成，总共耗时：{}秒", sw.getTime() / 1000);
+        logger.info("中付代付请求完成，总共耗时：{}毫秒", sw.getTime());
         return resp;
     }
 

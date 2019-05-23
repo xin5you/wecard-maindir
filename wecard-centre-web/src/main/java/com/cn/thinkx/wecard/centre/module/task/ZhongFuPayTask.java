@@ -138,6 +138,8 @@ public class ZhongFuPayTask implements Runnable {
                         payVo.setProvince(bankAddr[0]);
                         payVo.setCity(bankAddr[1]);
                     }
+                    // 联行号
+                    payVo.setCnaps(cardKeysOrderInf.getCnaps());
                     // 证件类型，默认为身份证
                     payVo.setCertType("0");
                     // 身份证号

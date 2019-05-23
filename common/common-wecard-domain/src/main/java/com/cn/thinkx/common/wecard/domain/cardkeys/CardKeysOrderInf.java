@@ -70,8 +70,20 @@ public class CardKeysOrderInf extends BaseDomain {
      */
     private String accountBankAddr;
 
-    private String productName;    //卡密产品名称
-    private String productType;    //卡密产品类型
+    /**
+     * 联行号
+     */
+    private String cnaps;
+
+    /**
+     * 卡密产品名称
+     */
+    private String productName;
+
+    /**
+     * 卡密产品类型
+     */
+    private String productType;
 
     public String getOrderId() {
         return orderId;
@@ -191,6 +203,14 @@ public class CardKeysOrderInf extends BaseDomain {
 
     public void setProductType(String productType) {
         this.productType = productType;
+    }
+
+    public String getCnaps() {
+        return cnaps;
+    }
+
+    public void setCnaps(String cnaps) {
+        this.cnaps = cnaps;
     }
 
     @Override
