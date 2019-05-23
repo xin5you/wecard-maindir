@@ -545,6 +545,7 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
                 String privateKey = k.getRSAKey();
                 Map<String, String> map = k.getKeys(privateKey);
                 md5 = map.get("MD5");
+                logger.info("### 中付MD5秘钥 {}", md5);
             }
         }
         // 组装代付请求参数

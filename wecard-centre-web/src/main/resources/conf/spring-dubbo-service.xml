@@ -12,7 +12,7 @@
 	<!-- 服务消费者缺省值配置 -->
 	<dubbo:consumer check="false" timeout="2000" />
 	<!-- 使用zookeeper注册中心暴露服务地址 -->
-	<dubbo:registry  address="${wecard.dubbo.registry.address}"/>
+	<dubbo:registry  address="${wecard.dubbo.registry.address}" check="false"/>
 	
 	<!-- 分销商 -->
 	<dubbo:reference id="telChannelInfFacade" interface="com.cn.thinkx.wecard.facade.telrecharge.service.TelChannelInfFacade" cluster="failfast">
