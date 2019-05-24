@@ -62,10 +62,8 @@ public class ZFPaymentServer {
             Map<String, String> map = k.getKeys(privateKey);
             String md5 = map.get("MD5");*/
 
-            String md5=RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_SIGN_MD5);
-
-            logger.info("### 中付MD5秘钥 {}",md5);
-            if(StringUtil.isNullOrEmpty(md5)){
+            String md5 = RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_SIGN_MD5);
+            if (StringUtil.isNullOrEmpty(md5)) {
                 Map<String, String> map = k.getKeys(privateKey);
                 md5 = map.get("MD5");
             }
@@ -92,15 +90,15 @@ public class ZFPaymentServer {
             msg.put("payKey", un.getPayKey());
 
             //清算号
-            if(StringUtil.isNotEmpty(un.getQsBankCode())){
+            if (StringUtil.isNotEmpty(un.getQsBankCode())) {
                 msg.put("qsBankCode", un.getQsBankCode());
             }
             //手机号
-            if(StringUtil.isNotEmpty(un.getMobile())){
+            if (StringUtil.isNotEmpty(un.getMobile())) {
                 msg.put("mobile", un.getMobile());
             }
             //回调地址
-            if(StringUtil.isNotEmpty(un.getMerchantURL())){
+            if (StringUtil.isNotEmpty(un.getMerchantURL())) {
                 msg.put("merchantURL", un.getMerchantURL());
             }
 
