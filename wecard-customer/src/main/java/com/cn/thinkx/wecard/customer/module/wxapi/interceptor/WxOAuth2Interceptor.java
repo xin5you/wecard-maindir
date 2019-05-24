@@ -28,7 +28,6 @@ public class WxOAuth2Interceptor extends HandlerInterceptorAdapter {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		String uri = request.getRequestURI();
-
 		boolean oauthFlag = false;// 为方便展示的参数，开发者自行处理
 		for (String s : includes) {
 			if (uri.contains(s)) {// 如果包含，就拦截
@@ -39,11 +38,12 @@ public class WxOAuth2Interceptor extends HandlerInterceptorAdapter {
 		if (!oauthFlag) {// 如果不需要oauth认证
 			return true;
 		}
-
-		String openid = "oYw_B50E661DcCpg9LNtJeqVwvqg";//WxMemoryCacheClient.getOpenid(request);// 先从缓存中获取openid
+		//String openid = "oYw_B50E661DcCpg9LNtJeqVwvqg";
+		//WxMemoryCacheClient.setOpenid(request, openid);// 缓存openid
+		//return true;
+		String openid = WxMemoryCacheClient.getOpenid(request);// 先从缓存中获取openid
 		WxMemoryCacheClient.setOpenid(request, openid);// 缓存openid
-		return true;
-		/*if (StringUtils.isBlank(openid)) {// 如果缓存没有openID，通过微信页面授权获取
+		if (StringUtils.isBlank(openid)) {// 如果缓存没有openID，通过微信页面授权获取
 			String code = request.getParameter("code");
 
 			if (!StringUtils.isBlank(code)) {// 如果request中包括code，则是微信回调
@@ -70,7 +70,7 @@ public class WxOAuth2Interceptor extends HandlerInterceptorAdapter {
 			return true;
 		}
 		HttpUtil.redirectUrl(request, response, "/base/404.html");
-		return false;*/
+		return false;
 	}
 
 	public String[] getExcludes() {
