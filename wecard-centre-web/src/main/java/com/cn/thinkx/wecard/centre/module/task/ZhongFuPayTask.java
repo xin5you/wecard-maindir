@@ -10,23 +10,21 @@ import com.cn.thinkx.pay.domain.UnifyPayForAnotherVO;
 import com.cn.thinkx.pms.base.domain.BaseResp;
 import com.cn.thinkx.pms.base.http.HttpClientUtil;
 import com.cn.thinkx.pms.base.redis.util.RedisDictProperties;
-import com.cn.thinkx.pms.base.utils.*;
+import com.cn.thinkx.pms.base.utils.BankUtil;
+import com.cn.thinkx.pms.base.utils.BaseConstants;
 import com.cn.thinkx.pms.base.utils.BaseConstants.DataStatEnum;
 import com.cn.thinkx.pms.base.utils.BaseConstants.TransType;
 import com.cn.thinkx.pms.base.utils.BaseConstants.UserTypeEnum;
+import com.cn.thinkx.pms.base.utils.StringUtil;
 import com.cn.thinkx.wecard.centre.module.biz.service.CardKeysOrderInfService;
 import com.cn.thinkx.wecard.centre.module.biz.service.CardKeysTransLogService;
 import com.cn.thinkx.wecard.centre.module.biz.service.PersonInfService;
 import com.cn.thinkx.wecard.centre.module.biz.util.CardKeysFactory;
 import com.cn.thinkx.wecard.centre.module.biz.util.PersonInfFactory;
-import com.cn.thinkx.wecard.centre.module.vo.BatchDataVO;
-import com.cn.thinkx.wecard.centre.module.vo.DetailDataVO;
-import com.cn.thinkx.wecard.centre.module.vo.WithdrawOrderVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -50,11 +48,6 @@ public class ZhongFuPayTask implements Runnable {
      * 薪无忧代付接口请求地址
      */
     private static final String REQUEST_URL = RedisDictProperties.getInstance().getdictValueByCode("ZHONGFU_WITHDRAW_REQUEST_URL");
-
-    /**
-     * 薪无忧请求代付加密KEY
-     */
-    private String WELFAREMART_WITHDRAW_KEY = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.WELFAREMART_WITHDRAW_KEY);
 
     /**
      * 黄牛机器人1
@@ -94,7 +87,6 @@ public class ZhongFuPayTask implements Runnable {
                 logger.info("黄牛[{}]开始回收卡密交易订单{}", SCALPER_LIST.get(index).getUserName(), cardKeysOrderInf.toString());
 
                 CardKeysTransLogService cardKeysTransLogService = CardKeysFactory.getCardKeysTransLogService();
-
                 CardKeysTransLog vo = new CardKeysTransLog();
                 vo.setOrderId(cardKeysOrderInf.getOrderId());
                 vo.setTransId(TransType.W30.getCode());
@@ -112,9 +104,8 @@ public class ZhongFuPayTask implements Runnable {
                         item.setTransResult(BaseConstants.RESPONSE_SUCCESS_CODE);
                         // 更新卡密交易流水失败时，出款扣除失败卡密流水出款金额
                         if (cardKeysTransLogService.updateCardKeysTransLog(item) < 1) {
-                            int amount = Integer.parseInt(cardKeysOrderInf.getPaidAmount()) - Integer.parseInt(item.getTransAmt());
-                            cardKeysOrderInf.setPaidAmount("" + amount);
                             logger.error("## 定时任务Task--->回收待转让卡密失败，卡密交易订单号[{}] 卡密交易流水号[{}]", vo.getOrderId(), item.getTxnPrimaryKey());
+                            throw new RuntimeException("## 更新卡密交易流水失败，跳出代付");
                         }
                     });
 
