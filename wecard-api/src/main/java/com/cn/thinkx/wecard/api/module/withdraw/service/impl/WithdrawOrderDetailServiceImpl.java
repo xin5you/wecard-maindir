@@ -201,7 +201,7 @@ public class WithdrawOrderDetailServiceImpl implements WithdrawOrderDetailServic
             logger.error("## 代付回调接口--->批次号[{}]在出款订单信息中不存在", orderNumber);
             return;
         }
-        WithdrawOrder order = withdrawOrderService.getWithdrawOrderById(orderNumber);
+        WithdrawOrder order = withdrawOrderService.getWithdrawOrderByPaidId(orderNumber);
         CardKeysOrderInf cko = cardKeysOrderInfService.getCardKeysOrderByOrderId(order.getPaidId());
         if (cko == null) {
             logger.error("## 代付回调接口--->查询订单：{} CardKeysOrderInf的信息为空", JSONObject.toJSONString(order));

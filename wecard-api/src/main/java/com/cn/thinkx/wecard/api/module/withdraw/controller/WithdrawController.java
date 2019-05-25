@@ -232,18 +232,15 @@ public class WithdrawController {
         if (respJson == null) {
             return resp;
         } else {
-            // 中付受理成功
             if (respJson.containsKey("responseCode") && "00".equals(respJson.get("responseCode"))) {
                 resp.setRespCode(BaseConstants.RESPONSE_SUCCESS_CODE);
                 resp.setRespMsg(BaseConstants.RESPONSE_SUCCESS_INFO);
-            }
-            // 易付宝未全部受理成功
-            else {
+            } else {
                 String responseCode = respJson.getString("responseCode");
                 String responseMsg = respJson.getString("responseComment");
                 resp.setRespCode(responseCode);
                 resp.setRespMsg(responseMsg);
-                logger.error("## 中付代付未成功 返回json[{}]", respJson.toJSONString());
+                logger.error("## 中付代付未实时成功 返回json[{}]", respJson.toJSONString());
             }
         }
         sw.stop();

@@ -111,6 +111,7 @@ public class ZhongFuPayTask implements Runnable {
 
                     //组装调用中付代付接口参数
                     UnifyPayForAnotherVO payVo = new UnifyPayForAnotherVO();
+                    payVo.setUserId(personInf.getUserId());
                     // 代付金额
                     payVo.setPayMoney(cardKeysOrderInf.getPaidAmount());
                     // 订单号

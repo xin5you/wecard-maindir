@@ -36,7 +36,10 @@ import redis.clients.jedis.JedisCluster;
 import java.io.UnsupportedEncodingException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service("withdrawOrderService")
 public class WithdrawOrderServiceImpl implements WithdrawOrderService {
@@ -557,10 +560,31 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
         un.setPayKey(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_KEY));
 
         JSONObject result = null;
+        WithdrawOrder order = new WithdrawOrder();
         try {
             logger.info("##发送中付代付参数{}", JSONArray.toJSON(un));
             // 发送HTTP POST请求至中付代付返回结果
             result = ZFPaymentServer.doPayForAnotherPay(un);
+            //插入出款订单表信息
+            order.setOrderId(getPrimaryKey());
+            order.setUserId(un.getUserId());
+            order.setTotalFee("0");
+            order.setTotalAmount(un.getPayMoney());
+            order.setTotalNum("1");
+            order.setWithdrawDate(DateUtil.getCurrentDateStr());
+            order.setOrderName("卡密交易订单[" + un.getOrderId() + "]代付");
+            order.setSuccessAmount("0");
+            order.setSuccessNum("0");
+            order.setSuccessFee("0");
+            order.setFailAmount("0");
+            order.setFailNum("0");
+            order.setPaidId(un.getOrderId());
+            order.setPaidIns("中付代付");
+            order.setStat(Constants.withdrawStat.S66.getCode());
+            if (insertWithdrawOrder(order) < 1) {
+                logger.error("## 用户[{}]新增出款订单信息失败 出款订单号[{}]", un.getUserId(), un.getOrderId());
+                return null;
+            }
         } catch (Exception e) {
             logger.error("## 发送中付代付 Exception {}", e);
         }
@@ -570,12 +594,13 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
 
     /**
      * 代付查询
+     *
      * @param queryVO
      * @return
      * @throws Exception
      */
-    public JSONObject zfPayQuery(UnifyQueryVO queryVO ) throws Exception{
-        CardKeysOrderInf cardKeysOrderInf=cardKeysOrderInfService.getCardKeysOrderByOrderId(queryVO.getInTradeOrderNo());
+    public JSONObject zfPayQuery(UnifyQueryVO queryVO) throws Exception {
+        CardKeysOrderInf cardKeysOrderInf = cardKeysOrderInfService.getCardKeysOrderByOrderId(queryVO.getInTradeOrderNo());
         queryVO.setTradeTime(DateUtil.COMMON.getDateText(cardKeysOrderInf.getCreateTime()));
         return ZFPaymentServer.doPayForAnotherQuery(queryVO);
     }

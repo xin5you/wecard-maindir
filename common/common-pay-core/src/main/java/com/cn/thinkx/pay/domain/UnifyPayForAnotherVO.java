@@ -5,6 +5,7 @@ package com.cn.thinkx.pay.domain;
  */
 public class UnifyPayForAnotherVO implements java.io.Serializable{
 
+    private String userId;
     private String service; //	服务类型	<20	不可空
     private String merchantNo; //		商户号 	15 	不可空
     private String payMoney; //		代付金额密文	8	不可空
@@ -31,6 +32,14 @@ public class UnifyPayForAnotherVO implements java.io.Serializable{
     private String  Name3; //		保留域3
     private String  Name4; //		保留域4
     private String Name5; //		保留域5
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getService() {
         return service;

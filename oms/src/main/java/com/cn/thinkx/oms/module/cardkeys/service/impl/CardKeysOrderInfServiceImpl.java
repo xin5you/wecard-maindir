@@ -136,7 +136,6 @@ public class CardKeysOrderInfServiceImpl implements CardKeysOrderInfService {
 
     @Override
     public boolean editCardTicketTransOrder(CardKeysOrderInf cko, List<CardKeysTransLog> cktList) {
-        boolean isReset = true;
         if (cardKeysOrderInfMapper.updateCardKeysOrderInf(cko) < 1) {
             logger.error("## 重置卡券交易信息失败，更新卡密订单[{}]信息失败", cko.getOrderId());
             return false;
@@ -174,7 +173,7 @@ public class CardKeysOrderInfServiceImpl implements CardKeysOrderInfService {
                 } else {
                     CardKeys card = new CardKeys();
                     card.setCardKey(log.getCardKey());
-                    card.setDataStat("0");
+                    card.setDataStat(BaseConstants.DataStatEnum.TRUE_STATUS.getCode());
                     if (cardKeysMapper.updateCardKeys(card) < 1) {
                         logger.error("## 重置卡券交易信息失败，更新卡密[{}]信息失败", card.getCardKey());
                         throw new RuntimeException("更新用户卡密失败");
@@ -183,6 +182,6 @@ public class CardKeysOrderInfServiceImpl implements CardKeysOrderInfService {
             }
         }
 
-        return isReset;
+        return true;
     }
 }
