@@ -144,6 +144,8 @@ public class ZFPaymentServer {
             queryVO.setMerchantNo(merchantNo);
             queryVO.setMD5(md5);
 
+
+
             JSONObject params = new JSONObject();
             params.put("service", "p4aQuery");
             params.put("merchantNo", queryVO.getMerchantNo());
@@ -160,8 +162,19 @@ public class ZFPaymentServer {
                 params.put("inTradeOrderNo", queryVO.getInTradeOrderNo());
                 paramsMd5OrderId=queryVO.getInTradeOrderNo();
             }
+
+            //sessionId获取
+            if(StringUtil.isNullOrEmpty(queryVO.getTradeTime())) {
+                queryVO.setTradeTime(DateUtil.getCurrentDateStr2());
+            }
             params.put("tradeTime", queryVO.getTradeTime());
+
+            //sessionId获取
+            if(StringUtil.isNullOrEmpty(queryVO.getSessionId())) {
+                queryVO.setSessionId(getPayForAnotherSessionId());
+            }
             params.put("sessionId", queryVO.getSessionId());
+
             params.put("MD5", Objects.requireNonNull(MD5Util.md5(( paramsMd5OrderId+ params.getString("merchantNo") + queryVO.getMD5()))).toUpperCase());
             logger.info("##代付查询request params {}", params.toJSONString());
             res = HttpClientUtil.sendPostReturnStr(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_URL), params.toJSONString());

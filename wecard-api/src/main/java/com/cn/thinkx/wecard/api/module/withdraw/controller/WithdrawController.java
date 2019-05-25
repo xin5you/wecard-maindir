@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.cn.thinkx.pay.core.KeyUtils;
 import com.cn.thinkx.pay.domain.UnifyPayForAnotherVO;
+import com.cn.thinkx.pay.domain.UnifyQueryVO;
 import com.cn.thinkx.pay.service.ZFPaymentServer;
 import com.cn.thinkx.pms.base.domain.BaseReq;
 import com.cn.thinkx.pms.base.domain.BaseResp;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.json.Json;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
@@ -247,6 +249,20 @@ public class WithdrawController {
         sw.stop();
         logger.info("中付代付请求完成，总共耗时：{}毫秒", sw.getTime());
         return resp;
+    }
+
+
+    /**
+     * 中付代付 查询
+     * @param orderId 代付请求
+     * @return 代付结果
+     */
+    @RequestMapping(value = "/zf-pay/queryOrder", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject queryOrder(String orderId) throws  Exception {
+        UnifyQueryVO queryVO=new UnifyQueryVO();
+        queryVO.setInTradeOrderNo(orderId);
+        return withdrawOrderService.zfPayQuery(queryVO);
     }
 
     /**

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.cn.thinkx.pay.core.KeyUtils;
 import com.cn.thinkx.pay.domain.UnifyPayForAnotherVO;
+import com.cn.thinkx.pay.domain.UnifyQueryVO;
 import com.cn.thinkx.pay.service.ZFPaymentServer;
 import com.cn.thinkx.pms.base.redis.util.RedisConstants;
 import com.cn.thinkx.pms.base.redis.util.RedisDictProperties;
@@ -516,7 +517,7 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
 			return null;
 		}
 		WithdrawQuery withdrawQuery = JSON.parseObject(responseStr, WithdrawQuery.class);
-			
+
 		return JSONArray.toJSONString(withdrawQuery);*/
     }
 
@@ -567,4 +568,15 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
         return result;
     }
 
+    /**
+     * 代付查询
+     * @param queryVO
+     * @return
+     * @throws Exception
+     */
+    public JSONObject zfPayQuery(UnifyQueryVO queryVO ) throws Exception{
+        CardKeysOrderInf cardKeysOrderInf=cardKeysOrderInfService.getCardKeysOrderByOrderId(queryVO.getInTradeOrderNo());
+        queryVO.setTradeTime(DateUtil.COMMON.getDateText(cardKeysOrderInf.getCreateTime()));
+        return ZFPaymentServer.doPayForAnotherQuery(queryVO);
+    }
 }
