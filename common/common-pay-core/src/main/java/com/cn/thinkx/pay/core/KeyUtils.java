@@ -15,8 +15,9 @@ import java.util.Map;
  * 
  */
 public class KeyUtils {
-    
 
+
+	public static final String ZHONGFU_SESSION_ID="ZHONGFU_SESSION_ID"; //中付簽到
 	public static final String ZHONGFU_PAY_URL="ZHONGFU_PAY_URL"; //中付获取keyURL路径
 	public static final String ZHONGFU_KEY_URL="ZHONGFU_KEY_URL"; //中付获取keyURL路径
 	public static final String ZHONGFU_PAY_USER_KEY="ZHONGFU_PAY_USER_KEY"; //中付商户号

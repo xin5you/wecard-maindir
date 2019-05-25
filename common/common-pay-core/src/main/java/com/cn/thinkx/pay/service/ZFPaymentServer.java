@@ -6,7 +6,9 @@ import com.cn.thinkx.pay.core.KeyUtils;
 import com.cn.thinkx.pay.domain.UnifyPayForAnotherVO;
 import com.cn.thinkx.pay.domain.UnifyQueryVO;
 import com.cn.thinkx.pms.base.http.HttpClientUtil;
+import com.cn.thinkx.pms.base.redis.core.JedisClusterUtils;
 import com.cn.thinkx.pms.base.redis.util.RedisDictProperties;
+import com.cn.thinkx.pms.base.utils.DateUtil;
 import com.cn.thinkx.pms.base.utils.MD5Util;
 import com.cn.thinkx.pms.base.utils.StringUtil;
 import org.slf4j.Logger;
@@ -26,22 +28,33 @@ public class ZFPaymentServer {
     /**
      * 代付签到接口
      *
-     * @param merchantNo 商户号
-     * @return 签到返回码
      */
-    public static JSONObject getPayForAnotherSessionId(String merchantNo, String md5) {
-        String res = "";
-        try {
-            JSONObject params = new JSONObject();
-            params.put("service", "p4aSignIn");
-            params.put("merchantNo", merchantNo);
-            params.put("MD5", Objects.requireNonNull(MD5Util.md5(merchantNo + md5)).toUpperCase());
-            res = HttpClientUtil.sendPostReturnStr(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_URL), params.toJSONString());
-            logger.info("返回的签到数据：{}", res);
-        } catch (Exception ex) {
-            logger.error("##代付签到接口执行异常{}", ex);
+    public static String getPayForAnotherSessionId() {
+        //redis set key+yyyyMMdd
+        String key =KeyUtils.ZHONGFU_SESSION_ID+DateUtil.getCurrentDateStr();
+        String sessionId =JedisClusterUtils.getInstance().get(key);
+        //判断是否为空，重新获取签到数据
+        if(StringUtil.isNullOrEmpty(sessionId)) {
+            try {
+                String merchantNo= RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_USER_KEY);
+                String md5= RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_SIGN_MD5);
+                JSONObject params = new JSONObject();
+                params.put("service", "p4aSignIn");
+                params.put("merchantNo",  RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_USER_KEY));
+                params.put("MD5", Objects.requireNonNull(MD5Util.md5(merchantNo + md5)).toUpperCase());
+                JSONObject res = JSONObject.parseObject(HttpClientUtil.sendPostReturnStr(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_URL), params.toJSONString()));
+                logger.info("返回的签到数据：{}", res);
+
+                sessionId = res.getString("sessionId");
+                //设置到redis中 并设置失效时间
+                if (StringUtil.isNotEmpty(sessionId)) {
+                    JedisClusterUtils.getInstance().set(key, sessionId, 12 * 60 * 60);
+                }
+            } catch (Exception ex) {
+                logger.error("##代付签到接口执行异常{}", ex);
+            }
         }
-        return JSONObject.parseObject(res);
+        return sessionId;
     }
 
     /**
@@ -126,15 +139,30 @@ public class ZFPaymentServer {
     public static JSONObject doPayForAnotherQuery(UnifyQueryVO queryVO) {
         String res = "";
         try {
+            String merchantNo= RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_USER_KEY);
+            String md5= RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_SIGN_MD5);
+            queryVO.setMerchantNo(merchantNo);
+            queryVO.setMD5(md5);
 
             JSONObject params = new JSONObject();
-            params.put("service", queryVO.getService());
+            params.put("service", "p4aQuery");
             params.put("merchantNo", queryVO.getMerchantNo());
-            params.put("orderNumber", queryVO.getOrderNumber());
-            params.put("inTradeOrderNo", queryVO.getInTradeOrderNo());
+            String paramsMd5OrderId="";
+
+            //代付接口返回订单号 (和原订单号二者选一)
+            if(StringUtil.isNotEmpty(queryVO.getOrderNumber())) {
+                params.put("orderNumber", queryVO.getOrderNumber());
+                paramsMd5OrderId=queryVO.getOrderNumber();
+            }
+
+            //原始订单号(和订单号二者选一)
+            if(StringUtil.isNotEmpty(queryVO.getInTradeOrderNo())) {
+                params.put("inTradeOrderNo", queryVO.getInTradeOrderNo());
+                paramsMd5OrderId=queryVO.getInTradeOrderNo();
+            }
             params.put("tradeTime", queryVO.getTradeTime());
             params.put("sessionId", queryVO.getSessionId());
-            params.put("MD5", Objects.requireNonNull(MD5Util.md5((params.getString("orderNumber") + params.getString("merchantNo") + queryVO.getMD5()))).toUpperCase());
+            params.put("MD5", Objects.requireNonNull(MD5Util.md5(( paramsMd5OrderId+ params.getString("merchantNo") + queryVO.getMD5()))).toUpperCase());
             logger.info("##代付查询request params {}", params.toJSONString());
             res = HttpClientUtil.sendPostReturnStr(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_URL), params.toJSONString());
             logger.info("##代付查询response result {}", res);
@@ -165,14 +193,14 @@ public class ZFPaymentServer {
         un.setPayKey("111111");
 
         ZFPaymentServer.doPayForAnotherPay(un);*/
-        JSONObject json = getPayForAnotherSessionId("990149635210001", "dsFGDS213");
+        String sessionId = getPayForAnotherSessionId();
         UnifyQueryVO queryVO = new UnifyQueryVO();
         queryVO.setService("p4aQuery");
         queryVO.setMerchantNo("990149635210001");
         queryVO.setOrderNumber("20190517135757796201");
         /* queryVO.setInTradeOrderNo("750c6eef-efb0-4606-9fe3-996b8270c394");*/
         queryVO.setTradeTime("2019-05-17");
-        queryVO.setSessionId(json.getString("sessionId"));
+        queryVO.setSessionId(sessionId);
         queryVO.setMD5("dsFGDS213");
         ZFPaymentServer.doPayForAnotherQuery(queryVO);
     }

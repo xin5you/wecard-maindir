@@ -549,9 +549,10 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
             }
         }
         // 组装代付请求参数
-        JSONObject jsonSession = ZFPaymentServer.getPayForAnotherSessionId(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_USER_KEY), md5);
+        //获取签到SessionId
+        String sessionId = ZFPaymentServer.getPayForAnotherSessionId();
         un.setMerchantURL(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_NOTIFY_URL));
-        un.setSessionId(jsonSession.getString("sessionId"));
+        un.setSessionId(sessionId);
         un.setPayKey(RedisDictProperties.getInstance().getdictValueByCode(KeyUtils.ZHONGFU_PAY_KEY));
 
         JSONObject result = null;
