@@ -3,6 +3,11 @@ package com.cn.thinkx.oms.module.cardkeys.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
+import com.cn.thinkx.pay.core.KeyUtils;
+import com.cn.thinkx.pay.domain.UnifyQueryVO;
+import com.cn.thinkx.pay.service.ZFPaymentServer;
+import com.cn.thinkx.pms.base.utils.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,18 +32,18 @@ import com.github.pagehelper.PageInfo;
 
 @Service("cardKeysOrderInfService")
 public class CardKeysOrderInfServiceImpl implements CardKeysOrderInfService {
-	
+
 	Logger logger = LoggerFactory.getLogger(CardKeysOrderInfServiceImpl.class);
-	
+
 	@Autowired
 	private CardKeysOrderInfMapper cardKeysOrderInfMapper;
-	
+
 	@Autowired
 	private CardKeysTransLogMapper cardKeysTransLogMapper;
-	
+
 	@Autowired
 	private CardKeysMapper cardKeysMapper;
-	
+
 	@Autowired
 	private WithdrawOrderMapper withdrawOrderMapper;
 
@@ -136,7 +141,20 @@ public class CardKeysOrderInfServiceImpl implements CardKeysOrderInfService {
 			logger.error("## 重置卡券交易信息失败，更新卡密订单[{}]信息失败", cko.getOrderId());
 			return false;
 		}
-		
+
+		//中付代付 订单查询
+		String sessionId = ZFPaymentServer.getPayForAnotherSessionId();
+		UnifyQueryVO queryVO = new UnifyQueryVO();
+		queryVO.setInTradeOrderNo(cko.getOrderId());;
+		queryVO.setTradeTime(DateUtil.getCurrentDateStr2());
+		queryVO.setSessionId(sessionId);
+		JSONObject result=ZFPaymentServer.doPayForAnotherQuery(queryVO);
+
+		//中付代付成功，不需要更改卡密状态
+		if(KeyUtils.responseCode.equals(result.getString("responseCode"))){
+			return  false;
+		}
+
 		WithdrawOrder withdrawOrder = withdrawOrderMapper.getWithdrawOrderByPaidId(cko.getOrderId());
 		if (withdrawOrder == null) {
 			logger.info("用户[{}]订单[{}]未进入代付，根据paid_id[{}]查询出款订单信息不存在", cko.getUserId(), cko.getOrderId(), cko.getOrderId());
@@ -147,7 +165,7 @@ public class CardKeysOrderInfServiceImpl implements CardKeysOrderInfService {
 				return false;
 			}
 		}
-		
+
 		for (CardKeysTransLog log : cktList) {
 			if (cardKeysTransLogMapper.updateCardKeysTransLog(log) < 1) {
 				logger.error("## 重置卡券交易信息失败，更新用户[{}]卡密流水[{}]信息失败", withdrawOrder.getUserId(), log.getTxnPrimaryKey());
@@ -166,6 +184,4 @@ public class CardKeysOrderInfServiceImpl implements CardKeysOrderInfService {
 		}
 		return isReset;
 	}
-
-
 }
