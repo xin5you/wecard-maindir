@@ -604,6 +604,7 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
         queryVO.setTradeTime(DateUtil.COMMON.getDateText(cardKeysOrderInf.getCreateTime()));
         JSONObject jsonObject = ZFPaymentServer.doPayForAnotherQuery(queryVO);
         if (jsonObject != null) {
+            logger.info("代付查询中付接口返回{}", jsonObject.toJSONString());
             String respCode = jsonObject.getString("responseCode");
             if ("00".equals(respCode)) {
                 cardKeysOrderInf.setStat(orderStat.OS32.getCode());
@@ -613,6 +614,8 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
                 cardKeysOrderInf.setStat(orderStat.OS35.getCode());
             }
             cardKeysOrderInfService.updateCardKeysOrderInf(cardKeysOrderInf);
+        } else {
+            logger.info("代付查询中付接口返回：null");
         }
 
         return jsonObject;
