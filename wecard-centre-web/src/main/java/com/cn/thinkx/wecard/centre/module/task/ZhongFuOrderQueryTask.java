@@ -44,6 +44,7 @@ public class ZhongFuOrderQueryTask implements Runnable {
     public void run() {
         if (cardKeysOrderInf != null) {
             List<CardKeysOrderInf> cardKeysOrderInfs = cardKeysOrderInfService.getCardKeysOrderInfs(cardKeysOrderInf);
+            logger.info("中付已受理卡密订单查询=========>查询条件：{}，查询结果：{}",cardKeysOrderInf, JSONObject.toJSONString(cardKeysOrderInfs));
             JSONObject paramData = new JSONObject();
             cardKeysOrderInfs.forEach(item -> {
                 paramData.put("paramData", JSONArray.toJSONString(item.getOrderId()));
