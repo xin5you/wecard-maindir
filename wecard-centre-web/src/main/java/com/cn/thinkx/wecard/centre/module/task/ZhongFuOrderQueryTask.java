@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.cn.thinkx.common.wecard.domain.cardkeys.CardKeysOrderInf;
 import com.cn.thinkx.pms.base.http.HttpClientUtil;
+import com.cn.thinkx.pms.base.utils.BaseConstants;
 import com.cn.thinkx.wecard.centre.module.biz.service.CardKeysOrderInfService;
 import com.cn.thinkx.wecard.centre.module.biz.util.CardKeysFactory;
 import org.slf4j.Logger;
@@ -43,6 +44,8 @@ public class ZhongFuOrderQueryTask implements Runnable {
     @Override
     public void run() {
         if (cardKeysOrderInf != null) {
+            // 转让受理中
+            cardKeysOrderInf.setStat(BaseConstants.orderStat.OS33.getCode());
             List<CardKeysOrderInf> cardKeysOrderInfs = cardKeysOrderInfService.getCardKeysOrderInfs(cardKeysOrderInf);
             logger.info("中付已受理卡密订单查询=========>查询条件：{}，查询结果：{}",cardKeysOrderInf, JSONObject.toJSONString(cardKeysOrderInfs));
             JSONObject paramData = new JSONObject();

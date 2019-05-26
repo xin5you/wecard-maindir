@@ -60,8 +60,6 @@ public class CardKeysRetrievingJob {
 
         Set<CardKeysOrderInf> orderList;
         try {
-            // 转让受理中
-            cko.setStat(orderStat.OS33.getCode());
             // 处理代付处理中的卡密订单
             es.execute(new ZhongFuOrderQueryTask(cko));
 
