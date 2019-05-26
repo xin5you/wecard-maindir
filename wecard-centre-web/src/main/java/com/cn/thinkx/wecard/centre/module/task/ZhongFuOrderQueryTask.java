@@ -28,37 +28,27 @@ public class ZhongFuOrderQueryTask implements Runnable {
     /**
      * 卡密交易订单
      */
-    private CardKeysOrderInf cardKeysOrderInf;
     private CardKeysOrderInfService cardKeysOrderInfService = CardKeysFactory.getCardKeysOrderInfService();
-
-    /**
-     * 初始化Task<br>
-     *
-     * @param cko 卡券交易订单
-     * @see ZhongFuOrderQueryTask
-     */
-    public ZhongFuOrderQueryTask(CardKeysOrderInf cko) {
-        this.cardKeysOrderInf = cko;
-    }
 
     @Override
     public void run() {
-        if (cardKeysOrderInf != null) {
-            // 转让受理中
-            cardKeysOrderInf.setStat(BaseConstants.orderStat.OS33.getCode());
-            List<CardKeysOrderInf> cardKeysOrderInfs = cardKeysOrderInfService.getCardKeysOrderInfs(cardKeysOrderInf);
-            logger.info("中付已受理卡密订单查询=========>查询条件：{}，查询结果：{}",cardKeysOrderInf, JSONObject.toJSONString(cardKeysOrderInfs));
-            JSONObject paramData = new JSONObject();
-            cardKeysOrderInfs.forEach(item -> {
-                paramData.put("paramData", JSONArray.toJSONString(item.getOrderId()));
-                // 调用代付查询接口,根据代付接口返回信息更新卡密订单
-                logger.info("中付代付查询传参=========>orderId[{}]", item.getOrderId());
-                String rtnStr = HttpClientUtil.sendPost("http://api.xin5you.com/withdraw/zf-pay/queryOrder.html", paramData.toString());
-                logger.info("中付代付查询返回=========>{}", rtnStr);
-            });
-        } else {
-            logger.error("## 查询中付代付中订单异常：cardKeysOrderInf对象为空");
-        }
+        CardKeysOrderInf cko = new CardKeysOrderInf();
+        // 转让订单
+        cko.setType(BaseConstants.orderType.O3.getCode());
+        // 没有放入任务执行
+        cko.setDataStat(BaseConstants.DataStatEnum.TRUE_STATUS.getCode());
+        // 转让受理中
+        cko.setStat(BaseConstants.orderStat.OS33.getCode());
+        List<CardKeysOrderInf> cardKeysOrderInfs = cardKeysOrderInfService.getCardKeysOrderInfs(cko);
+        logger.info("中付已受理卡密订单查询=========>查询结果：{}", JSONObject.toJSONString(cardKeysOrderInfs));
+        JSONObject paramData = new JSONObject();
+        cardKeysOrderInfs.forEach(item -> {
+            paramData.put("paramData", JSONArray.toJSONString(item.getOrderId()));
+            // 调用代付查询接口,根据代付接口返回信息更新卡密订单
+            logger.info("中付代付查询传参=========>orderId[{}]", item.getOrderId());
+            String rtnStr = HttpClientUtil.sendPost("http://api.xin5you.com/withdraw/zf-pay/queryOrder.html", paramData.toString());
+            logger.info("中付代付查询返回=========>{}", rtnStr);
+        });
     }
 
 }
