@@ -62,13 +62,17 @@ public class CardKeysRetrievingJob {
 
         Set<CardKeysOrderInf> orderList;
         try {
+            // 转让受理中
+            cko.setStat(orderStat.OS33.getCode());
+            // 处理代付处理中的卡密订单
+            es.execute(new ZhongFuOrderQueryTask(cko));
+
             // 查询所有可代付订单
             orderList = cardKeysOrderInfService.getCardKeysOrderInfList(cko);
             if (orderList == null || orderList.size() < 1) {
                 logger.info("No executable orders are currently available.");
                 return;
             }
-
             // 将“转让中”卡密交易订单加入缓存线程池执行代付处理
             // TODO 二期加入阿里开源消息队列中间件RocketMQ
             CardKeysTransLog cardKeysTransLog = new CardKeysTransLog();
@@ -104,11 +108,6 @@ public class CardKeysRetrievingJob {
                     es.execute(new ZhongFuPayTask(item));
                 }
             });
-
-            // 转让受理中
-            cko.setStat(orderStat.OS33.getCode());
-            // 处理代付处理中的卡密订单
-            es.execute(new ZhongFuOrderQueryTask(cko));
         } catch (Exception e) {
             logger.error("## CardKeysRetrievingJob执行异常", e);
             es.shutdownNow();
