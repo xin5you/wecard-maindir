@@ -153,8 +153,8 @@ public class ZhongFuPayTask implements Runnable {
                         cardKeysOrderInf.setStat(BaseConstants.orderStat.OS31.getCode());
                     } else {
                         BaseResp resp = JSONObject.parseObject(rtnStr, BaseResp.class);
-                        if (BaseConstants.RESPONSE_SUCCESS_CODE.equals(resp.getRespCode())) {
-                            // 转让受理成功
+                        // 代付处理中
+                        if ("02".equals(resp.getRespCode())) {
                             cardKeysOrderInf.setStat(BaseConstants.orderStat.OS33.getCode());
                         } else {
                             // 转让受理失败
