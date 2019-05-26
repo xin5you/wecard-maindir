@@ -55,8 +55,6 @@ public class CardKeysRetrievingJob {
 
         // 转让订单
         cko.setType(orderType.O3.getCode());
-        // 转让中
-        cko.setStat(orderStat.OS30.getCode());
         // 没有放入任务执行
         cko.setDataStat(DataStatEnum.TRUE_STATUS.getCode());
 
@@ -67,6 +65,8 @@ public class CardKeysRetrievingJob {
             // 处理代付处理中的卡密订单
             es.execute(new ZhongFuOrderQueryTask(cko));
 
+            // 转让中
+            cko.setStat(orderStat.OS30.getCode());
             // 查询所有可代付订单
             orderList = cardKeysOrderInfService.getCardKeysOrderInfList(cko);
             if (orderList == null || orderList.size() < 1) {
