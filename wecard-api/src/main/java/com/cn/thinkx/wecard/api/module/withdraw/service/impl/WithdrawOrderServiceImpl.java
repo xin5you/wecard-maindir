@@ -2,6 +2,7 @@ package com.cn.thinkx.wecard.api.module.withdraw.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.cn.thinkx.common.activemq.service.WechatMQProducerService;
 import com.cn.thinkx.pay.core.KeyUtils;
 import com.cn.thinkx.pay.domain.UnifyPayForAnotherVO;
 import com.cn.thinkx.pay.domain.UnifyQueryVO;
@@ -14,6 +15,8 @@ import com.cn.thinkx.pms.base.utils.BaseConstants.TransFeeType;
 import com.cn.thinkx.pms.base.utils.BaseConstants.TransType;
 import com.cn.thinkx.pms.base.utils.BaseConstants.orderStat;
 import com.cn.thinkx.pms.base.utils.BaseConstants.orderType;
+import com.cn.thinkx.wecard.api.module.pub.model.ChannelUserInf;
+import com.cn.thinkx.wecard.api.module.pub.service.ChannelUserInfService;
 import com.cn.thinkx.wecard.api.module.welfaremart.model.*;
 import com.cn.thinkx.wecard.api.module.welfaremart.service.*;
 import com.cn.thinkx.wecard.api.module.withdraw.domain.WithdrawOrder;
@@ -26,6 +29,7 @@ import com.cn.thinkx.wecard.api.module.withdraw.util.MessageUtil;
 import com.cn.thinkx.wecard.api.module.withdraw.vo.WelfaremartResellReq;
 import com.cn.thinkx.wecard.api.module.withdraw.vo.WelfaremartResellResp;
 import com.cn.thinkx.wecard.api.module.withdraw.vo.WithdrawOrderVO;
+import com.cn.thinkx.wechat.base.wxapi.util.WXTemplateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +40,7 @@ import redis.clients.jedis.JedisCluster;
 import java.io.UnsupportedEncodingException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service("withdrawOrderService")
 public class WithdrawOrderServiceImpl implements WithdrawOrderService {
@@ -74,6 +75,14 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
     @Autowired
     @Qualifier("userBankInfService")
     private UserBankInfService userBankInfService;
+
+    @Autowired
+    @Qualifier("wechatMQProducerService")
+    private WechatMQProducerService wechatMQProducerService;
+
+    @Autowired
+    @Qualifier("channelUserInfService")
+    private ChannelUserInfService channelUserInfService;
 
     @Autowired
     @Qualifier("jedisCluster")
@@ -566,6 +575,7 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
             // 发送HTTP POST请求至中付代付返回结果
             result = ZFPaymentServer.doPayForAnotherPay(un);
             //插入出款订单表信息
+            order.setBatchNo(BizUtil.generalBatchNo());
             order.setOrderId(getPrimaryKey());
             order.setUserId(un.getUserId());
             order.setTotalFee("0");
@@ -583,7 +593,6 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
             order.setStat(Constants.withdrawStat.S66.getCode());
             if (insertWithdrawOrder(order) < 1) {
                 logger.error("## 用户[{}]新增出款订单信息失败 出款订单号[{}]", un.getUserId(), un.getOrderId());
-                return null;
             }
         } catch (Exception e) {
             logger.error("## 发送中付代付 Exception {}", e);
@@ -607,6 +616,22 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
             logger.info("代付查询中付接口返回{}", jsonObject.toJSONString());
             String respCode = jsonObject.getString("responseCode");
             if ("00".equals(respCode)) {
+                CardKeysOrderInf cko = cardKeysOrderInfService.getCardKeysOrderByOrderId(jsonObject.getString("inTradeOrderNo"));
+                CardKeysProduct product = new CardKeysProduct();
+                product.setProductCode(cko.getProductCode());
+                CardKeysProduct ckp = cardKeysProductService.getCardKeysProductByCode(product);
+                ChannelUserInf cUser = new ChannelUserInf();
+                cUser.setUserId(cko.getUserId());
+                cUser.setChannelCode(BaseConstants.ChannelCode.CHANNEL1.toString());
+                String openId = channelUserInfService.getExternalId(cUser);
+                String desc = NumberUtils.RMBCentToYuan(ckp.getOrgAmount()) + ckp.getProductUnit() + Objects.requireNonNull(TransFeeType.findByCode(ckp.getProductType())).getValue();
+                wechatMQProducerService.sendTemplateMsg(RedisDictProperties.getInstance().getdictValueByCode("WX_CUSTOMER_ACCOUNT"), openId, "WX_TEMPLATE_ID_5", null,
+                        WXTemplateUtil.setResellData(jsonObject.getString("inTradeOrderNo"),
+                                jsonObject.getString("payMoney"),
+                                DateUtil.getCurrentDateTimeStr(),
+                                NumberUtils.hideCardNo(cko.getBankNo()),
+                                cko.getNum(),
+                                desc));
                 cardKeysOrderInf.setStat(orderStat.OS32.getCode());
             } else if ("02".equals(respCode)) {
                 cardKeysOrderInf.setStat(orderStat.OS33.getCode());

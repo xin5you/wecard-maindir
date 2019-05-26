@@ -257,9 +257,10 @@ public class WithdrawController {
     @ResponseBody
     public JSONObject queryOrder(@RequestBody BaseReq request) throws Exception {
         // 获得中付代付请求参数
-        String orderId = request.getParamData();
-        logger.info("中付代付查询，订单号：{}", orderId);
+        String paramData = request.getParamData();
         UnifyQueryVO queryVO = new UnifyQueryVO();
+        String orderId = JSONObject.parseObject(paramData, String.class);
+        logger.info("中付代付查询，订单号：{}", paramData);
         queryVO.setInTradeOrderNo(orderId);
         return withdrawOrderService.zfPayQuery(queryVO);
     }
