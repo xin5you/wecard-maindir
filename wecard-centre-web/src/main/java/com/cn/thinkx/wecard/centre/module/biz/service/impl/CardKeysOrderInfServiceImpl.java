@@ -38,6 +38,11 @@ public class CardKeysOrderInfServiceImpl implements CardKeysOrderInfService {
     }
 
     @Override
+    public List<CardKeysOrderInf> getCardKeysOrderInfs(CardKeysOrderInf cko) {
+        return cardKeysOrderInfMapper.getCardKeysOrderInfs(cko);
+    }
+
+    @Override
     public int insertCardKeysOrderInf(CardKeysOrderInf cardKeysOrderInf) {
         return this.cardKeysOrderInfMapper.insertCardKeysOrderInf(cardKeysOrderInf);
     }

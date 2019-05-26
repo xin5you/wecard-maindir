@@ -9,6 +9,7 @@ import com.cn.thinkx.wecard.centre.module.biz.util.CardKeysFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -42,7 +43,7 @@ public class ZhongFuOrderQueryTask implements Runnable {
     @Override
     public void run() {
         if (cardKeysOrderInf != null) {
-            Set<CardKeysOrderInf> cardKeysOrderInfs = cardKeysOrderInfService.getCardKeysOrderInfList(cardKeysOrderInf);
+            List<CardKeysOrderInf> cardKeysOrderInfs = cardKeysOrderInfService.getCardKeysOrderInfs(cardKeysOrderInf);
             JSONObject paramData = new JSONObject();
             cardKeysOrderInfs.forEach(item -> {
                 paramData.put("paramData", JSONArray.toJSONString(item.getOrderId()));

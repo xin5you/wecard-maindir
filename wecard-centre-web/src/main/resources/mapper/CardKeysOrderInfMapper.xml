@@ -107,6 +107,32 @@
 				AND c.STAT=#{stat}
 		 </if>
 	</select>
+
+	<select id="getCardKeysOrderInfs" parameterType="CardKeysOrderInf" resultMap="CardKeysOrderInfMap">
+		SELECT
+			<include refid="CardKeysOrderInfColumns" />
+		FROM
+			<include refid="tableName" />
+		WHERE 1=1
+		<if test="userId !=null and userId !='' ">
+			AND USER_ID=#{userId}
+		</if>
+		<if test="dataStat !=null and dataStat !='' ">
+			AND DATA_STAT=#{dataStat}
+		</if>
+		<if test="productCode !=null and productCode !='' ">
+			AND PRODUCT_CODE=#{productCode}
+		</if>
+		<if test="bankNo !=null and bankNo !='' ">
+			AND BANK_NO=#{bankNo}
+		</if>
+		<if test="type !=null and type !='' ">
+			AND TYPE=#{type}
+		</if>
+		<if test="stat !=null and stat !='' ">
+			AND STAT=#{stat}
+		</if>
+	</select>
 	
 	<select id="getOrderNumByOrderId" parameterType="CardKeysOrderInf" resultType="CardKeysOrderInf">
 		SELECT

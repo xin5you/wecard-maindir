@@ -7,6 +7,8 @@ import com.cn.thinkx.common.wecard.domain.cardkeys.CardKeysOrderInf;
 public interface CardKeysOrderInfMapper {
 	
 	List<CardKeysOrderInf> getCardKeysOrderInfList(CardKeysOrderInf cko);
+
+	List<CardKeysOrderInf> getCardKeysOrderInfs(CardKeysOrderInf cko);
 	
 	CardKeysOrderInf getOrderNumByOrderId(CardKeysOrderInf cko);
 	
