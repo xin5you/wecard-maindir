@@ -103,12 +103,12 @@ public class CardKeysRetrievingJob {
                     // 执行代付逻辑
                     es.execute(new ZhongFuPayTask(item));
                 }
-
-                // 转让受理中
-                cko.setStat(orderStat.OS33.getCode());
-                // 处理代付处理中的卡密订单
-                es.execute(new ZhongFuOrderQueryTask(cko));
             });
+
+            // 转让受理中
+            cko.setStat(orderStat.OS33.getCode());
+            // 处理代付处理中的卡密订单
+            es.execute(new ZhongFuOrderQueryTask(cko));
         } catch (Exception e) {
             logger.error("## CardKeysRetrievingJob执行异常", e);
             es.shutdownNow();
