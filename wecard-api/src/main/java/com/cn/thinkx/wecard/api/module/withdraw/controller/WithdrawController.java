@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.cn.thinkx.pay.core.KeyUtils;
 import com.cn.thinkx.pay.domain.UnifyPayForAnotherVO;
 import com.cn.thinkx.pay.domain.UnifyQueryVO;
-import com.cn.thinkx.pay.service.ZFPaymentServer;
 import com.cn.thinkx.pms.base.domain.BaseReq;
 import com.cn.thinkx.pms.base.domain.BaseResp;
 import com.cn.thinkx.pms.base.redis.util.RedisDictProperties;
@@ -31,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.json.Json;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
@@ -223,7 +221,7 @@ public class WithdrawController {
         JSONObject respJson = null;
         try {
             // 调用中付代付接口
-            UnifyPayForAnotherVO un = JSONObject.parseObject(paramData,UnifyPayForAnotherVO.class);
+            UnifyPayForAnotherVO un = JSONObject.parseObject(paramData, UnifyPayForAnotherVO.class);
             respJson = withdrawOrderService.zfPayWithdraw(un);
         } catch (Exception e) {
             logger.error("## 调用中付代付接口异常{}", e);
@@ -251,13 +249,16 @@ public class WithdrawController {
 
     /**
      * 中付代付 查询
-     * @param orderId 代付请求
-     * @return 代付结果
+     *
+     * @param request 查询请求
+     * @return 查询结果
      */
     @RequestMapping(value = "/zf-pay/queryOrder", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject queryOrder(String orderId) throws  Exception {
-        UnifyQueryVO queryVO=new UnifyQueryVO();
+    public JSONObject queryOrder(@RequestBody BaseReq request) throws Exception {
+        // 获得中付代付请求参数
+        String orderId = request.getParamData();
+        UnifyQueryVO queryVO = new UnifyQueryVO();
         queryVO.setInTradeOrderNo(orderId);
         return withdrawOrderService.zfPayQuery(queryVO);
     }
@@ -288,7 +289,7 @@ public class WithdrawController {
             //生成回调签名
             String sign = Objects.requireNonNull(MD5Util.md5(orderNumber + inTradeOrderNo + md5)).toUpperCase();
             if (Objects.equals(sign, signature)) {
-                withdrawOrderDetailService.zfPayNotify(orderNumber,inTradeOrderNo, payMoney);
+                withdrawOrderDetailService.zfPayNotify(orderNumber, inTradeOrderNo, payMoney);
                 return "success";
             } else {
                 logger.error("## 回调签名不一致，平台订单号：{} 商户订单号：{} 中付签名：{}", orderNumber, inTradeOrderNo, md5);

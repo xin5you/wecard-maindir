@@ -597,11 +597,24 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
      *
      * @param queryVO
      * @return
-     * @throws Exception
      */
-    public JSONObject zfPayQuery(UnifyQueryVO queryVO) throws Exception {
+    @Override
+    public JSONObject zfPayQuery(UnifyQueryVO queryVO) {
         CardKeysOrderInf cardKeysOrderInf = cardKeysOrderInfService.getCardKeysOrderByOrderId(queryVO.getInTradeOrderNo());
         queryVO.setTradeTime(DateUtil.COMMON.getDateText(cardKeysOrderInf.getCreateTime()));
-        return ZFPaymentServer.doPayForAnotherQuery(queryVO);
+        JSONObject jsonObject = ZFPaymentServer.doPayForAnotherQuery(queryVO);
+        if (jsonObject != null) {
+            String respCode = jsonObject.getString("responseCode");
+            if ("00".equals(respCode)) {
+                cardKeysOrderInf.setStat(orderStat.OS32.getCode());
+            } else if ("02".equals(respCode)) {
+                cardKeysOrderInf.setStat(orderStat.OS33.getCode());
+            } else {
+                cardKeysOrderInf.setStat(orderStat.OS35.getCode());
+            }
+            cardKeysOrderInfService.updateCardKeysOrderInf(cardKeysOrderInf);
+        }
+
+        return jsonObject;
     }
 }

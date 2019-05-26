@@ -9,6 +9,7 @@ import com.cn.thinkx.pms.base.utils.BaseConstants.orderType;
 import com.cn.thinkx.wecard.centre.module.biz.service.CardKeysOrderInfService;
 import com.cn.thinkx.wecard.centre.module.biz.service.CardKeysTransLogService;
 import com.cn.thinkx.wecard.centre.module.task.NegotiationTask;
+import com.cn.thinkx.wecard.centre.module.task.ZhongFuOrderQueryTask;
 import com.cn.thinkx.wecard.centre.module.task.ZhongFuPayTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,12 +100,14 @@ public class CardKeysRetrievingJob {
                 }
 
                 if (canExecuteTask) {
+                    // 执行代付逻辑
                     es.execute(new ZhongFuPayTask(item));
-                }/* else {
-					item.setStat(BaseConstants.orderStat.OS31.getCode());
-					item.setPaidAmount("0");
-					cardKeysOrderInfService.updateCardKeysOrderInf(item);
-				}*/
+                }
+
+                // 转让受理中
+                cko.setStat(orderStat.OS33.getCode());
+                // 处理代付处理中的卡密订单
+                es.execute(new ZhongFuOrderQueryTask(cko));
             });
         } catch (Exception e) {
             logger.error("## CardKeysRetrievingJob执行异常", e);
