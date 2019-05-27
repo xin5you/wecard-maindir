@@ -260,7 +260,6 @@ public class WithdrawController {
         String paramData = request.getParamData();
         UnifyQueryVO queryVO = new UnifyQueryVO();
         String orderId = JSONObject.parseObject(paramData, String.class);
-        logger.info("中付代付查询，订单号：{}", paramData);
         queryVO.setInTradeOrderNo(orderId);
         return withdrawOrderService.zfPayQuery(queryVO);
     }

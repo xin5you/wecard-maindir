@@ -611,9 +611,10 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
     public JSONObject zfPayQuery(UnifyQueryVO queryVO) {
         CardKeysOrderInf cardKeysOrderInf = cardKeysOrderInfService.getCardKeysOrderByOrderId(queryVO.getInTradeOrderNo());
         queryVO.setTradeTime(DateUtil.COMMON.getDateText(cardKeysOrderInf.getCreateTime()));
+        logger.info("代付查询中付接口传参：{}", JSONObject.toJSONString(queryVO));
         JSONObject jsonObject = ZFPaymentServer.doPayForAnotherQuery(queryVO);
         if (jsonObject != null) {
-            logger.info("代付查询中付接口返回{}", jsonObject.toJSONString());
+            logger.info("代付查询中付接口返回：{}", jsonObject.toJSONString());
             String respCode = jsonObject.getString("responseCode");
             if ("00".equals(respCode)) {
                 CardKeysOrderInf cko = cardKeysOrderInfService.getCardKeysOrderByOrderId(jsonObject.getString("inTradeOrderNo"));
