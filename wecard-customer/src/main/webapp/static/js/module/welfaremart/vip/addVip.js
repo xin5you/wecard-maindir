@@ -183,7 +183,9 @@ var AddVip = {
 									location.href = CONETXT_PATH + '/welfareMart/toBankCardList.html';
 								} else if (data.check == "2") {
 									location.href = CONETXT_PATH + '/welfareMart/toWelfareResellCard.html?productCode='+productCode+'&num='+num;
-								} else {
+								}else if (data.check == "3") {
+                                    location.href = CONETXT_PATH + '/welfareMart/toWageBalanceTrans.html';
+                                } else {
 									jfShowTips.toastShow({'text' : '网络异常，请稍后再试'});
 								}
 							} else {
