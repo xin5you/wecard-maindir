@@ -113,12 +113,13 @@ public class WelfareMartServiceImpl implements WelfareMartService {
      * @param notifyUrl  通知地址
      * @param redirectUrl 重定向地址
      * @param  transAmt 卡密交易金额
+     * @param  bankNo 银行卡号
      * @param  isCard 是否真实卡密 true: transAmt无效，false: transAmt必须填写 单位元
      * @return
      * @throws Exception
      */
     @Override
-    public TransOrderReq buyCardCommit(String openid,String num,String productCode,String mchntCode,String shopCode,String notifyUrl,String redirectUrl,String transAmt,boolean isCard) throws Exception {
+    public TransOrderReq buyCardCommit(String openid,String num,String productCode,String mchntCode,String shopCode,String notifyUrl,String redirectUrl,String transAmt,String bankNo,boolean isCard) throws Exception {
         if (StringUtil.isNullOrEmpty(openid)) {
             logger.error("★★★★★Request WelfareMart--->buyCardCommit get openid is [Null]★★★★★");
             return null;
@@ -159,6 +160,7 @@ public class WelfareMartServiceImpl implements WelfareMartService {
         cko.setStat(orderStat.OS10.getCode());
         cko.setNum(num);
         cko.setPaidAmount("0");
+        cko.setAccountBank(bankNo);
         if (cardKeysOrderInfService.insertCardKeysOrderInf(cko) < 1) {
             logger.error("## 卡券集市--->购卡支付接口接口，为userID[{}]插入CardKeysOrderInf信息失败", personInf.getUserId());
             return null;

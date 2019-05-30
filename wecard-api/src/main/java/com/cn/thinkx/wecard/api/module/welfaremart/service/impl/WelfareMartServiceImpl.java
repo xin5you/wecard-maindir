@@ -18,6 +18,9 @@ import com.cn.thinkx.wecard.api.module.welfaremart.util.GenCardKeysUtil;
 import com.cn.thinkx.wecard.api.module.welfaremart.valid.WelfareMartValid;
 import com.cn.thinkx.wecard.api.module.welfaremart.vo.NotifyOrder;
 import com.cn.thinkx.wecard.api.module.welfaremart.vo.PhoneRechargeNotifyReq;
+import com.cn.thinkx.wecard.api.module.withdraw.service.WithdrawOrderService;
+import com.cn.thinkx.wecard.api.module.withdraw.vo.WelfaremartResellReq;
+import com.cn.thinkx.wecard.api.module.withdraw.vo.WelfaremartResellResp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +57,11 @@ public class WelfareMartServiceImpl implements WelfareMartService {
     @Autowired
     @Qualifier("jedisCluster")
     private JedisCluster jedisCluster;
+
+
+    @Autowired
+    @Qualifier("withdrawOrderService")
+    private WithdrawOrderService withdrawOrderService;
 
     @Override
     public String welfareBuyCardNotify(HttpServletRequest request) {
@@ -274,6 +282,30 @@ public class WelfareMartServiceImpl implements WelfareMartService {
         if (isUpdateUserCardKey)
             return "SUCCESS";
         return "FAIL";
+    }
+
+
+    /**
+     * 工资余额提现支付回调
+     * @param request
+     * @return
+     */
+    @Override
+    public String welfareBalanceDrawNotify(HttpServletRequest request){
+        // step1 购买流程
+        String result=welfareBuyCardNotify(request);
+
+
+        // step2 转让提现操作
+        WelfaremartResellReq resellReq =new WelfaremartResellReq();
+        try {
+            WelfaremartResellResp resp =withdrawOrderService.welfaremartResellCommit(resellReq);
+        }catch (Exception e){
+            logger.error("## 工资余额提现--->转让接口，转让发生异常{}", e);
+        }
+
+
+        return "SUCCESS";
     }
 
 }

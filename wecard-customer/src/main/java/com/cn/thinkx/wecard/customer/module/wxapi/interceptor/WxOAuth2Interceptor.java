@@ -38,10 +38,10 @@ public class WxOAuth2Interceptor extends HandlerInterceptorAdapter {
 		if (!oauthFlag) {// 如果不需要oauth认证
 			return true;
 		}
-		String openid = "oYw_B50E661DcCpg9LNtJeqVwvqg";
+/*		String openid = "oYw_B50E661DcCpg9LNtJeqVwvqg";
 		WxMemoryCacheClient.setOpenid(request, openid);// 缓存openid
-		return true;
-		/*String openid = WxMemoryCacheClient.getOpenid(request);// 先从缓存中获取openid
+		return true;*/
+		String openid = WxMemoryCacheClient.getOpenid(request);// 先从缓存中获取openid
 		WxMemoryCacheClient.setOpenid(request, openid);// 缓存openid
 		if (StringUtils.isBlank(openid)) {// 如果缓存没有openID，通过微信页面授权获取
 			String code = request.getParameter("code");
@@ -70,7 +70,7 @@ public class WxOAuth2Interceptor extends HandlerInterceptorAdapter {
 			return true;
 		}
 		HttpUtil.redirectUrl(request, response, "/base/404.html");
-		return false;*/
+		return false;
 	}
 
 	public String[] getExcludes() {

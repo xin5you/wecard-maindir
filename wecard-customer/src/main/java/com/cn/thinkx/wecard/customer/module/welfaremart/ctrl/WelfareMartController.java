@@ -220,7 +220,7 @@ public class WelfareMartController extends BaseController {
 				String notifyUrl = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.HKB_WELFAREMART_BUYCARD_NOTIFY_URL);
 				String redirectUrl = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.HKB_WELFAREMART_REDIRECT_URL);
 
-				TransOrderReq orderReq = welfareMartService.buyCardCommit(openid,num,productCode,mchntCode,shopCode,notifyUrl,redirectUrl,null ,true);
+				TransOrderReq orderReq = welfareMartService.buyCardCommit(openid,num,productCode,mchntCode,shopCode,notifyUrl,redirectUrl,null,null ,true);
 
 				mv = new ModelAndView("welfaremart/cardshow/unifiedOrder");
 				mv.addObject("orderReq", orderReq);
@@ -903,6 +903,7 @@ public class WelfareMartController extends BaseController {
 			logger.error("★★★★★Request WelfareMart--->welfareBuyCardCommit get personInf is [Null]★★★★★");
 			return new ModelAndView("redirect:/common/500.html");
 		}
+		String phoneCode=request.getParameter("phoneCode"); //手机验证码
 
 		try {
 			/** 用户是否有此权限 */
@@ -912,13 +913,14 @@ public class WelfareMartController extends BaseController {
 				String num ="1";
 				String productCode =  RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.CARD_WAGES_XIN5YOU_PROD_NO);
 				String transAmt=request.getParameter("transAmt");
+				String bankNo=request.getParameter("bankNo"); //银行卡
 				//xin5you 工资卡信息
 				String mchntCode = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.WAGES_XIN5YOU_MCHNT_NO);
 				String shopCode = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.WAGES_XIN5YOU_SHOP_NO);
 				String notifyUrl = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.HKB_WELFAREMART_BUYCARD_NOTIFY_URL);
 				String redirectUrl = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.HKB_WELFAREMART_REDIRECT_URL);
 
-				TransOrderReq orderReq = welfareMartService.buyCardCommit(openid,num,productCode,mchntCode,shopCode,notifyUrl,redirectUrl,transAmt,false);
+				TransOrderReq orderReq = welfareMartService.buyCardCommit(openid,num,productCode,mchntCode,shopCode,notifyUrl,redirectUrl,transAmt,bankNo,false);
 
 				mv = new ModelAndView("welfaremart/cardshow/unifiedOrder");
 				mv.addObject("orderReq", orderReq);

@@ -39,11 +39,13 @@ public interface WelfareMartService {
 	 * @param shopCode
 	 * @param notifyUrl
 	 * @param redirectUrl
+	 * @param transAmt
+	 * @param bankNo
 	 * @param isCard
 	 * @return
 	 * @throws Exception
 	 */
-	TransOrderReq buyCardCommit(String openId,String num,String productCode,String mchntCode,String shopCode,String notifyUrl,String redirectUrl,String transAmt,boolean isCard) throws Exception;
+	TransOrderReq buyCardCommit(String openId,String num,String productCode,String mchntCode,String shopCode,String notifyUrl,String redirectUrl,String transAmt,String bankNo,boolean isCard) throws Exception;
 
 	/**
 	 * 购买卡券重定向方法

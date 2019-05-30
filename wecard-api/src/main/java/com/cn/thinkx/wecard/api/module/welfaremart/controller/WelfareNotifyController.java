@@ -45,5 +45,17 @@ public class WelfareNotifyController {
 	public String welfareRechargeNotify(HttpServletRequest request) {
 		return welfareMartService.welfareRechargeNotify(request);
 	}
-	
+
+
+	/**
+	 * 工資余额购卡提现通知异步回调
+	 *
+	 * @param request
+	 */
+	@RequestMapping(value = "/welfareBalanceDrawNotify")
+	@ResponseBody
+	public String welfareBalanceDrawNotify(HttpServletRequest request) {
+		return welfareMartService.welfareBalanceDrawNotify(request);
+	}
+
 }
