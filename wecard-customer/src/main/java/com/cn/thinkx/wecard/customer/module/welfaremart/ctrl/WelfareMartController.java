@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.cn.thinkx.pms.base.redis.util.RedisDictProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -209,7 +210,18 @@ public class WelfareMartController extends BaseController {
 			/** 用户是否有此权限 */
 			WithdrawBlacklistInf withdrawBlacklistInf = withdrawBlacklistInfService.getWithdrawBlacklistInfByUserPhone(personInf.getMobilePhoneNo());
 			if (withdrawBlacklistInf == null) {
-				TransOrderReq orderReq = welfareMartService.buyCardCommit(request);
+				// 得到通卡商户门店等信息
+				String num = request.getParameter("num");
+				String productCode = request.getParameter("productCode");
+
+				//xin5you 通卡购买卡密信息
+				String mchntCode = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.ACC_HKB_MCHNT_NO);
+				String shopCode = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.ACC_HKB_SHOP_NO);
+				String notifyUrl = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.HKB_WELFAREMART_BUYCARD_NOTIFY_URL);
+				String redirectUrl = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.HKB_WELFAREMART_REDIRECT_URL);
+
+				TransOrderReq orderReq = welfareMartService.buyCardCommit(openid,num,productCode,mchntCode,shopCode,notifyUrl,redirectUrl,null ,true);
+
 				mv = new ModelAndView("welfaremart/cardshow/unifiedOrder");
 				mv.addObject("orderReq", orderReq);
 			} else {
@@ -429,7 +441,10 @@ public class WelfareMartController extends BaseController {
 				resp.setMsg(MessageUtil.ERROR_MESSAGE_PHONE_CODE + "不正确，请重新输入");
 				return resp;
 			} else {
-				resp = welfareMartService.resellCommit(request, personInf.getUserId());
+				String resellNum = request.getParameter("resellNum");
+				String productCode = request.getParameter("productCode");
+				String bankNo = request.getParameter("bankNo");
+				resp = welfareMartService.resellCommit(resellNum,productCode,bankNo,personInf.getUserId());
 				if (resp.isStatus()) {
 					request.getSession().removeAttribute(WxCmsContents.SESSION_PHONECODE);
 				}
@@ -863,6 +878,59 @@ public class WelfareMartController extends BaseController {
 		mv.addObject("userBankList", userBankList);
 		mv.addObject("mobile", personInf.getMobilePhoneNo());
 		mv.addObject("appearNum", appearNum);
+		return mv;
+	}
+
+
+	/**
+	 * 工资提现提交
+	 *
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/welfareBalanceDrawCommit")
+	public ModelAndView welfareBalanceDrawCommit(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mv = null;
+		String openid = WxMemoryCacheClient.getOpenid(request);
+		if (StringUtil.isNullOrEmpty(openid)) {
+			logger.error("★★★★★Request WelfareMart--->welfareBuyCardCommit get openid is [Null]★★★★★");
+			return new ModelAndView("redirect:/common/500.html");
+		}
+
+		PersonInf personInf = personInfService.getPersonInfByOpenId(openid);
+		if (StringUtil.isNullOrEmpty(personInf)) {
+			logger.error("★★★★★Request WelfareMart--->welfareBuyCardCommit get personInf is [Null]★★★★★");
+			return new ModelAndView("redirect:/common/500.html");
+		}
+
+		try {
+			/** 用户是否有此权限 */
+			WithdrawBlacklistInf withdrawBlacklistInf = withdrawBlacklistInfService.getWithdrawBlacklistInfByUserPhone(personInf.getMobilePhoneNo());
+			if (withdrawBlacklistInf == null) {
+				// 得到通卡商户门店等信息
+				String num ="1";
+				String productCode =  RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.CARD_WAGES_XIN5YOU_PROD_NO);
+				String transAmt=request.getParameter("transAmt");
+				//xin5you 工资卡信息
+				String mchntCode = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.WAGES_XIN5YOU_MCHNT_NO);
+				String shopCode = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.WAGES_XIN5YOU_SHOP_NO);
+				String notifyUrl = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.HKB_WELFAREMART_BUYCARD_NOTIFY_URL);
+				String redirectUrl = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.HKB_WELFAREMART_REDIRECT_URL);
+
+				TransOrderReq orderReq = welfareMartService.buyCardCommit(openid,num,productCode,mchntCode,shopCode,notifyUrl,redirectUrl,transAmt,false);
+
+				mv = new ModelAndView("welfaremart/cardshow/unifiedOrder");
+				mv.addObject("orderReq", orderReq);
+			} else {
+				logger.info("卡券集市--->购买卡券，用户手机号{}在提现黑名单中，暂不支持卡券购买", personInf.getMobilePhoneNo());
+				mv = new ModelAndView("welfaremart/cardin/cardFail");
+				mv.addObject("msg", MessageUtil.WELFAREMART_NO_BUY);
+			}
+		} catch (Exception e) {
+			logger.error("## 卡券集市--->购买卡券提交异常{}", e);
+			return new ModelAndView("redirect:/common/500.html");
+		}
 		return mv;
 	}
 

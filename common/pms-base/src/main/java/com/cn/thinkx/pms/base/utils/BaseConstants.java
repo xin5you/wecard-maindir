@@ -55,6 +55,15 @@ public class BaseConstants {
     public static final String ACC_ITF = "ACC_ITF";
     public static final String ACC_HKB = "ACC_HKB";
 
+    // 薪无忧工资卡信息
+    public static final String WAGES_XIN5YOU_MCHNT_NO = "WAGES_XIN5YOU_MCHNT_NO";
+    public static final String WAGES_XIN5YOU_PROD_NO = "WAGES_XIN5YOU_PROD_NO";
+    public static final String WAGES_XIN5YOU_INS_CODE = "WAGES_XIN5YOU_INS_CODE";
+    public static final String WAGES_XIN5YOU_SHOP_NO = "WAGES_XIN5YOU_SHOP_NO";
+
+    // 薪无忧工资卡密商品
+    public static final String CARD_WAGES_XIN5YOU_PROD_NO = "CARD_WAGES_XIN5YOU_PROD_NO";
+
     public static final String PHONE_RECHARGE_REQ_KEY = "PHONE_RECHARGE_REQ_KEY";
     public static final String PHONE_RECHARGE_REQ_REDIRECT_URL = "PHONE_RECHARGE_REQ_REDIRECT_URL";
     public static final String PHONE_RECHARGE_REQ_NOTIFY_URL = "PHONE_RECHARGE_REQ_NOTIFY_URL";

@@ -103,31 +103,38 @@ public class WelfareMartServiceImpl implements WelfareMartService {
         return userInfo;
     }
 
+    /**
+     *
+     * @param openid
+     * @param num  购卡数量
+     * @param productCode 卡密商品号
+     * @param mchntCode  商户号
+     * @param shopCode  门店号
+     * @param notifyUrl  通知地址
+     * @param redirectUrl 重定向地址
+     * @param  transAmt 卡密交易金额
+     * @param  isCard 是否真实卡密 true: transAmt无效，false: transAmt必须填写 单位元
+     * @return
+     * @throws Exception
+     */
     @Override
-    public TransOrderReq buyCardCommit(HttpServletRequest request) throws Exception {
-        String openid = WxMemoryCacheClient.getOpenid(request);
+    public TransOrderReq buyCardCommit(String openid,String num,String productCode,String mchntCode,String shopCode,String notifyUrl,String redirectUrl,String transAmt,boolean isCard) throws Exception {
         if (StringUtil.isNullOrEmpty(openid)) {
             logger.error("★★★★★Request WelfareMart--->buyCardCommit get openid is [Null]★★★★★");
             return null;
         }
-
         PersonInf personInf = personInfService.getPersonInfByOpenId(openid);
         if (StringUtil.isNullOrEmpty(personInf)) {
             logger.error("★★★★★Request WelfareMart--->buyCardCommit get personInf is [Null]★★★★★");
             return null;
         }
-
-        String num = request.getParameter("num");
-        String productCode = request.getParameter("productCode");
-
         if (StringUtil.isNullOrEmpty(num) || StringUtil.isNullOrEmpty(productCode)) {
             logger.error("★★★★★Request WelfareMart--->buyCardCommit get num | productCode is [Null]★★★★★");
             return null;
         }
-
         CardKeysProduct product = new CardKeysProduct();
         product.setProductCode(productCode);
-        product.setIsPutaway("0");
+       /* product.setIsPutaway("0");*/
         product.setDataStat("0");
         CardKeysProduct ckp = cardKeysProductService.getCardKeysProductByCode(product);
         if (StringUtil.isNullOrEmpty(ckp)) {
@@ -140,8 +147,14 @@ public class WelfareMartServiceImpl implements WelfareMartService {
         cko.setOrderId(RandomUtils.getOrderIdByUUId("G"));
         cko.setUserId(personInf.getUserId());
         cko.setProductCode(productCode);
-        int amt = NumberUtils.mul(Integer.parseInt(num), Integer.parseInt(ckp.getAmount()));
-        cko.setAmount(String.valueOf(amt));
+        //计算卡密交易金额
+        if(isCard) {
+            int amt = NumberUtils.mul(Integer.parseInt(num), Integer.parseInt(ckp.getAmount()));
+            cko.setAmount(String.valueOf(amt));
+        }else{
+            cko.setAmount(NumberUtils.RMBYuanToCent(transAmt));
+        }
+
         cko.setType(orderType.O1.getCode());
         cko.setStat(orderStat.OS10.getCode());
         cko.setNum(num);
@@ -150,11 +163,7 @@ public class WelfareMartServiceImpl implements WelfareMartService {
             logger.error("## 卡券集市--->购卡支付接口接口，为userID[{}]插入CardKeysOrderInf信息失败", personInf.getUserId());
             return null;
         }
-        // 得到通卡商户门店等信息
-        String mchntCode = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.ACC_HKB_MCHNT_NO);
-        String shopCode = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.ACC_HKB_SHOP_NO);
-        String notifyUrl = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.HKB_WELFAREMART_BUYCARD_NOTIFY_URL);
-        String redirectUrl = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.HKB_WELFAREMART_REDIRECT_URL);
+
         // 设置薪无忧收银台所需参数
         TransOrderReq req = new TransOrderReq();
         req.setChannel(ChannelCode.CHANNEL9.toString());
@@ -301,16 +310,23 @@ public class WelfareMartServiceImpl implements WelfareMartService {
         return phoneList;
     }
 
+
+    /**
+     * 转让提交
+     * @param resellNum
+     * @param productCode
+     * @param bankNo
+     * @param userId
+     * @return
+     * @throws Exception
+     */
     @Override
     @Transactional
-    public WelfaremartResellResp resellCommit(HttpServletRequest request, String userId) throws Exception {
+    public WelfaremartResellResp resellCommit(String resellNum,String productCode, String bankNo, String userId) throws Exception{
         WelfaremartResellResp resp = new WelfaremartResellResp();
         resp.setCode("1");// 不需要弹框提示
         resp.setStatus(Boolean.FALSE);
 
-        String resellNum = request.getParameter("resellNum");
-        String productCode = request.getParameter("productCode");
-        String bankNo = request.getParameter("bankNo");
         if (StringUtil.isNullOrEmpty(userId)) {
             logger.error("## 卡券集市--->转让接口，接收userId为空");
             resp.setMsg(MessageUtil.ERROR_MSSAGE);

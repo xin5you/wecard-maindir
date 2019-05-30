@@ -113,20 +113,12 @@ var draw = {
 			success : function(data) {
 				if (data) {
 					var phoneCode = $.trim($('#phoneCode').val());
-					var productCode = $('#productCode').val();
-					var gainAmount = $('#gainAmount').html();
 					var drawAmount = $.trim($('#drawAmount').val());
 					var bankNo = $.trim($('#bankNumber').val());
-					var appearNum = $('#appearNum').val();
-					var amount = $('#amount').val();
-					var productName = $('#productName').text();
-					if (!appearNum || parseInt(appearNum) == 0) {
-						jfShowTips.toastShow({'text' : '您当月支取次数已用完'});
-						return false;
-					}
 
-					if (parseInt(unusedAmount) > 50000) {
-						jfShowTips.toastShow({'text' : '卡券转让总额度不能超过 五万 元'});
+
+					if (parseInt(drawAmount) > 50000) {
+						jfShowTips.toastShow({'text' : '支取总额度不能超过 五万 元'});
 						return false;
 					}
 					if (!bankNo) {
@@ -138,7 +130,7 @@ var draw = {
 						return false;
 					}
 					jfShowTips.dialogShow({
-						"mainText": "您将转让 "+drawAmount+" 张"+drawAmount+"元"+productName,
+						"mainText": "您将转支取工资余额："+drawAmount+"元",
 						"minText": "  ",
 						"hasCheck": false,
 						"hasCancel": true,
@@ -151,48 +143,7 @@ var draw = {
 			    			}
 			    			flag = false;
 			    			loadingChange.showLoading();
-							$.ajax({
-								url : CONETXT_PATH + '/welfareMart/welfareResellCardCommit.html',
-								type : 'post',
-								dataType : "json",
-								data : {
-									phoneCode : phoneCode,
-									productCode : productCode,
-                                    drawAmount : drawAmount,
-									bankNo : bankNo
-								},
-								success : function(data) {
-									loadingChange.hideLoading();
-									$('main.loaded').removeClass('loaded');
-									$('#resellCommit').attr("disabled",false); 
-									if (data == null) {
-										jfShowTips.toastShow({'text' : '网络异常，请稍后再试'});
-										flag = true;
-										jfShowTips.dialogRemove();
-									} else {
-										if (data.status) {
-											location.href = CONETXT_PATH + '/welfareMart/toWelfareResellSuccess.html?orderId='+data.orderId;
-										} else {
-											var msg = "";
-											if (data.msg == null || data.msg == '') {
-												msg = "网络异常，请稍后再试";
-											} else {
-												msg = data.msg;
-											}
-											jfShowTips.toastShow({'text' : msg});
-											flag = true;
-											jfShowTips.dialogRemove();
-											return false;
-										}
-									}
-								},
-								error : function() {
-									jfShowTips.toastShow({'text' : '网络异常，请稍后再试'});
-									flag = true;
-									jfShowTips.dialogRemove();
-									return false;
-								}
-							});
+                            window.location.href = CONETXT_PATH + '/welfareMart/welfareBalanceDrawCommit.html?phoneCode='+phoneCode+'&transAmt='+drawAmount+'&bankNo='+bankNo;
 						}
 					});
 				} else {
