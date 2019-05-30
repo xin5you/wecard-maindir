@@ -917,8 +917,8 @@ public class WelfareMartController extends BaseController {
 				//xin5you 工资卡信息
 				String mchntCode = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.WAGES_XIN5YOU_MCHNT_NO);
 				String shopCode = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.WAGES_XIN5YOU_SHOP_NO);
-				String notifyUrl = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.HKB_WELFAREMART_BUYCARD_NOTIFY_URL);
-				String redirectUrl = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.HKB_WELFAREMART_REDIRECT_URL);
+				String notifyUrl = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.XIN5YOU_WELFAREMART_BALANCEDRAW_NOTIFY_URL);
+				String redirectUrl = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.XIN5YOU_WELFAREMART_BALANCEDRAW_REDIRECT_URL);
 
 				TransOrderReq orderReq = welfareMartService.buyCardCommit(openid,num,productCode,mchntCode,shopCode,notifyUrl,redirectUrl,transAmt,bankNo,false);
 

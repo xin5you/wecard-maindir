@@ -7,6 +7,7 @@ import com.cn.thinkx.pms.base.utils.BaseConstants.TransType;
 import com.cn.thinkx.pms.base.utils.BaseConstants.orderStat;
 import com.cn.thinkx.pms.base.utils.BaseConstants.orderType;
 import com.cn.thinkx.pms.base.utils.BaseConstants.phoneRechargeReqChnl;
+import com.cn.thinkx.pms.base.utils.SignUtil;
 import com.cn.thinkx.pms.base.utils.StringUtil;
 import com.cn.thinkx.wecard.api.module.welfaremart.model.CardKeys;
 import com.cn.thinkx.wecard.api.module.welfaremart.model.CardKeysOrderInf;
@@ -294,17 +295,26 @@ public class WelfareMartServiceImpl implements WelfareMartService {
     public String welfareBalanceDrawNotify(HttpServletRequest request){
         // step1 购买流程
         String result=welfareBuyCardNotify(request);
+        logger.info("## 工资余额提现 购卡返回 result={}",result);
 
-
-        // step2 转让提现操作
-        WelfaremartResellReq resellReq =new WelfaremartResellReq();
-        try {
-            WelfaremartResellResp resp =withdrawOrderService.welfaremartResellCommit(resellReq);
-        }catch (Exception e){
-            logger.error("## 工资余额提现--->转让接口，转让发生异常{}", e);
-        }
-
-
+       if("SUCCESS".equals(result)) {
+           // step2 转让提现操作
+           WelfaremartResellReq resellReq = new WelfaremartResellReq();
+           String WELFAREMART_RESELL_KEY = jedisCluster.hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV,
+                   BaseConstants.WELFAREMART_RESELL_KEY);
+           CardKeysOrderInf cko = cardKeysOrderInfService.getCardKeysOrderByOrderId(request.getParameter("orderId"));
+           try {
+               resellReq.setResellNum("1");
+               resellReq.setProductCode(jedisCluster.hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV,
+                       BaseConstants.CARD_WAGES_XIN5YOU_PROD_NO)); //卡密 工资卡商品
+               resellReq.setBankNo(cko.getBankNo());
+               resellReq.setUserId(cko.getUserId());
+               String sign = SignUtil.genSign(resellReq, WELFAREMART_RESELL_KEY);
+               WelfaremartResellResp resp = withdrawOrderService.welfaremartResellCommit(resellReq);
+           } catch (Exception e) {
+               logger.error("## 工资余额提现--->转让接口，转让发生异常{}", e);
+           }
+       }
         return "SUCCESS";
     }
 

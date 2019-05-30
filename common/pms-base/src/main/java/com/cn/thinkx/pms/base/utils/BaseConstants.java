@@ -255,6 +255,16 @@ public class BaseConstants {
      */
     public static final String RESELL_FEE = "3";
 
+
+    /**
+     * 薪无忧工资余额  - 购卡提现异步回调链接
+     */
+    public static final String XIN5YOU_WELFAREMART_BALANCEDRAW_NOTIFY_URL = "XIN5YOU_WELFAREMART_BALANCEDRAW_NOTIFY_URL";
+    /**
+     * 薪无忧工资余额  - 购卡提现重定向链接
+     */
+    public static final String XIN5YOU_WELFAREMART_BALANCEDRAW_REDIRECT_URL = "XIN5YOU_WELFAREMART_BALANCEDRAW_REDIRECT_URL";
+
     /**
      * 电商商城渠道号
      *
