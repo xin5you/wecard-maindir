@@ -310,6 +310,7 @@ public class WelfareMartServiceImpl implements WelfareMartService {
                resellReq.setBankNo(cko.getBankNo());
                resellReq.setUserId(cko.getUserId());
                String sign = SignUtil.genSign(resellReq, WELFAREMART_RESELL_KEY);
+               resellReq.setSign(sign);
                WelfaremartResellResp resp = withdrawOrderService.welfaremartResellCommit(resellReq);
            } catch (Exception e) {
                logger.error("## 工资余额提现--->转让接口，转让发生异常{}", e);
