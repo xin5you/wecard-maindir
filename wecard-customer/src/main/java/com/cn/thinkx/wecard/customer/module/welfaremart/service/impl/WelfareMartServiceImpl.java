@@ -160,7 +160,7 @@ public class WelfareMartServiceImpl implements WelfareMartService {
         cko.setStat(orderStat.OS10.getCode());
         cko.setNum(num);
         cko.setPaidAmount("0");
-        cko.setAccountBank(bankNo);
+        cko.setBankNo(bankNo); //银行卡
         if (cardKeysOrderInfService.insertCardKeysOrderInf(cko) < 1) {
             logger.error("## 卡券集市--->购卡支付接口接口，为userID[{}]插入CardKeysOrderInf信息失败", personInf.getUserId());
             return null;
