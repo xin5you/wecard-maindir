@@ -45,9 +45,9 @@ public class ZhongFuOrderQueryTask implements Runnable {
         cardKeysOrderInfs.forEach(item -> {
             paramData.put("paramData", JSONArray.toJSONString(item.getOrderId()));
             // 调用代付查询接口,根据代付接口返回信息更新卡密订单
-            logger.info("中付代付查询传参=========>orderId[{}]", item.getOrderId());
+            logger.info("中付代付查询传参=========>paramData：{}", paramData.toString());
             String rtnStr = HttpClientUtil.sendPost("http://api.xin5you.com/withdraw/zf-pay/queryOrder.html", paramData.toString());
-            logger.info("中付代付查询返回=========>{}", rtnStr);
+            logger.info("中付代付查询返回=========>result：{}", rtnStr);
         });
     }
 
