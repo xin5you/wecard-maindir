@@ -3,7 +3,7 @@
 <head>
 	<#include "../../common/wecardHeader.html">
     <meta charset="UTF-8">
-    <title>工資余额</title>
+    <title>工资余额</title>
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -18,21 +18,21 @@
 	<div class="resell_plate">
 		<div class="waring_tips">
 		    <img src="${s.base}/static/images/welfaremart/tips.png">
-		    <p>每月可转让次数3次（还剩${appearNum!}次）</p>
+		    <p>每月可转让次数9次（还剩${appearNum!}次）</p>
 		</div>
 		<div class="resell_none"></div>
-		<div class="in_text">
-		    <div class="left_line">
-		        <input id="drawAmount" name="drawAmount" type="number"  placeholder="请输入支取金额" />
-		    </div>
+		<div class="add_card">
+			<div class="in_text">
+				<div class="add_line">
+					<input id="drawAmount" name="drawAmount" type="number"  placeholder="请输入支取金额" />
+				</div>
+			</div>
+
+			<a class="in_text choose_banker" id="bank_select" onclick="bankDragUp.run()"><span id="checkBankNo">选择银行卡</span></a>
 		</div>
-		<a class="in_text choose_banker" id="bank_select" onclick="bankDragUp.run()"><span id="checkBankNo">选择银行卡</span></a>
-		<div class="phone_code grey_button">
-		    <input id="phoneCode" name="phoneCode" type="tel" pattern="[0-9]*" class="left_code input_code" placeholder="请输入验证码" maxlength="6" onkeyup="this.value=this.value.replace(/\D/g,'')" />
-		    <div class="number_place">
-		    	<input class="right_code_box" type="button" value="获取验证码" id="sendPhoneCode" onclick="settime(this)" disabled="disabled" />
-		    </div>
-		</div>
+
+
+
 		<!--<div id="IframeVip" class="IframeVip" style="display: none">
 		    <iframe src="../vip/add_card.html" scrolling="auto" id="mainIframeVip" class="mainIframeVip" name="mainIframeVip"></iframe>
 		</div>-->
@@ -95,7 +95,7 @@
 	<!--底部按钮-->
 	<div>
 	    <div class="resell_bottom_box">
-	        <a id="resellCommit">支取</a>
+	        <a id="resellCommit">确定</a>
 	    </div>
 	    <div class="resell_bottom_plate"></div>
 	</div>
@@ -121,30 +121,9 @@
 	<script src="${s.base}/static/js/common/fastclick.min.js?v=${s.version}"></script>
 	<script src="${s.base}/static/js/common/hkb_welfare.min.js?v=${s.version}"></script>
 	<script src="${s.base}/static/js/common/LAreaData2.min.js?v=${s.version}"></script>
-    <script src="${s.base}/static/js/module/welfaremart/resell/balanceWithdraw.js?v=1.1"></script>
+    <script src="${s.base}/static/js/module/welfaremart/resell/balanceWithdraw.js?v=1.2"></script>
 
 	<script>
-	    //获取验证码
-	    var codeTime=60; //先声明一个变量为60s时间
-	    function settime(obj) { //调用函数参数的方法
-	    	if($("#div").hasClass('weui_choose')){
-		        if (codeTime == 0) {  //如果变量等于0，也就是时间为0时
-		            obj.removeAttribute("disabled");  //按钮可点击
-		            obj.value="获取验证码";  //按钮文字为“获取验证码”
-		            codeTime = 60;  //时间为60s
-		            document.getElementsByClassName('phone_code')[0].className = 'phone_code';  //按钮颜色变灰色
-		            return;
-		        } else {  //反之
-		            obj.setAttribute("disabled", true);  //按钮不可点击
-		            obj.value="重新获取(" + codeTime + "s)";  //按钮文字为“重新获取”
-		            codeTime--;  //时间60s递减
-		            document.getElementsByClassName('phone_code')[0].className = 'phone_code grey_button';  //按钮颜色变橙色
-		        }
-		        setTimeout(function() {
-		            settime(obj)  //参数每一秒执行一次
-		        },1000)
-	    	}
-	    }
 	  	//银行列表上拉框
 	    var bankDragUp=new jfFrameDrag.dragEleshow({
 	        "targetButton":"bank_select",//点击的目标元素。ID选择器

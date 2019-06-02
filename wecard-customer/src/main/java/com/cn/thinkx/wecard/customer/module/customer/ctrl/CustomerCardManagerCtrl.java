@@ -530,8 +530,28 @@ public class CustomerCardManagerCtrl extends BaseController {
             mv = new ModelAndView("redirect:/common/500.html");
             return mv;
         }
-
         mv.addObject("userAccInfo", userAccList.get(0));
+
+        //工资余额
+        String productCode2 = jedisCluster.hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV, BaseConstants.WAGES_XIN5YOU_PROD_NO);
+        String mchntCode2 = jedisCluster.hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV, BaseConstants.WAGES_XIN5YOU_MCHNT_NO);
+        String insCode2 = jedisCluster.hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV, BaseConstants.WAGES_XIN5YOU_INS_CODE);
+        uAcc = new UserMerchantAcct();
+        uAcc.setExternalId(openid);
+        uAcc.setUserId(personInf.getUserId());
+        uAcc.setMchntCode(mchntCode2);
+        uAcc.setInsCode(insCode2);
+        uAcc.setProductCode(productCode2);
+        userAccList = userMerchantAcctService.getUserMerchantAcctByUser(uAcc);
+
+        if (userAccList == null || userAccList.size() < 1) {
+            logger.error("## 用户[{}]进入工资账户失败：无法查找到工资账户信息", openid);
+            uAcc.setAccBal("0");
+            mv.addObject("userWageInfo", uAcc);
+            return mv;
+        }
+        mv.addObject("userWageInfo", userAccList.get(0));
+
         return mv;
     }
 

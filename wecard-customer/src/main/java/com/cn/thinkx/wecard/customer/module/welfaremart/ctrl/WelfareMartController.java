@@ -860,10 +860,10 @@ public class WelfareMartController extends BaseController {
 
         //可转让次数
         int appearNum = cardKeysOrderInfService.getMonthResellNum(personInf.getUserId());
-        if (appearNum >= 3) {
+        if (appearNum >= 9) {
             appearNum = 0;
         } else {
-            appearNum = 3 - appearNum;
+            appearNum = 9 - appearNum;
         }
         mv.addObject("userBankList", userBankList);
         mv.addObject("mobile", personInf.getMobilePhoneNo());

@@ -36,6 +36,13 @@
 				<div class="balance_text">薪无忧余额</div>
 				<div class="balance_sum">${userAccInfo.accBal! }</div>
 			</div>
+			<a class="hkb_available_balance button" href="${s.base}/welfareMart/toWageBalanceTrans.html">
+				<div class="balance_text">工资余额: <span class="balance_sum">${userWageInfo.accBal! }</span></div>
+				<div class="balance_go">
+					<img src="${s.base}/static/images/hkb_account_go.png" />
+				</div>
+			</a>
+
 			<a class="hkb_available_balance button" href="${s.base}/customer/card/cardTransList.html?innerMerchantNo=${userAccInfo.mchntCode!}">
 				<div class="balance_text">&#x4F59;&#x989D;&#x660E;&#x7EC6;</div>
 				<div class="balance_go">

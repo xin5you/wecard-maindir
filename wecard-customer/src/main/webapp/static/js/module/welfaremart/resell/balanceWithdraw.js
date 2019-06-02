@@ -11,64 +11,21 @@ var draw = {
 	loadSendCode : function () {//页面一加载就判断获取验证码按钮是否可用
 		var resellNum = $.trim($("#resellNum").val());
 		if($("#div").hasClass('weui_choose')){
-			if (resellNum != null && resellNum != '' && parseInt(resellNum) > 0 ) {
-				$('#sendPhoneCode').removeAttr("disabled");
-				document.getElementsByClassName('phone_code')[0].className = 'phone_code';
-			} else {
-				$('#sendPhoneCode').attr("disabled",true); 
-				$(".phone_code").addClass("grey_button");
-				/*jfShowTips.toastShow({'text' : '请输入有效的转让张数'});*/
-				$('#resellNum').focus();
-			}
+
 			var bankName = $("#div").parent(".checkBank").find("div.bank_name").text();
 			var bankNum = $("#div").parent(".checkBank").find("span.bankNum").text();
 			var bankNo = $("#div").parent(".checkBank").find("input.bankNo").val();
 			$('#bankNumber').val(bankNo);
 			$("#checkBankNo").text(bankName+" "+bankNum);
-		} else {
-			$('#sendPhoneCode').attr("disabled",true); 
-			$(".phone_code").addClass("grey_button");
 		}
 	},
 	initEvent: function () {
-		$('#sendPhoneCode').on('click', draw.sendPhoneSMS);
+
 		$('.checkBank').on("click", draw.checkBank);
 		$('#addBank').on("click", draw.addBank);
 		$('#resellCommit').on("click", draw.resellCommit);
 	},
 
-	sendPhoneSMS : function() {
-		var phoneNumber = $('#mobile').val();
-		var mobile = phoneNumber.substring(0,3)+"****"+phoneNumber.substring(7,11); 
-		var that = $('#sendPhoneCode');
-		var bizCode = '04';
-		$.ajax({
-			url : CONETXT_PATH + '/welfareMart/welfareSendPhoneCode.html',
-			type : 'post',
-			dataType : "json",
-			data : {
-				bizCode : bizCode,
-				phoneNumber : phoneNumber
-			},
-			success : function(data) {
-				if (data == null || data == ''){
-					var msg = "网络异常，请稍后再试";
-					jfShowTips.toastShow({'text' : msg});
-					return;
-				}
-				if (data) {
-					var msg = "短信验证码已成功发至 " + mobile;
-					jfShowTips.toastShow({'text' : msg});
-					return;
-				}
-				if (!data) {
-					var msg = "网络异常，请稍后再试";
-					jfShowTips.toastShow({'text' : msg});
-					return;
-				}
-			}
-		});
-	},
 	checkBank:function(){
 		var bankNo = $.trim($(this).attr("data"));
 		$('#bankNumber').val(bankNo);
@@ -84,25 +41,14 @@ var draw = {
 			var bankName = $($(this).find('div.bank_name')).html();
 			var bankNum = $($(this).find('span.card_number')).text();
 			$("#checkBankNo").text(bankName+" "+bankNum);
-			if (drawAmount != null && drawAmount != '' && parseInt(drawAmount) > 0 ) {
-				$('#sendPhoneCode').removeAttr("disabled");
-				document.getElementsByClassName('phone_code')[0].className = 'phone_code';
-			} else {
-				/*jfShowTips.toastShow({'text' : '请输入有效的转让张数'});*/
-				$('#drawAmount').focus();
-			}
+
 		} else {
 			$("#checkBankNo").text("选择银行卡");
-			$("#sendPhoneCode").removeClass("right_code_orange");
-			$('#sendPhoneCode').attr("disabled",true); 
-			$(".phone_code").addClass("grey_button");
 		}
 	},
 	addBank:function(){
-		var productCode = $('#productCode').val();
-		var num = $('#num').html();
 		var check = "2";
-		location.href = CONETXT_PATH + '/welfareMart/toWelfareAddBank.html?productCode='+productCode+'&num='+num+'&check='+check;
+		location.href = CONETXT_PATH + '/welfareMart/toWelfareAddBank.html?num=&check='+check;
 	},
 	resellCommit:function(){
 		$.ajax({
@@ -112,21 +58,18 @@ var draw = {
 			data : {},
 			success : function(data) {
 				if (data) {
-					var phoneCode = $.trim($('#phoneCode').val());
 					var drawAmount = $.trim($('#drawAmount').val());
 					var bankNo = $.trim($('#bankNumber').val());
-
-
+                    if (!drawAmount){
+                        jfShowTips.toastShow({'text' : '请输入支取金额'});
+                        return false;
+					}
 					if (parseInt(drawAmount) > 50000) {
 						jfShowTips.toastShow({'text' : '支取总额度不能超过 五万 元'});
 						return false;
 					}
 					if (!bankNo) {
 						jfShowTips.toastShow({'text' : '请选择银行卡'});
-						return false;
-					}
-					if (!phoneCode) {
-						jfShowTips.toastShow({'text' : '请输入验证码'});
 						return false;
 					}
 					jfShowTips.dialogShow({
@@ -143,7 +86,7 @@ var draw = {
 			    			}
 			    			flag = false;
 			    			loadingChange.showLoading();
-                            window.location.href = CONETXT_PATH + '/welfareMart/welfareBalanceDrawCommit.html?phoneCode='+phoneCode+'&transAmt='+drawAmount+'&bankNo='+bankNo;
+                            window.location.href = CONETXT_PATH + '/welfareMart/welfareBalanceDrawCommit.html?transAmt='+drawAmount+'&bankNo='+bankNo;
 						}
 					});
 				} else {
