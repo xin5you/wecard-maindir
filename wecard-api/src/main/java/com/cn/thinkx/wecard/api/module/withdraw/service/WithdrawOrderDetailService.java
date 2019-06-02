@@ -23,6 +23,6 @@ public interface WithdrawOrderDetailService {
 	
 	boolean YFBBatchWithdrawNotifyUpdateUserCardKey(String userId, String orderId);
 
-	void zfPayNotify(String orderNumber, String inTradeOrderNo, String payMoney);
+	void zfPayNotify(String orderNumber, String inTradeOrderNo, String payMoney, String respCode, String respMsg);
 	
 }

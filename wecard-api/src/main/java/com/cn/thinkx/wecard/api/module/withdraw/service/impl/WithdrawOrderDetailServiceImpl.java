@@ -3,6 +3,7 @@ package com.cn.thinkx.wecard.api.module.withdraw.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.cn.thinkx.common.activemq.service.WechatMQProducerService;
+import com.cn.thinkx.pay.core.KeyUtils;
 import com.cn.thinkx.pms.base.redis.util.RedisDictProperties;
 import com.cn.thinkx.pms.base.utils.*;
 import com.cn.thinkx.pms.base.utils.BaseConstants.ChannelCode;
@@ -18,6 +19,7 @@ import com.cn.thinkx.wecard.api.module.withdraw.domain.WithdrawOrderDetail;
 import com.cn.thinkx.wecard.api.module.withdraw.mapper.WithdrawOrderDetailMapper;
 import com.cn.thinkx.wecard.api.module.withdraw.service.WithdrawOrderDetailService;
 import com.cn.thinkx.wecard.api.module.withdraw.service.WithdrawOrderService;
+import com.cn.thinkx.wecard.api.module.withdraw.suning.utils.Constants;
 import com.cn.thinkx.wecard.api.module.withdraw.suning.utils.Constants.RespCode;
 import com.cn.thinkx.wecard.api.module.withdraw.suning.utils.Constants.orderNotifyStat;
 import com.cn.thinkx.wecard.api.module.withdraw.suning.utils.Constants.withdrawStat;
@@ -68,7 +70,7 @@ public class WithdrawOrderDetailServiceImpl implements WithdrawOrderDetailServic
     @Qualifier("cardKeysService")
     private CardKeysService cardKeysService;
 
-@Autowired
+    @Autowired
     @Qualifier("userBankInfService")
     private UserBankInfService userBankInfService;
 
@@ -196,20 +198,24 @@ public class WithdrawOrderDetailServiceImpl implements WithdrawOrderDetailServic
     }
 
     @Override
-    public void zfPayNotify(String orderNumber, String inTradeOrderNo, String payMoney) {
+    public void zfPayNotify(String orderNumber, String inTradeOrderNo, String payMoney, String respCode, String respMsg) {
         if (withdrawOrderService.getCountByBatchNo(orderNumber) < 1) {
             logger.error("## 代付回调接口--->批次号[{}]在出款订单信息中不存在", orderNumber);
             return;
         }
         WithdrawOrder order = withdrawOrderService.getWithdrawOrderByPaidId(orderNumber);
+        if (order == null) {
+            logger.error("## 代付回调接口--->提现订单为空，订单号[{}]", orderNumber);
+            return;
+        }
         CardKeysOrderInf cko = cardKeysOrderInfService.getCardKeysOrderByOrderId(order.getPaidId());
         if (cko == null) {
             logger.error("## 代付回调接口--->查询订单：{} CardKeysOrderInf的信息为空", JSONObject.toJSONString(order));
             return;
         }
 
-        order.setStat("00");
-        order.setPaidRespDesc("代付成功");
+        order.setStat(Constants.withdrawStat.S05.getCode());
+        order.setPaidRespDesc(respMsg);
         order.setSuccessAmount(payMoney);
         order.setSuccessNum("1");
         order.setSuccessFee("0");
@@ -221,6 +227,13 @@ public class WithdrawOrderDetailServiceImpl implements WithdrawOrderDetailServic
         }
 
         WithdrawOrderDetail orderDetail = new WithdrawOrderDetail();
+        if (KeyUtils.responseCode.equals(respCode.trim())) {
+            cko.setStat(orderStat.OS32.getCode());
+        } else if ("02".equals(respCode.trim())) {
+            cko.setStat(orderStat.OS33.getCode());
+        } else {
+            cko.setStat(orderStat.OS35.getCode());
+        }
         if (cardKeysOrderInfService.updateCardKeysOrderInf(cko) < 1) {
             logger.error("## 代付回调接口--->更新CardKeysOrderInf：{}失败", JSONObject.toJSONString(cko));
             return;
@@ -239,7 +252,7 @@ public class WithdrawOrderDetailServiceImpl implements WithdrawOrderDetailServic
         orderDetail.setBankType(userBankInf.getBankType());
         orderDetail.setBankName(userBankInf.getBankName());
         orderDetail.setBankCode(userBankInf.getAccountBank());
-        orderDetail.setAmount(new Long(payMoney).intValue());
+        orderDetail.setAmount(Integer.parseInt(payMoney));
         orderDetail.setRespCode("0");
         orderDetail.setPayTime(DateUtil.getCurrentDateTimeStr());
         if (insertWithdrawOrderDetail(orderDetail) < 1) {
@@ -268,7 +281,7 @@ public class WithdrawOrderDetailServiceImpl implements WithdrawOrderDetailServic
             wechatMQProducerService.sendTemplateMsg(RedisDictProperties.getInstance().getdictValueByCode("WX_CUSTOMER_ACCOUNT"), openId, "WX_TEMPLATE_ID_5", null,
                     WXTemplateUtil.setResellData(order.getPaidId(),
                             payMoney,
-                            DateUtil.getCurrentDateTimeStr(),
+                            DateUtil.getStringFromDate(cko.getUpdateTime()),
                             NumberUtils.hideCardNo(userBankInf.getAccountBank()),
                             cko.getNum(),
                             desc));

@@ -230,7 +230,7 @@ public class WithdrawController {
         if (respJson == null) {
             return resp;
         } else {
-            if (respJson.containsKey("responseCode") && "00".equals(respJson.get("responseCode"))) {
+            if (respJson.containsKey("responseCode") && KeyUtils.responseCode.equals(respJson.get("responseCode"))) {
                 resp.setRespCode(BaseConstants.RESPONSE_SUCCESS_CODE);
                 resp.setRespMsg(BaseConstants.RESPONSE_SUCCESS_INFO);
             } else {
@@ -280,7 +280,7 @@ public class WithdrawController {
     public String zfPayNotify(HttpServletRequest request) {
         String responseCode = request.getParameter("responseCode");
         String responseComment = request.getParameter("responseComment");
-        if ("00".equals(responseCode)) {
+        if (KeyUtils.responseCode.equals(responseCode)) {
             String orderNumber = request.getParameter("orderNumber");
             String inTradeOrderNo = request.getParameter("inTradeOrderNo");
             String payMoney = request.getParameter("payMoney");
@@ -290,7 +290,7 @@ public class WithdrawController {
             //生成回调签名
             String sign = Objects.requireNonNull(MD5Util.md5(orderNumber + inTradeOrderNo + md5)).toUpperCase();
             if (Objects.equals(sign, signature)) {
-                withdrawOrderDetailService.zfPayNotify(orderNumber, inTradeOrderNo, payMoney);
+                withdrawOrderDetailService.zfPayNotify(orderNumber, inTradeOrderNo, payMoney, responseCode, responseComment);
                 return "success";
             } else {
                 logger.error("## 回调签名不一致，平台订单号：{} 商户订单号：{} 中付签名：{}", orderNumber, inTradeOrderNo, md5);

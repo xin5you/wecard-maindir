@@ -618,7 +618,7 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
             if (jsonObject != null) {
                 logger.info("代付查询中付接口返回：{}", jsonObject.toJSONString());
                 String respCode = jsonObject.getString("responseCode");
-                if ("00".equals(respCode.trim())) {
+                if (KeyUtils.responseCode.equals(respCode.trim())) {
                     sendMsg = true;
                     cko.setStat(orderStat.OS32.getCode());
                 } else if ("02".equals(respCode.trim())) {
@@ -643,7 +643,7 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
                 wechatMQProducerService.sendTemplateMsg(RedisDictProperties.getInstance().getdictValueByCode("WX_CUSTOMER_ACCOUNT"), openId, "WX_TEMPLATE_ID_5", null,
                         WXTemplateUtil.setResellData(cko.getOrderId(),
                                 NumberUtils.RMBCentToYuan(cko.getPaidAmount()),
-                                DateUtil.getCurrentDateTimeStr(),
+                                DateUtil.getStringFromDate(cko.getUpdateTime()),
                                 NumberUtils.hideCardNo(cko.getBankNo()),
                                 cko.getNum(),
                                 desc));
