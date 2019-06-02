@@ -72,4 +72,12 @@ public interface WithdrawOrderService {
      * @return JSONObject
      */
     JSONObject zfPayQuery(UnifyQueryVO queryVO);
+
+    /**
+     * 公司余额提现 转让提交
+     *
+     * @param req
+     * @return
+     */
+    WelfaremartResellResp welfaremartBalanceDrawCommit(WelfaremartResellReq req,String cardOrderId) throws Exception;
 }

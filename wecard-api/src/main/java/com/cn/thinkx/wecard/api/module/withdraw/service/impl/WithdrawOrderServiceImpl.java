@@ -653,4 +653,194 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
         }
         return jsonObject;
     }
+
+    /**
+     * 公司余额提现 转让提交
+     *
+     * @param req
+     * @return
+     */
+   public WelfaremartResellResp welfaremartBalanceDrawCommit(WelfaremartResellReq req,String cardOrderId) throws Exception{
+        WelfaremartResellResp resp = new WelfaremartResellResp();
+        resp.setCode("1");//不需要弹框提示
+        resp.setStatus(Boolean.FALSE);
+
+        String resellNum = req.getResellNum();
+        String productCode = req.getProductCode();
+        String bankNo = req.getBankNo();
+        String userId = req.getUserId();
+        String sign = req.getSign();
+
+        if (StringUtil.isNullOrEmpty(userId)) {
+            logger.error("## 卡券集市--->转让接口，接收userId为空");
+            resp.setMsg(MessageUtil.ERROR_MSSAGE);
+            return resp;
+        }
+        if (StringUtil.isNullOrEmpty(productCode)) {
+            logger.error("## 卡券集市--->转让接口，接收用户[{}]productCode为空", userId);
+            resp.setMsg(MessageUtil.ERROR_MSSAGE);
+            return resp;
+        }
+        if (StringUtil.isNullOrEmpty(bankNo)) {
+            logger.error("## 卡券集市--->转让接口，接收用户[{}]银行卡号为空", userId);
+            resp.setMsg(MessageUtil.RESELL_BANKNO_IS_NULL);
+            return resp;
+        }
+        if (StringUtil.isNullOrEmpty(resellNum) || Integer.parseInt(resellNum) == 0) {
+            logger.error("## 卡券集市--->转让接口，接收用户[{}]resellNum为空", userId);
+            resp.setMsg(MessageUtil.RESELL_NUM_IS_NULL);
+            return resp;
+        }
+        if (StringUtil.isNullOrEmpty(sign)) {
+            logger.error("## 卡券集市--->转让接口，接收用户ID[{}]sign为空", userId);
+            resp.setMsg(MessageUtil.ERROR_MSSAGE);
+            return resp;
+        }
+        try {
+            String WELFAREMART_RESELL_KEY = jedisCluster.hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV, BaseConstants.WELFAREMART_RESELL_KEY);
+            //验签
+            String genSign = SignUtil.genSign(req, WELFAREMART_RESELL_KEY);
+            if (!genSign.equals(req.getSign())) {
+                logger.error("## 卡券集市--->转让接口，用户ID[{}]验签失败，当前生成签名[{}]", userId, genSign);
+                resp.setMsg(MessageUtil.ERROR_MSSAGE);
+                return resp;
+            }
+
+            //查询银行卡号是否属于该用户所持有的
+            UserBankInf userBank = new UserBankInf();
+            userBank.setUserId(userId);
+            userBank.setBankNo(bankNo);
+            UserBankInf bankInf = userBankInfService.getUserBankInf(userBank);
+            if (bankInf == null) {
+                logger.error("## 卡券集市--->转让接口，用户ID[{}]转让的银行卡号[{}]在UserBankInf信息中不存在", userId, bankNo);
+                resp.setMsg(MessageUtil.RESELL_BANKNO_NOT_EXIST);
+                return resp;
+            }
+
+            //可转让次数
+            int appearNum = cardKeysOrderInfService.getMonthResellNum(userId);
+            if (appearNum >= 9) {
+                logger.error("## 卡券集市--->转让接口，用户[{}]本月卡券转让次数已用完", userId);
+                resp.setMsg(MessageUtil.RESELL_NUM_USE_UP);
+                return resp;
+            }
+
+            //可转让的张数
+            CardKeys ck = new CardKeys();
+            ck.setAccountId(userId);
+            ck.setProductCode(productCode);
+            int loseNum = cardKeysService.getLoseNumByAccountId(ck);
+            if (Integer.parseInt(resellNum) > loseNum) {
+                logger.error("## 卡券集市--->转让接口，用户[{}]卡券转让张数[{}]大于持有卡券张数[{}]", userId, resellNum, loseNum);
+                resp.setMsg(MessageUtil.RESELL_NUM_MORE_THAN_OWN);
+                return resp;
+            }
+
+            //校验卡密产品号是否存在
+            CardKeysProduct product = new CardKeysProduct();
+            product.setProductCode(productCode);
+            CardKeysProduct ckp = cardKeysProductService.getCardKeysProductByCode(product);
+            if (ckp == null) {
+                logger.error("## 卡券集市--->转让接口，查询用户[{}]的产品[{}]信息为空", userId, productCode);
+                resp.setMsg(MessageUtil.ERROR_MSSAGE);
+                return resp;
+            }
+
+            CardKeysOrderInf cardKeysOrder =cardKeysOrderInfService.getCardKeysOrderByOrderId(cardOrderId);
+            if (cardKeysOrder == null) {
+                logger.error("## 卡券集市--->转让接口，查询转让购买订单用户[{}]的产品[{}]信息为空，卡订单号[{}]", userId, productCode,cardOrderId);
+                resp.setMsg(MessageUtil.ERROR_MSSAGE);
+                return resp;
+            }
+
+            //TODO 需优化计算规则
+            int totalFee = new Double(Double.parseDouble(resellNum) * Double.parseDouble(cardKeysOrder.getAmount()) * Double.parseDouble(BaseConstants.RESELL_FEE) / 100).intValue();
+            int totalResellAmount = new Double(Double.parseDouble(resellNum) * Double.parseDouble(cardKeysOrder.getAmount())).intValue();
+            int gainAmount = totalResellAmount - totalFee;
+
+            //校验转让额度是否超过五万
+            if (totalResellAmount > 5000000) {
+                logger.error("## 卡券集市--->转让接口，用户[{}]转让额度[{}]超过五万", userId, totalResellAmount);
+                resp.setCode("2");//需要弹框提示
+                resp.setMsg(MessageUtil.EROOR_RESELL_AMOUNT);
+                return resp;
+            }
+
+            //新增转让卡密交易订单信息
+            CardKeysOrderInf cko = new CardKeysOrderInf();
+            cko.setOrderId(RandomUtils.getOrderIdByUUId("Z"));
+            cko.setUserId(userId);
+            cko.setProductCode(productCode);
+            cko.setBankNo(bankNo);
+            cko.setAmount(String.valueOf(gainAmount));
+            cko.setPaidAmount(String.valueOf(gainAmount));
+            cko.setType(orderType.O3.getCode());
+            cko.setStat(orderStat.OS34.getCode());
+            cko.setNum(resellNum);
+            if (cardKeysOrderInfService.insertCardKeysOrderInf(cko) < 1) {
+                logger.error("## 卡券集市--->转让接口，新增用户[{}]卡密订单信息{}失败", userId, JSONArray.toJSONString(cko));
+                resp.setMsg(MessageUtil.ERROR_MSSAGE);
+                return resp;
+            }
+            CardKeys cardKeys = new CardKeys();
+            cardKeys.setAccountId(userId);
+            cardKeys.setProductCode(productCode);
+            cardKeys.setValidNum(resellNum);
+            List<CardKeys> cardKeysList = cardKeysService.getCardKeysList(cardKeys);
+
+            List<CardKeysTransLog> cktList = new ArrayList<CardKeysTransLog>();
+            for (CardKeys card : cardKeysList) {
+                // 检查订单流水对应的卡密是否已经有代付订单
+                int orderNum = cardKeysOrderInfService.getCardKeysOrderByCardKeys(card.getCardKey());
+                if (orderNum > 0) {
+                    logger.error("## 卡券集市--->转让接口，用户[{}]转让的卡密[{}]已存在代付订单", userId, card.getCardKey());
+                    resp.setMsg(MessageUtil.ERROR_MSSAGE);
+                    break;
+                }
+                /** 设置卡密交易流水信息 */
+                CardKeysTransLog ckt = new CardKeysTransLog();
+                String id = cardKeysTransLogService.getPrimaryKey();
+                ckt.setTxnPrimaryKey(id);
+                ckt.setCardKey(card.getCardKey());
+                ckt.setOrderId(cko.getOrderId());
+                ckt.setTransId(TransType.W30.getCode());
+                ckt.setProductCode(cko.getProductCode());
+                ckt.setTransAmt(cardKeysOrder.getAmount());
+                ckt.setOrgTransAmt(cardKeysOrder.getAmount());
+                ckt.setTransFee(BaseConstants.RESELL_FEE);
+                ckt.setTransFeeType(TransFeeType.findByCode(ckp.getProductType()).getCode());
+                cktList.add(ckt);
+            }
+
+            //新增卡密交易流水信息
+            if (cktList.size() < 1) {
+                logger.error("## 卡券集市--->转让接口，用户[{}]没有需更新的卡密交易流水信息", userId);
+                resp.setMsg(MessageUtil.ERROR_MSSAGE);
+                return resp;
+            }
+            if (cardKeysTransLogService.insertBatchCardKeysTransLogList(cktList) < 1) {
+                logger.error("## 卡券集市--->转让接口，新增用户[{}]卡密交易流水信息失败，订单号[{}]", userId, cko.getOrderId());
+                resp.setMsg(MessageUtil.ERROR_MSSAGE);
+                return resp;
+            } else {
+                CardKeysOrderInf order = new CardKeysOrderInf();
+                order.setOrderId(cko.getOrderId());
+                order.setStat(orderStat.OS30.getCode());
+                int i = cardKeysOrderInfService.updateCardKeysOrderInfAndCardKeys(order, cardKeysList);
+                if (i < 1) {
+                    logger.error("## 卡券集市--->转让接口,更新用户[{}]卡密交易订单[{}]及核销卡密信息[{}]失败", userId, JSONArray.toJSONString(order), JSONArray.toJSONString(cardKeysList));
+                    resp.setMsg(MessageUtil.ERROR_MSSAGE);
+                    return resp;
+                }
+            }
+            resp.setOrderId(cko.getOrderId());
+        } catch (Exception e) {
+            logger.error("## 卡券集市--->转让接口,用户[{}]转让异常{} ", userId, e);
+            resp.setMsg(MessageUtil.ERROR_MSSAGE);
+            return resp;
+        }
+        resp.setStatus(Boolean.TRUE);
+        logger.info("卡券集市--->转让接口，用户[{}]转让执行完毕", userId);
+        return resp;
+    }
 }
