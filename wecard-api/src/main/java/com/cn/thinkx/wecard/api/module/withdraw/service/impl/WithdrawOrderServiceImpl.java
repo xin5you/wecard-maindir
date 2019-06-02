@@ -604,20 +604,34 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
     /**
      * 代付查询
      *
-     * @param queryVO
-     * @return
+     * @param queryVO queryVO
+     * @return JSONObject
      */
     @Override
     public JSONObject zfPayQuery(UnifyQueryVO queryVO) {
-        CardKeysOrderInf cardKeysOrderInf = cardKeysOrderInfService.getCardKeysOrderByOrderId(queryVO.getInTradeOrderNo());
-        queryVO.setTradeTime(DateUtil.COMMON.getDateText(cardKeysOrderInf.getCreateTime()));
+        CardKeysOrderInf cko = cardKeysOrderInfService.getCardKeysOrderByOrderId(queryVO.getInTradeOrderNo());
+        queryVO.setTradeTime(DateUtil.COMMON.getDateText(cko.getCreateTime()));
         logger.info("代付查询中付接口传参：{}", JSONObject.toJSONString(queryVO));
         JSONObject jsonObject = ZFPaymentServer.doPayForAnotherQuery(queryVO);
-        if (jsonObject != null) {
-            logger.info("代付查询中付接口返回：{}", jsonObject.toJSONString());
-            String respCode = jsonObject.getString("responseCode");
-            if ("00".equals(respCode)) {
-                CardKeysOrderInf cko = cardKeysOrderInfService.getCardKeysOrderByOrderId(jsonObject.getString("inTradeOrderNo"));
+        try {
+            boolean sendMsg = false;
+            if (jsonObject != null) {
+                logger.info("代付查询中付接口返回：{}", jsonObject.toJSONString());
+                String respCode = jsonObject.getString("responseCode");
+                if ("00".equals(respCode.trim())) {
+                    sendMsg = true;
+                    cko.setStat(orderStat.OS32.getCode());
+                } else if ("02".equals(respCode.trim())) {
+                    cko.setStat(orderStat.OS33.getCode());
+                } else {
+                    cko.setStat(orderStat.OS35.getCode());
+                }
+                cardKeysOrderInfService.updateCardKeysOrderInf(cko);
+            } else {
+                logger.info("代付查询中付接口返回：null");
+            }
+
+            if (sendMsg) {
                 CardKeysProduct product = new CardKeysProduct();
                 product.setProductCode(cko.getProductCode());
                 CardKeysProduct ckp = cardKeysProductService.getCardKeysProductByCode(product);
@@ -627,23 +641,16 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
                 String openId = channelUserInfService.getExternalId(cUser);
                 String desc = NumberUtils.RMBCentToYuan(ckp.getOrgAmount()) + ckp.getProductUnit() + Objects.requireNonNull(TransFeeType.findByCode(ckp.getProductType())).getValue();
                 wechatMQProducerService.sendTemplateMsg(RedisDictProperties.getInstance().getdictValueByCode("WX_CUSTOMER_ACCOUNT"), openId, "WX_TEMPLATE_ID_5", null,
-                        WXTemplateUtil.setResellData(jsonObject.getString("inTradeOrderNo"),
-                                jsonObject.getString("payMoney"),
+                        WXTemplateUtil.setResellData(cko.getOrderId(),
+                                NumberUtils.RMBCentToYuan(cko.getPaidAmount()),
                                 DateUtil.getCurrentDateTimeStr(),
                                 NumberUtils.hideCardNo(cko.getBankNo()),
                                 cko.getNum(),
                                 desc));
-                cardKeysOrderInf.setStat(orderStat.OS32.getCode());
-            } else if ("02".equals(respCode)) {
-                cardKeysOrderInf.setStat(orderStat.OS33.getCode());
-            } else {
-                cardKeysOrderInf.setStat(orderStat.OS35.getCode());
             }
-            cardKeysOrderInfService.updateCardKeysOrderInf(cardKeysOrderInf);
-        } else {
-            logger.info("代付查询中付接口返回：null");
+        } catch (Exception e) {
+            logger.error("## 代付查询异常", e);
         }
-
         return jsonObject;
     }
 }
