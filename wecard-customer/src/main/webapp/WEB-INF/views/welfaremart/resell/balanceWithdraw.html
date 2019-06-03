@@ -3,7 +3,7 @@
 <head>
 	<#include "../../common/wecardHeader.html">
     <meta charset="UTF-8">
-    <title>工资余额</title>
+    <title>工资账户</title>
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimum-scale=1, maximum-scale=1">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -18,16 +18,15 @@
 	<div class="resell_plate">
 		<div class="waring_tips">
 		    <img src="${s.base}/static/images/welfaremart/tips.png">
-		    <p>每月可转让次数9次（还剩${appearNum!}次）</p>
+		    <p>每月可提现次数9次（还剩${appearNum!}次）</p>
 		</div>
 		<div class="resell_none"></div>
 		<div class="add_card">
 			<div class="in_text">
 				<div class="add_line">
-					<input id="drawAmount" name="drawAmount" type="number"  placeholder="请输入支取金额" />
+                    工资余额：￥<span id="accBal" style="color: #ff4646">${userWageInfo.accBal! }</span><input id="drawAmount" name="drawAmount" type="number"  placeholder="请输入提现金额" />
 				</div>
 			</div>
-
 			<a class="in_text choose_banker" id="bank_select" onclick="bankDragUp.run()"><span id="checkBankNo">选择银行卡</span></a>
 		</div>
 
@@ -135,7 +134,7 @@
 		    var personalHold=document.getElementsByClassName('gray_check_buy')[0];
 		    personalHold.addEventListener('click',function () {
 		        jfShowTips.dialogShow({
-		            "mainText": "转让金额不能超过五万",
+		            "mainText": "提现金额不能超过五万",
 		            "minText": "  ",
 		            "hasCheck": false,
 		            "hasCancel": true,

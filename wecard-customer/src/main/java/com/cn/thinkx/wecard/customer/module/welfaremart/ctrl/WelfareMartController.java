@@ -6,6 +6,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.cn.thinkx.common.wecard.domain.base.ResultHtml;
 import com.cn.thinkx.common.wecard.domain.cardkeys.*;
 import com.cn.thinkx.common.wecard.domain.person.PersonInf;
+import com.cn.thinkx.common.wecard.domain.user.UserMerchantAcct;
+import com.cn.thinkx.pms.base.redis.util.RedisConstants;
 import com.cn.thinkx.pms.base.redis.util.RedisDictProperties;
 import com.cn.thinkx.pms.base.utils.BankUtil;
 import com.cn.thinkx.pms.base.utils.BaseConstants;
@@ -16,6 +18,7 @@ import com.cn.thinkx.wecard.customer.core.util.MessageUtil;
 import com.cn.thinkx.wecard.customer.module.base.ctrl.BaseController;
 import com.cn.thinkx.wecard.customer.module.checkstand.vo.TransOrderReq;
 import com.cn.thinkx.wecard.customer.module.customer.service.PersonInfService;
+import com.cn.thinkx.wecard.customer.module.customer.service.UserMerchantAcctService;
 import com.cn.thinkx.wecard.customer.module.pub.service.CommonSerivce;
 import com.cn.thinkx.wecard.customer.module.welfaremart.service.*;
 import com.cn.thinkx.wecard.customer.module.welfaremart.vo.CardRechargeResp;
@@ -28,12 +31,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import redis.clients.jedis.JedisCluster;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
@@ -75,6 +79,14 @@ public class WelfareMartController extends BaseController {
     @Autowired
     @Qualifier("withdrawBlacklistInfService")
     private WithdrawBlacklistInfService withdrawBlacklistInfService;
+
+    @Autowired
+    @Qualifier("userMerchantAcctService")
+    private UserMerchantAcctService userMerchantAcctService;
+
+    @Autowired
+    @Qualifier("jedisCluster")
+    private JedisCluster jedisCluster;
 
     private final int resellFee = Integer.parseInt(BaseConstants.RESELL_FEE);
 
@@ -842,29 +854,38 @@ public class WelfareMartController extends BaseController {
     @RequestMapping(value = "/toWageBalanceTrans")
     public ModelAndView toWageBalance(HttpServletRequest request) {
         ModelAndView mv = new ModelAndView("welfaremart/resell/balanceWithdraw");
-        //String productCode = request.getParameter("productCodeproductCode");
-
         String openid = WxMemoryCacheClient.getOpenid(request);
         if (StringUtil.isNullOrEmpty(openid)) {
-            logger.error("★★★★★Request WelfareMart--->toWelfareResellCard get openid is [Null]★★★★★");
+            logger.error("## toWageBalance get openid is null");
             return new ModelAndView("redirect:/common/500.html");
         }
 
         PersonInf personInf = personInfService.getPersonInfByOpenId(openid);
         if (StringUtil.isNullOrEmpty(personInf)) {
-            logger.error("★★★★★Request WelfareMart--->toWelfareResellCard get personInf is [Null]★★★★★");
+            logger.error("## toWageBalance get personInf is null");
             return new ModelAndView("redirect:/common/500.html");
         }
-        //银行卡列表
+        // 银行卡列表
         List<UserBankInf> userBankList = userBankInfService.getUserBankInfByUserId(personInf.getUserId());
-
-        //可转让次数
+        // 可提现次数
         int appearNum = cardKeysOrderInfService.getMonthResellNum(personInf.getUserId());
-        if (appearNum >= 9) {
-            appearNum = 0;
-        } else {
-            appearNum = 9 - appearNum;
+        appearNum = appearNum > 9 ? 0 : 9 - appearNum;
+
+        //工资余额
+        UserMerchantAcct uAcc = new UserMerchantAcct();
+        uAcc.setExternalId(openid);
+        uAcc.setUserId(personInf.getUserId());
+        uAcc.setMchntCode(jedisCluster.hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV, BaseConstants.WAGES_XIN5YOU_MCHNT_NO));
+        uAcc.setInsCode(jedisCluster.hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV, BaseConstants.WAGES_XIN5YOU_INS_CODE));
+        uAcc.setProductCode(jedisCluster.hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV, BaseConstants.WAGES_XIN5YOU_PROD_NO));
+        List<UserMerchantAcct> userAccList = userMerchantAcctService.getUserMerchantAcctByUser(uAcc);
+
+        if (CollectionUtils.isEmpty(userAccList)) {
+            logger.error("## 用户[{}]进入工资账户失败：无法查找到工资账户信息", openid);
+            uAcc.setAccBal("0");
+            mv.addObject("userWageInfo", uAcc);
         }
+        mv.addObject("userWageInfo", userAccList.get(0));
         mv.addObject("userBankList", userBankList);
         mv.addObject("mobile", personInf.getMobilePhoneNo());
         mv.addObject("appearNum", appearNum);
@@ -876,34 +897,28 @@ public class WelfareMartController extends BaseController {
      * 工资提现提交
      *
      * @param request
-     * @param response
      * @return
      */
     @RequestMapping(value = "/welfareBalanceDrawCommit")
-    public ModelAndView welfareBalanceDrawCommit(HttpServletRequest request, HttpServletResponse response) {
-        ModelAndView mv = null;
+    public ModelAndView welfareBalanceDrawCommit(HttpServletRequest request) {
+        ModelAndView mv;
         String openid = WxMemoryCacheClient.getOpenid(request);
-        if (StringUtil.isNullOrEmpty(openid)) {
-            logger.error("★★★★★Request WelfareMart--->welfareBuyCardCommit get openid is [Null]★★★★★");
-            return new ModelAndView("redirect:/common/500.html");
-        }
-
         PersonInf personInf = personInfService.getPersonInfByOpenId(openid);
         if (StringUtil.isNullOrEmpty(personInf)) {
-            logger.error("★★★★★Request WelfareMart--->welfareBuyCardCommit get personInf is [Null]★★★★★");
+            logger.error("## welfareBalanceDrawCommit get personInf is null");
             return new ModelAndView("redirect:/common/500.html");
         }
-        String phoneCode = request.getParameter("phoneCode"); //手机验证码
 
         try {
-            /** 用户是否有此权限 */
+            /* 用户是否有此权限 */
             WithdrawBlacklistInf withdrawBlacklistInf = withdrawBlacklistInfService.getWithdrawBlacklistInfByUserPhone(personInf.getMobilePhoneNo());
             if (withdrawBlacklistInf == null) {
                 // 得到通卡商户门店等信息
                 String num = "1";
                 String productCode = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.CARD_WAGES_XIN5YOU_PROD_NO);
                 String transAmt = request.getParameter("transAmt");
-                String bankNo = request.getParameter("bankNo"); //银行卡
+                //银行卡
+                String bankNo = request.getParameter("bankNo");
                 //xin5you 工资卡信息
                 String mchntCode = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.WAGES_XIN5YOU_MCHNT_NO);
                 String shopCode = RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.WAGES_XIN5YOU_SHOP_NO);
@@ -915,12 +930,12 @@ public class WelfareMartController extends BaseController {
                 mv = new ModelAndView("welfaremart/cardshow/unifiedOrder");
                 mv.addObject("orderReq", orderReq);
             } else {
-                logger.info("卡券集市--->购买卡券，用户手机号{}在提现黑名单中，暂不支持卡券购买", personInf.getMobilePhoneNo());
+                logger.info("用户手机号{}在提现黑名单中，暂不允许工资提现", personInf.getMobilePhoneNo());
                 mv = new ModelAndView("welfaremart/cardin/cardFail");
                 mv.addObject("msg", MessageUtil.WELFAREMART_NO_BUY);
             }
         } catch (Exception e) {
-            logger.error("## 卡券集市--->购买卡券提交异常{}", e);
+            logger.error("## 工资提现异常{}", e);
             return new ModelAndView("redirect:/common/500.html");
         }
         return mv;

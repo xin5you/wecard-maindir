@@ -60,12 +60,21 @@ var draw = {
 				if (data) {
 					var drawAmount = $.trim($('#drawAmount').val());
 					var bankNo = $.trim($('#bankNumber').val());
+                    var accBal = $("#accBal").text();
                     if (!drawAmount){
-                        jfShowTips.toastShow({'text' : '请输入支取金额'});
+                        jfShowTips.toastShow({'text' : '请输入提现金额'});
                         return false;
 					}
+                    if (!isNaN(drawAmount) || drawAmount <= 0){
+                        jfShowTips.toastShow({'text' : '请输入正确的提现金额'});
+                        return false;
+					}
+                    if (parseFloat(accBal) < parseFloat(drawAmount)){
+                        jfShowTips.toastShow({'text' : '提现金额超过工资余额'});
+                        return false;
+                    }
 					if (parseInt(drawAmount) > 50000) {
-						jfShowTips.toastShow({'text' : '支取总额度不能超过 五万 元'});
+						jfShowTips.toastShow({'text' : '提现金额不能超过五万元'});
 						return false;
 					}
 					if (!bankNo) {
@@ -73,7 +82,7 @@ var draw = {
 						return false;
 					}
 					jfShowTips.dialogShow({
-						"mainText": "您将转支取工资余额："+drawAmount+"元",
+						"mainText": "您将提现工资："+drawAmount+"元",
 						"minText": "  ",
 						"hasCheck": false,
 						"hasCancel": true,
@@ -90,12 +99,12 @@ var draw = {
 						}
 					});
 				} else {
-					jfShowTips.toastShow({'text' : '对不起，您暂时无法转让'});
+					jfShowTips.toastShow({'text' : '对不起，您暂时无法提现'});
 					return false;
 				}
 			},
 			error : function () {
-				jfShowTips.toastShow({'text' : '对不起，您暂时无法转让'});
+				jfShowTips.toastShow({'text' : '对不起，您暂时无法提现'});
 				return false;
 			}
 		});

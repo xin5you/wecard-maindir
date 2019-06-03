@@ -104,63 +104,65 @@ public class WelfareMartServiceImpl implements WelfareMartService {
     }
 
     /**
-     *
      * @param openid
-     * @param num  购卡数量
+     * @param num         购卡数量
      * @param productCode 卡密商品号
-     * @param mchntCode  商户号
-     * @param shopCode  门店号
-     * @param notifyUrl  通知地址
+     * @param mchntCode   商户号
+     * @param shopCode    门店号
+     * @param notifyUrl   通知地址
      * @param redirectUrl 重定向地址
-     * @param  transAmt 卡密交易金额
-     * @param  bankNo 银行卡号
-     * @param  isCard 是否真实卡密 true: transAmt无效，false: transAmt必须填写 单位元
+     * @param transAmt    卡密交易金额
+     * @param bankNo      银行卡号
+     * @param isCard      是否真实卡密 true: transAmt无效，false: transAmt必须填写 单位元
      * @return
-     * @throws Exception
      */
     @Override
-    public TransOrderReq buyCardCommit(String openid,String num,String productCode,String mchntCode,String shopCode,String notifyUrl,String redirectUrl,String transAmt,String bankNo,boolean isCard) throws Exception {
+    public TransOrderReq buyCardCommit(String openid, String num, String productCode, String mchntCode, String shopCode, String notifyUrl, String redirectUrl, String transAmt, String bankNo, boolean isCard) throws Exception {
         if (StringUtil.isNullOrEmpty(openid)) {
-            logger.error("★★★★★Request WelfareMart--->buyCardCommit get openid is [Null]★★★★★");
+            logger.error("## buyCardCommit get openid is null");
             return null;
         }
         PersonInf personInf = personInfService.getPersonInfByOpenId(openid);
         if (StringUtil.isNullOrEmpty(personInf)) {
-            logger.error("★★★★★Request WelfareMart--->buyCardCommit get personInf is [Null]★★★★★");
+            logger.error("## buyCardCommit get personInf is null");
             return null;
         }
         if (StringUtil.isNullOrEmpty(num) || StringUtil.isNullOrEmpty(productCode)) {
-            logger.error("★★★★★Request WelfareMart--->buyCardCommit get num | productCode is [Null]★★★★★");
+            logger.error("## buyCardCommit get num or productCode is null");
             return null;
         }
         CardKeysProduct product = new CardKeysProduct();
         product.setProductCode(productCode);
-       /* product.setIsPutaway("0");*/
+        /* product.setIsPutaway("0");*/
         product.setDataStat("0");
         CardKeysProduct ckp = cardKeysProductService.getCardKeysProductByCode(product);
         if (StringUtil.isNullOrEmpty(ckp)) {
-            logger.error("## 卡券集市--->购买卡券接口，查询userID[{}]产品号[{}]信息为空", personInf.getUserId(), productCode);
+            logger.error("## buyCardCommit，询userID[{}]产品号[{}]信息为空", personInf.getUserId(), productCode);
             return null;
         }
 
-        /** 新增卡密交易订单信息 */
+        /* 新增卡密交易订单信息 */
         CardKeysOrderInf cko = new CardKeysOrderInf();
         cko.setOrderId(RandomUtils.getOrderIdByUUId("G"));
         cko.setUserId(personInf.getUserId());
         cko.setProductCode(productCode);
         //计算卡密交易金额
-        if(isCard) {
+        if (isCard) {
             int amt = NumberUtils.mul(Integer.parseInt(num), Integer.parseInt(ckp.getAmount()));
             cko.setAmount(String.valueOf(amt));
-        }else{
+        } else {
             cko.setAmount(NumberUtils.RMBYuanToCent(transAmt));
+            // 校验工资提现代付金额
+            if (Integer.parseInt(cko.getAmount()) <= 0) {
+                return null;
+            }
         }
 
         cko.setType(orderType.O1.getCode());
         cko.setStat(orderStat.OS10.getCode());
         cko.setNum(num);
         cko.setPaidAmount("0");
-        cko.setBankNo(bankNo); //银行卡
+        cko.setBankNo(bankNo);
         if (cardKeysOrderInfService.insertCardKeysOrderInf(cko) < 1) {
             logger.error("## 卡券集市--->购卡支付接口接口，为userID[{}]插入CardKeysOrderInf信息失败", personInf.getUserId());
             return null;
@@ -177,7 +179,8 @@ public class WelfareMartServiceImpl implements WelfareMartService {
         req.setCommodityNum(num);
         req.setTxnAmount(cko.getAmount());
         req.setNotify_url(notifyUrl);
-        req.setRedirect_type("1");// 1：需要重定向，0：不需要重定向
+        // 1：需要重定向，0：不需要重定向
+        req.setRedirect_type("1");
         req.setRedirect_url(redirectUrl);
         req.setAttach(productCode);
         req.setSign(ChannelSignUtil.genSign(req));
@@ -315,6 +318,7 @@ public class WelfareMartServiceImpl implements WelfareMartService {
 
     /**
      * 转让提交
+     *
      * @param resellNum
      * @param productCode
      * @param bankNo
@@ -324,7 +328,7 @@ public class WelfareMartServiceImpl implements WelfareMartService {
      */
     @Override
     @Transactional
-    public WelfaremartResellResp resellCommit(String resellNum,String productCode, String bankNo, String userId) throws Exception{
+    public WelfaremartResellResp resellCommit(String resellNum, String productCode, String bankNo, String userId) throws Exception {
         WelfaremartResellResp resp = new WelfaremartResellResp();
         resp.setCode("1");// 不需要弹框提示
         resp.setStatus(Boolean.FALSE);
@@ -501,8 +505,8 @@ public class WelfareMartServiceImpl implements WelfareMartService {
         }
 
         String bankName = BankUtil.getBankNameByCode(welfareUserInfo.getAccountBank());
-        String cnaps=CnapsUtil.getCnapsNo(bankName, accountBankAddr.split(",")[0],accountBankAddr.split(",")[1]);
-        logger.info("cnaps=="+cnaps);
+        String cnaps = CnapsUtil.getCnapsNo(bankName, accountBankAddr.split(",")[0], accountBankAddr.split(",")[1]);
+        logger.info("cnaps==" + cnaps);
         if (StringUtil.isNullOrEmpty(cnaps)) {
             logger.error("## 卡券集市--->新增用户银行卡接口，userID[{}]银行卡[{}]类型为获取不到联行号", personInf.getUserId(), bankNo);
             result.setMsg(MessageUtil.WELFAREMART_NO_ADDBANKCARD);

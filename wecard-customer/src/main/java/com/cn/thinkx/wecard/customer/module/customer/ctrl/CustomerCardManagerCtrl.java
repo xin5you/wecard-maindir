@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -525,7 +526,7 @@ public class CustomerCardManagerCtrl extends BaseController {
         uAcc.setInsCode(insCode);
         uAcc.setProductCode(productCode);
         List<UserMerchantAcct> userAccList = userMerchantAcctService.getUserMerchantAcctByUser(uAcc);
-        if (userAccList == null || userAccList.size() < 1) {
+        if (CollectionUtils.isEmpty(userAccList)) {
             logger.error("## 用户[{}]进入通卡账户失败：无法查找到通卡账户信息", openid);
             mv = new ModelAndView("redirect:/common/500.html");
             return mv;
@@ -544,7 +545,7 @@ public class CustomerCardManagerCtrl extends BaseController {
         uAcc.setProductCode(productCode2);
         userAccList = userMerchantAcctService.getUserMerchantAcctByUser(uAcc);
 
-        if (userAccList == null || userAccList.size() < 1) {
+        if (CollectionUtils.isEmpty(userAccList)) {
             logger.error("## 用户[{}]进入工资账户失败：无法查找到工资账户信息", openid);
             uAcc.setAccBal("0");
             mv.addObject("userWageInfo", uAcc);
