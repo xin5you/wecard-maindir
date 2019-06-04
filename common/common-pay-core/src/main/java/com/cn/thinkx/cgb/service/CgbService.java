@@ -16,7 +16,7 @@ public class CgbService {
         CommHeadDTO commHeadDTO = new CommHeadDTO();
         commHeadDTO.setTranCode("0021");
         commHeadDTO.setCifMaster(cgbInit.getMaster());//
-        commHeadDTO.setEntSeqNo("20190675312345671");
+        commHeadDTO.setEntSeqNo("20190675312345671"+"001");
         commHeadDTO.setEntUserId(cgbInit.getUserId());
         commHeadDTO.setPassword(cgbInit.getPassword());
         Timestamp time = new Timestamp(System.currentTimeMillis());
@@ -27,12 +27,12 @@ public class CgbService {
         OutwardPaymentDTO outwardPaymentDTO = new OutwardPaymentDTO();
         outwardPaymentDTO.setOutAccName(cgbInit.getAccountName());
         outwardPaymentDTO.setOutAcc(cgbInit.getAccount());
-        outwardPaymentDTO.setInAccName("向建华");
-        outwardPaymentDTO.setInAcc("6252514373");
-        outwardPaymentDTO.setInAccBank("农业银行");
+        outwardPaymentDTO.setInAccName("朱秋友");
+        outwardPaymentDTO.setInAcc("6214830215284406");
+        outwardPaymentDTO.setInAccBank("招商银行");
         // outwardPaymentDTO.setInAccAdd();
         outwardPaymentDTO.setAmount("1");
-        outwardPaymentDTO.setPaymentBankid("103496134666");
+        outwardPaymentDTO.setPaymentBankid("308290003011");
 
         outwardPaymentDTO.setComment("测试");
 
