@@ -60,7 +60,7 @@ var draw = {
 				if (data) {
 					var drawAmount = $.trim($('#drawAmount').val());
 					var bankNo = $.trim($('#bankNumber').val());
-                    var accBal = $("#accBal").text();
+                    var accBal = $("#accBal").val();
                     if (!drawAmount){
                         jfShowTips.toastShow({'text' : '请输入提现金额'});
                         return false;
