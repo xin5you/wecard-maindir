@@ -65,12 +65,16 @@ var draw = {
                         jfShowTips.toastShow({'text' : '请输入提现金额'});
                         return false;
 					}
-                    if (!isNaN(drawAmount) || drawAmount <= 0){
+                    if (isNaN(drawAmount) || drawAmount <= 0){
                         jfShowTips.toastShow({'text' : '请输入正确的提现金额'});
                         return false;
 					}
-                    if (parseFloat(accBal) < parseFloat(drawAmount)){
+                    if (accBal < drawAmount){
                         jfShowTips.toastShow({'text' : '提现金额超过工资余额'});
+                        return false;
+                    }
+                    if (parseInt(drawAmount) < 500) {
+                        jfShowTips.toastShow({'text' : '提现金额不能低于五百元'});
                         return false;
                     }
 					if (parseInt(drawAmount) > 50000) {
@@ -82,7 +86,7 @@ var draw = {
 						return false;
 					}
 					jfShowTips.dialogShow({
-						"mainText": "您将提现工资："+drawAmount+"元",
+						"mainText": "您将提现工资"+drawAmount+"元",
 						"minText": "  ",
 						"hasCheck": false,
 						"hasCancel": true,

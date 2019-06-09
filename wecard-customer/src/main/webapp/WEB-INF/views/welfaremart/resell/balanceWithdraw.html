@@ -15,6 +15,7 @@
 	<input id="bankNumber" name="bankNumber" type="hidden" />
 	<input id="mobile" name="mobile" type="hidden" value="${mobile!}" />
 	<input id="appearNum" name="appearNum" type="hidden" value="${appearNum!}" />
+	<input id="accBal" name="accBal" type="hidden" value="${userWageInfo.accBal!}" />
 	<div class="resell_plate">
 		<div class="waring_tips">
 		    <img src="${s.base}/static/images/welfaremart/tips.png">
@@ -24,7 +25,8 @@
 		<div class="add_card">
 			<div class="in_text">
 				<div class="add_line">
-                    工资余额：￥<b id="accBal" style="color: #ff4646">${userWageInfo.accBal! }</b><input id="drawAmount" name="drawAmount" type="number" placeholder="请输入提现金额" />
+                    工资余额：￥${userWageInfo.accBal! }
+					<input id="drawAmount" name="drawAmount" type="number" oninput="value=value.replace(/[^\d]/g,'')" placeholder="请输入提现金额" />
 				</div>
 			</div>
 			<a class="in_text choose_banker" id="bank_select" onclick="bankDragUp.run()"><span id="checkBankNo">选择银行卡</span></a>
