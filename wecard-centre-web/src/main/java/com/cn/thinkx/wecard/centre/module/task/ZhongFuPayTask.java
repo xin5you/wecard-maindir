@@ -23,6 +23,7 @@ import com.cn.thinkx.wecard.centre.module.biz.util.CardKeysFactory;
 import com.cn.thinkx.wecard.centre.module.biz.util.PersonInfFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -84,7 +85,7 @@ public class ZhongFuPayTask implements Runnable {
             try {
                 // 随机选择黄牛号
                 int index = (int) (Math.random() * SCALPER_LIST.size());
-                logger.info("黄牛[{}]开始回收卡密交易订单{}", SCALPER_LIST.get(index).getUserName(), cardKeysOrderInf.toString());
+                logger.info("代付出款订单{}", JSONObject.toJSONString(cardKeysOrderInf));
 
                 CardKeysTransLogService cardKeysTransLogService = CardKeysFactory.getCardKeysTransLogService();
                 CardKeysTransLog vo = new CardKeysTransLog();
@@ -94,7 +95,7 @@ public class ZhongFuPayTask implements Runnable {
                 // 根据订单号查找所有卡密交易流水
                 List<CardKeysTransLog> list = cardKeysTransLogService.getCardKeysTransLogList(vo);
                 // 卡密交易流水不为空
-                if (list != null && list.size() > 0) {
+                if (!CollectionUtils.isEmpty(list)) {
                     list.forEach(item -> {
                         // 设置转入账户(随机黄牛号)
                         item.setTfrInAcctNo(SCALPER_LIST.get(index).getUserId());
@@ -105,9 +106,13 @@ public class ZhongFuPayTask implements Runnable {
                         // 更新卡密交易流水失败时，出款扣除失败卡密流水出款金额
                         if (cardKeysTransLogService.updateCardKeysTransLog(item) < 1) {
                             logger.error("## 定时任务Task--->回收待转让卡密失败，卡密交易订单号[{}] 卡密交易流水号[{}]", vo.getOrderId(), item.getTxnPrimaryKey());
-                            throw new RuntimeException("## 更新卡密交易流水失败，跳出代付");
+                            throw new RuntimeException("更新卡密交易流水失败，跳出代付");
                         }
                     });
+
+                    if (Integer.parseInt(cardKeysOrderInf.getPaidAmount()) <= 0) {
+                        throw new RuntimeException("代付金额为0，跳出代付");
+                    }
 
                     //组装调用中付代付接口参数
                     UnifyPayForAnotherVO payVo = new UnifyPayForAnotherVO();
@@ -139,9 +144,9 @@ public class ZhongFuPayTask implements Runnable {
                     // 调用代付接口,根据代付接口返回信息更新卡密订单
                     JSONObject paramData = new JSONObject();
                     paramData.put("paramData", JSONArray.toJSONString(payVo));
-                    logger.info("代付传参=========>{}", paramData.toString());
+                    logger.info("中付代付传参=========>{}", paramData.toString());
                     String rtnStr = HttpClientUtil.sendPost(REQUEST_URL, paramData.toString());
-                    logger.info("代付返回=========>{}", rtnStr);
+                    logger.info("中付代付返回=========>{}", rtnStr);
 
                     // 代付成功后更新卡密交易订单：出款金额置0、订单状态为已转让或者转让失败
                     cardKeysOrderInf.setPaidAmount(null);

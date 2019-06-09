@@ -8,13 +8,13 @@ import com.cn.thinkx.pms.base.utils.BaseConstants.orderStat;
 import com.cn.thinkx.pms.base.utils.BaseConstants.orderType;
 import com.cn.thinkx.wecard.centre.module.biz.service.CardKeysOrderInfService;
 import com.cn.thinkx.wecard.centre.module.biz.service.CardKeysTransLogService;
-import com.cn.thinkx.wecard.centre.module.task.NegotiationTask;
 import com.cn.thinkx.wecard.centre.module.task.ZhongFuOrderQueryTask;
 import com.cn.thinkx.wecard.centre.module.task.ZhongFuPayTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -66,8 +66,7 @@ public class CardKeysRetrievingJob {
             cko.setStat(orderStat.OS30.getCode());
             // 查询所有可代付订单
             orderList = cardKeysOrderInfService.getCardKeysOrderInfList(cko);
-            if (orderList == null || orderList.size() < 1) {
-                logger.info("No executable orders are currently available.");
+            if (CollectionUtils.isEmpty(orderList)) {
                 return;
             }
             // 将“转让中”卡密交易订单加入缓存线程池执行代付处理
@@ -80,7 +79,7 @@ public class CardKeysRetrievingJob {
                 // 出款卡密订单能否执行代付逻辑标识
                 boolean canExecuteTask = false;
 
-                if (list != null && list.size() > 0) {
+                if (!CollectionUtils.isEmpty(list)) {
                     // 根据卡密查找是否有重复卡密流水记录
                     for (CardKeysTransLog log : list) {
                         cardKeysTransLog.setCardKey(log.getCardKey());
