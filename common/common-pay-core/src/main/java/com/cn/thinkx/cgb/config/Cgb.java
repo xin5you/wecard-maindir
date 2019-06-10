@@ -9,6 +9,6 @@ import com.cn.thinkx.cgb.service.CgbService;
  */
 public class Cgb {
     public static void main(String[] args) {
-        new CgbService().dfPaymentResult();
+        new CgbService().dfQueryOrderResult();
     }
 }
