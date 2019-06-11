@@ -640,13 +640,22 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
                 cUser.setChannelCode(BaseConstants.ChannelCode.CHANNEL1.toString());
                 String openId = channelUserInfService.getExternalId(cUser);
                 String desc = NumberUtils.RMBCentToYuan(ckp.getOrgAmount()) + ckp.getProductUnit() + Objects.requireNonNull(TransFeeType.findByCode(ckp.getProductType())).getValue();
-                wechatMQProducerService.sendTemplateMsg(RedisDictProperties.getInstance().getdictValueByCode("WX_CUSTOMER_ACCOUNT"), openId, "WX_TEMPLATE_ID_5", null,
-                        WXTemplateUtil.setResellData(cko.getOrderId(),
-                                NumberUtils.RMBCentToYuan(cko.getPaidAmount()),
-                                DateUtil.getStringFromDate(cko.getUpdateTime()),
-                                NumberUtils.hideCardNo(cko.getBankNo()),
-                                cko.getNum(),
-                                desc));
+                TreeMap msg;
+                if (RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.CARD_WAGES_XIN5YOU_PROD_NO).equals(cko.getProductCode())) {
+                    msg = WXTemplateUtil.setBalanceDrawData(cko.getOrderId(),
+                            NumberUtils.RMBCentToYuan(cko.getPaidAmount()),
+                            DateUtil.getStringFromDate(cko.getUpdateTime()),
+                            NumberUtils.hideCardNo(cko.getBankNo()));
+                } else {
+                    msg = WXTemplateUtil.setResellData(cko.getOrderId(),
+                            NumberUtils.RMBCentToYuan(cko.getPaidAmount()),
+                            DateUtil.getStringFromDate(cko.getUpdateTime()),
+                            NumberUtils.hideCardNo(cko.getBankNo()),
+                            cko.getNum(),
+                            desc);
+                }
+
+                wechatMQProducerService.sendTemplateMsg(RedisDictProperties.getInstance().getdictValueByCode("WX_CUSTOMER_ACCOUNT"), openId, "WX_TEMPLATE_ID_5", null, msg);
             }
         } catch (Exception e) {
             logger.error("## 代付查询异常", e);
@@ -660,7 +669,7 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
      * @param req
      * @return
      */
-   public WelfaremartResellResp welfaremartBalanceDrawCommit(WelfaremartResellReq req,String cardOrderId) throws Exception{
+    public WelfaremartResellResp welfaremartBalanceDrawCommit(WelfaremartResellReq req, String cardOrderId) throws Exception {
         WelfaremartResellResp resp = new WelfaremartResellResp();
         resp.setCode("1");//不需要弹框提示
         resp.setStatus(Boolean.FALSE);
@@ -746,9 +755,9 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
                 return resp;
             }
 
-            CardKeysOrderInf cardKeysOrder =cardKeysOrderInfService.getCardKeysOrderByOrderId(cardOrderId);
+            CardKeysOrderInf cardKeysOrder = cardKeysOrderInfService.getCardKeysOrderByOrderId(cardOrderId);
             if (cardKeysOrder == null) {
-                logger.error("## 卡券集市--->转让接口，查询转让购买订单用户[{}]的产品[{}]信息为空，卡订单号[{}]", userId, productCode,cardOrderId);
+                logger.error("## 卡券集市--->转让接口，查询转让购买订单用户[{}]的产品[{}]信息为空，卡订单号[{}]", userId, productCode, cardOrderId);
                 resp.setMsg(MessageUtil.ERROR_MSSAGE);
                 return resp;
             }

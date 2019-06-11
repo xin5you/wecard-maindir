@@ -86,7 +86,18 @@ public class WXTemplateUtil {
 		params.put("remark", TemplateMessage.item("感谢您的使用，如有疑问请致电021-52896776", "#FF0000"));
 		return params;
 	}
-	
+		public static TreeMap<String, TreeMap<String, String>> setBalanceDrawData(String transId, String payAmt, String txnDate, String bankNo) {
+		TreeMap<String, TreeMap<String, String>> params = new TreeMap<>();
+		StringBuilder data = new StringBuilder();
+		data.append("提现订单号[").append(transId).append("]");
+		params.put("first", TemplateMessage.item("您银行卡号" + bankNo + "有一笔工资提现资金到账，请及时查收\n", "#000000"));
+		params.put("keyword1", TemplateMessage.item(payAmt + " 元", "#FF0000"));
+		params.put("keyword2", TemplateMessage.item(txnDate, "#000000"));
+		params.put("keyword3", TemplateMessage.item(data.toString() + "\n\n", "#000000"));
+		params.put("remark", TemplateMessage.item("感谢您的使用，如有疑问请致电021-52896776", "#FF0000"));
+		return params;
+	}
+
 	public static TreeMap<String, TreeMap<String, String>> setProceedsMsg(String customerPhone, String mchntName, String payAmt, String shopName,String payType, String interfacePrimaryKey, String txnDate) {
 		TreeMap<String, TreeMap<String, String>> params = new TreeMap<>();
 		params.put("first", TemplateMessage.item("收到一笔手机尾号"+customerPhone+"的客户付款，请及时查收\n", "#000000"));

@@ -50,7 +50,7 @@ public class CardKeysRetrievingJob {
      */
     public void doCardKeysRecovery() {
         if (es.isShutdown()) {
-            es = Executors.newCachedThreadPool();
+            es = Executors.newFixedThreadPool(3);
         }
 
         Set<CardKeysOrderInf> orderList;
