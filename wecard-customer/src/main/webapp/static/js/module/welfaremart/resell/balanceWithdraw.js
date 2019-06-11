@@ -69,7 +69,7 @@ var draw = {
                         jfShowTips.toastShow({'text' : '请输入正确的提现金额'});
                         return false;
 					}
-                    if (accBal < drawAmount){
+                    if (parseInt(accBal) < parseInt(drawAmount)){
                         jfShowTips.toastShow({'text' : '提现金额超过工资余额'});
                         return false;
                     }
