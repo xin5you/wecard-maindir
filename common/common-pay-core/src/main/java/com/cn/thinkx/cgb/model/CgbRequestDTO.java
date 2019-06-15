@@ -1,25 +1,42 @@
 package com.cn.thinkx.cgb.model;
 
-import java.io.Serializable;
+public class CgbRequestDTO implements  java.io.Serializable {
+    private static final long serialVersionUID = -8870785475407963495L;
 
-
-public class OutwardPaymentDTO implements Serializable {
-    private static final long serialVersionUID = -767991643528462317L;
+    private String account;  //企业账户号
+    private String entSeqNo;//企业财务系统自己产生的流水号。每天唯一
 
     private String outAccName;//付款人
     private String outAcc;//付款账号
     private String inAccName;//收款人
     private String inAcc;//收款账号
     private String inAccBank;//收款银行
-
     private String inAccAdd;//收款银行地址
-    private String amount;//金额
-
+    private String amount;//金额 单位元 1:表示1.00元人民币
     private String remark;//摘要
     private String comment;//附言
     private String paymentBankid;//联行号
 
 
+    private String origEntseqno;
+    private String origEntdate;
+
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getEntSeqNo() {
+        return entSeqNo;
+    }
+
+    public void setEntSeqNo(String entSeqNo) {
+        this.entSeqNo = entSeqNo;
+    }
 
     public String getOutAccName() {
         return outAccName;
@@ -101,10 +118,28 @@ public class OutwardPaymentDTO implements Serializable {
         this.paymentBankid = paymentBankid;
     }
 
+    public String getOrigEntseqno() {
+        return origEntseqno;
+    }
+
+    public void setOrigEntseqno(String origEntseqno) {
+        this.origEntseqno = origEntseqno;
+    }
+
+    public String getOrigEntdate() {
+        return origEntdate;
+    }
+
+    public void setOrigEntdate(String origEntdate) {
+        this.origEntdate = origEntdate;
+    }
+
     @Override
     public String toString() {
-        return "OutwardPaymentDTO{" +
-                "outAccName='" + outAccName + '\'' +
+        return "CgbRequestDTO{" +
+                "account='" + account + '\'' +
+                ", entSeqNo='" + entSeqNo + '\'' +
+                ", outAccName='" + outAccName + '\'' +
                 ", outAcc='" + outAcc + '\'' +
                 ", inAccName='" + inAccName + '\'' +
                 ", inAcc='" + inAcc + '\'' +
@@ -114,6 +149,8 @@ public class OutwardPaymentDTO implements Serializable {
                 ", remark='" + remark + '\'' +
                 ", comment='" + comment + '\'' +
                 ", paymentBankid='" + paymentBankid + '\'' +
+                ", origEntseqno='" + origEntseqno + '\'' +
+                ", origEntdate='" + origEntdate + '\'' +
                 '}';
     }
 }

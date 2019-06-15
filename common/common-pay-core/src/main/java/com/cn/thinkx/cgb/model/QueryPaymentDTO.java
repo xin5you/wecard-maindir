@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 public class QueryPaymentDTO implements Serializable {
 
-    private static final long serialVersionUID = 7606634695832137322L;
+    private static final long serialVersionUID = 7130123948729936435L;
 
     private String origEntseqno;
 

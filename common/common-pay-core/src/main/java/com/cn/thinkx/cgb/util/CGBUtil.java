@@ -2,10 +2,7 @@ package com.cn.thinkx.cgb.util;
 import cn.hutool.core.util.XmlUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
-import com.cn.thinkx.cgb.model.KeyDTO;
-import com.cn.thinkx.cgb.model.RequestParametersDTO;
-import com.cn.thinkx.cgb.model.ResponseParametersDTO;
-import com.cn.thinkx.cgb.model.SignatureDTO;
+import com.cn.thinkx.cgb.model.*;
 import org.apache.commons.codec.binary.Base64;
 
 import java.io.FileInputStream;
@@ -24,7 +21,6 @@ import java.util.Map;
 
 
 public class CGBUtil {
-    private static String CGBPubPath = "/mipay/disanfang/cgbFile/cert/gfs.puk";
 
     public static String doPost(String url, String xmlString) {
         try {
@@ -98,7 +94,8 @@ public class CGBUtil {
     public static KeyDTO getKey(String pukPaht, String pvkPaht) {
         //广发说公钥一样先写死
         if (pukPaht == null) {
-            pukPaht = CGBPubPath;
+            CgbInit cgbInit = new CgbInit();
+            pukPaht = cgbInit.getAccount();
         }
         KeyDTO keyDTO = new KeyDTO();
         byte[] pvk = new byte[2048];
