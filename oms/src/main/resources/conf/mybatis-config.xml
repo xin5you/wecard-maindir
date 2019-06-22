@@ -4,76 +4,77 @@
 		<settings>
 		<setting name="mapUnderscoreToCamelCase" value="true" />
 		<!-- <setting name="logImpl" value="SLF4J" /> -->
-	</settings>
-	 <typeAliases>
-	 	<typeAlias type="com.cn.thinkx.oms.module.sys.model.User" alias="User" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.sys.model.Role" alias="Role" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.sys.model.Resource" alias="Resource" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.sys.model.RoleResource" alias="RoleResource" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.sys.model.UserRole" alias="UserRole" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.sys.model.Dictionary" alias="Dictionary" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.sys.model.Organization" alias="Organization" />
-	 	
-	 	<typeAlias type="com.cn.thinkx.oms.module.merchant.model.InsInf" alias="InsInf" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.merchant.model.MerchantInf" alias="MerchantInf" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.merchant.model.MerchantInfList" alias="MerchantInfList" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.merchant.model.ShopInf" alias="ShopInf" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.merchant.model.MerchantManagerTmp" alias="MerchantManagerTmp" />
-	 	
-	 	<typeAlias type="com.cn.thinkx.oms.module.active.model.CommodityInf" alias="CommodityInf" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.active.model.MerchantActiveInf" alias="MerchantActiveInf" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.active.model.ActiveList" alias="ActiveList" />
-	 	
-	 	<typeAlias type="com.cn.thinkx.oms.module.margin.model.MerchantMarginList" alias="MerchantMarginList" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.margin.model.MerchantCashManage" alias="MerchantCashManage" />
-	 	
-	 	<typeAlias type="com.cn.thinkx.oms.module.merchant.model.MerchantContract" alias="MerchantContract" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.merchant.model.MerchantContractList" alias="MerchantContractList" />
-	 	
-	    <typeAlias type="com.cn.thinkx.oms.module.merchant.model.Product" alias="Product" />
-	    <typeAlias type="com.cn.thinkx.oms.module.merchant.model.RelInsProduct" alias="RelInsProduct" />
-	    
-	    <typeAlias type="com.cn.thinkx.oms.module.key.model.KeyVersion" alias="KeyVersion" />
-	    <typeAlias type="com.cn.thinkx.oms.module.key.model.KeyIndex" alias="KeyIndex" />
-	 	
-	 	<typeAlias type="com.cn.thinkx.oms.module.common.model.IndustryClassification" alias="IndustryClassification" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.common.model.ImageManager" alias="ImageManager" />
-	 	
-	 	<typeAlias type="com.cn.thinkx.oms.module.city.model.CityInf" alias="CityInf" />
-	 	
-	 	<typeAlias type="com.cn.thinkx.oms.module.merchant.model.TransLog" alias="TransLog" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.merchant.model.TransInf" alias="TransInf" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.merchant.model.TransLogUpload" alias="TransLogUpload" />
-	 	
-	 	<typeAlias type="com.cn.thinkx.oms.module.mchnteshop.model.MchntEshopInf" alias="MchntEshopInf" />
+        <!-- <setting name="logImpl" value="STDOUT_LOGGING" /> -->
+    </settings>
+     <typeAliases>
+         <typeAlias type="com.cn.thinkx.oms.module.sys.model.User" alias="User" />
+         <typeAlias type="com.cn.thinkx.oms.module.sys.model.Role" alias="Role" />
+         <typeAlias type="com.cn.thinkx.oms.module.sys.model.Resource" alias="Resource" />
+         <typeAlias type="com.cn.thinkx.oms.module.sys.model.RoleResource" alias="RoleResource" />
+         <typeAlias type="com.cn.thinkx.oms.module.sys.model.UserRole" alias="UserRole" />
+         <typeAlias type="com.cn.thinkx.oms.module.sys.model.Dictionary" alias="Dictionary" />
+         <typeAlias type="com.cn.thinkx.oms.module.sys.model.Organization" alias="Organization" />
 
-	 	
-	 	<typeAlias type="com.cn.thinkx.oms.module.enterpriseorder.model.BatchOrder" alias="BatchOrder" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.enterpriseorder.model.BatchOrderList" alias="BatchOrderList" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.enterpriseorder.model.BatchInvoiceOrder" alias="BatchInvoiceOrder" />
+         <typeAlias type="com.cn.thinkx.oms.module.merchant.model.InsInf" alias="InsInf" />
+         <typeAlias type="com.cn.thinkx.oms.module.merchant.model.MerchantInf" alias="MerchantInf" />
+         <typeAlias type="com.cn.thinkx.oms.module.merchant.model.MerchantInfList" alias="MerchantInfList" />
+         <typeAlias type="com.cn.thinkx.oms.module.merchant.model.ShopInf" alias="ShopInf" />
+         <typeAlias type="com.cn.thinkx.oms.module.merchant.model.MerchantManagerTmp" alias="MerchantManagerTmp" />
 
-	 	
-	 	<typeAlias type="com.cn.thinkx.oms.module.customer.model.UserInf" alias="UserInf" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.customer.model.PersonInf" alias="PersonInf" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.customer.model.ChannelUserInf" alias="ChannelUserInf" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.common.model.WxTransLog" alias="WxTransLog" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.customer.model.UserMerchantAcct" alias="UserMerchantAcct" />
-	 	<typeAlias type="com.cn.thinkx.beans.CtrlSystem" alias="CtrlSystem" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.customer.model.CardInf" alias="CardInf" />
-	 	
-	 	<typeAlias type="com.cn.thinkx.oms.module.statement.model.OperationDetail" alias="OperationDetail" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.statement.model.OperationSummarizing" alias="OperationSummarizing" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.statement.model.CustomerInfo" alias="CustomerInfo" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.statement.model.CustomerInfoDetail" alias="CustomerInfoDetail" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.statement.model.MerchantDetail" alias="MerchantDetail" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.statement.model.MerchantSummarizing" alias="MerchantSummarizing" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.statement.model.ShopDetail" alias="ShopDetail" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.statement.model.FinancingSummarizing" alias="FinancingSummarizing" />
+         <typeAlias type="com.cn.thinkx.oms.module.active.model.CommodityInf" alias="CommodityInf" />
+         <typeAlias type="com.cn.thinkx.oms.module.active.model.MerchantActiveInf" alias="MerchantActiveInf" />
+         <typeAlias type="com.cn.thinkx.oms.module.active.model.ActiveList" alias="ActiveList" />
+
+         <typeAlias type="com.cn.thinkx.oms.module.margin.model.MerchantMarginList" alias="MerchantMarginList" />
+         <typeAlias type="com.cn.thinkx.oms.module.margin.model.MerchantCashManage" alias="MerchantCashManage" />
+
+         <typeAlias type="com.cn.thinkx.oms.module.merchant.model.MerchantContract" alias="MerchantContract" />
+         <typeAlias type="com.cn.thinkx.oms.module.merchant.model.MerchantContractList" alias="MerchantContractList" />
+
+        <typeAlias type="com.cn.thinkx.oms.module.merchant.model.Product" alias="Product" />
+        <typeAlias type="com.cn.thinkx.oms.module.merchant.model.RelInsProduct" alias="RelInsProduct" />
+
+        <typeAlias type="com.cn.thinkx.oms.module.key.model.KeyVersion" alias="KeyVersion" />
+        <typeAlias type="com.cn.thinkx.oms.module.key.model.KeyIndex" alias="KeyIndex" />
+
+         <typeAlias type="com.cn.thinkx.oms.module.common.model.IndustryClassification" alias="IndustryClassification" />
+         <typeAlias type="com.cn.thinkx.oms.module.common.model.ImageManager" alias="ImageManager" />
+
+         <typeAlias type="com.cn.thinkx.oms.module.city.model.CityInf" alias="CityInf" />
+
+         <typeAlias type="com.cn.thinkx.oms.module.merchant.model.TransLog" alias="TransLog" />
+         <typeAlias type="com.cn.thinkx.oms.module.merchant.model.TransInf" alias="TransInf" />
+         <typeAlias type="com.cn.thinkx.oms.module.merchant.model.TransLogUpload" alias="TransLogUpload" />
+
+         <typeAlias type="com.cn.thinkx.oms.module.mchnteshop.model.MchntEshopInf" alias="MchntEshopInf" />
+
+
+         <typeAlias type="com.cn.thinkx.oms.module.enterpriseorder.model.BatchOrder" alias="BatchOrder" />
+         <typeAlias type="com.cn.thinkx.oms.module.enterpriseorder.model.BatchOrderList" alias="BatchOrderList" />
+         <typeAlias type="com.cn.thinkx.oms.module.enterpriseorder.model.BatchInvoiceOrder" alias="BatchInvoiceOrder" />
+
+
+         <typeAlias type="com.cn.thinkx.oms.module.customer.model.UserInf" alias="UserInf" />
+         <typeAlias type="com.cn.thinkx.oms.module.customer.model.PersonInf" alias="PersonInf" />
+         <typeAlias type="com.cn.thinkx.oms.module.customer.model.ChannelUserInf" alias="ChannelUserInf" />
+         <typeAlias type="com.cn.thinkx.oms.module.common.model.WxTransLog" alias="WxTransLog" />
+         <typeAlias type="com.cn.thinkx.oms.module.customer.model.UserMerchantAcct" alias="UserMerchantAcct" />
+         <typeAlias type="com.cn.thinkx.beans.CtrlSystem" alias="CtrlSystem" />
+         <typeAlias type="com.cn.thinkx.oms.module.customer.model.CardInf" alias="CardInf" />
+
+         <typeAlias type="com.cn.thinkx.oms.module.statement.model.OperationDetail" alias="OperationDetail" />
+         <typeAlias type="com.cn.thinkx.oms.module.statement.model.OperationSummarizing" alias="OperationSummarizing" />
+         <typeAlias type="com.cn.thinkx.oms.module.statement.model.CustomerInfo" alias="CustomerInfo" />
+         <typeAlias type="com.cn.thinkx.oms.module.statement.model.CustomerInfoDetail" alias="CustomerInfoDetail" />
+         <typeAlias type="com.cn.thinkx.oms.module.statement.model.MerchantDetail" alias="MerchantDetail" />
+         <typeAlias type="com.cn.thinkx.oms.module.statement.model.MerchantSummarizing" alias="MerchantSummarizing" />
+         <typeAlias type="com.cn.thinkx.oms.module.statement.model.ShopDetail" alias="ShopDetail" />
+         <typeAlias type="com.cn.thinkx.oms.module.statement.model.FinancingSummarizing" alias="FinancingSummarizing" />
         <typeAlias type="com.cn.thinkx.oms.module.statement.model.MarketingDetail" alias="MarketingDetail" />
         <typeAlias type="com.cn.thinkx.oms.module.statement.util.Condition" alias="Condition" />
-        
+
         <typeAlias type="com.cn.thinkx.oms.module.merchant.model.ScanBoxDeviceInf" alias="ScanBoxDeviceInf" />
-        
+
         <typeAlias type="com.cn.thinkx.oms.module.diy.model.DiyRole" alias="DiyRole" />
         <typeAlias type="com.cn.thinkx.oms.module.diy.model.DiyResource" alias="DiyResource" />
         <typeAlias type="com.cn.thinkx.oms.module.diy.model.DiyRoleResource" alias="DiyRoleResource" />
@@ -81,34 +82,37 @@
         <typeAlias type="com.cn.thinkx.oms.module.diy.model.DiyUserRole" alias="DiyUserRole" />
         <typeAlias type="com.cn.thinkx.oms.module.diy.model.DiyDataAuth" alias="DiyDataAuth" />
         <typeAlias type="com.cn.thinkx.oms.module.diy.model.DiyUserDataAuth" alias="DiyUserDataAuth" />
-        
+
         <typeAlias type="com.cn.thinkx.oms.module.channel.model.PaymentChannel" alias="PaymentChannel" />
         <typeAlias type="com.cn.thinkx.oms.module.channel.model.PaymentChannelApi" alias="PaymentChannelApi" />
-        
+
         <typeAlias type="com.cn.thinkx.oms.module.trans.model.CardTransLog" alias="CardTransLog" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.trans.model.CardTransInf" alias="CardTransInf" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.trans.model.CardTransLogUpload" alias="CardTransLogUpload" />
-	 	
-	 	<typeAlias type="com.cn.thinkx.oms.module.trans.model.PayChannelTransInf" alias="PayChannelTransInf" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.trans.model.PayChannelTransLog" alias="PayChannelTransLog" />
-	 	<typeAlias type="com.cn.thinkx.oms.module.trans.model.PayChannelTransLogUpload" alias="PayChannelTransLogUpload" />
-        
+         <typeAlias type="com.cn.thinkx.oms.module.trans.model.CardTransInf" alias="CardTransInf" />
+         <typeAlias type="com.cn.thinkx.oms.module.trans.model.CardTransLogUpload" alias="CardTransLogUpload" />
+
+         <typeAlias type="com.cn.thinkx.oms.module.trans.model.PayChannelTransInf" alias="PayChannelTransInf" />
+         <typeAlias type="com.cn.thinkx.oms.module.trans.model.PayChannelTransLog" alias="PayChannelTransLog" />
+         <typeAlias type="com.cn.thinkx.oms.module.trans.model.PayChannelTransLogUpload" alias="PayChannelTransLogUpload" />
+
         <typeAlias type="com.cn.thinkx.oms.module.cardkeys.model.CardKeysProduct" alias="CardKeysProduct" />
         <typeAlias type="com.cn.thinkx.oms.module.cardkeys.model.CardKeys" alias="CardKeys" />
         <typeAlias type="com.cn.thinkx.oms.module.cardkeys.model.CardKeysOrderInf" alias="CardKeysOrderInf" />
         <typeAlias type="com.cn.thinkx.oms.module.cardkeys.model.CardKeysTransLog" alias="CardKeysTransLog" />
         <typeAlias type="com.cn.thinkx.oms.module.cardkeys.model.WithdrawOrder" alias="WithdrawOrder" />
-        
+
         <typeAlias type="com.cn.thinkx.oms.module.customer.model.AccountInf" alias="AccountInf" />
-        
+
         <typeAlias type="com.cn.thinkx.oms.module.phoneRecharge.model.PhoneRechargeOrder" alias="PhoneRechargeOrder" />
         <typeAlias type="com.cn.thinkx.oms.module.phoneRecharge.model.PhoneRechargeOrderUpload" alias="PhoneRechargeOrderUpload" />
-        
+
         <typeAlias type="com.cn.thinkx.oms.module.phoneRecharge.model.PhoneRechargeShop" alias="PhoneRechargeShop" />
-        
+
         <typeAlias type="com.cn.thinkx.oms.module.withdrawBlacklist.model.WithdrawBlacklist" alias="WithdrawBlacklist" />
-        
-	</typeAliases>
+
+         <typeAlias type="com.cn.thinkx.oms.module.enterpriseorder.model.BatchWithdrawOrderDetail" alias="BatchWithdrawOrderDetail" />
+         <typeAlias type="com.cn.thinkx.oms.module.enterpriseorder.model.BatchWithdrawOrder" alias="BatchWithdrawOrder" />
+
+    </typeAliases>
     <mappers>
     
     </mappers>

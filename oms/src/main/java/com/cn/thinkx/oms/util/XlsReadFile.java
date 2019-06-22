@@ -1,14 +1,8 @@
 package com.cn.thinkx.oms.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.DecimalFormat;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.regex.Pattern;
-
+import com.cn.thinkx.oms.module.enterpriseorder.model.BatchOrderList;
+import com.cn.thinkx.oms.module.enterpriseorder.model.BatchWithdrawOrderDetail;
+import com.cn.thinkx.oms.module.sys.model.SMSMessage;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -19,8 +13,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.ModelMap;
 
-import com.cn.thinkx.oms.module.enterpriseorder.model.BatchOrderList;
-import com.cn.thinkx.oms.module.sys.model.SMSMessage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.*;
+import java.util.regex.Pattern;
 
 public class XlsReadFile {
 	
@@ -78,7 +76,7 @@ public class XlsReadFile {
 	 * 
 	 * @param inputStream
 	 * @param fileName
-	 * @param pageList
+	 * @param orderMap
 	 */
 	public ModelMap readOrderExcel(InputStream inputStream, String fileName, Map<String, BatchOrderList> orderMap, String batchType) {
 		Workbook wb = null;
@@ -195,7 +193,6 @@ public class XlsReadFile {
 				}
 			}
 		}
-
 		return map;
 	}
 
@@ -213,6 +210,76 @@ public class XlsReadFile {
 		}
 	}
 
+	/**
+	 * 读取导入的订单Excel
+	 *
+	 * @param inputStream
+	 * @param fileName
+	 * @param orderList
+	 */
+	public ModelMap readBatchWithDrawOrderDetailsExcel(InputStream inputStream, String fileName, List<BatchWithdrawOrderDetail> orderList) {
+
+		Workbook wb = null;
+		ModelMap map = new ModelMap();
+		map.addAttribute("status", Boolean.TRUE);
+		try {
+			if (!fileName.endsWith("xls") && !fileName.endsWith("xlsx")) {
+				map.addAttribute("status", Boolean.FALSE);
+				map.addAttribute("msg", "上传文件格式不正确");
+				return map;
+			}
+			if (fileName.endsWith("xls")) {
+				wb = new HSSFWorkbook(inputStream);// 解析xls格式
+			} else if (fileName.endsWith("xlsx")) {
+				wb = new XSSFWorkbook(inputStream);// 解析xlsx格式
+			}
+			Sheet sheet = wb.getSheetAt(0);// 第一个工作表
+
+			int lastRowIndex = sheet.getLastRowNum();
+			BatchWithdrawOrderDetail order = new BatchWithdrawOrderDetail();
+			for (int rIndex = 1; rIndex <= lastRowIndex; rIndex++) {
+				Row row = sheet.getRow(rIndex);
+				if (row != null) {
+					order = new BatchWithdrawOrderDetail();
+					order.setDetailId(UUID.randomUUID().toString().replace("-", ""));
+					//收款人姓名
+					order.setReceiverName(getValue(row.getCell(0)));
+					//收款人银行卡号
+					order.setReceiverCardNo(getValue(row.getCell(1)));
+					//银行名称
+					order.setBankName(getValue(row.getCell(2)));
+					//充值金额
+					order.setAmount(new BigDecimal(getValue(row.getCell(3))));
+
+					order.setBankProvince(getValue(row.getCell(4)));
+					order.setBankCity(getValue(row.getCell(5)));
+					order.setRemarks(getValue(row.getCell(6)));
+					order.setPayeeBankLinesNo(getValue(row.getCell(7)));
+					orderList.add(order);
+				}
+			}
+			wb.close();
+			inputStream.close();
+		} catch (Exception e) {
+			map.addAttribute("status", Boolean.FALSE);
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e1) {
+					logger.error("读取代付订单Excel发生异常：", e1);
+				}
+			}
+			if (wb != null) {
+				try {
+					wb.close();
+				} catch (IOException e1) {
+
+					logger.error("读取代付订单Excel发生异常：", e1);
+				}
+			}
+		}
+		return map;
+	}
 	public static void main(String[] args) {
 
 	}

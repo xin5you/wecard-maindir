@@ -121,6 +121,9 @@
                                      <sec:authorize access="hasRole('ROLE_PHONE_RECHARGE_ORDER')"> 
                                         <li><a href="${ctx }/phone/phoneRecharge/getPhoneRechargeList.do">手机充值交易明细</a></li>
                                      </sec:authorize>
+                                     <sec:authorize access="hasRole('ROLE_PHONE_RECHARGE_ORDER')">
+                                         <li><a href="${ctx }/batchWithdrawOrder/listBatchWithdrawOrder.do">广发批量代付</a></li>
+                                     </sec:authorize>
                                  </ul>
                              </li>
                              </sec:authorize>

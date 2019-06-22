@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://10.20.91.130/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cn.thinkx.oms.module.enterpriseorder.mapper.BatchWithdrawOrderDetailMapper">
+
+	<sql id="BatchWithdrawOrderDetailColumns">
+		DETAIL_ID,
+		ORDER_ID,
+		SERIAL_NO,
+		RECEIVER_NAME,
+		RECEIVER_CARD_NO,
+		RECEIVER_TYPE,
+		BANK_TYPE,
+		BANK_NAME,
+		BANK_CODE,
+		PAYEE_BANK_LINES_NO,
+		BANK_PROVINCE,
+		BANK_CITY,
+		DMS_SERIAL_NO,
+		AMOUNT,
+		FEE,
+		RESP_CODE,
+		RESP_MSG,
+		PAY_TIME,
+		PAY_CHANEL,
+		DATA_STAT,
+		REMARKS,
+		CREATE_USER,
+		UPDATE_USER,
+		CREATE_TIME,
+		UPDATE_TIME,
+		LOCK_VERSION
+	</sql>
+
+	<sql id="BatchWithdrawOrderDetailFields">
+		#{detailId, jdbcType=VARCHAR},
+		#{orderId, jdbcType=VARCHAR},
+		#{serialNo, jdbcType=VARCHAR},
+		#{receiverName, jdbcType=VARCHAR},
+		#{receiverCardNo, jdbcType=VARCHAR},
+		#{receiverType, jdbcType=VARCHAR},
+		#{bankType, jdbcType=VARCHAR},
+		#{bankName, jdbcType=VARCHAR},
+		#{bankCode, jdbcType=VARCHAR},
+		#{payeeBankLinesNo, jdbcType=VARCHAR},
+		#{bankProvince, jdbcType=VARCHAR},
+		#{bankCity, jdbcType=VARCHAR},
+		#{dmsSerialNo, jdbcType=VARCHAR},
+		#{amount, jdbcType=DECIMAL},
+		#{fee, jdbcType=DECIMAL},
+		#{respCode, jdbcType=VARCHAR},
+		#{respMsg, jdbcType=VARCHAR},
+		#{payTime, jdbcType=DATE},
+		#{payChanel, jdbcType=VARCHAR},
+		'0',
+		#{remarks, jdbcType=VARCHAR},
+		#{createUser, jdbcType=VARCHAR},
+		#{updateUser, jdbcType=VARCHAR},
+		SYSDATE,
+		SYSDATE,
+		'0'
+	</sql>
+
+	<sql id="tableName">
+			TB_BATCH_WITHDRAW_ORDER_DETAIL
+	</sql>
+	
+
+	
+	<insert id="insertBatchWithdrawOrderDetail" parameterType="BatchWithdrawOrderDetail">
+		INSERT INTO 
+			<include refid="tableName" />
+		(
+			<include refid="BatchWithdrawOrderDetailColumns" />
+		) VALUES (
+			<include refid="BatchWithdrawOrderDetailFields" />
+		)
+	</insert>
+
+	<update id="updateBatchWithdrawOrderDetail" parameterType="BatchWithdrawOrderDetail">
+	UPDATE
+	<include refid="tableName" />
+	SET
+	<if test="orderId !=null and orderId !='' ">
+		ORDER_ID = #{orderId,jdbcType=VARCHAR},
+	</if>
+	<if test="serialNo !=null and serialNo !='' ">
+		SERIAL_NO = #{serialNo,jdbcType=VARCHAR},
+	</if>
+	<if test="receiverName !=null and receiverName !='' ">
+		RECEIVER_NAME = #{receiverName,jdbcType=VARCHAR},
+	</if>
+	<if test="receiverCardNo !=null and receiverCardNo !='' ">
+		RECEIVER_CARD_NO = #{paidAmount,jdbcType=VARCHAR},
+	</if>
+	<if test="receiverType !=null and receiverType !='' ">
+		RECEIVER_TYPE = #{receiverType,jdbcType=VARCHAR},
+	</if>
+	<if test="bankType !=null and bankType !='' ">
+		BANK_TYPE = #{bankType,jdbcType=VARCHAR},
+	</if>
+	<if test="bankName !=null and bankName !='' ">
+		BANK_NAME = #{bankName,jdbcType=VARCHAR},
+	</if>
+	<if test="bankCode !=null and bankCode !='' ">
+		BANK_CODE = #{bankCode,jdbcType=VARCHAR},
+	</if>
+	<if test="payeeBankLinesNo !=null and payeeBankLinesNo !='' ">
+		PAYEE_BANK_LINES_NO = #{payeeBankLinesNo,jdbcType=VARCHAR},
+	</if>
+	<if test="bankProvince !=null and bankProvince !='' ">
+		BANK_PROVINCE = #{bankProvince,jdbcType=VARCHAR},
+	</if>
+	<if test="bankCity !=null and bankCity !='' ">
+		BANK_CITY = #{bankCity,jdbcType=VARCHAR},
+	</if>
+	<if test="dmsSerialNo !=null and dmsSerialNo !='' ">
+		DMS_SERIAL_NO = #{dmsSerialNo,jdbcType=VARCHAR},
+	</if>
+	<if test="amount !=null and amount !='' ">
+		AMOUNT = #{amount,jdbcType=DECIMAL},
+	</if>
+	<if test="fee !=null and fee !='' ">
+		FEE = #{fee,jdbcType=DECIMAL},
+	</if>
+	<if test="respCode !=null and respCode !='' ">
+		RESP_CODE = #{respCode,jdbcType=VARCHAR},
+	</if>
+	<if test="respMsg !=null and respMsg !='' ">
+		RESP_MSG = #{respMsg,jdbcType=VARCHAR},
+	</if>
+	<if test="payTime !=null and payTime !='' ">
+		PAY_TIME = #{payTime,jdbcType=DATE},
+	</if>
+	<if test="payChanel !=null and payChanel !='' ">
+		PAY_CHANEL = #{payChanel,jdbcType=VARCHAR},
+	</if>
+	UPDATE_TIME = SYSDATE,
+	LOCK_VERSION = LOCK_VERSION+1
+	WHERE DETAIL_ID = #{detailId}
+</update>
+
+	<update id="deleteBatchWithdrawOrderDetail" parameterType="BatchWithdrawOrderDetail">
+		UPDATE
+		<include refid="tableName" />
+		SET
+		DATA_STAT = '1'
+		UPDATE_TIME = SYSDATE,
+		LOCK_VERSION = LOCK_VERSION+1
+		WHERE DETAIL_ID = #{detailId}
+	</update>
+
+	<select id="getList" parameterType="BatchWithdrawOrderDetail" resultType="BatchWithdrawOrderDetail">
+		SELECT
+		<include refid="BatchWithdrawOrderDetailColumns" />
+		FROM <include refid="tableName" />
+		WHERE DATA_STAT='0'
+		<if test="bankName !=null and bankName !='' ">
+			AND BANK_NAME LIKE '%' || #{bankName} || '%'
+		</if>
+		<if test="receiverName !=null and receiverName !='' ">
+			AND RECEIVER_NAME LIKE '%' || #{receiverName} || '%'
+		</if>
+		<if test="receiverCardNo !=null and receiverCardNo !='' ">
+			AND RECEIVER_CARD_NO LIKE '%' || #{receiverCardNo} || '%'
+		</if>
+		<if test="orderId !=null and orderId !='' ">
+			AND ORDER_ID = #{orderId}
+		</if>
+		ORDER BY CREATE_TIME DESC
+	</select>
+
+</mapper>

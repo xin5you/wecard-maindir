@@ -124,4 +124,9 @@
 
 	<context:component-scan base-package="com.cn.thinkx.*.module.*.service.impl" />
 
+	<!-- 服务器启动时自动加载-->
+	<bean id="appServiceImpl" class="com.cn.thinkx.oms.core.AppDefineInitService"></bean>
+	<bean id="beanDefineConfigue" class="com.cn.thinkx.oms.core.SpringBeanDefineConfigue">
+		<property name="appService" ref="appServiceImpl"></property>
+	</bean>
 </beans>

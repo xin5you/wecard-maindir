@@ -59,7 +59,7 @@ public class BatchOpenCardController extends BaseController {
      */
     @RequestMapping(value = "/listOpenCard")
     public ModelAndView listOpenCard(HttpServletRequest req, HttpServletResponse response) {
-        ModelAndView mv = new ModelAndView("enterpriseOrder/batchOpenCard/listOpenCard");
+        ModelAndView mv = new ModelAndView("enterpriseOrder/batchWithDraw/listOpenCard");
         String operStatus = StringUtils.nullToString(req.getParameter("operStatus"));
         PageInfo<BatchOrder> pageList = null;
         int startNum = parseInt(req.getParameter("pageNum"), 1);
