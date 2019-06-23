@@ -121,6 +121,7 @@ public class BatchWithdrawOrderServiceImpl implements BatchWithdrawOrderService 
 						cgbRequestDTO.setAmount(detail.getAmount().toString()); //金额 单位元
 						cgbRequestDTO.setPaymentBankid(detail.getPayeeBankLinesNo()); //联行号
 						cgbRequestDTO.setRemark(detail.getBankType()); //銀行摘要 用途
+                        cgbRequestDTO.setComment(detail.getBankType());
 						jsonObject = cgbService.dfPaymentResult(cgbRequestDTO);
 					}catch (Exception ex){
 						logger.error("## 代付失败 {}",ex);
