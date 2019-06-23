@@ -47,6 +47,8 @@ public class CgbService {
         }
         if(StringUtil.isNotEmpty(cgbRequestDTO.getRemark())){
             outwardPaymentDTO.setRemark(cgbRequestDTO.getRemark());
+        }else{
+            outwardPaymentDTO.setRemark("报销款");
         }
         if(StringUtil.isNotEmpty(cgbRequestDTO.getInAccAdd())){
            outwardPaymentDTO.setInAccAdd(cgbRequestDTO.getInAccAdd());

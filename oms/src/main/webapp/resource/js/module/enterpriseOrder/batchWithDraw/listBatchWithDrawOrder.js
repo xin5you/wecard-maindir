@@ -123,7 +123,7 @@ var listBatchOrder = {
 	            },
 	            success: function (result) {
 	            	if(result.status){
-	            		location.href=Helper.getRootPath() + '/batchWithdrawOrder/listBatchWithDrawOrderDetail.do?operStatus=1';
+	            		location.href=Helper.getRootPath() + '/batchWithdrawOrder/listBatchWithdrawOrder.do?operStatus=1';
 	            	}else{
 	            		Helper.alter(result.msg);
 	            	}

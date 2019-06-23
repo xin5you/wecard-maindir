@@ -255,6 +255,7 @@ public class XlsReadFile {
 					order.setBankCity(getValue(row.getCell(5)));
 					order.setRemarks(getValue(row.getCell(6)));
 					order.setPayeeBankLinesNo(getValue(row.getCell(7)));
+					order.setBankType(getValue(row.getCell(8)));
 					orderList.add(order);
 				}
 			}
