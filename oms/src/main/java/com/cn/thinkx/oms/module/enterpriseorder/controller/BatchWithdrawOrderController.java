@@ -78,13 +78,63 @@ public class BatchWithdrawOrderController extends BaseController {
 		CgbRequestDTO cgbRequestDTO=new CgbRequestDTO();
 		cgbRequestDTO.setEntSeqNo(String.valueOf(id));
 		JSONObject jsonObject=cgbService.queryAccountBalResult(cgbRequestDTO);
-		JSONObject balObj= jsonObject.getJSONObject("BEDC").getJSONObject("Message").getJSONObject("Body");
 
-		mv.addObject("balObj", balObj);
+		if(jsonObject !=null){
+            jsonObject= jsonObject.getJSONObject("BEDC").getJSONObject("Message").getJSONObject("Body");
+        }else{
+            jsonObject=new JSONObject();
+        }
+		mv.addObject("balObj", jsonObject);
 		mv.addObject("order", order);
 		mv.addObject("pageInfo", pageList);
 		return mv;
 	}
+
+    /**
+     * 删除
+     * @param req
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/deleteCommit")
+    @ResponseBody
+    public ModelMap deleteCommit(HttpServletRequest req, HttpServletResponse response) {
+        ModelMap map = new ModelMap();
+        map.addAttribute("status", Boolean.FALSE);
+
+         String orderId=req.getParameter("orderId");
+         BatchWithdrawOrder order=batchWithdrawOrderService.getById(orderId);
+
+        if(order ==null || ! "00".equals(order.getStat())){
+            map.addAttribute("msg", "该订单状态正在处理中，不能删除。");
+            return map;
+        }
+        batchWithdrawOrderService.deleteBatchWithdrawOrder(orderId);
+        map.addAttribute("status", Boolean.TRUE);
+        return map;
+    }
+
+    @RequestMapping(value = "/paymentCommit")
+    @ResponseBody
+    public ModelMap paymentCommit(HttpServletRequest req, HttpServletResponse response) {
+        ModelMap map = new ModelMap();
+        map.addAttribute("status", Boolean.FALSE);
+
+        String orderId=req.getParameter("orderId");
+        BatchWithdrawOrder order=batchWithdrawOrderService.getById(orderId);
+
+        if(order ==null || ! "00".equals(order.getStat())){
+            map.addAttribute("msg", "该订单状态正在处理中，不能继续代付。");
+            return map;
+        }
+        try {
+            batchWithdrawOrderService.doPaymentBatchWithdrawOrder(order);
+        }catch (Exception ex){
+            logger.error("#提交代付失败 {}",ex);
+        }
+        map.addAttribute("status", Boolean.TRUE);
+        return map;
+    }
 
 	/**
 	 *  批量代付订单

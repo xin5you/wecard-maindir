@@ -39,6 +39,7 @@
                     <div class="pull-right">
                         <button type="submit" class="btn btn-search"> 查 询 </button>
                         <button type="reset" class="btn btn-inverse btn-reset">重 置</button>
+                        <button type="button" class="btn btn-primary btn-synchron">同步状态</button>
                     </div>
                 </div>
             </div>
@@ -69,7 +70,7 @@
                         <td>${entity.fee }</td>
                         <td>${entity.respCode }</td>
                         <td>${entity.respMsg }</td>
-                        <td></td>
+                        <td><fmt:formatDate value="${entity.createTime }" pattern="yyyy-MM-dd  HH:mm:ss"/></td>
                         <td></td>
                     </tr>
                 </c:forEach>

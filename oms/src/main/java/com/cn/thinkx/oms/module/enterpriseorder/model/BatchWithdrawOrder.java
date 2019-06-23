@@ -3,7 +3,6 @@ package com.cn.thinkx.oms.module.enterpriseorder.model;
 import com.cn.thinkx.pms.base.domain.BaseDomain;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * 出款订单信息
@@ -76,7 +75,7 @@ public class BatchWithdrawOrder extends BaseDomain {
 	/**
 	 * 出款总金额
 	 */
-	private String failAmount;
+	private BigDecimal failAmount;
 	/**
 	 * 出款总金额
 	 */
@@ -86,9 +85,9 @@ public class BatchWithdrawOrder extends BaseDomain {
 	 */
 	private String dataStat;
 
-	private Date startTime;
+	private String startTime;
 
-	private Date endTime;
+	private String endTime;
 
 	public String getOrderId() {
 		return orderId;
@@ -210,11 +209,11 @@ public class BatchWithdrawOrder extends BaseDomain {
 		this.successFee = successFee;
 	}
 
-	public String getFailAmount() {
+	public BigDecimal getFailAmount() {
 		return failAmount;
 	}
 
-	public void setFailAmount(String failAmount) {
+	public void setFailAmount(BigDecimal failAmount) {
 		this.failAmount = failAmount;
 	}
 
@@ -234,19 +233,19 @@ public class BatchWithdrawOrder extends BaseDomain {
 		this.dataStat = dataStat;
 	}
 
-	public Date getStartTime() {
+	public String getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Date startTime) {
+	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
 
-	public Date getEndTime() {
+	public String getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Date endTime) {
+	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
 

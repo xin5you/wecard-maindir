@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="${ctx}/resource/datetimepicker/css/bootstrap-datetimepicker.0.0.11.min.css" />
     <script src="${ctx}/resource/datetimepicker/js/bootstrap-datetimepicker.0.0.11.min.js"></script>
     <script src="${ctx}/resource/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
-    <script src="${ctx}/resource/js/module/enterpriseOrder/batchWithDraw/listBatchWithDrawOrder.js?v=1.3"></script>
+    <script src="${ctx}/resource/js/module/enterpriseOrder/batchWithDraw/listBatchWithDrawOrder.js?v=1.7"></script>
 	<script src="${ctx}/resource/js/jquery/jquery.form.js"></script>
 </head>
 <body>
@@ -36,28 +36,13 @@
 		                       	</div>
 
 								<div class="pull-right">
-									<button type="button" class="btn btn-search"> 查 询 </button>
+									<button type="submit" class="btn btn-search"> 查 询 </button>
 									<button type="reset" class="btn btn-inverse btn-reset">重 置</button>
-									 <sec:authorize access="hasRole('ROLE_BATCH_OPEN_CARD_INTOADD')">
 									<button type="button" class="btn btn-primary btn-into-export-order">批量代付</button>
-									</sec:authorize>
 								</div>
 						  </div>
 						</div>
 						<div class="row-fluid">
-							<div class="span12">
-	                            <div id="datetimepicker1" class="input-prepend input-append date date-time-picker">
-	                                <span class="add-on">开始时间</span>
-	                                <input class="input-medium" id="startTime" name="startTime" readonly="readonly" type="text" />
-	                                <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
-	                            </div>
-	                            <div id="datetimepicker2" class="input-prepend input-append date date-time-picker">
-	                                <span class="add-on">结束时间</span>
-	                                <input class="input-medium" id="endTime" name="endTime" readonly="readonly" type="text" />
-	                                <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
-	                            </div>
-	                        </div>
-
 							<div class="pull-right">
 								<span class="add-on" style="color: #a94442">账户余额: ${balObj.balSign}${balObj.balance}</span>
 							</div>
@@ -68,6 +53,7 @@
 				             <tr>
 				               <th>订单号码</th>
 				               <th>订单名称</th>
+								<th>代付总额</th>
 				               <th>代付数量</th>
 				               <th>订单状态</th>
 				               <th>创建人</th>
@@ -80,13 +66,16 @@
 				                 <tr>
 				                 	<td>${entity.orderId }</td>
 				                 	<td>${entity.orderName }</td>
+									 <td>${entity.totalAmount }</td>
 									<td>${entity.totalNum }</td>
 									<td>${entity.stat }</td>
 				                    <td>${entity.createUser }</td>
-                                    <td></td>
+									 <td><fmt:formatDate value="${entity.createTime }" pattern="yyyy-MM-dd  HH:mm:ss"/></td>
                                     <td>
-										<a orderId="${entity.orderId }" title="代付提交" class="btn-mini btn-commit" href="#">代付提交</a>
-										<a orderId="${entity.orderId }" title="删除订单" class="btn-mini btn-delete" href="#">删除订单</a>
+										<c:if test="${entity.stat=='00' }">
+											<a orderId="${entity.orderId }" title="代付提交" class="btn-mini btn-submit" href="#">代付提交</a>
+											<a orderId="${entity.orderId }" title="删除订单" class="btn-mini btn-delete" href="#">删除订单</a>
+										</c:if>
 										<a orderId="${entity.orderId }" title="代付详情" class="btn-mini btn-view-list" href="#">代付列表</a>
 									</td>
 				                 </tr>

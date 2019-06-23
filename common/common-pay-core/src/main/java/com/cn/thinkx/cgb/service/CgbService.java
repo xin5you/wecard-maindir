@@ -59,6 +59,9 @@ public class CgbService {
         try {
             logger.info("#广发银行代付封装后请求参数：{}" ,strXml);
             String xmlMap = CGBUtil.doPost(cgbInit.getUpProt(), strXml);
+            if(xmlMap ==null) {
+                return null;
+            }
             logger.info("#广发银行代付返回参数：{}" + xmlMap);
             JSONObject jsonObject = XML.toJSONObject(xmlMap);
             return jsonObject;
@@ -87,7 +90,7 @@ public class CgbService {
 
         QueryPaymentDTO queryPaymentDTO=new QueryPaymentDTO();
         queryPaymentDTO.setOrigEntseqno(cgbRequestDTO.getOrigEntseqno());
-        queryPaymentDTO.setOrigEntdate(cgbRequestDTO.getEntSeqNo());
+        queryPaymentDTO.setOrigEntdate(cgbRequestDTO.getOrigEntdate());
         logger.info("#广发银行查询订单状态请求参数：{}", queryPaymentDTO);
         RequestParametersDTO<QueryPaymentDTO> requestParametersDTO = new RequestParametersDTO<QueryPaymentDTO>(queryPaymentDTO);
         requestParametersDTO.setCommHeadDTO(commHeadDTO);
@@ -96,6 +99,9 @@ public class CgbService {
             logger.info("#广发银行查询订单状态封装后请求参数：{}" ,strXml);
             String xmlMap = CGBUtil.doPost(cgbInit.getUpProt(), strXml);
             logger.info("#广发银行查询订单返回参数：{}" + xmlMap);
+            if(xmlMap ==null) {
+                return null;
+            }
             JSONObject jsonObject = XML.toJSONObject(xmlMap);
             return jsonObject;
         } catch (Exception e) {
@@ -131,6 +137,9 @@ public class CgbService {
             logger.info("#广发银行查询账号余额封装请求c参数：{}" + strXml);
             String xmlMap = CGBUtil.doPost(cgbInit.getUpProt(), strXml);
             logger.info("#广发银行查询账号余额返回参数：{}" + xmlMap);
+            if(xmlMap ==null) {
+                return null;
+            }
             JSONObject jsonObject = XML.toJSONObject(xmlMap);
             return jsonObject;
         } catch (Exception e) {

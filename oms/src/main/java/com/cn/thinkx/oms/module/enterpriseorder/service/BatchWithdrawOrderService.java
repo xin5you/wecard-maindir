@@ -43,4 +43,10 @@ public interface BatchWithdrawOrderService {
      */
     public PageInfo<BatchWithdrawOrder> getBatchWithdrawOrderPage(int startNum, int pageSize, BatchWithdrawOrder entity);
 
+
+    /**
+     * 代付提交
+     * @param entity
+     */
+    public void doPaymentBatchWithdrawOrder(BatchWithdrawOrder entity);
 }

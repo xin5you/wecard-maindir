@@ -7,7 +7,7 @@ import java.util.List;
 public interface BatchWithdrawOrderDetailMapper {
 
 
-	BatchWithdrawOrderDetail getByDetailId(String id);
+	BatchWithdrawOrderDetail getById(String id);
 
 	/**
 	 * 保存
@@ -30,6 +30,8 @@ public interface BatchWithdrawOrderDetailMapper {
 	 * @return
 	 */
 	public int deleteBatchWithdrawOrderDetail(String id);
+
+	public int deleteBatchWithdrawOrderDetailByOrderId(String orderId);
 
 	List<BatchWithdrawOrderDetail> getList(BatchWithdrawOrderDetail entity);
 

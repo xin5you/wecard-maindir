@@ -1,6 +1,7 @@
 package com.cn.thinkx.oms.module.enterpriseorder.controller;
 
 import com.cn.thinkx.oms.base.controller.BaseController;
+import com.cn.thinkx.oms.module.enterpriseorder.model.BatchWithdrawOrder;
 import com.cn.thinkx.oms.module.enterpriseorder.model.BatchWithdrawOrderDetail;
 import com.cn.thinkx.oms.module.enterpriseorder.service.BatchWithdrawOrderDetailService;
 import com.cn.thinkx.oms.module.enterpriseorder.service.BatchWithdrawOrderService;
@@ -10,7 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,5 +54,34 @@ public class BatchWithdrawOrderDetailController extends BaseController {
 		mv.addObject("order", order);
 		mv.addObject("pageInfo", pageList);
 		return mv;
+	}
+
+	/**
+	 * 同步数据状态
+	 * @param req
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/synchronCommit")
+	@ResponseBody
+	public ModelMap synchronCommit(HttpServletRequest req, HttpServletResponse response) {
+		ModelMap map = new ModelMap();
+		map.addAttribute("status", Boolean.FALSE);
+
+		String orderId=req.getParameter("orderId");
+		BatchWithdrawOrder order=batchWithdrawOrderService.getById(orderId);
+
+		if(order ==null ||  "00".equals(order.getStat())){
+			map.addAttribute("msg", "该订单状态正在处理中，不能继续代付。");
+			return map;
+		}
+		try {
+			//同步订单明细数据
+			map=batchWithdrawOrderDetailService.doSynchronStat(order);
+		}catch (Exception ex){
+			logger.error("#提交代付失败 {}",ex);
+		}
+		map.addAttribute("status", Boolean.TRUE);
+		return map;
 	}
 }

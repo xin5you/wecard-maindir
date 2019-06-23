@@ -34,8 +34,8 @@
 		#{orderId, jdbcType=VARCHAR},
 		#{batchNo, jdbcType=VARCHAR},
 		#{userId, jdbcType=VARCHAR},
-		#{totalFee, jdbcType=VARCHAR},
-		#{totalAmount, jdbcType=VARCHAR},
+		#{totalFee, jdbcType=DECIMAL},
+		#{totalAmount, jdbcType=DECIMAL},
 		#{totalNum, jdbcType=VARCHAR},
 		#{withdrawDate, jdbcType=VARCHAR},
 		#{orderName, jdbcType=VARCHAR},
@@ -43,9 +43,9 @@
 		#{paidIns, jdbcType=VARCHAR},
 		#{paidId, jdbcType=VARCHAR},
 		#{paidRespDesc, jdbcType=VARCHAR},
-		#{successAmount, jdbcType=VARCHAR},
+		#{successAmount, jdbcType=DECIMAL},
 		#{successNum, jdbcType=VARCHAR},
-		#{successFee, jdbcType=VARCHAR},
+		#{successFee, jdbcType=DECIMAL},
 		#{failAmount, jdbcType=VARCHAR},
 		#{failNum, jdbcType=VARCHAR},
 		'0',
@@ -77,18 +77,18 @@
 		FROM 
 			<include refid="tableName" />
 		WHERE
-			 id = #{id}
+		ORDER_ID = #{id}
 	</select>
 
 	<update id="updateBatchWithdrawOrder" parameterType="BatchWithdrawOrder">
 		UPDATE
 		<include refid="tableName" />
 		SET
-		<if test="totalFee !=null and totalFee !='' ">
-			TOTAL_FEE = #{totalFee,jdbcType=VARCHAR},
+		<if test="totalFee !=null">
+			TOTAL_FEE = #{totalFee,jdbcType=DECIMAL},
 		</if>
-		<if test="totalAmount !=null and totalAmount !='' ">
-			TOTAL_AMOUNT = #{totalAmount,jdbcType=VARCHAR},
+		<if test="totalAmount !=null ">
+			TOTAL_AMOUNT = #{totalAmount,jdbcType=DECIMAL},
 		</if>
 		<if test="totalNum !=null and totalNum !='' ">
 			TOTAL_NUM = #{totalNum,jdbcType=VARCHAR},
@@ -108,17 +108,17 @@
 		<if test="paidRespDesc !=null and paidRespDesc !='' ">
 			PAID_RESP_DESC = #{paidId,jdbcType=VARCHAR},
 		</if>
-		<if test="successAmount !=null and successAmount !='' ">
-			SUCCESS_AMOUNT = #{successAmount,jdbcType=VARCHAR},
+		<if test="successAmount !=null ">
+			SUCCESS_AMOUNT = #{successAmount,jdbcType=DECIMAL},
 		</if>
-		<if test="successNum !=null and successNum !='' ">
+		<if test="successNum !=null">
 			SUCCESS_NUM = #{successNum,jdbcType=VARCHAR},
 		</if>
-		<if test="successFee !=null and successFee !='' ">
-			SUCCESS_FEE = #{successFee,jdbcType=VARCHAR},
+		<if test="successFee !=null">
+			SUCCESS_FEE = #{successFee,jdbcType=DECIMAL},
 		</if>
-		<if test="failAmount !=null and failAmount !='' ">
-			FAIL_AMOUNT = #{failAmount,jdbcType=VARCHAR},
+		<if test="failAmount !=null ">
+			FAIL_AMOUNT = #{failAmount,jdbcType=DECIMAL},
 		</if>
 		<if test="failNum !=null and failNum !='' ">
 			FAIL_NUM = #{failNum,jdbcType=VARCHAR},
@@ -129,11 +129,11 @@
 	</update>
 
 
-	<update id="deleteBatchWithdrawOrder" parameterType="BatchWithdrawOrder">
+	<update id="deleteBatchWithdrawOrder" parameterType="java.lang.String">
 		UPDATE
 		<include refid="tableName" />
 		SET
-		DATA_STAT = '1'
+		DATA_STAT = '1',
 		UPDATE_TIME = sysdate,
 		LOCK_VERSION = LOCK_VERSION+1
 		WHERE ORDER_ID = #{orderId}

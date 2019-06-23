@@ -10,7 +10,7 @@ var listBatchOrder = {
 	},
 
 	initEvent:function(){
-		$('.date-time-picker').datetimepicker({
+/*		$('.date-time-picker').datetimepicker({
 	        format: 'yyyy-MM-dd hh:mm:ss',
 	        language: 'zh-CN',
 	        pickDate: true,
@@ -25,7 +25,7 @@ var listBatchOrder = {
 	    	  //alert(ev.date.valueOf());
 	    });
 		$('#datetimepicker1').show();
-		$('#datetimepicker2').show();
+		$('#datetimepicker2').show();*/
 
         $('.btn-submit').on('click', listBatchOrder.addOrderAgainCommit);
 		$('.btn-delete').on('click', listBatchOrder.deleteCommit);
@@ -34,12 +34,12 @@ var listBatchOrder = {
 
 	},
 	searchData:function(){
-		var sd = $('#startTime').val();
+/*		var sd = $('#startTime').val();
 		var ed = $('#endTime').val();
 		if(sd !='' && ed !='' && sd.localeCompare(ed)>0){
 			Helper.alert('交易开始时间不能大于结束时间');
 			return false;
-		}
+		}*/
 		document.forms['searchForm'].submit();
 	},
 	searchReset:function(){
@@ -53,28 +53,30 @@ var listBatchOrder = {
 
 	orderImportCommit:function(){
 		$("#orderImportBtn").attr("disabled",true);
-
-        $('#imorptMsg').modal({
-            backdrop : "static"
-        });
         var batchOrderName=$("#batchOrderName").val();
+        $('#batchExportOrderModal').modal('hide');
+        Helper.wait("系统执行中,请执行返回前不要关闭页面...");
         $("#uploadMainForm").ajaxSubmit({
             type:'post', // 提交方式 get/post
-            timeout : 120000,
+            timeout : 180000,
             url: Helper.getRootPath() + '/batchWithdrawOrder/excelImp.do', // 需要提交的 url
             dataType: 'json',
             data: {
                 "batchOrderName":batchOrderName
             },
             success: function(data){
+                Helper.closeWait();
                 if(data.status) {
                     location.href=Helper.getRootPath() + '/batchWithdrawOrder/listBatchWithdrawOrder.do';
                 }else{
-                    $('#imorptMsg').modal('hide');
                     Helper.alert(data.msg);
                     $("#orderImportBtn").removeAttr("disabled");
                     return false;
                 }
+            },
+            error:function(){
+                Helper.closeWait();
+                Helper.alert("系统故障，请稍后再试");
             }
         });
     },
@@ -86,7 +88,7 @@ var listBatchOrder = {
 	deleteCommit:function(){
 		var orderId = $(this).attr('orderId');
 		Helper.confirm("您是否删除该记录？",function(){
-		    $.ajax({								  
+		    $.ajax({
 	            url: Helper.getRootPath() + '/batchWithdrawOrder/deleteCommit.do',
 	            type: 'post',
 	            dataType : "json",
@@ -97,7 +99,8 @@ var listBatchOrder = {
 	            	if(result.status){
 	            		location.href=Helper.getRootPath() + '/batchWithdrawOrder/listBatchWithdrawOrder.do?operStatus=4';
 	            	}else{
-	            		Helper.alter(result.msg);
+	            		Helper.alert(result.msg);
+	            		return false;
 	            	}
 	            },
 	            error:function(){
@@ -109,8 +112,10 @@ var listBatchOrder = {
 	addOrderAgainCommit:function(){
 		var orderId = $(this).attr('orderId');
 		Helper.confirm("您确认提交该订单吗？",function(){
-		    $.ajax({								  
-	            url: Helper.getRootPath() + '/enterpriseOrder/batchOpenCard/addOrderAgainCommit.do',
+            Helper.wait("系统执行中,请执行返回前不要关闭页面...");
+		    $.ajax({
+	            url: Helper.getRootPath() + '/batchWithdrawOrder/paymentCommit.do',
+                timeout : 180000,
 	            type: 'post',
 	            dataType : "json",
 	            data: {
@@ -118,7 +123,7 @@ var listBatchOrder = {
 	            },
 	            success: function (result) {
 	            	if(result.status){
-	            		location.href=Helper.getRootPath() + '/enterpriseOrder/batchOpenCard/listOpenCard.do?operStatus=1';
+	            		location.href=Helper.getRootPath() + '/batchWithdrawOrder/listBatchWithDrawOrderDetail.do?operStatus=1';
 	            	}else{
 	            		Helper.alter(result.msg);
 	            	}

@@ -1,6 +1,7 @@
 package com.cn.thinkx.oms.module.enterpriseorder.service;
 
 
+import com.cn.thinkx.oms.module.enterpriseorder.model.BatchWithdrawOrder;
 import com.cn.thinkx.oms.module.enterpriseorder.model.BatchWithdrawOrderDetail;
 import com.github.pagehelper.PageInfo;
 import org.springframework.ui.ModelMap;
@@ -34,6 +35,13 @@ public interface BatchWithdrawOrderDetailService {
 		public int deleteBatchWithdrawOrderDetail(String id);
 
 		/**
+		 * 删除
+		 * @param orderId
+		 * @return
+		 */
+		public int deleteBatchWithdrawOrderDetailByOrderId(String orderId);
+
+		/**
 		 * 分页
 		 * @param startNum
 		 * @param pageSize
@@ -49,4 +57,11 @@ public interface BatchWithdrawOrderDetailService {
 		ModelMap getCanps(List<BatchWithdrawOrderDetail>  list);
 
 	   List<BatchWithdrawOrderDetail> getList(BatchWithdrawOrderDetail entity);
+
+	 /**
+	 * 同步订单数据
+	 * @param order
+	 * @return
+	 */
+	ModelMap doSynchronStat(BatchWithdrawOrder order);
 }

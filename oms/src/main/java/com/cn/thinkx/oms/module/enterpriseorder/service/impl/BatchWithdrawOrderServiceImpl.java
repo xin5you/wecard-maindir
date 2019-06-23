@@ -2,13 +2,19 @@ package com.cn.thinkx.oms.module.enterpriseorder.service.impl;
 
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.json.JSONObject;
+import com.cn.thinkx.cgb.model.CgbRequestDTO;
+import com.cn.thinkx.cgb.service.CgbService;
 import com.cn.thinkx.oms.module.enterpriseorder.mapper.BatchWithdrawOrderMapper;
 import com.cn.thinkx.oms.module.enterpriseorder.model.BatchWithdrawOrder;
 import com.cn.thinkx.oms.module.enterpriseorder.model.BatchWithdrawOrderDetail;
 import com.cn.thinkx.oms.module.enterpriseorder.service.BatchWithdrawOrderDetailService;
 import com.cn.thinkx.oms.module.enterpriseorder.service.BatchWithdrawOrderService;
+import com.cn.thinkx.pms.base.utils.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +25,7 @@ import java.util.List;
 @Service("batchWithdrawOrderService")
 public class BatchWithdrawOrderServiceImpl implements BatchWithdrawOrderService {
 
+	private Logger logger=LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	private BatchWithdrawOrderMapper batchWithdrawOrderMapper;
 
@@ -66,6 +73,7 @@ public class BatchWithdrawOrderServiceImpl implements BatchWithdrawOrderService 
 
 	@Override
 	public int deleteBatchWithdrawOrder(String id) {
+		batchWithdrawOrderDetailService.deleteBatchWithdrawOrderDetailByOrderId(id);
 		return batchWithdrawOrderMapper.deleteBatchWithdrawOrder(id);
 	}
 
@@ -78,5 +86,66 @@ public class BatchWithdrawOrderServiceImpl implements BatchWithdrawOrderService 
         List<BatchWithdrawOrder> list = getBatchWithdrawOrderList(entity);
         PageInfo<BatchWithdrawOrder> page = new PageInfo<BatchWithdrawOrder>(list);
         return page;
+	}
+
+	/**
+	 * 代付提交
+	 * @param entity
+	 */
+	public void doPaymentBatchWithdrawOrder(BatchWithdrawOrder entity){
+			entity.setStat("03"); //代付支付中
+			this.updateBatchWithdrawOrder(entity);
+
+			BatchWithdrawOrderDetail detail=new BatchWithdrawOrderDetail();
+			detail.setOrderId(entity.getOrderId());
+			List<BatchWithdrawOrderDetail> payList=batchWithdrawOrderDetailService.getList(detail);
+
+			JSONObject jsonObject=null;
+			CgbRequestDTO cgbRequestDTO=null;
+
+			//代付service
+			CgbService cgbService=new CgbService();
+
+			if(payList != null){
+				for (int i=0;i<payList.size();i++){
+					detail = payList.get(i);
+					detail.setPayTime(new Date());
+					detail.setPayChanel("2");
+
+					try {
+						cgbRequestDTO = new CgbRequestDTO();
+						cgbRequestDTO.setEntSeqNo(detail.getDetailId());
+						cgbRequestDTO.setInAccName(detail.getReceiverName()); //收款人姓名
+						cgbRequestDTO.setInAcc(detail.getReceiverCardNo());  //收款人银行卡号
+						cgbRequestDTO.setInAccBank(detail.getBankName()); //"交通银行" 银行名称
+						cgbRequestDTO.setAmount(detail.getAmount().toString()); //金额 单位元
+						cgbRequestDTO.setPaymentBankid(detail.getPayeeBankLinesNo()); //联行号
+						jsonObject = cgbService.dfPaymentResult(cgbRequestDTO);
+					}catch (Exception ex){
+						logger.error("## 代付失败 {}",ex);
+					}
+
+					try{
+						if(jsonObject != null){
+							detail.setRespCode(StringUtil.nullToString(jsonObject.getJSONObject("BEDC").getJSONObject("Message").getJSONObject("commHead").get("retCode")));
+
+							jsonObject=jsonObject.getJSONObject("BEDC");
+							jsonObject=jsonObject.getJSONObject("Message");
+							if(jsonObject.get("Body") != null && StringUtil.isNotEmpty(String.valueOf(jsonObject.get("Body")))) {
+								jsonObject = jsonObject.getJSONObject("Body");
+								if (jsonObject != null) {
+									detail.setDmsSerialNo(StringUtil.nullToString(jsonObject.get("traceNo")));
+									if (jsonObject.get("handleFee") != null) {
+										detail.setFee(new BigDecimal(StringUtil.nullToString(jsonObject.get("handleFee"))));
+									}
+								}
+							}
+						}
+						batchWithdrawOrderDetailService.updateBatchWithdrawOrderDetail(detail);
+					}catch (Exception ex){
+						logger.error("## 更新代付失败 {}",ex);
+					}
+				}
+			}
 	}
 }

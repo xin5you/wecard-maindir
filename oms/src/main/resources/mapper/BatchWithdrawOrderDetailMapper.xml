@@ -64,8 +64,15 @@
 	<sql id="tableName">
 			TB_BATCH_WITHDRAW_ORDER_DETAIL
 	</sql>
-	
 
+	<select id="getById" parameterType="java.lang.String" resultType="BatchWithdrawOrder">
+		SELECT
+		<include refid="BatchWithdrawOrderDetailColumns" />
+		FROM
+		<include refid="tableName" />
+		WHERE
+		DETAIL_ID = #{id}
+	</select>
 	
 	<insert id="insertBatchWithdrawOrderDetail" parameterType="BatchWithdrawOrderDetail">
 		INSERT INTO 
@@ -91,7 +98,7 @@
 		RECEIVER_NAME = #{receiverName,jdbcType=VARCHAR},
 	</if>
 	<if test="receiverCardNo !=null and receiverCardNo !='' ">
-		RECEIVER_CARD_NO = #{paidAmount,jdbcType=VARCHAR},
+		RECEIVER_CARD_NO = #{receiverCardNo,jdbcType=VARCHAR},
 	</if>
 	<if test="receiverType !=null and receiverType !='' ">
 		RECEIVER_TYPE = #{receiverType,jdbcType=VARCHAR},
@@ -117,10 +124,10 @@
 	<if test="dmsSerialNo !=null and dmsSerialNo !='' ">
 		DMS_SERIAL_NO = #{dmsSerialNo,jdbcType=VARCHAR},
 	</if>
-	<if test="amount !=null and amount !='' ">
+	<if test="amount !=null ">
 		AMOUNT = #{amount,jdbcType=DECIMAL},
 	</if>
-	<if test="fee !=null and fee !='' ">
+	<if test="fee !=null ">
 		FEE = #{fee,jdbcType=DECIMAL},
 	</if>
 	<if test="respCode !=null and respCode !='' ">
@@ -129,7 +136,7 @@
 	<if test="respMsg !=null and respMsg !='' ">
 		RESP_MSG = #{respMsg,jdbcType=VARCHAR},
 	</if>
-	<if test="payTime !=null and payTime !='' ">
+	<if test="payTime !=null">
 		PAY_TIME = #{payTime,jdbcType=DATE},
 	</if>
 	<if test="payChanel !=null and payChanel !='' ">
@@ -140,11 +147,23 @@
 	WHERE DETAIL_ID = #{detailId}
 </update>
 
-	<update id="deleteBatchWithdrawOrderDetail" parameterType="BatchWithdrawOrderDetail">
+
+
+	<update id="deleteBatchWithdrawOrderDetailByOrderId" parameterType="java.lang.String">
 		UPDATE
 		<include refid="tableName" />
 		SET
-		DATA_STAT = '1'
+		DATA_STAT = '1',
+		UPDATE_TIME = SYSDATE,
+		LOCK_VERSION = LOCK_VERSION+1
+		WHERE ORDER_ID = #{orderId}
+	</update>
+
+	<update id="deleteBatchWithdrawOrderDetail" parameterType="java.lang.String">
+		UPDATE
+		<include refid="tableName" />
+		SET
+		DATA_STAT = '1',
 		UPDATE_TIME = SYSDATE,
 		LOCK_VERSION = LOCK_VERSION+1
 		WHERE DETAIL_ID = #{detailId}
