@@ -1,9 +1,12 @@
 package com.cn.thinkx.cgb.util;
+
 import cn.hutool.core.util.XmlUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import com.cn.thinkx.cgb.model.*;
 import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -21,7 +24,7 @@ import java.util.Map;
 
 
 public class CGBUtil {
-
+    private static Logger logger=LoggerFactory.getLogger(CGBUtil.class);
     public static String doPost(String url, String xmlString) {
         try {
             HttpRequest post = HttpUtil.createPost(url);
@@ -30,7 +33,7 @@ public class CGBUtil {
             post.body(xmlString);
             return post.execute(true).body();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("##发生异常 {}" , e);
             return null;
         }
     }
@@ -82,7 +85,7 @@ public class CGBUtil {
     public static String encryption(String dataXml, String pukPaht, String pvkPaht) {
         KeyDTO keyDTO = getKey(pukPaht, pvkPaht);
         if (keyDTO.isFlag() == false) {
-            System.out.println(("keyDTO {}"+keyDTO));
+            logger.info("keyDTO {}" , keyDTO);
             return null;
         }
         String sign = sign(dataXml, keyDTO.getPrivateKey());
@@ -106,13 +109,11 @@ public class CGBUtil {
 
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("##发生异常 {}" , e);
             keyDTO.setFlag(false);
             keyDTO.setMsg("第三方秘钥路径错误");
         }
         try {
-
-
             X509EncodedKeySpec pubX09 = new X509EncodedKeySpec(Base64.decodeBase64(pu));
             PKCS8EncodedKeySpec priPKCS8 = new PKCS8EncodedKeySpec(Base64.decodeBase64(pvk));
             KeyFactory key = KeyFactory.getInstance("RSA");
@@ -121,7 +122,7 @@ public class CGBUtil {
             keyDTO.setFlag(true);
             return keyDTO;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("##发生异常 {}" , e);
             keyDTO.setFlag(false);
             keyDTO.setMsg("第三方错误");
             return keyDTO;
@@ -153,6 +154,7 @@ public class CGBUtil {
                 try {
                     crls.close();
                 } catch (Exception localException1) {
+                    logger.error("##发生异常 {}" , localException1);
                 }
             }
         }
@@ -167,7 +169,7 @@ public class CGBUtil {
             signature.update(unsigned.getBytes("GBK"));
             signed = new String(Base64.encodeBase64(signature.sign(), false), "GBK");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("##发生异常 {}" , e);
         }
         return signed;
     }
@@ -182,6 +184,7 @@ public class CGBUtil {
             sig.update(unsigned.getBytes("GBK"));
             return sig.verify(Base64.decodeBase64(signed.getBytes()));
         } catch (Exception e) {
+            logger.error("##发生异常 {}" , e);
             return false;
         }
     }
@@ -196,11 +199,8 @@ public class CGBUtil {
             messageMap.put("Body", objectMap);
             map.put("Message", messageMap);
 
-            System.out.println("准备参与签名的：" + map);
             //String signedInfo = XmlUtil.toStr(XmlUtil.mapToXml(messageMap, "Message"), "GBK",false);/**/
             String signedInfo = CGBXmlUtil.MapToXML(map);
-            System.out.println("准备参与签名的xml：" + signedInfo);
-
             SignatureDTO signatureDTO = new SignatureDTO();
             String sing = CGBUtil.encryption(signedInfo, pukPaht, pvkPaht);
             if (sing == null) {
@@ -211,9 +211,8 @@ public class CGBUtil {
             signatureDTO.setSignatureMethod("RSA");
             Map<String, Object> signatureDTOMap = JavaBeanUtil.convertBeanToUpCaseKeyMap(signatureDTO);
             map.put("Signature", signatureDTOMap);
-               System.out.println("map：" + map);
         } catch (Exception e) {
-               System.out.println("getxml错误 {}"+ e);
+            logger.error("##发生异常 {}" , e);
             return null;
         }
         return XmlUtil.toStr(XmlUtil.mapToXml(map, "BEDC"), "UTF-8", false);
@@ -221,7 +220,6 @@ public class CGBUtil {
 
     //解析返回参数
     public static ResponseParametersDTO getResponseParametersDTO(HashMap<String, Object> map) {
-           System.out.println("返回的map {}"+ map);
         ResponseParametersDTO responseParametersDTO = new ResponseParametersDTO();
         Map<String, Object> BEDCMap = (Map<String, Object>) map.get("BEDC");
         Map<String, Object> messageMap = (Map<String, Object>) BEDCMap.get("Message");
@@ -230,7 +228,7 @@ public class CGBUtil {
             try {
                 objectMap = (Map<String, Object>) messageMap.get("Body");
             } catch (Exception e) {
-                   System.out.println("messageMap.get(\"Body\")错误 {}"+ e.getMessage());
+                   logger.error("messageMap.get(\"Body\")错误 {}",e);
             }
         }
 
@@ -254,7 +252,7 @@ public class CGBUtil {
             KeyDTO keyDTO = getKey(pukPath, pvkPath);
             return verify(signedInfo, messageXml, keyDTO.getPublicKey());
         } catch (Exception e) {
-               System.out.println("系统错误延签失败 {}"+ e);
+            logger.error("系统错误延签失败 {}", e);
             return false;
         }
     }
