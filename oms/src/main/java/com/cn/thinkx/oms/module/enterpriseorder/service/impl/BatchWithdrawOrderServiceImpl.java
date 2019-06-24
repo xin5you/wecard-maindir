@@ -15,6 +15,7 @@ import com.cn.thinkx.pms.base.utils.BaseConstants;
 import com.cn.thinkx.pms.base.utils.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,7 @@ public class BatchWithdrawOrderServiceImpl implements BatchWithdrawOrderService 
      * @param entity
      * @return
      */
+    @Override
     public int insertBatchWithdrawOrder(BatchWithdrawOrder entity, List<BatchWithdrawOrderDetail> details) {
         //批量订单Id
         Snowflake snowflake = IdUtil.getSnowflake(1, 1);
@@ -106,6 +108,7 @@ public class BatchWithdrawOrderServiceImpl implements BatchWithdrawOrderService 
      *
      * @param entity
      */
+    @Override
     public void doPaymentBatchWithdrawOrder(BatchWithdrawOrder entity) {
         // 代付支付中
         entity.setStat(Constants.withdrawStat.S03.getCode());
@@ -118,52 +121,70 @@ public class BatchWithdrawOrderServiceImpl implements BatchWithdrawOrderService 
         JSONObject jsonObject = null;
         CgbRequestDTO cgbRequestDTO;
 
-        // 代付service
+        //代付service
         CgbService cgbService = new CgbService();
-        if (payList != null) {
-            for (BatchWithdrawOrderDetail batchWithdrawOrderDetail : payList) {
-                detail = batchWithdrawOrderDetail;
-                detail.setPayTime(new Date());
-                detail.setPayChanel("2");
-                try {
-                    cgbRequestDTO = new CgbRequestDTO();
-                    cgbRequestDTO.setEntSeqNo(detail.getDetailId());
-                    // 收款人姓名
-                    cgbRequestDTO.setInAccName(detail.getReceiverName());
-                    // 收款人银行卡号
-                    cgbRequestDTO.setInAcc(detail.getReceiverCardNo());
-                    // 银行名称
-                    cgbRequestDTO.setInAccBank(detail.getBankName());
-                    //金额 单位元
-                    cgbRequestDTO.setAmount(detail.getAmount().toString());
-                    // 联行号
-                    cgbRequestDTO.setPaymentBankid(detail.getPayeeBankLinesNo());
-                    // 銀行摘要 用途
-                    cgbRequestDTO.setRemark(detail.getBankType());
-                    cgbRequestDTO.setComment(detail.getBankType());
-                    jsonObject = cgbService.dfPaymentResult(cgbRequestDTO);
-                } catch (Exception ex) {
-                    logger.error("## 代付失败 {}", ex);
+        if (CollectionUtils.isNotEmpty(payList)) {
+            boolean payFlag = false;
+            //获取代付总额
+            try {
+                BigDecimal totalMoney = payList.stream().map(BatchWithdrawOrderDetail::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+                int paysize = payList.size();
+                //支付的笔数和查询出来的笔数  && 支付总额 和 统计的金额要完全一致，避免失败
+                if (entity.getTotalNum() == paysize && totalMoney.compareTo(entity.getTotalAmount()) == 0) {
+                    payFlag = true;
+                } else {
+                    logger.info("## 代付失败 代付订单中 总额:{},笔数：{} 。实际处理代付金额:{}，实际处理笔数:{}", entity.getTotalAmount(), entity.getTotalNum(), totalMoney, paysize);
                 }
+            } catch (Exception ex) {
+                logger.info("## 代付检验异常：{}", ex);
+            }
+            if (payFlag) {
+                for (int i = 0; i < payList.size(); i++) {
+                    detail = payList.get(i);
+                    detail.setPayTime(new Date());
+                    detail.setPayChanel("2");
 
-                try {
-                    if (jsonObject != null) {
-                        detail.setRespCode(StringUtil.nullToString(jsonObject.getJSONObject("BEDC").getJSONObject("Message").getJSONObject("commHead").get("retCode")));
-                        jsonObject = jsonObject.getJSONObject("BEDC");
-                        jsonObject = jsonObject.getJSONObject("Message");
-                        if (jsonObject.get("Body") != null && StringUtil.isNotEmpty(String.valueOf(jsonObject.get("Body")))) {
-                            jsonObject = jsonObject.getJSONObject("Body");
-                            if (jsonObject != null) {
-                                detail.setDmsSerialNo(StringUtil.nullToString(jsonObject.get("traceNo")));
-                                if (jsonObject.get("handleFee") != null) {
-                                    detail.setFee(new BigDecimal(StringUtil.nullToString(jsonObject.get("handleFee"))));
+                    try {
+                        cgbRequestDTO = new CgbRequestDTO();
+                        cgbRequestDTO.setEntSeqNo(detail.getDetailId());
+                        // 收款人姓名
+                        cgbRequestDTO.setInAccName(detail.getReceiverName());
+                        // 收款人银行卡号
+                        cgbRequestDTO.setInAcc(detail.getReceiverCardNo());
+                        // 银行名称
+                        cgbRequestDTO.setInAccBank(detail.getBankName());
+                        //金额 单位元
+                        cgbRequestDTO.setAmount(detail.getAmount().toString());
+                        // 联行号
+                        cgbRequestDTO.setPaymentBankid(detail.getPayeeBankLinesNo());
+                        // 銀行摘要 用途
+                        cgbRequestDTO.setRemark(detail.getBankType());
+                        cgbRequestDTO.setComment(detail.getBankType());
+                        jsonObject = cgbService.dfPaymentResult(cgbRequestDTO);
+                    } catch (Exception ex) {
+                        logger.error("## 代付失败 {}", ex);
+                    }
+
+                    try {
+                        if (jsonObject != null) {
+                            detail.setRespCode(StringUtil.nullToString(jsonObject.getJSONObject("BEDC").getJSONObject("Message").getJSONObject("commHead").get("retCode")));
+
+                            jsonObject = jsonObject.getJSONObject("BEDC");
+                            jsonObject = jsonObject.getJSONObject("Message");
+                            if (jsonObject.get("Body") != null && StringUtil.isNotEmpty(String.valueOf(jsonObject.get("Body")))) {
+                                jsonObject = jsonObject.getJSONObject("Body");
+                                if (jsonObject != null) {
+                                    detail.setDmsSerialNo(StringUtil.nullToString(jsonObject.get("traceNo")));
+                                    if (jsonObject.get("handleFee") != null) {
+                                        detail.setFee(new BigDecimal(StringUtil.nullToString(jsonObject.get("handleFee"))));
+                                    }
                                 }
                             }
                         }
+                        batchWithdrawOrderDetailService.updateBatchWithdrawOrderDetail(detail);
+                    } catch (Exception ex) {
+                        logger.error("## 更新代付失败 {}", ex);
                     }
-                    batchWithdrawOrderDetailService.updateBatchWithdrawOrderDetail(detail);
-                } catch (Exception ex) {
-                    logger.error("## 更新代付失败 {}", ex);
                 }
             }
         }
