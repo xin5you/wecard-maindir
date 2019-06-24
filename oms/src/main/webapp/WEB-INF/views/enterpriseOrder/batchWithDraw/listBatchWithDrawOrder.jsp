@@ -53,7 +53,7 @@
 				             <tr>
 				               <th>订单号码</th>
 				               <th>订单名称</th>
-								<th>代付总额</th>
+								<th>代付总额（元）</th>
 				               <th>代付数量</th>
 				               <th>订单状态</th>
 				               <th>创建人</th>
@@ -96,19 +96,19 @@
 		   <form id="uploadMainForm" action="#"  method="post" enctype="multipart/form-data">
 			   <div class="modal-body">
 				   <div class="control-group">
-					   <div class="controls" style="text-align: center;">
+					   <div class="controls">
 						   <div class="control-group formSep">
 							   <div class="input-prepend">
 							   <span class="add-on">订单名称：</span><input id="batchOrderName" name="batchOrderName" type="text" class="input-medium" value=""/>
 							   </div>
-							   <div data-provides="fileupload" class="fileupload fileupload-new">
+							   <div data-provides="fileupload" class="fileupload fileupload-new input-prepend">
 								   <input type="hidden" />
-								   <span class="control-label">上传文件 ：</span>
+								   <span class="add-on">上传文件 ：</span>
 								   <div class="input-append">
 									   <div class="uneditable-input"><i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span></div><span class="btn btn-file"><span class="fileupload-new">选择文件</span><span class="fileupload-exists">重新选择</span><input type="file"  name="file"/></span><a data-dismiss="fileupload" class="btn fileupload-exists" href="#">删除文件</a>
 								   </div>
 							   </div>
-							   <span class="add-on">如果文件上传失败，请重新刷新页面！再次上传</span>
+							   <p>如果文件上传失败，请重新刷新页面！再次上传</p>
 						   </div>
 					   </div>
 				   </div>

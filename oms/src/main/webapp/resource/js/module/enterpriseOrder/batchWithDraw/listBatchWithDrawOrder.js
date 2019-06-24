@@ -53,7 +53,11 @@ var listBatchOrder = {
 
 	orderImportCommit:function(){
 		$("#orderImportBtn").attr("disabled",true);
-        var batchOrderName=$("#batchOrderName").val();
+        var batchOrderName = $("#batchOrderName").val();
+        if (batchOrderName === '' || batchOrderName == null) {
+            Helper.alert("订单名称不能为空");
+			return;
+		}
         $('#batchExportOrderModal').modal('hide');
         Helper.wait("系统执行中,请执行返回前不要关闭页面...");
         $("#uploadMainForm").ajaxSubmit({

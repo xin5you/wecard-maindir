@@ -480,9 +480,15 @@ public class WxTransOrderServiceImpl implements WxTransOrderService {
                     }
 
                     /* 模板消息-客户 */
-                    wechatMQProducerService.sendTemplateMsg(mpAccount.getAccount(), wxTransLog.getOperatorOpenId(),
-                            "WX_TEMPLATE_ID_0", null, WXTemplateUtil.setHKBPayData(txnDate, shopInf.getMchntName(),
-                                    shopInf.getShopName(), payAmt, NumberUtils.RMBCentToYuan(accBal), channelName));
+                    if (RedisDictProperties.getInstance().getdictValueByCode(BaseConstants.WAGES_XIN5YOU_SHOP_NO).equals(wxTransLog.getShopCode())) {
+                        wechatMQProducerService.sendTemplateMsg(mpAccount.getAccount(), wxTransLog.getOperatorOpenId(),
+                                "WX_TEMPLATE_ID_0", null, WXTemplateUtil.setBalanceData(txnDate, shopInf.getMchntName(),
+                                        payAmt, NumberUtils.RMBCentToYuan(accBal)));
+                    } else {
+                        wechatMQProducerService.sendTemplateMsg(mpAccount.getAccount(), wxTransLog.getOperatorOpenId(),
+                                "WX_TEMPLATE_ID_0", null, WXTemplateUtil.setHKBPayData(txnDate, shopInf.getMchntName(),
+                                        shopInf.getShopName(), payAmt, NumberUtils.RMBCentToYuan(accBal), channelName));
+                    }
 
                     /*
                      * =======================收款通知 发送B端管理员======================

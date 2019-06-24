@@ -42,56 +42,53 @@ import java.util.List;
 @RequestMapping(value = "batchWithdrawOrder")
 public class BatchWithdrawOrderController extends BaseController {
 
-	Logger logger = LoggerFactory.getLogger(BatchWithdrawOrderController.class);
+    Logger logger = LoggerFactory.getLogger(BatchWithdrawOrderController.class);
 
-	@Autowired
-	@Qualifier("batchWithdrawOrderService")
-	private BatchWithdrawOrderService batchWithdrawOrderService;
+    @Autowired
+    @Qualifier("batchWithdrawOrderService")
+    private BatchWithdrawOrderService batchWithdrawOrderService;
 
-	@Autowired
-	@Qualifier("batchWithdrawOrderDetailService")
-	private BatchWithdrawOrderDetailService batchWithdrawOrderDetailService;
+    @Autowired
+    @Qualifier("batchWithdrawOrderDetailService")
+    private BatchWithdrawOrderDetailService batchWithdrawOrderDetailService;
 
-	/**
-	 * 后台批量提现列表
-	 * @param req
-	 * @param response
-	 * @return
-	 */
-	@RequestMapping(value = "/listBatchWithdrawOrder")
-	public ModelAndView listBatchWithdrawOrder(HttpServletRequest req, HttpServletResponse response ,BatchWithdrawOrder order) {
-		ModelAndView mv = new ModelAndView("enterpriseOrder/batchWithDraw/listBatchWithDrawOrder");
-		String operStatus = StringUtils.nullToString(req.getParameter("operStatus"));
-		PageInfo<BatchWithdrawOrder> pageList = null;
-		int startNum = parseInt(req.getParameter("pageNum"), 1);
-		int pageSize = parseInt(req.getParameter("pageSize"), 10);
-		try {
-			pageList = batchWithdrawOrderService.getBatchWithdrawOrderPage(startNum,pageSize,order);
-		} catch (Exception e) {
-			logger.error("## 查询列表信息出错", e);
-		}
-
-		//
-		Snowflake snowflake = IdUtil.createSnowflake(1, 1);
-		long id = snowflake.nextId(); //获取雪花算法，获取分布式id
-		CgbService cgbService=new CgbService();
-		CgbRequestDTO cgbRequestDTO=new CgbRequestDTO();
-		cgbRequestDTO.setEntSeqNo(String.valueOf(id));
-		JSONObject jsonObject=cgbService.queryAccountBalResult(cgbRequestDTO);
-
-		if(jsonObject !=null){
-            jsonObject= jsonObject.getJSONObject("BEDC").getJSONObject("Message").getJSONObject("Body");
-        }else{
-            jsonObject=new JSONObject();
+    /**
+     * 后台批量提现列表
+     */
+    @RequestMapping(value = "/listBatchWithdrawOrder")
+    public ModelAndView listBatchWithdrawOrder(HttpServletRequest req, BatchWithdrawOrder order) {
+        ModelAndView mv = new ModelAndView("enterpriseOrder/batchWithDraw/listBatchWithDrawOrder");
+        PageInfo<BatchWithdrawOrder> pageList = null;
+        int startNum = parseInt(req.getParameter("pageNum"), 1);
+        int pageSize = parseInt(req.getParameter("pageSize"), 10);
+        try {
+            pageList = batchWithdrawOrderService.getBatchWithdrawOrderPage(startNum, pageSize, order);
+        } catch (Exception e) {
+            logger.error("## 查询列表信息出错", e);
         }
-		mv.addObject("balObj", jsonObject);
-		mv.addObject("order", order);
-		mv.addObject("pageInfo", pageList);
-		return mv;
-	}
+
+        Snowflake snowflake = IdUtil.createSnowflake(1, 1);
+        //获取雪花算法，获取分布式id
+        long id = snowflake.nextId();
+        CgbService cgbService = new CgbService();
+        CgbRequestDTO cgbRequestDTO = new CgbRequestDTO();
+        cgbRequestDTO.setEntSeqNo(String.valueOf(id));
+        JSONObject jsonObject = cgbService.queryAccountBalResult(cgbRequestDTO);
+
+        if (jsonObject != null) {
+            jsonObject = jsonObject.getJSONObject("BEDC").getJSONObject("Message").getJSONObject("Body");
+        } else {
+            jsonObject = new JSONObject();
+        }
+        mv.addObject("balObj", jsonObject);
+        mv.addObject("order", order);
+        mv.addObject("pageInfo", pageList);
+        return mv;
+    }
 
     /**
      * 删除
+     *
      * @param req
      * @param response
      * @return
@@ -102,10 +99,10 @@ public class BatchWithdrawOrderController extends BaseController {
         ModelMap map = new ModelMap();
         map.addAttribute("status", Boolean.FALSE);
 
-         String orderId=req.getParameter("orderId");
-         BatchWithdrawOrder order=batchWithdrawOrderService.getById(orderId);
+        String orderId = req.getParameter("orderId");
+        BatchWithdrawOrder order = batchWithdrawOrderService.getById(orderId);
 
-        if(order ==null || ! "00".equals(order.getStat())){
+        if (order == null || !"00".equals(order.getStat())) {
             map.addAttribute("msg", "该订单状态正在处理中，不能删除。");
             return map;
         }
@@ -116,78 +113,79 @@ public class BatchWithdrawOrderController extends BaseController {
 
     @RequestMapping(value = "/paymentCommit")
     @ResponseBody
-    public ModelMap paymentCommit(HttpServletRequest req, HttpServletResponse response) {
+    public ModelMap paymentCommit(HttpServletRequest req) {
         ModelMap map = new ModelMap();
         map.addAttribute("status", Boolean.FALSE);
 
-        String orderId=req.getParameter("orderId");
-        BatchWithdrawOrder order=batchWithdrawOrderService.getById(orderId);
+        String orderId = req.getParameter("orderId");
+        BatchWithdrawOrder order = batchWithdrawOrderService.getById(orderId);
 
-        if(order ==null || ! "00".equals(order.getStat())){
+        if (order == null || !"00".equals(order.getStat())) {
             map.addAttribute("msg", "该订单状态正在处理中，不能继续代付。");
             return map;
         }
         try {
             batchWithdrawOrderService.doPaymentBatchWithdrawOrder(order);
-        }catch (Exception ex){
-            logger.error("#提交代付失败 {}",ex);
+        } catch (Exception ex) {
+            logger.error("## 提交代付失败", ex);
         }
         map.addAttribute("status", Boolean.TRUE);
         return map;
     }
 
-	/**
-	 *  批量代付订单
-	 * @param req
-	 * @param response
-	 * @return
-	 */
-	@RequestMapping(value = "/excelImp")
-	@ResponseBody
-	public ModelMap excelImp(HttpServletRequest req, HttpServletResponse response){
-		String batchOrderName =req.getParameter("batchOrderName");
-		List<BatchWithdrawOrderDetail> orderList = new LinkedList<BatchWithdrawOrderDetail>();
-		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) req;
-		MultipartFile multipartFile = multipartRequest.getFile("file");
-		ModelMap map = null;
-		if (multipartFile == null) {
-			map = new ModelMap();
-			map.addAttribute("status", Boolean.FALSE);
-			map.addAttribute("msg", "请选择上传文件！！！");
-			return map;
-		}
-		try {
-			CommonsMultipartFile cf = (CommonsMultipartFile) multipartFile;
-			if (cf != null && cf.getSize() > 0) {
-				DiskFileItem fi = (DiskFileItem) cf.getFileItem();
-				File file = fi.getStoreLocation();
-				XlsReadFile xls = new XlsReadFile();
-				InputStream inputStream = new FileInputStream(file);
-				map = xls.readBatchWithDrawOrderDetailsExcel(inputStream, multipartFile.getOriginalFilename(), orderList);
-				if(map.get("status").equals(Boolean.FALSE)) {
-					//如果文件解析是吧直接返回
-					return map;
-				}
-			}
-			// 获取联行号
-			map=batchWithdrawOrderDetailService.getCanps(orderList);
-			if(map.get("status").equals(Boolean.FALSE)) {
-				return map;
-			}
-            logger.info("# 批量代付的数据 {} " , JSONArray.toJSON(orderList));
-			//保存信息
-			BigDecimal totalMoney = orderList.stream().map(BatchWithdrawOrderDetail::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
-			BatchWithdrawOrder batchWithdrawOrder=new BatchWithdrawOrder();
-			batchWithdrawOrder.setOrderName(batchOrderName);
+    /**
+     * 批量代付订单
+     *
+     * @param req
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/excelImp")
+    @ResponseBody
+    public ModelMap excelImp(HttpServletRequest req, HttpServletResponse response) {
+        String batchOrderName = req.getParameter("batchOrderName");
+        List<BatchWithdrawOrderDetail> orderList = new LinkedList<BatchWithdrawOrderDetail>();
+        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) req;
+        MultipartFile multipartFile = multipartRequest.getFile("file");
+        ModelMap map = null;
+        if (multipartFile == null) {
+            map = new ModelMap();
+            map.addAttribute("status", Boolean.FALSE);
+            map.addAttribute("msg", "请选择上传文件！！！");
+            return map;
+        }
+        try {
+            CommonsMultipartFile cf = (CommonsMultipartFile) multipartFile;
+            if (cf != null && cf.getSize() > 0) {
+                DiskFileItem fi = (DiskFileItem) cf.getFileItem();
+                File file = fi.getStoreLocation();
+                XlsReadFile xls = new XlsReadFile();
+                InputStream inputStream = new FileInputStream(file);
+                map = xls.readBatchWithDrawOrderDetailsExcel(inputStream, multipartFile.getOriginalFilename(), orderList);
+                if (map.get("status").equals(Boolean.FALSE)) {
+                    //如果文件解析是吧直接返回
+                    return map;
+                }
+            }
+            // 获取联行号
+            map = batchWithdrawOrderDetailService.getCanps(orderList);
+            if (map.get("status").equals(Boolean.FALSE)) {
+                return map;
+            }
+            logger.info("# 批量代付的数据 {} ", JSONArray.toJSON(orderList));
+            //保存信息
+            BigDecimal totalMoney = orderList.stream().map(BatchWithdrawOrderDetail::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+            BatchWithdrawOrder batchWithdrawOrder = new BatchWithdrawOrder();
+            batchWithdrawOrder.setOrderName(batchOrderName);
             batchWithdrawOrder.setTotalAmount(totalMoney);
             batchWithdrawOrder.setCreateUser(getCurrUser(req).getName());
             batchWithdrawOrder.setUserId(StringUtil.nullToString(getCurrUser(req).getId()));
-			batchWithdrawOrderService.insertBatchWithdrawOrder(batchWithdrawOrder,orderList);
-		} catch (Exception e) {
-		    e.printStackTrace();
+            batchWithdrawOrderService.insertBatchWithdrawOrder(batchWithdrawOrder, orderList);
+        } catch (Exception e) {
+            e.printStackTrace();
             map.addAttribute("status", Boolean.FALSE);
-			logger.error("# 批量代付解析excel文件异常 {}",e);
-		}
-		return map;
-	}
+            logger.error("# 批量代付解析excel文件异常 {}", e);
+        }
+        return map;
+    }
 }

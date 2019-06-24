@@ -331,7 +331,7 @@ public class WithdrawOrderServiceImpl implements WithdrawOrderService {
 
             //可转让次数
             int appearNum = cardKeysOrderInfService.getMonthResellNum(userId);
-            if (appearNum >= 3) {
+            if (appearNum >= 9) {
                 logger.error("## 卡券集市--->转让接口，用户[{}]本月卡券转让次数已用完", userId);
                 resp.setMsg(MessageUtil.RESELL_NUM_USE_UP);
                 return resp;

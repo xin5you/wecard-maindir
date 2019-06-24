@@ -29,6 +29,16 @@ public class WXTemplateUtil {
 		params.put("remark", TemplateMessage.item("感谢您的使用，如有疑问请致电021-52896776", "#FF0000"));
 		return params;
 	}
+	public static TreeMap<String, TreeMap<String, String>> setBalanceData(String txnDate, String mchntName,  String payAmt, String accBal) {
+		TreeMap<String, TreeMap<String, String>> params = new TreeMap<>();
+		params.put("first", TemplateMessage.item("工资账户提现成功\n", "#000000"));
+		params.put("keyword1", TemplateMessage.item(txnDate, "#000000"));
+		params.put("keyword2", TemplateMessage.item(mchntName, "#000000"));
+		params.put("keyword3", TemplateMessage.item(payAmt + " 元", "#228B22"));
+		params.put("keyword4", TemplateMessage.item(accBal + " 元\n\n", "#228B22"));
+		params.put("remark", TemplateMessage.item("感谢您的使用，如有疑问请致电021-52896776", "#FF0000"));
+		return params;
+	}
 
 	public static TreeMap<String, TreeMap<String, String>> setQuickPayData(String txnDate, String mchntName,
 			String shopName, String payAmt) {

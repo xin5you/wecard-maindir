@@ -5,11 +5,13 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.json.JSONObject;
 import com.cn.thinkx.cgb.model.CgbRequestDTO;
 import com.cn.thinkx.cgb.service.CgbService;
+import com.cn.thinkx.oms.constants.Constants;
 import com.cn.thinkx.oms.module.enterpriseorder.mapper.BatchWithdrawOrderMapper;
 import com.cn.thinkx.oms.module.enterpriseorder.model.BatchWithdrawOrder;
 import com.cn.thinkx.oms.module.enterpriseorder.model.BatchWithdrawOrderDetail;
 import com.cn.thinkx.oms.module.enterpriseorder.service.BatchWithdrawOrderDetailService;
 import com.cn.thinkx.oms.module.enterpriseorder.service.BatchWithdrawOrderService;
+import com.cn.thinkx.pms.base.utils.BaseConstants;
 import com.cn.thinkx.pms.base.utils.StringUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -25,129 +27,145 @@ import java.util.List;
 @Service("batchWithdrawOrderService")
 public class BatchWithdrawOrderServiceImpl implements BatchWithdrawOrderService {
 
-	private Logger logger=LoggerFactory.getLogger(this.getClass());
-	@Autowired
-	private BatchWithdrawOrderMapper batchWithdrawOrderMapper;
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    private BatchWithdrawOrderMapper batchWithdrawOrderMapper;
 
-	@Autowired
-	private BatchWithdrawOrderDetailService batchWithdrawOrderDetailService;
+    @Autowired
+    private BatchWithdrawOrderDetailService batchWithdrawOrderDetailService;
 
-	@Override
-	public BatchWithdrawOrder getById(String id) {
-		return batchWithdrawOrderMapper.getById(id);
-	}
+    @Override
+    public BatchWithdrawOrder getById(String id) {
+        return batchWithdrawOrderMapper.getById(id);
+    }
 
-  /**
-	 * 保存
-	 * @param entity
-	 * @return
-	 */
-	public int insertBatchWithdrawOrder(BatchWithdrawOrder entity, List<BatchWithdrawOrderDetail> details){
-		//批量订单Id
-		Snowflake snowflake=IdUtil.getSnowflake(1,1);
-		String batchOrderId=snowflake.nextIdStr();
+    /**
+     * 保存
+     *
+     * @param entity
+     * @return
+     */
+    public int insertBatchWithdrawOrder(BatchWithdrawOrder entity, List<BatchWithdrawOrderDetail> details) {
+        //批量订单Id
+        Snowflake snowflake = IdUtil.getSnowflake(1, 1);
+        String batchOrderId = snowflake.nextIdStr();
 
-		BatchWithdrawOrderDetail detail=null;
-		for (int i=0;i<details.size();i++){
-			detail=details.get(i);
-			detail.setDetailId(snowflake.nextIdStr());
-			detail.setOrderId(batchOrderId);
-			//手续费先为0
-			detail.setFee(new BigDecimal(0));
-			detail.setDataStat("0");
-			batchWithdrawOrderDetailService.insertBatchWithdrawOrderDetail(detail);
-		}
-		entity.setOrderId(batchOrderId);
-		entity.setTotalNum(details.size());
-		entity.setStat("00"); //初始化新建
-		entity.setCreateTime(new Date());
-		entity.setUpdateTime(new Date());
-		entity.setLockVersion(0);
-		return batchWithdrawOrderMapper.insertBatchWithdrawOrder(entity);
-	}
+        for (BatchWithdrawOrderDetail detail : details) {
+            detail.setDetailId(snowflake.nextIdStr());
+            detail.setOrderId(batchOrderId);
+            //手续费先为0
+            detail.setFee(new BigDecimal(0));
+            detail.setDataStat(BaseConstants.DataStatEnum.TRUE_STATUS.getCode());
+            batchWithdrawOrderDetailService.insertBatchWithdrawOrderDetail(detail);
+        }
+        entity.setOrderId(batchOrderId);
+        entity.setTotalNum(details.size());
+        // 初始化新建
+        entity.setStat(Constants.withdrawStat.S00.getCode());
+        entity.setCreateTime(new Date());
+        entity.setUpdateTime(new Date());
+        entity.setLockVersion(0);
+        return batchWithdrawOrderMapper.insertBatchWithdrawOrder(entity);
+    }
 
-	@Override
-	public int updateBatchWithdrawOrder(BatchWithdrawOrder entity) {
-		return batchWithdrawOrderMapper.updateBatchWithdrawOrder(entity);
-	}
+    @Override
+    public int updateBatchWithdrawOrder(BatchWithdrawOrder entity) {
+        return batchWithdrawOrderMapper.updateBatchWithdrawOrder(entity);
+    }
 
-	@Override
-	public int deleteBatchWithdrawOrder(String id) {
-		batchWithdrawOrderDetailService.deleteBatchWithdrawOrderDetailByOrderId(id);
-		return batchWithdrawOrderMapper.deleteBatchWithdrawOrder(id);
-	}
+    @Override
+    public int deleteBatchWithdrawOrder(String id) {
+        batchWithdrawOrderDetailService.deleteBatchWithdrawOrderDetailByOrderId(id);
+        return batchWithdrawOrderMapper.deleteBatchWithdrawOrder(id);
+    }
 
-	public List<BatchWithdrawOrder> getBatchWithdrawOrderList(BatchWithdrawOrder entity) {
-		return batchWithdrawOrderMapper.getBatchWithdrawOrderList(entity);
-	}
-	@Override
-	public PageInfo<BatchWithdrawOrder> getBatchWithdrawOrderPage(int startNum, int pageSize, BatchWithdrawOrder entity) {
-		PageHelper.startPage(startNum, pageSize);
+    public List<BatchWithdrawOrder> getBatchWithdrawOrderList(BatchWithdrawOrder entity) {
+        return batchWithdrawOrderMapper.getBatchWithdrawOrderList(entity);
+    }
+
+    @Override
+    public PageInfo<BatchWithdrawOrder> getBatchWithdrawOrderPage(int startNum, int pageSize, BatchWithdrawOrder entity) {
+        PageHelper.startPage(startNum, pageSize);
         List<BatchWithdrawOrder> list = getBatchWithdrawOrderList(entity);
-        PageInfo<BatchWithdrawOrder> page = new PageInfo<BatchWithdrawOrder>(list);
-        return page;
-	}
+        list.forEach(e -> {
+            if (Constants.withdrawStat.S00.getCode().equals(e.getStat())) {
+                e.setStat(Constants.withdrawStat.S00.getValue());
+            } else if (Constants.withdrawStat.S03.getCode().equals(e.getStat())) {
+                e.setStat(Constants.withdrawStat.S03.getValue());
+            } else if (Constants.withdrawStat.S07.getCode().equals(e.getStat())) {
+                e.setStat(Constants.withdrawStat.S07.getValue());
+            } else {
+                e.setStat(Constants.withdrawStat.S04.getValue());
+            }
+        });
+        return new PageInfo<>(list);
+    }
 
-	/**
-	 * 代付提交
-	 * @param entity
-	 */
-	public void doPaymentBatchWithdrawOrder(BatchWithdrawOrder entity){
-			entity.setStat("03"); //代付支付中
-			this.updateBatchWithdrawOrder(entity);
+    /**
+     * 代付提交
+     *
+     * @param entity
+     */
+    public void doPaymentBatchWithdrawOrder(BatchWithdrawOrder entity) {
+        // 代付支付中
+        entity.setStat(Constants.withdrawStat.S03.getCode());
+        this.updateBatchWithdrawOrder(entity);
 
-			BatchWithdrawOrderDetail detail=new BatchWithdrawOrderDetail();
-			detail.setOrderId(entity.getOrderId());
-			List<BatchWithdrawOrderDetail> payList=batchWithdrawOrderDetailService.getList(detail);
+        BatchWithdrawOrderDetail detail = new BatchWithdrawOrderDetail();
+        detail.setOrderId(entity.getOrderId());
+        List<BatchWithdrawOrderDetail> payList = batchWithdrawOrderDetailService.getList(detail);
 
-			JSONObject jsonObject=null;
-			CgbRequestDTO cgbRequestDTO=null;
+        JSONObject jsonObject = null;
+        CgbRequestDTO cgbRequestDTO;
 
-			//代付service
-			CgbService cgbService=new CgbService();
+        // 代付service
+        CgbService cgbService = new CgbService();
+        if (payList != null) {
+            for (BatchWithdrawOrderDetail batchWithdrawOrderDetail : payList) {
+                detail = batchWithdrawOrderDetail;
+                detail.setPayTime(new Date());
+                detail.setPayChanel("2");
+                try {
+                    cgbRequestDTO = new CgbRequestDTO();
+                    cgbRequestDTO.setEntSeqNo(detail.getDetailId());
+                    // 收款人姓名
+                    cgbRequestDTO.setInAccName(detail.getReceiverName());
+                    // 收款人银行卡号
+                    cgbRequestDTO.setInAcc(detail.getReceiverCardNo());
+                    // 银行名称
+                    cgbRequestDTO.setInAccBank(detail.getBankName());
+                    //金额 单位元
+                    cgbRequestDTO.setAmount(detail.getAmount().toString());
+                    // 联行号
+                    cgbRequestDTO.setPaymentBankid(detail.getPayeeBankLinesNo());
+                    // 銀行摘要 用途
+                    cgbRequestDTO.setRemark(detail.getBankType());
+                    cgbRequestDTO.setComment(detail.getBankType());
+                    jsonObject = cgbService.dfPaymentResult(cgbRequestDTO);
+                } catch (Exception ex) {
+                    logger.error("## 代付失败 {}", ex);
+                }
 
-			if(payList != null){
-				for (int i=0;i<payList.size();i++){
-					detail = payList.get(i);
-					detail.setPayTime(new Date());
-					detail.setPayChanel("2");
-
-					try {
-						cgbRequestDTO = new CgbRequestDTO();
-						cgbRequestDTO.setEntSeqNo(detail.getDetailId());
-						cgbRequestDTO.setInAccName(detail.getReceiverName()); //收款人姓名
-						cgbRequestDTO.setInAcc(detail.getReceiverCardNo());  //收款人银行卡号
-						cgbRequestDTO.setInAccBank(detail.getBankName()); //"交通银行" 银行名称
-						cgbRequestDTO.setAmount(detail.getAmount().toString()); //金额 单位元
-						cgbRequestDTO.setPaymentBankid(detail.getPayeeBankLinesNo()); //联行号
-						cgbRequestDTO.setRemark(detail.getBankType()); //銀行摘要 用途
-                        cgbRequestDTO.setComment(detail.getBankType());
-						jsonObject = cgbService.dfPaymentResult(cgbRequestDTO);
-					}catch (Exception ex){
-						logger.error("## 代付失败 {}",ex);
-					}
-
-					try{
-						if(jsonObject != null){
-							detail.setRespCode(StringUtil.nullToString(jsonObject.getJSONObject("BEDC").getJSONObject("Message").getJSONObject("commHead").get("retCode")));
-
-							jsonObject=jsonObject.getJSONObject("BEDC");
-							jsonObject=jsonObject.getJSONObject("Message");
-							if(jsonObject.get("Body") != null && StringUtil.isNotEmpty(String.valueOf(jsonObject.get("Body")))) {
-								jsonObject = jsonObject.getJSONObject("Body");
-								if (jsonObject != null) {
-									detail.setDmsSerialNo(StringUtil.nullToString(jsonObject.get("traceNo")));
-									if (jsonObject.get("handleFee") != null) {
-										detail.setFee(new BigDecimal(StringUtil.nullToString(jsonObject.get("handleFee"))));
-									}
-								}
-							}
-						}
-						batchWithdrawOrderDetailService.updateBatchWithdrawOrderDetail(detail);
-					}catch (Exception ex){
-						logger.error("## 更新代付失败 {}",ex);
-					}
-				}
-			}
-	}
+                try {
+                    if (jsonObject != null) {
+                        detail.setRespCode(StringUtil.nullToString(jsonObject.getJSONObject("BEDC").getJSONObject("Message").getJSONObject("commHead").get("retCode")));
+                        jsonObject = jsonObject.getJSONObject("BEDC");
+                        jsonObject = jsonObject.getJSONObject("Message");
+                        if (jsonObject.get("Body") != null && StringUtil.isNotEmpty(String.valueOf(jsonObject.get("Body")))) {
+                            jsonObject = jsonObject.getJSONObject("Body");
+                            if (jsonObject != null) {
+                                detail.setDmsSerialNo(StringUtil.nullToString(jsonObject.get("traceNo")));
+                                if (jsonObject.get("handleFee") != null) {
+                                    detail.setFee(new BigDecimal(StringUtil.nullToString(jsonObject.get("handleFee"))));
+                                }
+                            }
+                        }
+                    }
+                    batchWithdrawOrderDetailService.updateBatchWithdrawOrderDetail(detail);
+                } catch (Exception ex) {
+                    logger.error("## 更新代付失败 {}", ex);
+                }
+            }
+        }
+    }
 }
