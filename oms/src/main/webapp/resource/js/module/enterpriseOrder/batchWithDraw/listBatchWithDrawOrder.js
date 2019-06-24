@@ -56,6 +56,7 @@ var listBatchOrder = {
         var batchOrderName = $("#batchOrderName").val();
         if (batchOrderName === '' || batchOrderName == null) {
             Helper.alert("订单名称不能为空");
+            $("#orderImportBtn").removeAttr("disabled");
 			return;
 		}
         $('#batchExportOrderModal').modal('hide');

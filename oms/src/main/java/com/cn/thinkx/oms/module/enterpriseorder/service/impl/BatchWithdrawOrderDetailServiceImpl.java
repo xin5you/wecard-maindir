@@ -172,7 +172,7 @@ public class BatchWithdrawOrderDetailServiceImpl implements BatchWithdrawOrderDe
             }
             for (BatchWithdrawOrderDetail orderDetail : list) {
                 if (Constants.cgbPayStat.S02.getCode().equals(orderDetail.getRespMsg())) {
-                    order.setStat(Constants.withdrawStat.S05.getCode());
+                    order.setStat(Constants.withdrawStat.S07.getCode());
                 } else if (Constants.cgbPayStat.S01.getCode().equals(orderDetail.getRespMsg())) {
                     order.setStat(Constants.withdrawStat.S03.getCode());
                     break;
