@@ -117,6 +117,7 @@
         <module>pms-connect</module>
         <module>pms-socket</module>
         <module>common-pay-core</module>
+        <module>common-api-bm001</module>
     </modules>
 
     <properties>
