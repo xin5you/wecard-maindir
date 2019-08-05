@@ -1,6 +1,7 @@
 package com.cn.thinkx.wecard.customer.module.phonerecharge.ctrl;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -68,9 +69,7 @@ public class PhoneRechargeController extends BaseController{
 		try {
 			List<PhoneRechargeShop> allShopList = JSONObject.parseArray(jedisCluster.get(BaseConstants.PHONE_RECHARGE_ALL_GOODS), PhoneRechargeShop.class);
 			List<PhoneRechargeShop> newAllShopList = new ArrayList<>();
-			allShopList.stream().sorted((e1, e2) -> {
-				return Double.compare(Double.parseDouble(e1.getShopFace()), Double.parseDouble(e2.getShopFace()));
-			}).forEach(e -> newAllShopList.add(e));
+			allShopList.stream().sorted(Comparator.comparingDouble(e2 -> Double.parseDouble(e2.getShopFace()))).forEach(newAllShopList::add);
 			newAllShopList.forEach(e -> e.setResv1(ShopUnitType.findByCode(e.getResv1())));
 			mv.addObject("phoneRechargeShopList", newAllShopList);
 		} catch (Exception e) {

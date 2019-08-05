@@ -52,6 +52,7 @@ public class ErrCode {
 		codeMap.put("40050","不合法的分组id");
 		codeMap.put("40051","分组名字不合法");
 		codeMap.put("40054","自定义菜单的URL无效");
+		codeMap.put("40164","不在微信白名单内");
 		codeMap.put("41001","缺少access_token参数");
 		codeMap.put("41002","缺少appid参数");
 		codeMap.put("41003","缺少refresh_token参数");

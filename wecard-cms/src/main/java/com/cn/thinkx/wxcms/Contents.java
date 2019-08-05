@@ -5,5 +5,5 @@ public class Contents {
 	/**
 	 * 公众号
 	 */
-	public static final String ACCOUNT = "hui-wallet";
+	public static final String ACCOUNT = "xin5you";
 }
