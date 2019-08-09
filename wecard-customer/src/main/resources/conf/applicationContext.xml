@@ -26,11 +26,14 @@
 	</bean>
 
 	<!-- JNDI方式配置数据源  测试 生产-->
-<!--	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+
+<!--
+	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
 		<property name="jndiName">
 			<value>JDBC</value>
 		</property> 
-	</bean>-->
+	</bean>
+-->
 
 	<!-- 配置数据源 开发 -->
  	<bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
