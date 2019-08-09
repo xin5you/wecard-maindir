@@ -14,14 +14,13 @@ import com.qianmi.open.api.response.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service("bmOpenApiService")
 public class BMOpenApiServiceImpl implements BMOpenApiService {
 	
-	 private Logger logger = LoggerFactory.getLogger(BMOpenApiServiceImpl.class);
-	 
+	 private  Logger logger = LoggerFactory.getLogger(BMOpenApiServiceImpl.class);
+
 
 	@Override
 	public BmRechargeMobileGetItemInfoResponse handleGetItemInfo(String mobileNo, String rechargeAmount, String accessToken) {
@@ -107,12 +106,17 @@ public class BMOpenApiServiceImpl implements BMOpenApiService {
 
 	@Override
 	public BmRechargeMobileGetPhoneInfoResponse handleGetPhoneInfo(String mobileNo, String accessToken) {
-		OpenClient client = getOpenClient();
-		BmRechargeMobileGetPhoneInfoRequest  req = new BmRechargeMobileGetPhoneInfoRequest ();
+
+		String url = JedisClusterUtils.getInstance().hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV, BMConstants.BM_SERVER_URL);
+		String appSecret = JedisClusterUtils.getInstance().hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV, BMConstants.BM_APP_SECRET);
+		OpenClient client = new DefaultOpenClient(url, appSecret);
+		BmRechargeMobileGetPhoneInfoRequest req = new BmRechargeMobileGetPhoneInfoRequest ();
 		req.setPhoneNo(mobileNo);
-		
-		logger.info("查询手机信息请求参数  [{}]",JSONObject.toJSONString(req));
-		
+		req.setRespType("all");
+
+		logger.info("查询手机信息请求参数 client=[{}]",JSONObject.toJSONString(client));
+		logger.info("查询手机信息请求参数  req=[{}]",JSONObject.toJSONString(req));
+
 		BmRechargeMobileGetPhoneInfoResponse response = null;
 		try {
 			response = client.execute(req, accessToken);
@@ -127,7 +131,7 @@ public class BMOpenApiServiceImpl implements BMOpenApiService {
 			String serverUrl = JedisClusterUtils.getInstance().hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV, BMConstants.BM_SERVER_URL);
 			String appKey = JedisClusterUtils.getInstance().hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV, BMConstants.BM_APP_KEY);
 			String appSecret = JedisClusterUtils.getInstance().hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV, BMConstants.BM_APP_SECRET);
-			OpenClient client = new DefaultOpenClient(serverUrl, appKey, appSecret);
+			OpenClient client = new DefaultOpenClient(serverUrl, appSecret);
 			return client;
 		} catch (Exception e) {
 			logger.error(" ## 获取请求地址信息出错",e);

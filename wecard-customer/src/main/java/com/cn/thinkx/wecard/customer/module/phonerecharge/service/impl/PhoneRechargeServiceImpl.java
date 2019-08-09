@@ -1,6 +1,8 @@
 package com.cn.thinkx.wecard.customer.module.phonerecharge.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.cn.thinkx.api.bm001.constants.BMConstants;
+import com.cn.thinkx.api.bm001.service.BMOpenApiService;
 import com.cn.thinkx.common.wecard.domain.person.PersonInf;
 import com.cn.thinkx.common.wecard.domain.phoneRecharge.PhoneRechargeOrder;
 import com.cn.thinkx.common.wecard.domain.phoneRecharge.PhoneRechargeShop;
@@ -14,8 +16,9 @@ import com.cn.thinkx.pms.base.utils.BaseConstants.*;
 import com.cn.thinkx.wecard.customer.module.checkstand.vo.TransOrderReq;
 import com.cn.thinkx.wecard.customer.module.customer.service.PersonInfService;
 import com.cn.thinkx.wecard.customer.module.phonerecharge.service.PhoneRechargeService;
-import com.cn.thinkx.wecard.customer.module.phonerecharge.vo.PhoneInfo;
 import com.cn.thinkx.wechat.base.wxapi.process.WxMemoryCacheClient;
+import com.qianmi.open.api.domain.elife.PhoneInfo;
+import com.qianmi.open.api.response.BmRechargeMobileGetPhoneInfoResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +47,9 @@ public class PhoneRechargeServiceImpl implements PhoneRechargeService {
 
     @Autowired
     private PhoneRechargeShopMapper phoneRechargeShopMapper;
+
+    @Autowired
+    private BMOpenApiService bmOpenApiService;
 
     @Override
     public PhoneRechargeOrder getPhoneRechargeOrderById(String rId) {
@@ -85,16 +91,22 @@ public class PhoneRechargeServiceImpl implements PhoneRechargeService {
             return null;
         }
 
-        JSONObject paramData = new JSONObject();
+ /*       JSONObject paramData = new JSONObject();
         paramData.put("phone", mobile);
         String url = jedisCluster.hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV, BaseConstants.GET_PHONE_INFO_URL);
-
         String result = HttpClientUtil.sendPost(url, paramData.toString());
-        PhoneInfo phoneInfo = JSONObject.parseObject(result, PhoneInfo.class);
+        PhoneInfo phoneInfo = JSONObject.parseObject(result, PhoneInfo.class);*/
+
+        String accessToken = jedisCluster.hget(RedisConstants.REDIS_HASH_TABLE_TB_BASE_DICT_KV,
+                BMConstants.BM_ACCESS_TOKEN);
+        BmRechargeMobileGetPhoneInfoResponse response = bmOpenApiService.handleGetPhoneInfo(mobile, accessToken);
+        logger.info("手机信息  [{}]", JSONObject.toJSONString(response));
+        PhoneInfo phoneInfo = response.getPhoneInfo();
 
         List<PhoneRechargeShop> phoneRechargeShopList = new ArrayList<PhoneRechargeShop>();
         List<PhoneRechargeShop> prsList = new ArrayList<PhoneRechargeShop>();
         String phoneRechargeShopArray = null;
+
         // 移动充值额度列表
         if (OperatorType.OperatorType1.getValue().equals(phoneInfo.getOperator())) {
             phoneRechargeShopArray = jedisCluster.get(BaseConstants.PHONE_RECHARGE_YD_GOODS);
